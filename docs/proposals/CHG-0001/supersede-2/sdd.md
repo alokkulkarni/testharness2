@@ -5,22 +5,10 @@ authors:
   - squadSessionId: SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM
     changeId: CHG-0001
     agent: spec-author
-    agentRunId: run-sup2-d1
-  - squadSessionId: SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM
-    changeId: CHG-0001
-    agent: spec-author
-    agentRunId: run-sup2-d2
-  - squadSessionId: SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM
-    changeId: CHG-0001
-    agent: spec-author
-    agentRunId: run-sup2-d3
-  - squadSessionId: SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM
-    changeId: CHG-0001
-    agent: spec-author
-    agentRunId: run-sup2-d4
+    agentRunId: run-sup2-d5
 upstream:
   - path: docs/specs/CHG-0001/requirements.md
-    sha256: e389371395a1feb1fcd3de52506b0fc60cd1060e5b728e7a0849a540cf5789e5
+    sha256: 266b5b6d3d319d635b6fbe7e01d1750d017d704a0a24dada7243c8b6264241bb
 ---
 
 # SDD — CHG-0001 To-do list
