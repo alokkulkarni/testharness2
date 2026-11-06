@@ -7,9 +7,10 @@
   "reviewer": {
     "kind": "human",
     "id": "@alokkulkarni",
-    "reference": "https://github.com/alokkulkarni/testharness2/pull/3#pullrequestreview-5798799317"
+    "reference": "https://github.com/alokkulkarni/testharness2/pull/3#pullrequestreview-5803243447"
   },
-  "createdAt": "2026-11-06T10:24:41.176Z",
-  "reviewedCommit": "ebd6cea30c7737d8dadb5f7ac8f1d6235ad6e092",
+  "createdAt": "2026-11-06T16:25:26.296Z",
+  "specFreezeHash": "108a2158f902444a131977e20baa46715f7504c950c32bb7c0ecf20da5f78818",
+  "reviewedCommit": "b28c58d7aa8ce566abf19bff4efe9b9c6e8db539",
   "findings": []
 }
