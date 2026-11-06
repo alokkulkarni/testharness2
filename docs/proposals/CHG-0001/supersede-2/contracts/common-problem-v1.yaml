@@ -1,0 +1,198 @@
+# DRAFT (CHG-0001 supersede-2, spec-author run-sup2-d1): shared part of the split of the frozen
+# contracts/todo-api-v1.yaml into three files (Source: clarifications Q56(b)); no wire change.
+# Applying: copy to docs/specs/CHG-0001/contracts/common-problem-v1.yaml, delete contracts/todo-api-v1.yaml, and
+# remove this comment block (see the draft note in docs/proposals/CHG-0001/supersede-2/sdd.md).
+openapi: 3.1.0
+info:
+  title: To-do API — common problem model
+  version: 1.0.0
+  description: |
+    Shared components of the CHG-0001 To-do API (Source: clarifications Q56): the `Problem` error body, its
+    `FieldError`, the one closed list of error codes, the shared error responses, the `X-Todo-Client` header and the
+    session cookie. It defines no operation. The two module contracts, `identity-api-v1.yaml` (identity module) and
+    `todos-api-v1.yaml` (to-dos module), reference these components by `$ref` (sdd.md §2, adr/0018). Together they
+    are the source of truth for every interface between the React SPA and the Spring Boot API; see
+    docs/specs/CHG-0001/sdd.md for behaviour and docs/specs/CHG-0001/requirements.md for the requirement IDs cited
+    in each operation.
+
+    Versioning (sdd.md §12.1): the three files change together. Their `info.version` values are always equal; a
+    breaking change to this file bumps every file.
+
+    Conventions (sdd.md "Validation" and "Error model"), for every operation of both module contracts:
+    - Request and response bodies are JSON. A request body must be sent with `Content-Type: application/json`
+      (a `charset` parameter is allowed); any other or a missing `Content-Type` is refused with 415
+      `UNSUPPORTED_MEDIA_TYPE`.
+    - Every error response from any path under `/api/` is an RFC 9457 problem details body
+      (`application/problem+json`, schema `Problem`) with a `code` from its enum, whatever produced it: the
+      operations' own errors listed in the module contracts, 401 and 403 from the authentication and client-header checks, an
+      unknown path (404 `NOT_FOUND`), a method not listed for a path (405 `METHOD_NOT_ALLOWED`, response
+      `MethodNotAllowed`, with an `Allow` header), and any other request refused before an operation runs
+      (its 4xx status, `REQUEST_REJECTED`, response `RequestRejected`). See sdd.md §6.
+    - "Characters" in every length limit means Unicode code points, on server and client alike.
+    - "Whitespace" means exactly the code points of the Unicode `White_Space` property listed in sdd.md §5
+      (including U+00A0 and the other Unicode spaces; not zero-width characters such as U+200B or U+FEFF).
+    - Where a field is trimmed before it is checked (identifier, title, search text `q`), leading and trailing
+      whitespace is removed and the limit applies to the trimmed value, stated in the field description; no raw
+      `maxLength` is declared for such fields.
+    - Request bodies accept only the properties listed (`additionalProperties: false`); an unknown property is
+      refused with 400 `VALIDATION_FAILED` (field error code `UNKNOWN_FIELD`).
+    - Authentication is an opaque session cookie (`todo_session`) set by login; the session lasts 8 hours from
+      login (absolute, not extended by activity).
+    - Every POST, PUT and DELETE request must carry the header `X-Todo-Client: web`. On operations that require a
+      session, the session is checked first (401), then the header (403), then the path and method (404, 405),
+      then the `Content-Type` (415), then the body (400), then ownership (404).
+    - Unknown query parameters are ignored (there is no page-size parameter; the page size is fixed at 20).
+components:
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: todo_session
+      description: |
+        Opaque random session token issued by login; valid for 8 hours from login (absolute) or until logout.
+  parameters:
+    ClientHeader:
+      name: X-Todo-Client
+      in: header
+      required: true
+      description: |
+        Must be exactly `web` on every POST, PUT and DELETE. Missing or different: 403 `CLIENT_HEADER_MISSING`
+        (cross-site request defence, sdd.md §4 and adr/0007).
+      schema:
+        type: string
+        const: web
+  responses:
+    BadRequest:
+      description: |
+        `code` is `VALIDATION_FAILED` (one or more field errors in `errors`, each naming the field; REQ-TODO-002
+        AC-10, REQ-AUTH-001 AC-3) or `MALFORMED_REQUEST` (the body is missing or not parseable JSON; `errors` is
+        empty).
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    Unauthenticated:
+      description: |
+        No session cookie, an unknown or logged-out session, or an expired session (REQ-AUTH-004 AC-1, AC-3, AC-4);
+        the body is the same in every case. `code` is `UNAUTHENTICATED`. No data is returned or changed. Produced
+        by the authentication check before any operation runs, so it takes precedence over 403, 404, 405 and 415
+        on paths that require a session.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    ClientHeaderMissing:
+      description: The `X-Todo-Client` header is missing or wrong. `code` is `CLIENT_HEADER_MISSING`.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    NotFound:
+      description: |
+        No to-do with this identifier is owned by the caller: it does not exist, was deleted, or belongs to another
+        user. The body is identical in every case (REQ-ISO-001 AC-2, REQ-TODO-004 AC-3, REQ-TODO-006 AC-4).
+        `code` is `NOT_FOUND`. The same code is used for a path the API does not define.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    MethodNotAllowed:
+      description: |
+        The path exists but the method is not listed for it (for example PATCH /api/v1/todos/{todoId}).
+        `code` is `METHOD_NOT_ALLOWED`; `errors` is empty (NFR-004 AC-2). Not listed per operation, because it
+        answers methods that have no operation.
+      headers:
+        Allow:
+          description: The methods the path supports, e.g. `GET, PUT, DELETE`.
+          schema:
+            type: string
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    UnsupportedMediaType:
+      description: |
+        A request body was sent with a `Content-Type` other than `application/json`, or without one.
+        `code` is `UNSUPPORTED_MEDIA_TYPE`; `errors` is empty (NFR-004 AC-2).
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    RequestRejected:
+      description: |
+        The request was refused before any operation ran and no more specific code applies: for example a path
+        rejected by the server's request firewall (a `;`, an encoded `/` or `..`), or a request the server cannot
+        accept (406, 413, 431). The status is that 4xx; `code` is `REQUEST_REJECTED`; `errors` is empty;
+        `detail` is a fixed sentence (NFR-004 AC-2). Not listed per operation.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    InternalError:
+      description: |
+        Unexpected failure. `code` is `INTERNAL_ERROR`; `detail` is a fixed generic sentence. Never contains a
+        stack trace, SQL, exception text, password or password hash (NFR-004 AC-2, REQ-AUTH-003 AC-3).
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+  schemas:
+    Problem:
+      type: object
+      description: RFC 9457 problem details.
+      required: [type, title, status, code, errors]
+      properties:
+        type:
+          type: string
+          description: '`urn:todo:problem:` followed by `code` in lower kebab case, e.g. urn:todo:problem:validation-failed.'
+        title:
+          type: string
+          description: Short fixed summary for the code.
+        status:
+          type: integer
+        detail:
+          type: string
+          description: Human-readable, safe to show; never contains internals.
+        code:
+          type: string
+          enum:
+            - VALIDATION_FAILED
+            - MALFORMED_REQUEST
+            - IDENTIFIER_TAKEN
+            - INVALID_CREDENTIALS
+            - UNAUTHENTICATED
+            - CLIENT_HEADER_MISSING
+            - NOT_FOUND
+            - METHOD_NOT_ALLOWED
+            - UNSUPPORTED_MEDIA_TYPE
+            - REQUEST_REJECTED
+            - INTERNAL_ERROR
+        errors:
+          type: array
+          description: Field errors; empty unless `code` is VALIDATION_FAILED or IDENTIFIER_TAKEN.
+          items:
+            $ref: '#/components/schemas/FieldError'
+    FieldError:
+      type: object
+      additionalProperties: false
+      required: [field, code, message]
+      properties:
+        field:
+          type: string
+          description: The request property or query parameter, e.g. title, dueDate, identifier, page.
+        code:
+          type: string
+          enum:
+            - REQUIRED
+            - BLANK
+            - TOO_SHORT
+            - TOO_LONG
+            - INVALID_FORMAT
+            - INVALID_TYPE
+            - INVALID_DATE
+            - INVALID_VALUE
+            - UNKNOWN_FIELD
+            - TAKEN
+        message:
+          type: string
+          description: Human-readable message naming the problem, shown next to the field (NFR-001 AC-3).
