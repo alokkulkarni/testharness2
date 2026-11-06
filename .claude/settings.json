@@ -13,7 +13,8 @@
     "sdlc-quality@sdlc-harness": true,
     "sdlc-docs@sdlc-harness": true,
     "sdlc-backend@sdlc-harness": true,
-    "sdlc-web@sdlc-harness": true
+    "sdlc-web@sdlc-harness": true,
+    "sdlc-design@sdlc-harness": true
   },
   "permissions": {
     "disableBypassPermissionsMode": "disable"

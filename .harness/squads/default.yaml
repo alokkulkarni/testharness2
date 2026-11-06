@@ -11,13 +11,23 @@ roster:
     agents:
       - requirements-analyst
       - spec-author
-    instances: 1
+    instances: 2
   tester:
     agents:
       - backend-qa
       - web-qa
       - mobile-qa
+    instances: 3
+  developer:
+    agents:
+      - java-engineer
+      - react-engineer
     instances: 2
+  designer:
+    agents:
+      - ux-designer
+      - drawio-architect
+    instances: 1
   documenter:
     agents:
       - okf-documenter
