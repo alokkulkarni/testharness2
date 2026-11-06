@@ -11,7 +11,7 @@
       "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
       "changeId": "CHG-0001",
       "agent": "critic",
-      "agentRunId": "ad511a5d96a0c8799"
+      "agentRunId": "a9e34623a7a9c2f9e"
     },
     "modelAlias": "harness/critic"
   },
@@ -20,108 +20,180 @@
       "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
       "changeId": "CHG-0001",
       "agent": "spec-author",
-      "agentRunId": "run-mw4rq9pt"
+      "agentRunId": "a066c9deebb6ce3f3"
     },
     {
       "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
       "changeId": "CHG-0001",
-      "agent": "requirements-analyst",
-      "agentRunId": "run-mw4qgud8"
+      "agent": "spec-author",
+      "agentRunId": "a3e19e5093870ca67"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "spec-author",
+      "agentRunId": "a6b977211fc5f040e"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "spec-author",
+      "agentRunId": "a6f7c7b95e495e3ed"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "spec-author",
+      "agentRunId": "aafa578fd8d832674"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "spec-author",
+      "agentRunId": "ac06db47df17fdbe8"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "spec-author",
+      "agentRunId": "acc94bf2296757658"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "spec-author",
+      "agentRunId": "ace0cd1bc4e0d42b7"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "spec-author",
+      "agentRunId": "adb682a304cfb260f"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "spec-author",
+      "agentRunId": "ae5ce3af27cea1335"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "spec-author",
+      "agentRunId": "aead285e735d23bf9"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "spec-author",
+      "agentRunId": "af3af15564ff7d8ab"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "spec-author",
+      "agentRunId": "af49701c94d7966d6"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "spec-author",
+      "agentRunId": "af87c0dc2d586e85d"
     }
   ],
-  "createdAt": "2026-11-06T16:24:36.493Z",
-  "specFreezeHash": "108a2158f902444a131977e20baa46715f7504c950c32bb7c0ecf20da5f78818",
-  "reviewedCommit": "b28c58d7aa8ce566abf19bff4efe9b9c6e8db539",
+  "createdAt": "2026-11-06T21:40:26.828Z",
+  "specFreezeHash": "90a67418d90d00de3ead88d8ec7d68a9e7c916160071714b176e40828dc15a99",
+  "reviewedCommit": "6e039a96b335f9985fe9ef3a4d5ad66ce48b9d66",
   "diffHash": "4630cadff9513c9723c7ea704d0d0e0de9ca8e911b6429f89c4ef16f29b99fa5",
-  "summary": "Pre-re-freeze review of CHG-0001 spec at b28c58d. Applied requirements.md, sdd.md, ADR-0001 equal the round-3 draft at 80b916b except front matter and the removed draft note; 5aabf73..b28c58d leaves contracts, intent.md, design/ and spec-freeze.json untouched. Q46-Q49 reflected faithfully; Q36-Q39, Q44 carried into REQ-AUTH-002, NFR-001, REQ-NAV-001, REQ-TODO-007, NFR-006; no earlier answer contradicted. REQ/AC ids, analyst defaults 7-12, 12.1 items 5-10, section and ADR numbers, contract codes and strings, and UX line citations resolve; each new or changed requirement has an SDD 14 row. Upstream hash not self-verified. Authors taken from the draft front matter at 80b916b; the applied commits are the requester. Prior F-11, F-12 closed by Q35; F-13 to F-16 unchanged; F-17 carried as F-5. No blocker or major: four minor, seven info.",
+  "summary": "round 1 (draft supersede-2 at 6e039a9): exhaustive review of all 11 draft files against the frozen spec (docs/specs unchanged since 2a0d38e). Q50-Q63 are implemented; NFR-007 and C-2 match Q57 verbatim; SDD sections 2, 3, 6, 10, 12.1, 13 and 14, ADR-0001/0002/0011/0012/0014/0018 and the three contracts are consistent; every requirement traces to section 14. D-45 form holds: no draft notes, YAML comment blocks or copy/delete steps; nothing outside requirements.md, sdd.md, contracts/ and adr/; no frozen file removed (contracts/todo-api-v1.yaml present). Q63 complete: no todos-api-v1.yaml in the draft, every cross-file ref resolves to an existing component of common-problem-v1.yaml, and ADR-0012 L5-L8 and ADR-0018 L30-L32 state why the to-dos file keeps its name. tool-spikes.md citations resolve. No blocker or major; 6 minor and 5 info findings.",
   "findings": [
     {
       "id": "F-1",
       "severity": "minor",
-      "message": "The applied spec still speaks of itself as a draft or a supersede: this draft reading (L323, L567), The draft keeps safeReturnTo unchanged (L577), The draft takes the reset (L582), and The contract itself is not changed by this supersede (L306). Once frozen these read as stale process text rather than design.",
-      "requirement": "NFR-006",
-      "location": "docs/specs/CHG-0001/sdd.md:L306-L586",
-      "suggestion": "Before the re-freeze replace this draft or the draft with this SDD (or the design), and reword L306 to: the contract is unchanged; this rule governs where it says less."
+      "message": "The context paragraph lists the second supersede answers that change only the SDD, ADRs and contracts as Q50, Q52-Q56, Q58, Q59, Q60 and Q63, but omits Q61 and Q62; Q62 changed SDD section 10, section 12.1 item 19, ADR-0012 and ADR-0018 (round-3 F-1, F-2, F-6).",
+      "requirement": "NFR-007",
+      "location": "docs/proposals/CHG-0001/supersede-2/requirements.md:L20-L23",
+      "suggestion": "Write Q50, Q52-Q56 and Q58-Q63 (or name Q61 and Q62 explicitly)."
     },
     {
       "id": "F-2",
       "severity": "minor",
-      "message": "SDD 12.1 item 7(d) keeps the Back to my to-dos link on the edit page although the Q48 answer says the link stays only on the detail page; the SDD tags it as a reading. Items 7(a) to 7(c), 9 and 10 are likewise choices the requester did not make. They are surfaced honestly, but confirmation by silence at freeze would leave 7(d) as an unconfirmed reinterpretation of a requester answer.",
-      "requirement": "NFR-006",
-      "location": "docs/specs/CHG-0001/sdd.md:L555-L586",
-      "suggestion": "Have the approver confirm 12.1 items 7(a)-(d), 9 and 10 explicitly in the re-freeze approval (or in a clarification entry), as Q35 did for the first freeze."
+      "message": "The section 12.1 lead cites Q51, Q56-Q58 and Q63 as the source of items 11-20, but item 19 (RequestIdFilter on REQUEST and ERROR dispatches) comes from Q62; and it says item 21 was decided by the requester in Q60, while Q60 decided only the Spring Boot 4.x line, not the switch to openapi-request-validator-core 3.0.0 and its v3 MockMvc adapter, which is an engineering consequence for the approver to confirm.",
+      "requirement": "NFR-005, NFR-007",
+      "location": "docs/proposals/CHG-0001/supersede-2/sdd.md:L639-L642",
+      "suggestion": "Add Q62 to the sources of items 11-20, and say the Boot 4.x line of item 21 was decided in Q60 while its validator choice follows from it and is confirmed by approving the freeze."
     },
     {
       "id": "F-3",
       "severity": "minor",
-      "message": "The clear-completed text rule says For any N other than 1 use the plural sentence, which literally includes N = 0; Q43 (approved) says that when the re-fetch finds nothing completed no dialog opens, the control is disabled and a status message is shown. The SDD does not state the N = 0 case, so the rule as written admits a dialog reading Delete all 0 completed to-dos.",
-      "requirement": "REQ-TODO-007",
-      "location": "docs/specs/CHG-0001/sdd.md:L462-L469",
-      "suggestion": "Say For any N of 2 or more, and add: N = 0 after the re-fetch opens no dialog and disables the control (Q43, UX design); add that case to the REQ-TODO-007 component test in SDD 14."
+      "message": "Q60 moved the backend to the latest Spring Boot 4.x line, but the starter list on the same page is unchanged from the frozen file (spring-boot-starter-web, spring-boot-starter-test). Spring Boot 4.0 modularised its starters (the web starter is superseded by spring-boot-starter-webmvc, Flyway auto-configuration needs its own starter, test slices moved to per-technology test starters); ADR-0014 likewise still assumes Flyway auto-configures from the Flyway dependency alone. Stated from knowledge of the 4.0 release, not verified against a primary source in this session.",
+      "requirement": "NFR-005",
+      "location": "docs/proposals/CHG-0001/supersede-2/adr/0002-spring-boot-rest-api.md:L20-L22",
+      "suggestion": "Name the Boot 4.x starters, or state that the java-engineer uses the starter names the pinned 4.x release defines (including the Flyway starter, with a matching note in ADR-0014)."
     },
     {
       "id": "F-4",
       "severity": "minor",
-      "message": "The three commits that applied the supersede (7c949e3, 78ab0c4, b28c58d) are all titled specs updated, which breaks the semantic commit rule (CLAUDE.md rule 12) and does not name the change or the clarifications applied; 7c949e3 also deletes the reviewed draft under docs/proposals in the same commit.",
-      "requirement": "REQ-ACC-001",
-      "location": "docs/specs/CHG-0001/requirements.md:L1-L9",
-      "suggestion": "If the branch history can still be rewritten before the PR, reword them (for example docs(spec): CHG-0001 apply supersede-1 for Q36-Q49); otherwise state the mapping in the re-freeze PR description."
+      "message": "The Context still says the module layout is open, then in the next sentence says the requester chose a modular monolith (C-2), and the Boot line is now fixed by Q60; one line also runs far past the file wrap width.",
+      "requirement": "NFR-007",
+      "location": "docs/proposals/CHG-0001/supersede-2/adr/0002-spring-boot-rest-api.md:L10-L12",
+      "suggestion": "Say only the Java version, build tool and starters were open; the module layout is fixed by C-2 (Q51) and ADR-0018. Rewrap the paragraph."
     },
     {
       "id": "F-5",
-      "severity": "info",
-      "message": "The sdd.md upstream sha256 for requirements.md was re-stamped (e3893713...) but this review could not recompute it: hashing commands are not in the critic grant. It relies on the harness chain gate, reported ok by the caller. requirements.md upstream for intent.md is unchanged and intent.md is unchanged, so that hash still holds.",
-      "requirement": "REQ-ACC-001",
-      "location": "docs/specs/CHG-0001/sdd.md:L6-L8",
-      "suggestion": "The orchestrator re-runs the chain gate at b28c58d immediately before harness freeze --supersede."
+      "severity": "minor",
+      "message": "The licence and maintenance of the new v3 validator artifacts are stated as unverified, not rechecked for v3, and no check is assigned, unlike the artifact id, which the java-engineer must confirm. ADR-0001 holds the dependency set to MIT or Apache-2.0.",
+      "requirement": "NFR-004",
+      "location": "docs/proposals/CHG-0001/supersede-2/adr/0012-contract-tests-swagger-request-validator.md:L27-L29",
+      "suggestion": "Have the java-engineer confirm the Apache-2.0 licence in the Maven Central POM of both v3 artifacts when pinning, and stop and report a spec question if it differs; drop the parenthetical."
     },
     {
       "id": "F-6",
-      "severity": "info",
-      "message": "NFR-001 AC-1 names six audited screens while SDD 9, 13, 14 and ADR-0001 L43 speak of eight. The not-found page is bound by REQ-NAV-001 AC-7; the detail page only by SDD prose (pre-existing since the first freeze).",
-      "requirement": "NFR-001",
-      "location": "docs/specs/CHG-0001/requirements.md:L253",
-      "suggestion": "Optionally add a parenthetical to NFR-001 AC-1 naming the detail and not-found pages, or accept as is at the re-freeze."
+      "severity": "minor",
+      "message": "D-45 step 1 names requirements-analyst as the author of a requirements.md draft; this draft was written by spec-author (commit 8eefb35, Drafted by spec-author) and stamped with agent spec-author. The content is the Q57 wording accepted verbatim, so this is a process departure, not a content defect; the stamp itself must not be hand-edited.",
+      "requirement": "NFR-007",
+      "location": "docs/proposals/CHG-0001/supersede-2/requirements.md:L4-L8",
+      "suggestion": "Orchestrator: record the departure on the PR, or have requirements-analyst confirm the draft and re-stamp with that agent if the harness expects it."
     },
     {
       "id": "F-7",
       "severity": "info",
-      "message": "SDD 8 cites analyst defaults 7, 8, 9 and 12 by number but not analyst default 11 (animation stops within 5 seconds); it is implemented by the at most 5 seconds clause but not traced by number.",
-      "requirement": "REQ-NAV-001",
-      "location": "docs/specs/CHG-0001/sdd.md:L422-L425",
-      "suggestion": "Append analyst default 11 to the WCAG 2.2.2 clause."
+      "message": "The label supersede-2 (the proposal folder name) remains as provenance in the SDD and ADR status lines; it parallels the frozen round 2 and first supersede wording, so it is not a D-45 draft note, but requirements.md calls the same thing the second supersede.",
+      "requirement": "NFR-007",
+      "location": "docs/proposals/CHG-0001/supersede-2/sdd.md:L640-L641",
+      "suggestion": "Optionally use the second supersede consistently (also adr/0002 L3-L4, adr/0018 L3)."
     },
     {
       "id": "F-8",
       "severity": "info",
-      "message": "SDD 6.1 quotes the contract FieldError.message description as Human-readable message naming the problem; the contract continues with shown next to the field (NFR-001 AC-3) (todo-api-v1.yaml L757). Not misleading, but the quote is partial.",
-      "requirement": "NFR-006",
-      "location": "docs/specs/CHG-0001/sdd.md:L303-L306",
-      "suggestion": "Quote the description whole."
+      "message": "The first freeze is used for the state this supersede replaces (sdd.md L696, L712, L750; adr/0012 L6, L19, L28; adr/0018 L8, L24, L31), although the current frozen state is the supersede-1 re-freeze at 2a0d38e; the names referred to date from the first freeze and were kept, so the text is accurate but could be read as skipping supersede-1.",
+      "requirement": "NFR-007",
+      "location": "docs/proposals/CHG-0001/supersede-2/adr/0018-modular-monolith-module-boundaries.md:L8",
+      "suggestion": "Optionally say the frozen spec or before this supersede."
     },
     {
       "id": "F-9",
       "severity": "info",
-      "message": "ADR-0008 (absolute 8-hour session) is unchanged and does not record the Q36 decision that the session gives no warning or extension and is accepted under the WCAG 2.2.1 essential exception; that rationale lives only in requirements NFR-001, SDD 4, 9 and 13.",
-      "requirement": "NFR-001",
-      "location": "docs/specs/CHG-0001/adr/0008-absolute-session-lifetime.md:L20-L25",
-      "suggestion": "Optionally add one Consequences bullet citing Q36 and SDD 9 when ADRs are next revisited; not needed for the re-freeze."
+      "message": "The contract lint (web script lint:contracts, redocly lint, @redocly/cli dev dependency) is a new verification step no Q50-Q63 answer asked for; it is disclosed as an engineering default in section 12.1 item 17 and section 13, so the approver confirms it with the freeze.",
+      "requirement": "NFR-007",
+      "location": "docs/proposals/CHG-0001/supersede-2/sdd.md:L787-L789",
+      "suggestion": "None required; the approver should note it."
     },
     {
       "id": "F-10",
       "severity": "info",
-      "message": "REQ-NAV-001 AC-4 for /todos/a%2Fb and /todos/% depends on how the pinned React Router version decodes path segments and params (an encoded slash kept inside one segment, a lone % tolerated). If the router treats %2F as a separator, /todos/a%2Fb would match the catch-all and show the not-found page. SDD 14 already lists component tests for these paths, which would catch it.",
-      "requirement": "REQ-NAV-001",
-      "location": "docs/specs/CHG-0001/sdd.md:L429-L436",
-      "suggestion": "Keep those component tests and add an e2e check for /todos/a%2Fb in a real browser, since memory-router decoding can differ from the browser router."
+      "message": "The shared NotFound response keeps the frozen to-do-specific description in the common file, which the identity module never lists; acknowledged in section 12.1 item 16.",
+      "requirement": "NFR-004",
+      "location": "docs/proposals/CHG-0001/supersede-2/contracts/common-problem-v1.yaml:L86-L94",
+      "suggestion": "None; frozen wording kept with no wire effect."
     },
     {
       "id": "F-11",
       "severity": "info",
-      "message": "The applied files now name @alokkulkarni as author, who is also the freeze approver. The applied text is identical to the agent-authored draft that passed critic round 3 and to what this review read, so review independence holds, but the record should say the human applied, not authored, the content.",
-      "requirement": "REQ-ACC-001",
-      "location": "docs/specs/CHG-0001/sdd.md:L4-L5",
-      "suggestion": "Note in the re-freeze PR that the text was drafted by spec-author (dac02e1, da26a2a, 80b916b) and applied verbatim by the requester."
+      "message": "Tool facts cited by ADR-0001 and ADR-0012 resolve to .harness/changes/CHG-0001/tool-spikes.md sections 1-5 and match them; they are relayed results (spike projects not in the repository), so they cannot be re-run here. The section 5 lint result (at 8eefb35) still applies: git diff 8eefb35 HEAD on the contracts shows only removed comment blocks and the todos-api to todo-api rename.",
+      "requirement": "NFR-004, NFR-007",
+      "location": ".harness/changes/CHG-0001/tool-spikes.md:L1-L85",
+      "suggestion": "None; the lint runs again in the gates."
     }
   ]
 }
