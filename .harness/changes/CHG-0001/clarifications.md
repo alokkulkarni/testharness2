@@ -595,3 +595,16 @@ request id and status lost from the log line when a filter throws), F-2 ("outerm
 
 **Answer:** @alokkulkarni (relayed by the coordinator, multiple-choice pick): "Fix all in one pass" — the Boot 4.x
 wording plus round-3 F-1, F-2 and F-6, in one pass.
+
+## Q63. How does the contract split keep every frozen file, now that a re-freeze removes none?
+
+Raised by the coordinator when moving the supersede-2 draft to the D-45 re-freeze procedure (harness #146), which
+says "a draft replaces files and removes none". The draft as revised at `5718670` replaces the frozen
+`docs/specs/CHG-0001/contracts/todo-api-v1.yaml` with `identity-api-v1.yaml`, `todos-api-v1.yaml` and
+`common-problem-v1.yaml` (Q56(b)), so it removes a frozen file, which D-45 allows only as a new change. The
+recommended option: keep the file name `todo-api-v1.yaml` for the to-dos module's contract.
+
+**Answer:** @alokkulkarni (relayed by the coordinator, multiple-choice pick): "Keep filename for to-dos (Recommended)"
+— `contracts/todo-api-v1.yaml` stays and becomes the to-dos module's contract (the content of the draft's
+`todos-api-v1.yaml` under the old name); `identity-api-v1.yaml` and `common-problem-v1.yaml` are added; it is still a
+three-file split, and still a re-freeze; references change from `todos-api-v1.yaml` to `todo-api-v1.yaml`.
