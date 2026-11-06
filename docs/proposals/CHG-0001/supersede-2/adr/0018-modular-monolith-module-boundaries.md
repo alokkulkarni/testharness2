@@ -62,10 +62,13 @@ only `user_id` and `UserRepository` had no lookup by id.
   given root package, so a non-vacuity test runs the same rules on a fixture root package in the test source set,
   outside `app.todo` (for example `archfixture`), made of plain classes with no
   Spring annotations, that holds a deliberate violation of each rule, and expects each to fail (sdd.md §14).
-- **Logging context** (sdd.md §10). `RequestIdFilter` (in `common`), the outermost filter, writes the per-request log
-  line after the chain returns and then clears the whole logging context in its `finally`;
-  `SessionCookieAuthenticationFilter` only puts the internal user id into the logging context under a plain
-  logging-context key, so `common` names no `auth` type.
+- **Logging context** (sdd.md §10, which describes it in full). `RequestIdFilter` (in `common`) is a servlet filter
+  registered ahead of the Spring Security filter chain (not inside it), for the `REQUEST` and `ERROR` dispatches. It
+  writes the one per-request log line in its `finally`, before clearing the logging context (status 500 and the stack
+  trace, with the request id, when an exception escapes the chain, which it then rethrows), keeps the request id in a
+  request attribute and restores it on the ERROR dispatch without a second line; `SessionCookieAuthenticationFilter`
+  only puts the internal user id into the logging context under a plain logging-context key, so `common` names no
+  `auth` type.
 
 Still valid unchanged: ADR-0003 (one SQLite file through sqlite-jdbc), ADR-0016 (one connection; with one
 `DataSource` in `config` it is also NFR-007 AC-1's one pool), NFR-002 (local run, one `./mvnw spring-boot:run`) and

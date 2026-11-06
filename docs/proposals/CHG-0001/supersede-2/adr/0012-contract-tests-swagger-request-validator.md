@@ -1,6 +1,6 @@
 # ADR-0012 Contract tests with openapi-request-validator (formerly swagger-request-validator) and an endpoint inventory
 
-> Draft note for applying supersede-2 (remove when applying): copy to `docs/specs/CHG-0001/adr/0012-contract-tests-swagger-request-validator.md` (file name kept); changed for Q56 and NFR-007 AC-3 (three contract files, renamed validator); see the note in `sdd.md`.
+> Draft note for applying supersede-2 (remove when applying): copy to `docs/specs/CHG-0001/adr/0012-contract-tests-swagger-request-validator.md` (file name kept); changed for Q56 and NFR-007 AC-3 (three contract files, renamed validator) and Q60 (Spring Boot 4.x); see the note in `sdd.md`.
 
 Status: proposed (CHG-0001, N03-spec); amended for Q56 and NFR-007 AC-3. Requirements: NFR-004, REQ-AUTH-005 AC-1,
 NFR-007 AC-3, and every requirement whose interface is in `contracts/identity-api-v1.yaml` or
@@ -57,10 +57,10 @@ docs/FEATURES.md, read the same day (summarised, not verbatim), its OpenAPI 3.1 
   `$ref`s. It is not linted on its own: having no operations and no servers, it fails `no-empty-servers` and warns
   `no-unused-components`. The lint runs as the `web/package.json` script `lint:contracts`
   (`pnpm -C web lint:contracts`, `redocly lint` on the two module roots), part of the contract level of sdd.md §14
-  and of the build's test gate.
+  and run in the gates.
 
 Source of the tool facts above: tool spikes of 2026-11-06, recorded in
-docs/proposals/CHG-0001/supersede-2/tool-spikes.md at commit 29b6c94. In short (java-engineer spikes A and
+`docs/proposals/CHG-0001/supersede-2/tool-spikes.md`. In short (java-engineer spikes A and
 B, JDK Temurin 23.0.2 with `release` 21, Maven 3.10.0, JUnit 5.10.2, `openapi-request-validator-core:3.0.0`): an
 OpenAPI 3.1 module file with `$ref`s to a sibling components-only file (parameter `ClientHeader`, response
 `NotFound` → `Problem`, security scheme `sessionCookie`) loads through
@@ -69,16 +69,16 @@ location; a missing `$ref` header is reported; the `$ref` `NotFound` response ac
 rejects a bad enum value; the first load logs one warning, "Unknown keyword components", and still succeeds; a
 missing `todo_session` cookie gives no validation error, whether the scheme is local or a `$ref`; direct validation
 against `Problem` works with `SchemaValidator` from either the common file or a module file. Lint results:
-react-engineer check of the draft at 8eefb35 (`@redocly/cli` 2.76.0), same file.
+react-engineer check of the supersede-2 draft (`@redocly/cli` 2.76.0), §5 of the same file.
 
 ## Consequences
 
 - The contract is exercised by the same tests that check behaviour; no separate contract suite to maintain.
 - The validator supports OpenAPI 3.1 only as far as its current release does; constructs the validator cannot read
   are kept out of the contract (the contract uses plain 3.1 schemas and relative `$ref`s only).
-- The v3 adapter is documented as compatible with Spring 7+ / Spring Boot 4+ (tool spikes of 2026-11-06 §1, above),
-  so choosing it ties the build to Spring Boot 4 or later; the java-engineer pins a Boot 4.x line accordingly
-  (sdd.md §12.1 item 21, §13).
+- The v3 adapter is documented as compatible with Spring 7+ / Spring Boot 4+ (tool spikes of 2026-11-06 §1, above).
+  The backend targets the latest Spring Boot 4.x release, pinned exactly in `api/pom.xml` by the java-engineer
+  (Source: clarifications Q60; ADR-0002, sdd.md §12.1 item 21, §13), which meets it.
 - `MethodNotAllowed` and `RequestRejected` are defined only in `common-problem-v1.yaml` and referenced by no
   operation (as in the first freeze's file), so neither the lint through the module roots nor an operation's
   validation covers them; the direct `SchemaValidator` checks against `Problem` above (405, `REQUEST_REJECTED`) are

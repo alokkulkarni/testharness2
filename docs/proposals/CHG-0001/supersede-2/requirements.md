@@ -10,17 +10,25 @@ authors:
     changeId: CHG-0001
     agent: spec-author
     agentRunId: run-sup2-d3
+  - squadSessionId: SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM
+    changeId: CHG-0001
+    agent: spec-author
+    agentRunId: run-sup2-d4
 upstream:
   - path: docs/specs/CHG-0001/intent.md
     sha256: 8465eeb8e5e930d7bd165b4c152e9be5bd62e33d8350a11291867d0b16792c98
 ---
 
 > **Draft note for applying supersede-2 (remove when applying).** Drafted by spec-author (run `run-sup2-d1`) for
-> clarifications Q50–Q59. Changes to this file: the source sentence of "Context and goal" (Q50–Q59), constraint C-2
-> (Q51, Q57) and the new NFR-007 "Modular API" (Q51, Q57, worded exactly as accepted in Q57). Nothing else differs from
-> the frozen file; no analyst default is added (Q57 accepted the NFR-007 wording, so it is the requester's).
+> clarifications Q50–Q59. Changes to this file: the source sentence of "Context and goal" (Q50–Q60), constraint C-2
+> (Q51, Q57) and the new NFR-007 "Modular API" (Q51, Q57, worded exactly as accepted in Q57). The front matter differs
+> too: `authors` lists the spec-author runs `run-sup2-d1`, `run-sup2-d3` and `run-sup2-d4` where the frozen file has
+> `login: "@alokkulkarni"`, and the applier sets `authors` as the requester decides (supersede-1 used
+> `login: "@alokkulkarni"`); `upstream` holds the frozen file's value. Nothing else differs from the frozen file; no
+> analyst default is added (Q57 accepted the NFR-007 wording, so it is the requester's).
 > Revised by spec-author (run `run-sup2-d3`) for the draft critic's round-2 finding F-1: the apply steps are no
-> longer repeated here.
+> longer repeated here. Revised by spec-author (run `run-sup2-d4`) for clarification Q60 (added to the source
+> sentence) and the draft critic's round-3 finding F-7 (the front-matter sentence above).
 > To apply: follow the apply steps in the draft note of `sdd.md` in this folder, which is the single source for them
 > (including the exact list of files to copy, which leaves out `tool-spikes.md`, and the removal of this note). The
 > `upstream` sha256 in this file's front matter is carried over from the frozen file, unverified; never hand-edit it.
@@ -33,8 +41,8 @@ CHG-0001 is a new to-do list application (Q1: to-do app only). Individual users 
 their own to-dos in a web UI backed by an HTTP API (Q2, Q5, Q11). To-dos persist across restarts (Q4). The first
 release runs locally only (Q10). Source of every requirement is the answered `clarifications.md` (Q1–Q34, and Q36–Q39,
 Q44, Q46 and Q47 for the items added or changed by the first supersede; Q48 and Q49 change only the SDD and ADR-0001, not these
-requirements; Q51 and Q57 add constraint C-2 and NFR-007 in the second supersede, whose other answers, Q50, Q52–Q56, Q58 and Q59,
-change only the SDD, the ADRs and the contract files); the Q numbers
+requirements; Q51 and Q57 add constraint C-2 and NFR-007 in the second supersede, whose other answers, Q50, Q52–Q56, Q58, Q59
+and Q60, change only the SDD, the ADRs and the contract files); the Q numbers
 in brackets trace each item. Q33 records that the requester accepted every item the first draft had marked as
 proposed; Q34 settled the three ambiguous criteria. The few points the requester did not decide carry the tag
 `(analyst default)` and are listed under "Analyst defaults" for the approver to confirm at freeze.
