@@ -55,9 +55,15 @@
       ],
       "executor": "any",
       "isolation": "none",
-      "status": "pending",
+      "status": "running",
       "attempts": 0,
-      "maxAttempts": 3
+      "maxAttempts": 3,
+      "claim": {
+        "runId": "run-mw4qgud8",
+        "executor": "claude-code",
+        "leaseUntil": "2026-11-06T09:04:25.436Z",
+        "claimedAt": "2026-11-06T08:49:25.436Z"
+      }
     },
     {
       "id": "N03-spec",
