@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N01-clarify",
+  "gate": "clarified",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "tool",
+    "id": "orchestrator",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "orchestrator",
+      "agentRunId": "a6835e8e33ca163ea"
+    },
+    "modelAlias": "harness/orchestrator"
+  },
+  "createdAt": "2026-11-06T08:48:32.780Z",
+  "findings": []
+}
