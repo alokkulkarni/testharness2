@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "path": "intent/a-new-todo-list-app-where-user-can-creat.md",
+  "sha256": "8465eeb8e5e930d7bd165b4c152e9be5bd62e33d8350a11291867d0b16792c98",
+  "reviewedCommit": "9081d35f109962d11de0c8715c8acdbe33d54dab",
+  "ref": "https://github.com/alokkulkarni/testharness2/pull/1#pullrequestreview-5797517809",
+  "approver": "@alokkulkarni",
+  "acceptedAt": "2026-11-06T08:33:51.056Z",
+  "consumedBy": null
+}
