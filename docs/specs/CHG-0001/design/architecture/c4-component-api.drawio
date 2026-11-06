@@ -1,0 +1,110 @@
+<mxfile host="sdlc-harness">
+  <diagram id="c4-component-api" name="C4 component API">
+    <mxGraphModel grid="1" gridSize="10" page="1" pageWidth="2200" pageHeight="1160">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title" value="&lt;b&gt;To-do list · C4 component view · API (api/, root package app.todo)&lt;/b&gt;&lt;br&gt;CHG-0001 · frozen spec · drawn 2026-11-06&lt;br&gt;Traces: sdd §2, §4, §5, §6, §7, §10; ADR-0004, 0005, 0007, 0008, 0009, 0010, 0011, 0013, 0015, 0016; REQ-AUTH-001..005, REQ-ISO-001, REQ-TODO-001..007, REQ-LIST-001..003, NFR-004" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="1400" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="spa" value="&lt;b&gt;SPA&lt;/b&gt; [React, TypeScript]&lt;br&gt;Calls /api/v1/**" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="40" y="170" width="150" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="boundary" value="API container [Java 21, Spring Boot] · Spring Security stateless, no HttpSession (ADR-0004)" style="rounded=0;dashed=1;fillColor=none;strokeColor=#666666;verticalAlign=top;align=left;spacingLeft=10;html=1;" vertex="1" parent="1">
+          <mxGeometry x="230" y="100" width="1930" height="990" as="geometry"/>
+        </mxCell>
+        <mxCell id="reqid" value="&lt;b&gt;RequestIdFilter&lt;/b&gt; [servlet filter]&lt;br&gt;Request id for logs only; not returned (sdd §10)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;" vertex="1" parent="1">
+          <mxGeometry x="260" y="160" width="240" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="sessf" value="&lt;b&gt;SessionCookieAuthenticationFilter&lt;/b&gt; [Spring Security]&lt;br&gt;Hashes cookie token, loads session; rejects missing, unknown, expired (ADR-0004, 0008)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;" vertex="1" parent="1">
+          <mxGeometry x="260" y="340" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="hdrf" value="&lt;b&gt;ClientHeaderFilter&lt;/b&gt; [servlet filter]&lt;br&gt;POST, PUT, DELETE need X-Todo-Client: web, else 403 (ADR-0007)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;" vertex="1" parent="1">
+          <mxGeometry x="260" y="540" width="240" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="authc" value="&lt;b&gt;AuthController&lt;/b&gt; [Spring MVC]&lt;br&gt;signUp, logIn, logOut, getSession" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;" vertex="1" parent="1">
+          <mxGeometry x="620" y="160" width="240" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="todoc" value="&lt;b&gt;TodoController&lt;/b&gt; [Spring MVC]&lt;br&gt;list, get, create, update, setDone, delete, clearCompleted; TodoQuery" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;" vertex="1" parent="1">
+          <mxGeometry x="620" y="540" width="240" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="authsvc" value="&lt;b&gt;AuthService&lt;/b&gt; [Spring bean]&lt;br&gt;Trim, validate, Argon2id hash and verify, dummy hash for unknown user (ADR-0005)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;" vertex="1" parent="1">
+          <mxGeometry x="980" y="160" width="240" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="sesssvc" value="&lt;b&gt;SessionService&lt;/b&gt; [Spring bean]&lt;br&gt;Create (SHA-256 of 256-bit token, 8 h absolute), resolve, delete (ADR-0004, 0008)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;" vertex="1" parent="1">
+          <mxGeometry x="980" y="340" width="240" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="todosvc" value="&lt;b&gt;TodoService&lt;/b&gt; [Spring bean]&lt;br&gt;Create, whole-content replace, done, delete, clamped paging, totals, clear completed (sdd §7, ADR-0006)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;" vertex="1" parent="1">
+          <mxGeometry x="980" y="540" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="rules" value="&lt;b&gt;PasswordRules, IdentifierRules&lt;/b&gt; [validators]&lt;br&gt;Password 8-128, identifier 3-254, email or username (sdd §5, ADR-0010)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;" vertex="1" parent="1">
+          <mxGeometry x="1340" y="160" width="240" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="ws" value="&lt;b&gt;Whitespace&lt;/b&gt; [utility]&lt;br&gt;Unicode White_Space set of 25 code points: trim, isBlank (sdd §5)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;" vertex="1" parent="1">
+          <mxGeometry x="1340" y="340" width="240" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="todoval" value="&lt;b&gt;TodoValidator&lt;/b&gt; [validator]&lt;br&gt;Title, description, strict due date, priority; all field errors together (sdd §5, ADR-0010)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;" vertex="1" parent="1">
+          <mxGeometry x="1340" y="540" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="clock" value="&lt;b&gt;ClockConfig&lt;/b&gt; [Spring config]&lt;br&gt;Injected Clock, system UTC in the normal run (ADR-0013)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;" vertex="1" parent="1">
+          <mxGeometry x="1340" y="700" width="240" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="userrepo" value="&lt;b&gt;UserRepository&lt;/b&gt; [Spring JdbcClient]&lt;br&gt;Find by identifier_key, insert (ADR-0009, 0015)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;" vertex="1" parent="1">
+          <mxGeometry x="620" y="830" width="240" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="sessrepo" value="&lt;b&gt;SessionRepository&lt;/b&gt; [Spring JdbcClient]&lt;br&gt;Insert, find by token_hash, delete expired and on logout" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;" vertex="1" parent="1">
+          <mxGeometry x="980" y="830" width="240" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="todorepo" value="&lt;b&gt;TodoRepository&lt;/b&gt; [Spring JdbcClient]&lt;br&gt;Every method takes userId; WHERE public_id AND user_id in one statement (ADR-0009)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;" vertex="1" parent="1">
+          <mxGeometry x="1340" y="830" width="240" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="db" value="&lt;b&gt;SQLite file&lt;/b&gt;&lt;br&gt;[HikariCP size 1, WAL, foreign_keys ON]&lt;br&gt;DatabaseConfig + Flyway (ADR-0014, 0016)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="960" y="980" width="280" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="advice" value="&lt;b&gt;ProblemDetailsAdvice&lt;/b&gt; [Spring MVC]&lt;br&gt;ApiException subtypes and MVC exceptions: 400, 404, 405, 409, 415, 500" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;" vertex="1" parent="1">
+          <mxGeometry x="1800" y="160" width="240" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="entry" value="&lt;b&gt;ProblemAuthenticationEntryPoint&lt;/b&gt; [Spring Security]&lt;br&gt;401 UNAUTHENTICATED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;" vertex="1" parent="1">
+          <mxGeometry x="1800" y="340" width="240" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="pw" value="&lt;b&gt;ProblemWriter&lt;/b&gt; [component]&lt;br&gt;Only builder of error bodies: application/problem+json with code and errors[] (ADR-0011)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;" vertex="1" parent="1">
+          <mxGeometry x="1800" y="540" width="240" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="rej" value="&lt;b&gt;ProblemRequestRejectedHandler&lt;/b&gt; [Spring Security]&lt;br&gt;Firewall rejections: REQUEST_REJECTED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;" vertex="1" parent="1">
+          <mxGeometry x="1800" y="740" width="240" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="errc" value="&lt;b&gt;ProblemErrorController&lt;/b&gt; [Spring MVC]&lt;br&gt;Container /error forwards; no whitelabel page" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;" vertex="1" parent="1">
+          <mxGeometry x="1800" y="880" width="240" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1" value="HTTP/JSON" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="spa" target="reqid"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" value="next" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="reqid" target="sessf"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" value="then header check (401 before 403)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="sessf" target="hdrf"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" value="routes /auth/**" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="hdrf" target="authc"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="560" y="595"/><mxPoint x="560" y="210"/></Array></mxGeometry></mxCell>
+        <mxCell id="e5" value="routes /todos/**" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="hdrf" target="todoc"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" value="delegates" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="authc" target="authsvc"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e7" value="delegates" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="todoc" target="todosvc"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e8" value="validates" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="authsvc" target="rules"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e9" value="validates" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="todosvc" target="todoval"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e10" value="trims with" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="todoval" target="ws"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e11" value="creates, deletes sessions" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="authsvc" target="sesssvc"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e12" value="users [JDBC]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="authsvc" target="userrepo"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="940" y="215"/><mxPoint x="940" y="780"/><mxPoint x="740" y="780"/></Array></mxGeometry></mxCell>
+        <mxCell id="e13" value="sessions [JDBC]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="sesssvc" target="sessrepo"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1280" y="395"/><mxPoint x="1280" y="780"/><mxPoint x="1100" y="780"/></Array></mxGeometry></mxCell>
+        <mxCell id="e14" value="to-dos [JDBC]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="todosvc" target="todorepo"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1280" y="600"/><mxPoint x="1280" y="810"/><mxPoint x="1460" y="810"/></Array></mxGeometry></mxCell>
+        <mxCell id="e15" value="resolves session via" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="sessf" target="sesssvc"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="560" y="400"/><mxPoint x="560" y="310"/><mxPoint x="900" y="310"/><mxPoint x="900" y="395"/></Array></mxGeometry></mxCell>
+        <mxCell id="e16" value="JDBC" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="sessrepo" target="db"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e16b" value="JDBC" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="userrepo" target="db"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="740" y="1030"/></Array></mxGeometry></mxCell>
+        <mxCell id="e16c" value="JDBC" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="todorepo" target="db"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1460" y="1030"/></Array></mxGeometry></mxCell>
+        <mxCell id="e17" value="Clock for timestamps" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="clock" target="todosvc"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1300" y="745"/><mxPoint x="1300" y="680"/><mxPoint x="1100" y="680"/></Array></mxGeometry></mxCell>
+        <mxCell id="e18" value="Clock for expiry" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="clock" target="sesssvc"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1620" y="745"/><mxPoint x="1620" y="490"/><mxPoint x="1250" y="490"/><mxPoint x="1250" y="420"/></Array></mxGeometry></mxCell>
+        <mxCell id="e19" value="writes 400, 404, 405, 409, 415, 500" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="advice" target="pw"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="2100" y="210"/><mxPoint x="2100" y="595"/></Array></mxGeometry></mxCell>
+        <mxCell id="e20" value="writes 401" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="entry" target="pw"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e21" value="writes 403" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="hdrf" target="pw"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="380" y="1060"/><mxPoint x="2130" y="1060"/><mxPoint x="2130" y="620"/></Array></mxGeometry></mxCell>
+        <mxCell id="e22" value="writes REQUEST_REJECTED" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="rej" target="pw"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e23" value="writes forwarded 4xx, 5xx" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="errc" target="pw"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="2070" y="920"/><mxPoint x="2070" y="640"/></Array></mxGeometry></mxCell>
+        <mxCell id="legend" value="&lt;b&gt;Legend&lt;/b&gt;&lt;br&gt;Light blue box: component · Cylinder: datastore · Mid blue box: container · Dashed box: container boundary · Arrow: call or dependency, labelled with verb and mechanism.&lt;br&gt;Not drawn: SecurityConfig and DatabaseConfig wiring, ApiException subtypes, test-only classes (sdd §2, §11)." style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1110" width="1100" height="50" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
