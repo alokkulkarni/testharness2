@@ -145,7 +145,7 @@
       "dependsOn": [
         "N04-spec-freeze"
       ],
-      "status": "running",
+      "status": "pending",
       "kind": "agent",
       "agent": "ux-designer",
       "description": "UX design spec and tokens for the frozen spec.",
@@ -155,13 +155,7 @@
       "executor": "any",
       "isolation": "none",
       "attempts": 0,
-      "maxAttempts": 3,
-      "claim": {
-        "runId": "run-mw4ytv3k",
-        "executor": "claude-code",
-        "leaseUntil": "2026-11-06T12:58:29.840Z",
-        "claimedAt": "2026-11-06T12:43:29.840Z"
-      }
+      "maxAttempts": 3
     },
     {
       "id": "N07-tests-backend",
