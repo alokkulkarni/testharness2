@@ -1,0 +1,49 @@
+# Written by harness init (sdlc-harness); SDD 02 §2, D-26. This file is the source of the profile.
+version: 1
+profile: lite
+marketplace:
+  repo: alokkulkarni/sdlc-harness
+  channel: stable
+platform:
+  repo: local
+plugins:
+  - sdlc-core
+  - sdlc-quality
+  - sdlc-docs
+  - sdlc-backend
+  - sdlc-web
+stacks: []
+executors:
+  - claude-code
+  - claude-code-headless
+  - copilot-ide
+  - copilot-cli
+  - copilot-cloud
+git:
+  integrationBranch: develop
+  releaseBranchPrefix: release/
+  protectedBranches:
+    - main
+    - develop
+    - release/*
+  stateBranch: harness-state
+plan:
+  leaseMinutes: 60
+approvers:
+  specFreeze: &a1
+    - "@alokkulkarni"
+  smeRules: *a1
+  smePlan: *a1
+  prApproval: *a1
+  prodRelease: *a1
+  crossSquad: *a1
+models:
+  access: claude-subscription
+github:
+  owner: alokkulkarni
+  ownerType: user
+  capabilities:
+    branchProtection: true
+    environmentReviewers: true
+    teams: false
+  enforcement: github

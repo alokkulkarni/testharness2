@@ -1,0 +1,18 @@
+{
+  "extraKnownMarketplaces": {
+    "sdlc-harness": {
+      "source": {
+        "source": "github",
+        "repo": "alokkulkarni/sdlc-harness",
+        "ref": "stable"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "sdlc-core@sdlc-harness": true,
+    "sdlc-quality@sdlc-harness": true,
+    "sdlc-docs@sdlc-harness": true,
+    "sdlc-backend@sdlc-harness": true,
+    "sdlc-web@sdlc-harness": true
+  }
+}

@@ -1,0 +1,42 @@
+# Written by harness init (single-team mode, SDD 12 §8); after init this file is the source.
+id: default
+platform: testharness2
+name: Default squad
+roster:
+  lead:
+    agents:
+      - orchestrator
+    instances: 1
+  analyst:
+    agents:
+      - requirements-analyst
+      - spec-author
+    instances: 1
+  tester:
+    agents:
+      - backend-qa
+      - web-qa
+      - mobile-qa
+    instances: 2
+  documenter:
+    agents:
+      - okf-documenter
+    instances: 1
+  reviewer:
+    agents:
+      - critic
+      - validator
+      - security-reviewer
+    instances: 2
+gateOwners:
+  productOwners:
+    - "@alokkulkarni"
+  techLeads:
+    - "@alokkulkarni"
+  smes:
+    - "@alokkulkarni"
+owns:
+  - repo: testharness2
+    paths:
+      - "**"
+wipLimit: 2

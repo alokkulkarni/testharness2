@@ -1,0 +1,310 @@
+{
+  "$comment": "The runner image's tools (SDD 08 §1): each names its pin in docker/versions.env, its layer, a check whose output carries that version, its licence (NFR-010) and its source. install-tools.sh installs them in this order (the Dockerfile's layer order: the agent CLIs, which change most, last); docker/scripts/tools-check.mjs runs the checks and writes the licence report.",
+  "tools": [
+    {
+      "name": "git",
+      "version": "GIT_VERSION",
+      "layer": "core",
+      "check": "git --version >/dev/null && dpkg-query -W git",
+      "licence": "GPL-2.0-only",
+      "source": "https://git-scm.com"
+    },
+    {
+      "name": "python",
+      "version": "PYTHON_VERSION",
+      "layer": "core",
+      "check": "python3 --version >/dev/null && dpkg-query -W python3.12",
+      "licence": "PSF-2.0",
+      "source": "https://www.python.org"
+    },
+    {
+      "name": "xvfb",
+      "version": "XVFB_VERSION",
+      "layer": "core",
+      "check": "command -v xvfb-run >/dev/null && dpkg-query -W xvfb",
+      "licence": "MIT",
+      "source": "https://www.x.org"
+    },
+    {
+      "name": "universal-ctags",
+      "version": "UNIVERSAL_CTAGS_VERSION",
+      "layer": "core",
+      "check": "ctags --version >/dev/null && dpkg-query -W universal-ctags",
+      "licence": "GPL-2.0-or-later",
+      "source": "https://ctags.io"
+    },
+    {
+      "name": "gnucobol",
+      "version": "GNUCOBOL_VERSION",
+      "layer": "core",
+      "check": "cobc --version >/dev/null && dpkg-query -W gnucobol3",
+      "licence": "GPL-3.0-or-later AND LGPL-3.0-or-later",
+      "source": "https://gnucobol.sourceforge.io"
+    },
+    {
+      "name": "node",
+      "version": "NODE_VERSION",
+      "layer": "core",
+      "check": "node --version",
+      "licence": "MIT",
+      "source": "https://nodejs.org"
+    },
+    {
+      "name": "pnpm",
+      "version": "PNPM_VERSION",
+      "layer": "core",
+      "check": "pnpm --version",
+      "licence": "MIT",
+      "source": "https://pnpm.io"
+    },
+    {
+      "name": "temurin",
+      "version": "TEMURIN_VERSION",
+      "layer": "core",
+      "check": "java -version 2>&1",
+      "licence": "GPL-2.0-only WITH Classpath-exception-2.0",
+      "source": "https://adoptium.net"
+    },
+    {
+      "name": "maven",
+      "version": "MAVEN_VERSION",
+      "layer": "core",
+      "check": "mvn -v",
+      "licence": "Apache-2.0",
+      "source": "https://maven.apache.org"
+    },
+    {
+      "name": "gradle",
+      "version": "GRADLE_VERSION",
+      "layer": "core",
+      "check": "gradle --version --offline",
+      "licence": "Apache-2.0",
+      "source": "https://gradle.org"
+    },
+    {
+      "name": "dotnet-sdk-8",
+      "version": "DOTNET_SDK_8_VERSION",
+      "layer": "core",
+      "check": "dotnet --list-sdks",
+      "licence": "MIT",
+      "source": "https://dotnet.microsoft.com"
+    },
+    {
+      "name": "dotnet-sdk-10",
+      "version": "DOTNET_SDK_10_VERSION",
+      "layer": "core",
+      "check": "dotnet --list-sdks",
+      "licence": "MIT",
+      "source": "https://dotnet.microsoft.com"
+    },
+    {
+      "name": "playwright",
+      "version": "PLAYWRIGHT_VERSION",
+      "layer": "core",
+      "check": "playwright --version && test -n \"$(ls /opt/ms-playwright)\"",
+      "licence": "Apache-2.0",
+      "source": "https://playwright.dev"
+    },
+    {
+      "name": "drawio",
+      "version": "DRAWIO_VERSION",
+      "layer": "core",
+      "check": "command -v drawio >/dev/null && dpkg-query -W draw.io",
+      "licence": "Apache-2.0",
+      "source": "https://github.com/jgraph/drawio-desktop"
+    },
+    {
+      "name": "semgrep",
+      "version": "SEMGREP_VERSION",
+      "layer": "core",
+      "check": "semgrep --version --disable-version-check",
+      "licence": "LGPL-2.1-only",
+      "source": "https://semgrep.dev"
+    },
+    {
+      "name": "sqlglot",
+      "version": "SQLGLOT_VERSION",
+      "layer": "core",
+      "check": "/opt/sdlc-harness/venv/bin/python -c 'import sqlglot; print(sqlglot.__version__)'",
+      "licence": "MIT",
+      "source": "https://github.com/tobymao/sqlglot"
+    },
+    {
+      "name": "gitleaks",
+      "version": "GITLEAKS_VERSION",
+      "layer": "core",
+      "check": "gitleaks version",
+      "licence": "MIT",
+      "source": "https://github.com/gitleaks/gitleaks"
+    },
+    {
+      "name": "syft",
+      "version": "SYFT_VERSION",
+      "layer": "core",
+      "check": "syft version",
+      "licence": "Apache-2.0",
+      "source": "https://github.com/anchore/syft"
+    },
+    {
+      "name": "grype",
+      "version": "GRYPE_VERSION",
+      "layer": "core",
+      "check": "grype version",
+      "licence": "Apache-2.0",
+      "source": "https://github.com/anchore/grype"
+    },
+    {
+      "name": "scc",
+      "version": "SCC_VERSION",
+      "layer": "core",
+      "check": "scc --version",
+      "licence": "MIT",
+      "source": "https://github.com/boyter/scc"
+    },
+    {
+      "name": "tree-sitter",
+      "version": "TREE_SITTER_VERSION",
+      "layer": "core",
+      "check": "tree-sitter --version",
+      "licence": "MIT",
+      "source": "https://tree-sitter.github.io"
+    },
+    {
+      "name": "gh",
+      "version": "GH_VERSION",
+      "layer": "core",
+      "check": "gh --version",
+      "licence": "MIT",
+      "source": "https://cli.github.com"
+    },
+    {
+      "name": "claude-code",
+      "version": "CLAUDE_CODE_VERSION",
+      "layer": "core",
+      "check": "claude --version",
+      "licence": "LicenseRef-Anthropic-Commercial-Terms",
+      "source": "https://www.npmjs.com/package/@anthropic-ai/claude-code"
+    },
+    {
+      "name": "copilot-cli",
+      "version": "COPILOT_CLI_VERSION",
+      "layer": "core",
+      "check": "copilot --version",
+      "licence": "LicenseRef-GitHub-Copilot-CLI",
+      "source": "https://www.npmjs.com/package/@github/copilot"
+    },
+    {
+      "name": "harness-code-intel-mcp",
+      "version": "CODE_INTEL_MCP_VERSION",
+      "layer": "core",
+      "built": "repository",
+      "check": "cd /tmp && printf '%s\\n' '{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2025-06-18\",\"capabilities\":{},\"clientInfo\":{\"name\":\"tools-check\",\"version\":\"0\"}}}' | timeout 20 harness-code-intel-mcp",
+      "licence": "LicenseRef-sdlc-harness",
+      "source": "https://github.com/alokkulkarni/sdlc-harness/tree/main/packages/code-intel-mcp"
+    },
+    {
+      "name": "codeql",
+      "version": "CODEQL_VERSION",
+      "layer": "codeql",
+      "check": "codeql version",
+      "licence": "LicenseRef-GitHub-CodeQL-Terms",
+      "source": "https://github.com/github/codeql-action/releases"
+    },
+    {
+      "name": "ruby",
+      "version": "RUBY_VERSION",
+      "layer": "mobile",
+      "check": "ruby --version >/dev/null && gem --version >/dev/null && dpkg-query -W ruby3.2",
+      "licence": "BSD-2-Clause",
+      "source": "https://www.ruby-lang.org"
+    },
+    {
+      "name": "android-cmdline-tools",
+      "version": "ANDROID_CMDLINE_TOOLS_VERSION",
+      "layer": "mobile",
+      "check": "avdmanager list target >/dev/null && grep '^Pkg.Revision=' \"$ANDROID_HOME/cmdline-tools/latest/source.properties\"",
+      "licence": "LicenseRef-Android-SDK-License",
+      "source": "https://developer.android.com/tools"
+    },
+    {
+      "name": "android-platform-tools",
+      "version": "ANDROID_PLATFORM_TOOLS_VERSION",
+      "layer": "mobile",
+      "check": "adb --version >/dev/null && grep '^Pkg.Revision=' \"$ANDROID_HOME/platform-tools/source.properties\"",
+      "licence": "LicenseRef-Android-SDK-License",
+      "source": "https://developer.android.com/tools/releases/platform-tools"
+    },
+    {
+      "name": "android-build-tools",
+      "version": "ANDROID_BUILD_TOOLS_VERSION",
+      "layer": "mobile",
+      "check": "d=\"$(ls -d \"$ANDROID_HOME\"/build-tools/*)\" && \"$d/aapt2\" version >/dev/null 2>&1 && grep '^Pkg.Revision=' \"$d/source.properties\"",
+      "licence": "LicenseRef-Android-SDK-License",
+      "source": "https://developer.android.com/tools/releases/build-tools"
+    },
+    {
+      "name": "android-platform",
+      "version": "ANDROID_PLATFORM_VERSION",
+      "layer": "mobile",
+      "check": "grep -h '^AndroidVersion.ApiLevel=' \"$ANDROID_HOME\"/platforms/android-*/source.properties",
+      "licence": "LicenseRef-Android-SDK-License",
+      "source": "https://developer.android.com/tools/releases/platforms"
+    },
+    {
+      "name": "android-emulator",
+      "version": "ANDROID_EMULATOR_VERSION",
+      "layer": "mobile",
+      "check": "emulator -version >/dev/null 2>&1 && grep '^Pkg.Revision=' \"$ANDROID_HOME/emulator/source.properties\"",
+      "licence": "LicenseRef-Android-SDK-License",
+      "source": "https://developer.android.com/studio/run/emulator"
+    },
+    {
+      "name": "flutter",
+      "version": "FLUTTER_VERSION",
+      "layer": "mobile",
+      "check": "flutter --version --suppress-analytics",
+      "licence": "BSD-3-Clause",
+      "source": "https://flutter.dev"
+    },
+    {
+      "name": "maestro",
+      "version": "MAESTRO_VERSION",
+      "layer": "mobile",
+      "check": "maestro --version",
+      "licence": "Apache-2.0",
+      "source": "https://github.com/mobile-dev-inc/maestro"
+    },
+    {
+      "name": "fastlane",
+      "version": "FASTLANE_VERSION",
+      "layer": "mobile",
+      "check": "fastlane --version",
+      "licence": "MIT",
+      "source": "https://fastlane.tools"
+    }
+  ],
+  "licences": {
+    "allowed": [
+      "MIT",
+      "Apache-2.0",
+      "BSD-2-Clause",
+      "BSD-3-Clause",
+      "ISC",
+      "PSF-2.0",
+      "MPL-2.0",
+      "GPL-2.0-only",
+      "GPL-2.0-or-later",
+      "GPL-2.0-only WITH Classpath-exception-2.0",
+      "LGPL-2.1-only"
+    ],
+    "review": {
+      "LicenseRef-Anthropic-Commercial-Terms": "Claude Code is used under Anthropic's Commercial Terms. Before a runner image carrying it is published outside the organisation, check that the terms permit redistributing it in an image (M14a).",
+      "LicenseRef-GitHub-Copilot-CLI": "Copilot CLI is used under GitHub's terms for Copilot. Before a runner image carrying it is published outside the organisation, check that the terms permit redistributing it in an image (M14a).",
+      "LicenseRef-GitHub-CodeQL-Terms": "CodeQL is free for open source and research only: analysing private repositories needs GitHub Advanced Security (Q-05). It is installed only in runner-core-codeql, used when reverseEngineering.codeql is true.",
+      "LicenseRef-Android-SDK-License": "The Android SDK (command-line tools, platform-tools, build-tools, platform, emulator) is used under the Android Software Development Kit License Agreement (developer.android.com/studio/terms). Whoever builds runner-mobile accepts it: install-tools.sh downloads the packages directly (cmdline-tools 23 no longer asks, `sdkmanager --licenses` is a no-op). The agreement does not permit redistributing the SDK, so runner-mobile stays private to the organisation; publishing it outside is decided with the other review notes (M14a).",
+      "GPL-3.0-or-later AND LGPL-3.0-or-later": "GnuCOBOL (M12, SDD 06 §3): cobc is GPL-3.0-or-later and its runtime libcob LGPL-3.0-or-later, unmodified from the Ubuntu snapshot. It compiles a legacy COBOL program so its characterisation suite runs on the legacy side (REQ-MIG-002); the programs it builds link libcob and stay in the runner, never in a product the harness ships. Check the terms before an image carrying it is published outside the organisation (M14a).",
+      "LicenseRef-sdlc-harness": "The harness's own code (the repository's package.json: UNLICENSED, the organisation's), built from this repository into runner-core (Q19): harness-code-intel-mcp (packages/code-intel-mcp, `pnpm deploy --prod`). It bundles, as npm production dependencies, @modelcontextprotocol/sdk, ajv, web-tree-sitter and @vscode/tree-sitter-wasm (MIT) and their dependencies (`pnpm licenses list --prod`, 2026-11-03: 83 MIT, 7 ISC, 2 BSD-3-Clause, 1 BSD-2-Clause; all allowed), and the vendored Kotlin, Swift and Dart grammar WASMs (MIT, their texts kept in grammars/LICENSE-*; M11 decision 5). Syft's SBOM of the image lists each package. Publishing an image carrying it outside the organisation is decided with the other review notes (M14a)."
+    },
+    "$comment": "Copyleft tools are run, not linked into the product; the GPL and LGPL packages come unmodified from the Ubuntu snapshot or their publishers, whose sources stay available there. Semgrep's registry rules have their own licence (Semgrep Rules License): the harness runs its own rules. Ruby is dual-licensed (Ruby's licence or BSD-2-Clause) and listed under BSD-2-Clause; fastlane's gem dependencies carry their own licences (Syft's SBOM of the image lists them)."
+  }
+}

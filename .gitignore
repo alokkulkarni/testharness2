@@ -1,0 +1,7 @@
+# sdlc-harness scratch (SDD 02 §2)
+.harness/tmp/
+.harness/cache/
+.harness/worktrees/
+.harness/audit/
+.harness/reports/
+.claude/worktrees/

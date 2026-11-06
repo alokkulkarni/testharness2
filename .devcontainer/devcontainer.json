@@ -1,0 +1,23 @@
+{
+  "name": "sdlc-harness runner",
+  "image": "sdlc-harness-runner:local",
+  "remoteUser": "runner",
+  "containerUser": "runner",
+  "runArgs": [
+    "--cap-drop=ALL",
+    "--security-opt=no-new-privileges",
+    "--add-host=gateway:host-gateway"
+  ],
+  "containerEnv": {
+    "ANTHROPIC_BASE_URL": "http://gateway:4000",
+    "HARNESS_GATEWAY_URL": "http://gateway:4000"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["anthropic.claude-code", "GitHub.copilot", "GitHub.copilot-chat"]
+    }
+  },
+  "remoteEnv": {
+    "ANTHROPIC_AUTH_TOKEN": "${localEnv:ANTHROPIC_AUTH_TOKEN}"
+  }
+}
