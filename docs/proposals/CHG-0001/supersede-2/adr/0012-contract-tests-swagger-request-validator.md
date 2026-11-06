@@ -41,9 +41,9 @@ docs/FEATURES.md, read the same day (summarised, not verbatim), its OpenAPI 3.1 
   their path-and-method pairs equals the routes Spring MVC has mapped; every path-and-method pair appears in exactly
   one of the two files; and the handler method of each operation is declared by a controller in that file's module
   package (`identity-api-v1.yaml` → `app.todo.auth`, `todos-api-v1.yaml` → `app.todo.todo`) (NFR-007 AC-3). The
-  mapped routes compared exclude, by name, only the error-dispatch mapping `/error` (`ProblemErrorController`, in
-  `common`, sdd.md §6) and any other mapping that serves only the servlet container's error dispatch; the test lists
-  each excluded mapping explicitly, so any other mapping missing from both module files fails it.
+  mapped routes are compared excluding, by name, only `/error` (all methods of `ProblemErrorController`, `common`;
+  sdd.md §6); any other mapped route missing from both module files fails the test, and the java-engineer stops and
+  reports it as a spec question.
 - Error responses that have no contract operation (405, unknown route, `REQUEST_REJECTED`, forwarded 413 and 500)
   are checked against the `Problem` schema directly (ADR-0011): `common-problem-v1.yaml` is parsed with
   `io.swagger.parser.OpenAPIParser.readLocation(path, null, options)` (resolve on), and the body is validated with
@@ -55,10 +55,12 @@ docs/FEATURES.md, read the same day (summarised, not verbatim), its OpenAPI 3.1 
 - Contract lint: `redocly lint` with `extends: [recommended]` (`@redocly/cli`, ADR-0001) is run on the two module
   roots only, `identity-api-v1.yaml` and `todos-api-v1.yaml`; `common-problem-v1.yaml` is linted through their
   `$ref`s. It is not linted on its own: having no operations and no servers, it fails `no-empty-servers` and warns
-  `no-unused-components`.
+  `no-unused-components`. The lint runs as the `web/package.json` script `lint:contracts`
+  (`pnpm -C web lint:contracts`, `redocly lint` on the two module roots), part of the contract level of sdd.md §14
+  and of the build's test gate.
 
 Source of the tool facts above: tool spikes of 2026-11-06, recorded in
-docs/proposals/CHG-0001/supersede-2/tool-spikes.md (supersede-2 draft commit). In short (java-engineer spikes A and
+docs/proposals/CHG-0001/supersede-2/tool-spikes.md at commit 29b6c94. In short (java-engineer spikes A and
 B, JDK Temurin 23.0.2 with `release` 21, Maven 3.10.0, JUnit 5.10.2, `openapi-request-validator-core:3.0.0`): an
 OpenAPI 3.1 module file with `$ref`s to a sibling components-only file (parameter `ClientHeader`, response
 `NotFound` → `Problem`, security scheme `sessionCookie`) loads through
@@ -74,8 +76,9 @@ react-engineer check of the draft at 8eefb35 (`@redocly/cli` 2.76.0), same file.
 - The contract is exercised by the same tests that check behaviour; no separate contract suite to maintain.
 - The validator supports OpenAPI 3.1 only as far as its current release does; constructs the validator cannot read
   are kept out of the contract (the contract uses plain 3.1 schemas and relative `$ref`s only).
-- Validator v3's Spring adapter needs Spring 7 / Spring Boot 4 (sdd.md §12.1 item 21, §13), which ties the build to
-  that line; ADR-0002's current OSS-supported Spring Boot major is Boot 4, which the v3 adapter supports.
+- The v3 adapter is documented as compatible with Spring 7+ / Spring Boot 4+ (tool spikes of 2026-11-06 §1, above),
+  so choosing it ties the build to Spring Boot 4 or later; the java-engineer pins a Boot 4.x line accordingly
+  (sdd.md §12.1 item 21, §13).
 - `MethodNotAllowed` and `RequestRejected` are defined only in `common-problem-v1.yaml` and referenced by no
   operation (as in the first freeze's file), so neither the lint through the module roots nor an operation's
   validation covers them; the direct `SchemaValidator` checks against `Problem` above (405, `REQUEST_REJECTED`) are
@@ -89,5 +92,5 @@ react-engineer check of the draft at 8eefb35 (`@redocly/cli` 2.76.0), same file.
 - Schemathesis: property-based and thorough, but needs a Python runtime in the build.
 - Hand-written response assertions only: no check that the contract and code agree.
 - Validating against one bundled file per module produced by `redocly bundle`: works (react-engineer spike,
-  tool-spikes.md), but adds a build step and a generated artefact, while the validator already resolves the
+  tool spikes of 2026-11-06 above), but adds a build step and a generated artefact, while the validator already resolves the
   cross-file `$ref`s.

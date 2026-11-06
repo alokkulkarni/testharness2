@@ -6,6 +6,10 @@ authors:
     changeId: CHG-0001
     agent: spec-author
     agentRunId: run-sup2-d1
+  - squadSessionId: SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM
+    changeId: CHG-0001
+    agent: spec-author
+    agentRunId: run-sup2-d3
 upstream:
   - path: docs/specs/CHG-0001/intent.md
     sha256: 8465eeb8e5e930d7bd165b4c152e9be5bd62e33d8350a11291867d0b16792c98
@@ -15,15 +19,11 @@ upstream:
 > clarifications Q50–Q59. Changes to this file: the source sentence of "Context and goal" (Q50–Q59), constraint C-2
 > (Q51, Q57) and the new NFR-007 "Modular API" (Q51, Q57, worded exactly as accepted in Q57). Nothing else differs from
 > the frozen file; no analyst default is added (Q57 accepted the NFR-007 wording, so it is the requester's).
-> To apply: (1) copy every file under `docs/proposals/CHG-0001/supersede-2/` to `docs/specs/CHG-0001/` at the same
-> relative path (`requirements.md`, `sdd.md`, `contracts/common-problem-v1.yaml`, `contracts/identity-api-v1.yaml`,
-> `contracts/todos-api-v1.yaml`, `adr/0001-…`, `adr/0002-…`, `adr/0011-…`, `adr/0012-…`, `adr/0014-…`,
-> `adr/0018-modular-monolith-module-boundaries.md`); (2) **delete `docs/specs/CHG-0001/contracts/todo-api-v1.yaml`**;
-> (3) remove this note, the note in `sdd.md`, the one-line note in each ADR and the YAML draft comment block at the
-> top of each contract file; (4) re-stamp with `harness chain stamp docs/specs/CHG-0001/requirements.md`, then
-> `harness chain stamp docs/specs/CHG-0001/sdd.md` (the `upstream` sha256 values in these drafts are carried over
-> from the frozen files, unverified; never hand-edit them). The non-frozen `design/architecture/README.md` and
-> `design/ux/ux-design.md` (L9) still name `todo-api-v1.yaml`; N05 and N06 update them after the re-freeze.
+> Revised by spec-author (run `run-sup2-d3`) for the draft critic's round-2 finding F-1: the apply steps are no
+> longer repeated here.
+> To apply: follow the apply steps in the draft note of `sdd.md` in this folder, which is the single source for them
+> (including the exact list of files to copy, which leaves out `tool-spikes.md`, and the removal of this note). The
+> `upstream` sha256 in this file's front matter is carried over from the frozen file, unverified; never hand-edit it.
 
 # Requirements — CHG-0001
 

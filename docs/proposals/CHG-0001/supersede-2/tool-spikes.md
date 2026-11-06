@@ -3,7 +3,7 @@
 > **Proposal provenance only. This file is NOT applied to `docs/specs/CHG-0001/`**: it is not copied by the apply
 > steps in `sdd.md`'s draft note, is not frozen, and stays in `docs/proposals/CHG-0001/supersede-2/` (supersede-2
 > draft commit). ADR-0012 and ADR-0001 cite it as "tool spikes of 2026-11-06, recorded in
-> docs/proposals/CHG-0001/supersede-2/tool-spikes.md (supersede-2 draft commit)".
+> docs/proposals/CHG-0001/supersede-2/tool-spikes.md at commit 29b6c94".
 >
 > The facts below are recorded as they were reported to the orchestrator by the agents named, and relayed to
 > spec-author (run `run-sup2-d2`). spec-author did not re-run any spike or command and did not re-read any source.

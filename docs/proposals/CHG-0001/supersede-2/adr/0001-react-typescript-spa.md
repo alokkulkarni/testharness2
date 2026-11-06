@@ -27,7 +27,7 @@ API module, `contracts/identity-api-v1.yaml` and `contracts/todos-api-v1.yaml`, 
   its `root` and `x-openapi-ts.output`). The cross-file `$ref`s into `common-problem-v1.yaml` are resolved by the
   generator, so each output carries its own, structurally identical `Problem` type; the SPA imports `Problem` from
   `web/src/api/todos.ts` only (sdd.md §2, §6.1). Source: tool spikes of 2026-11-06, recorded in
-  docs/proposals/CHG-0001/supersede-2/tool-spikes.md (supersede-2 draft commit); react-engineer spike with
+  docs/proposals/CHG-0001/supersede-2/tool-spikes.md at commit 29b6c94; react-engineer spike with
   openapi-typescript 7.13.0 and @redocly/cli 2.76.0, Node 26.12.0, pnpm 11.17.0: per-module outputs generated,
   cross-file `$ref`s resolved, each output with its own structurally identical `Problem`, security schemes not
   emitted, unreferenced schemas dropped, and a CLI path argument ignored when a `redocly.yaml` exists. `redocly join`
