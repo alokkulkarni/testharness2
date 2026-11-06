@@ -2,16 +2,12 @@
 stage: sdd
 changeId: CHG-0001
 authors:
-  - squadSessionId: SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM
-    changeId: CHG-0001
-    agent: spec-author
-    agentRunId: run-mw4rq9pt
+  - login: "@alokkulkarni"
 upstream:
   - path: docs/specs/CHG-0001/requirements.md
-    sha256: b4e11b8435570c1e0ce269019a40bde2cf5a5c11210bef3f22a4df32ee1a87dc
+    sha256: e389371395a1feb1fcd3de52506b0fc60cd1060e5b728e7a0849a540cf5789e5
 ---
 
-> **Draft note for applying this supersede (remove this note when applying; Q49, critic notes N-6 and N-7).**
 > (1) N-6: the `upstream.sha256` above is carried over unchanged from the frozen `sdd.md`; it was not verified or
 > recomputed for this draft and goes stale once the draft `requirements.md` is applied. After the draft
 > `requirements.md` is applied to `docs/specs/CHG-0001/`, re-stamp this value with `harness chain stamp` before the

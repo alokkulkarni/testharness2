@@ -2,10 +2,7 @@
 stage: requirements
 changeId: CHG-0001
 authors:
-  - squadSessionId: SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM
-    changeId: CHG-0001
-    agent: requirements-analyst
-    agentRunId: run-mw4qgud8
+  - login: "@alokkulkarni"
 upstream:
   - path: docs/specs/CHG-0001/intent.md
     sha256: 8465eeb8e5e930d7bd165b4c152e9be5bd62e33d8350a11291867d0b16792c98
