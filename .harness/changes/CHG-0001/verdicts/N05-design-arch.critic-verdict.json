@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N05-design-arch",
+  "gate": "critic-verdict",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "critic",
+      "agentRunId": "a576b4877d0401034"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "drawio-architect",
+      "agentRunId": "run-mw53b1i3"
+    }
+  ],
+  "createdAt": "2026-11-06T15:14:28.490Z",
+  "specFreezeHash": "108a2158f902444a131977e20baa46715f7504c950c32bb7c0ecf20da5f78818",
+  "reviewedCommit": "a8bf5f23d2e33f6a45d1e39fa4322025ab58be24",
+  "diffHash": "4c74f3b3c5619de0f13ea3ccdc9ee2c28e2fdb947f29067e03d74b5749803567",
+  "summary": "Review of a8bf5f2 (nine drawio sources, PNG/PDF exports, README). Context, container, deployment and data model match sdd 2, 3, 11 and ADR-0003/0004/0005/0014-0017 column for column; sequences match the contract paths, codes, cookie attributes, Argon2id, header defence, owner-scoped SQL, clamped paging and clear completed. No feature creep; the unfrozen supersede is kept out. No blocker or major. Minors: component PNG overprinted labels and ambiguous repository routing, two error-path inaccuracies in the component view, the 403 path drawn from the SPA, README trace overclaims and ADR-column drift, screen flow missing edges its own source states. Ruling on the two reported gaps: omitting Save-to-detail is acceptable (frozen sdd silent, ux tags it proposed); omitting the detail-page delete is inconsistent because the flow already takes its ids from ux-design 2, which states that edge without a proposed tag. Export --check could not be run by the critic role.",
+  "findings": [
+    {
+      "id": "F-1",
+      "severity": "minor",
+      "message": "Rendered png/c4-component-api.png has overprinted edge labels, not just labels close to lines as README L29 says: delegates (TodoController to TodoService) collides with users [JDBC]; trims with collides with Clock for expiry; sessions [JDBC] is covered by Clock for timestamps. Edges e13 (SessionService to SessionRepository) and e14 (TodoService to TodoRepository) share the vertical at x=1280, and the to-dos [JDBC] label lands where e13 turns into SessionRepository, so the PNG reads as TodoService to SessionRepository and SessionService to TodoRepository, the isolation-critical path.",
+      "requirement": "REQ-ISO-001",
+      "location": "docs/specs/CHG-0001/design/architecture/c4-component-api.drawio:L85-L98",
+      "suggestion": "Give e13 and e14 separate vertical channels, move the e7, e10, e12, e17, e18 label anchors off crossings, re-export, and drop the README L29 caveat once fixed."
+    },
+    {
+      "id": "F-2",
+      "severity": "minor",
+      "message": "ProblemDetailsAdvice is labelled as writing 400, 404, 405, 409, 415, 500 and only the entry point writes 401. Per sdd 2 (L44-L46) and 6 (L229-L233) InvalidCredentialsException is an ApiException subtype, so the 401 INVALID_CREDENTIALS of logIn is written by ProblemDetailsAdvice through ProblemWriter, not by ProblemAuthenticationEntryPoint (which writes only 401 UNAUTHENTICATED).",
+      "requirement": "REQ-AUTH-002",
+      "location": "docs/specs/CHG-0001/design/architecture/c4-component-api.drawio:L64-L65",
+      "suggestion": "Add 401 INVALID_CREDENTIALS to the advice label and edge e19 (L99)."
+    },
+    {
+      "id": "F-3",
+      "severity": "minor",
+      "message": "SessionCookieAuthenticationFilter is described as rejecting missing, unknown or expired sessions, but ADR-0004 L20-L23 and sdd 4 L107-L111 say it leaves the request unauthenticated and Spring Security calls ProblemAuthenticationEntryPoint only on protected paths (signup, login, logout pass). The entry point box has no incoming edge, so the 401 UNAUTHENTICATED path is not traceable in the view.",
+      "requirement": "REQ-AUTH-004",
+      "location": "docs/specs/CHG-0001/design/architecture/c4-component-api.drawio:L19-L20",
+      "suggestion": "Reword to: resolves session or leaves request unauthenticated; add an edge from the filter chain to ProblemAuthenticationEntryPoint labelled protected path without session."
+    },
+    {
+      "id": "F-4",
+      "severity": "minor",
+      "message": "Steps 13-14 draw a request without X-Todo-Client coming from the SPA lifeline, but the SPA client wrapper always adds the header on unsafe methods (sdd 2 L52, ADR-0007 L23), and a cross-origin page never reaches the filter because the preflight fails. The 403 is seen by direct callers (curl, tests) or same-origin requests that omit the header.",
+      "requirement": "NFR-004",
+      "location": "docs/specs/CHG-0001/design/architecture/seq-signup-login.drawio:L37-L38",
+      "suggestion": "Add a separate participant (direct API caller) for the 403 path, and show the cross-origin case as a browser preflight that fails with no request sent."
+    },
+    {
+      "id": "F-5",
+      "severity": "minor",
+      "message": "README trace claims exceed what is drawn. Row 4 claims REQ-AUTH-001..004 but the diagram covers only REQ-AUTH-004 AC-1; no sequence shows per-request cookie resolution (hash, lookup, expiry check, expired row deleted, 401 via entry point; ADR-0004, ADR-0008, REQ-AUTH-004 AC-4) or logout (AC-3). Row 5 claims REQ-TODO-001..005 but setTodoDone (REQ-TODO-005) and getTodo are not drawn.",
+      "requirement": "REQ-AUTH-004",
+      "location": "docs/specs/CHG-0001/design/architecture/README.md:L14-L15",
+      "suggestion": "Either narrow the trace cells to what is drawn, or add the session resolution/expiry and logout steps and a setTodoDone step."
+    },
+    {
+      "id": "F-6",
+      "severity": "minor",
+      "message": "README ADR column is out of step with the diagram titles: row 4 omits ADR-0016 (seq-signup-login L7), row 5 omits ADR-0016 (seq-todo-crud-list L7), row 6 lists no ADR while seq-clear-completed L7 traces ADR-0009, row 8 omits ADR-0013 listed in deployment-local L7.",
+      "requirement": "REQ-ACC-001",
+      "location": "docs/specs/CHG-0001/design/architecture/README.md:L14-L18",
+      "suggestion": "Make the README trace column equal the title trace of each diagram."
+    },
+    {
+      "id": "F-7",
+      "severity": "minor",
+      "message": "Screen flow takes S1..S6, D1, D2 from ux-design.md 2 (README L19) but omits edges that same section states without a proposed tag: S5 Delete to D1 (ux-design L58, L86; requester Q40), S3 Edit link to S6 (L84), and D1/D2 outcomes (confirm re-queries the list, cancel changes nothing; after delete on S5 go to /todos per Q40). Log out appears only in the legend. On the author-reported gap: omitting the detail-page delete is not consistent with the chosen source; it is not a frozen-spec question.",
+      "requirement": "REQ-TODO-006",
+      "location": "docs/specs/CHG-0001/design/architecture/screen-flow.drawio:L44-L49",
+      "suggestion": "Draw S5 to D1, S3 to S6, D1/D2 confirm and cancel outcomes and Log out, labelled as from ux-design.md 2 where the sdd is silent; or state in the README why ux-design edges are excluded while its ids are used."
+    },
+    {
+      "id": "F-8",
+      "severity": "info",
+      "message": "Ruling on the other reported gap: not drawing Save on the edit form to /todos/:id is acceptable for a view of the frozen spec. sdd 8 is silent, ux-design.md L83 tags it proposed, and the requester approval (Q41) is in clarifications.md, not in the freeze. The legend note at L49 records it.",
+      "requirement": "REQ-TODO-004",
+      "location": "docs/specs/CHG-0001/design/architecture/screen-flow.drawio:L49",
+      "suggestion": "Optionally draw it as a dashed edge labelled ux-design proposed, approved Q41; redraw solid after any re-freeze that adopts it."
+    },
+    {
+      "id": "F-9",
+      "severity": "info",
+      "message": "Could not verify README L6 (export --check passes): the harness hook refused harness docs diagram export --check for the critic role as not on its command list. PNGs for screen-flow, c4-component-api, seq-signup-login and data-model were viewed and match their sources text for text; manifest hashes were not recomputed.",
+      "requirement": "REQ-ACC-001",
+      "location": "docs/specs/CHG-0001/design/architecture/diagram-exports.json:L3-L13",
+      "suggestion": "Orchestrator runs harness docs diagram export --check before completing the node."
+    }
+  ]
+}
