@@ -107,7 +107,7 @@
       "gates": [
         "spec-freeze-approval"
       ],
-      "status": "pending"
+      "status": "complete"
     }
   ]
 }
