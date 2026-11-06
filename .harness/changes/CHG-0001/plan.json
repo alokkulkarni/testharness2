@@ -108,6 +108,107 @@
         "spec-freeze-approval"
       ],
       "status": "complete"
+    },
+    {
+      "id": "N05-security",
+      "phase": "6",
+      "inputs": [
+        ".harness/changes/CHG-0001/spec-freeze.json"
+      ],
+      "outputs": [
+        ".harness/changes/CHG-0001/evidence/scan-report/"
+      ],
+      "dependsOn": [
+        "N04-spec-freeze"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "security-reviewer",
+      "description": "Security scans, SBOM and findings on the PR delta.",
+      "gates": [
+        "security"
+      ],
+      "executor": "any",
+      "isolation": "none",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N06-validate",
+      "phase": "6",
+      "inputs": [
+        ".harness/changes/CHG-0001/spec-freeze.json"
+      ],
+      "outputs": [
+        ".harness/changes/CHG-0001/traceability.json"
+      ],
+      "dependsOn": [
+        "N04-spec-freeze"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "validator",
+      "description": "Map the PR delta to the frozen requirements (traceability).",
+      "gates": [
+        "validator"
+      ],
+      "executor": "any",
+      "isolation": "none",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N07-pr-review",
+      "phase": "6",
+      "inputs": [
+        ".harness/changes/CHG-0001/spec-freeze.json"
+      ],
+      "outputs": [
+        ".harness/changes/CHG-0001/verdicts/"
+      ],
+      "dependsOn": [
+        "N04-spec-freeze"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "critic",
+      "description": "Review the PR delta against the frozen spec (critic-verdict).",
+      "gates": [
+        "critic-verdict"
+      ],
+      "executor": "any",
+      "isolation": "none",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N08-docs",
+      "phase": "8",
+      "inputs": [
+        ".harness/changes/CHG-0001/evidence/scan-report/",
+        ".harness/changes/CHG-0001/traceability.json",
+        ".harness/changes/CHG-0001/verdicts/"
+      ],
+      "outputs": [
+        "docs/knowledge/"
+      ],
+      "dependsOn": [
+        "N05-security",
+        "N06-validate",
+        "N07-pr-review"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "okf-documenter",
+      "description": "Fold the change into the OKF bundle.",
+      "gates": [
+        "critic-verdict",
+        "docs-valid"
+      ],
+      "executor": "any",
+      "isolation": "none",
+      "attempts": 0,
+      "maxAttempts": 3
     }
   ]
 }
