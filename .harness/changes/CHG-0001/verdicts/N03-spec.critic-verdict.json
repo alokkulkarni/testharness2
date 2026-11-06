@@ -11,7 +11,7 @@
       "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
       "changeId": "CHG-0001",
       "agent": "critic",
-      "agentRunId": "aef297b6f8d595d22"
+      "agentRunId": "ad511a5d96a0c8799"
     },
     "modelAlias": "harness/critic"
   },
@@ -21,68 +21,107 @@
       "changeId": "CHG-0001",
       "agent": "spec-author",
       "agentRunId": "run-mw4rq9pt"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "requirements-analyst",
+      "agentRunId": "run-mw4qgud8"
     }
   ],
-  "createdAt": "2026-11-06T10:05:19.990Z",
-  "reviewedCommit": "b36e7dfae0093490cc5b25b73b206b2f952b8766",
-  "diffHash": "db5e466ad99c0c6d1c6e0fd7b9ad3095fc3bffb43a80abf8bc191d300c48685c",
-  "summary": "Round 2 re-review of b36e7df. Round-1: F-1 fixed (sdd 4.1 session states, silent probe 401, session-ended only when signed-in, tests); F-2 fixed (4.2 safeReturnTo allow-list, tests); F-3 fixed (5 explicit White_Space set, NBSP tests, 12.1 item 4); F-4 fixed (6 ProblemWriter for all error sources, contract adds 405/415/REQUEST_REJECTED codes, per-source test); F-5 fixed (11, ADR-0013 test-only offset clock); F-6 fixed (ADR-0007..0017); F-7 fixed (9, NFR-001 row); F-8, F-9 fixed (12.1 items 1-3); F-10 carried as info. Contract and SDD agree on codes, 401 precedence, 415 rule and session states. No blocker or major. Two minors: 12.1 omits returnTo landing and the no-message reload after expiry; approver confirms at freeze, no requester decision needed before freeze.",
+  "createdAt": "2026-11-06T16:24:36.493Z",
+  "specFreezeHash": "108a2158f902444a131977e20baa46715f7504c950c32bb7c0ecf20da5f78818",
+  "reviewedCommit": "b28c58d7aa8ce566abf19bff4efe9b9c6e8db539",
+  "diffHash": "4630cadff9513c9723c7ea704d0d0e0de9ca8e911b6429f89c4ef16f29b99fa5",
+  "summary": "Pre-re-freeze review of CHG-0001 spec at b28c58d. Applied requirements.md, sdd.md, ADR-0001 equal the round-3 draft at 80b916b except front matter and the removed draft note; 5aabf73..b28c58d leaves contracts, intent.md, design/ and spec-freeze.json untouched. Q46-Q49 reflected faithfully; Q36-Q39, Q44 carried into REQ-AUTH-002, NFR-001, REQ-NAV-001, REQ-TODO-007, NFR-006; no earlier answer contradicted. REQ/AC ids, analyst defaults 7-12, 12.1 items 5-10, section and ADR numbers, contract codes and strings, and UX line citations resolve; each new or changed requirement has an SDD 14 row. Upstream hash not self-verified. Authors taken from the draft front matter at 80b916b; the applied commits are the requester. Prior F-11, F-12 closed by Q35; F-13 to F-16 unchanged; F-17 carried as F-5. No blocker or major: four minor, seven info.",
   "findings": [
     {
-      "id": "F-11",
+      "id": "F-1",
       "severity": "minor",
-      "message": "The returnTo behaviour (4.2) sends a user to /todos/<uuid>, /todos/<uuid>/edit or /todos/new after login. REQ-AUTH-002 AC-1 says the user is signed in and sees their own to-do list, and REQ-AUTH-004 AC-2 only requires sending the user to the login page; no requirement or answer asks for a return to the deep link. This is a product-visible choice not listed in 12.1.",
-      "requirement": "REQ-AUTH-002",
-      "location": "docs/specs/CHG-0001/sdd.md:L150-L164",
-      "suggestion": "Add returnTo to 12.1 (after login the user returns to the to-do route they opened, otherwise /todos) so the approver confirms it at freeze, or reduce safeReturnTo to /todos with its list query only."
+      "message": "The applied spec still speaks of itself as a draft or a supersede: this draft reading (L323, L567), The draft keeps safeReturnTo unchanged (L577), The draft takes the reset (L582), and The contract itself is not changed by this supersede (L306). Once frozen these read as stale process text rather than design.",
+      "requirement": "NFR-006",
+      "location": "docs/specs/CHG-0001/sdd.md:L306-L586",
+      "suggestion": "Before the re-freeze replace this draft or the draft with this SDD (or the design), and reword L306 to: the contract is unchanged; this rule governs where it says less."
     },
     {
-      "id": "F-12",
+      "id": "F-2",
       "severity": "minor",
-      "message": "Reload after expiry (4.1) lands the user on the bare login page with no session-ended message, because the SPA no longer holds a user. The SDD argues the login page itself is the request to log in again for REQ-AUTH-004 AC-4; defensible, but it is an interpretation of AC-4 (the message appears only when a signed-in tab makes a request) and is not listed in 12.1.",
-      "requirement": "REQ-AUTH-004",
-      "location": "docs/specs/CHG-0001/sdd.md:L143-L145",
-      "suggestion": "List it in 12.1 for the approver, or show the message after reload by keeping a non-secret was-signed-in flag (for example sessionStorage) cleared on logout; keep the component test for whichever is chosen."
+      "message": "SDD 12.1 item 7(d) keeps the Back to my to-dos link on the edit page although the Q48 answer says the link stays only on the detail page; the SDD tags it as a reading. Items 7(a) to 7(c), 9 and 10 are likewise choices the requester did not make. They are surfaced honestly, but confirmation by silence at freeze would leave 7(d) as an unconfirmed reinterpretation of a requester answer.",
+      "requirement": "NFR-006",
+      "location": "docs/specs/CHG-0001/sdd.md:L555-L586",
+      "suggestion": "Have the approver confirm 12.1 items 7(a)-(d), 9 and 10 explicitly in the re-freeze approval (or in a clarification entry), as Q35 did for the first freeze."
     },
     {
-      "id": "F-13",
-      "severity": "info",
-      "message": "Search and identifier matching use a simple Locale.ROOT lower-case mapping, not full case folding (for example ss vs sharp s); the risk table records it as Accepted but no requester or approver accepted it, and 12.1 does not list it. Narrow effect on REQ-LIST-002 AC-1 (identifiers are ASCII, so uniqueness is unaffected).",
-      "requirement": "REQ-LIST-002",
-      "location": "docs/specs/CHG-0001/sdd.md:L404",
-      "suggestion": "Optionally add a one-line item to 12.1 so the acceptance is the approvers,nottheauthors."
+      "id": "F-3",
+      "severity": "minor",
+      "message": "The clear-completed text rule says For any N other than 1 use the plural sentence, which literally includes N = 0; Q43 (approved) says that when the re-fetch finds nothing completed no dialog opens, the control is disabled and a status message is shown. The SDD does not state the N = 0 case, so the rule as written admits a dialog reading Delete all 0 completed to-dos.",
+      "requirement": "REQ-TODO-007",
+      "location": "docs/specs/CHG-0001/sdd.md:L462-L469",
+      "suggestion": "Say For any N of 2 or more, and add: N = 0 after the re-fetch opens no dialog and disables the control (Q43, UX design); add that case to the REQ-TODO-007 component test in SDD 14."
     },
     {
-      "id": "F-14",
-      "severity": "info",
-      "message": "The rationale for not using Java String.strip says Java omits U+00A0, U+2007, U+202F and adds U+001C-U+001F; Character.isWhitespace also omits U+0085 (NEL), which is in the chosen set. The design is unaffected because both sides use an explicit list and a shared test table that includes U+0085.",
-      "requirement": "REQ-TODO-002",
-      "location": "docs/specs/CHG-0001/sdd.md:L173-L174",
-      "suggestion": "Add U+0085 to the list of code points Java omits."
-    },
-    {
-      "id": "F-15",
-      "severity": "info",
-      "message": "Residual ADR bundling after the split: ADR-0016 combines pool size, WAL, foreign_keys and busy_timeout (only pool size and WAL have alternatives); ADR-0005 combines the hashing algorithm with the login timing defence (dummy hash) and the over-128 refusal at login; ADR-0002 combines Java version, build tool, servlet stack and module layout. These are cohesive enough and alternatives are given; hygiene only.",
-      "requirement": "NFR-004",
-      "location": "docs/specs/CHG-0001/adr/0016-single-connection-pool.md:L12-L16",
-      "suggestion": "No action needed for freeze; split the login timing defence out of ADR-0005 if ADRs are revisited."
-    },
-    {
-      "id": "F-16",
-      "severity": "info",
-      "message": "The order of checks is stated only for protected unsafe requests. On an unprotected path a POST/PUT/DELETE with a wrong method or unknown route (for example POST /api/v1/nope or PUT /api/v1/auth/login) without X-Todo-Client gets 403 from ClientHeaderFilter before 404/405. Consistent with the contract rule that every POST, PUT and DELETE needs the header, but not written down.",
-      "requirement": "NFR-004",
-      "location": "docs/specs/CHG-0001/sdd.md:L112-L114",
-      "suggestion": "Optionally add one sentence: on unprotected paths the header check (403) precedes route and method (404/405); the NFR-004 unknown-route test uses GET."
-    },
-    {
-      "id": "F-17",
-      "severity": "info",
-      "message": "Carried from round-1 F-10: the requirements.md sha256 in the sdd.md frontmatter is not verified by this review (no hashing tool in the critic grant); requirements.md is not in the 6695a40..b36e7df diff, so it is unchanged since round 1. Squad PR #2 (java-engineer, react-engineer) still awaits the requester merge; delivery risk only, recorded in section 13.",
+      "id": "F-4",
+      "severity": "minor",
+      "message": "The three commits that applied the supersede (7c949e3, 78ab0c4, b28c58d) are all titled specs updated, which breaks the semantic commit rule (CLAUDE.md rule 12) and does not name the change or the clarifications applied; 7c949e3 also deletes the reviewed draft under docs/proposals in the same commit.",
       "requirement": "REQ-ACC-001",
-      "location": "docs/specs/CHG-0001/sdd.md:L9-L11",
-      "suggestion": "Orchestrator checks the upstream hash at freeze; requester merges PR #2 before the build phase."
+      "location": "docs/specs/CHG-0001/requirements.md:L1-L9",
+      "suggestion": "If the branch history can still be rewritten before the PR, reword them (for example docs(spec): CHG-0001 apply supersede-1 for Q36-Q49); otherwise state the mapping in the re-freeze PR description."
+    },
+    {
+      "id": "F-5",
+      "severity": "info",
+      "message": "The sdd.md upstream sha256 for requirements.md was re-stamped (e3893713...) but this review could not recompute it: hashing commands are not in the critic grant. It relies on the harness chain gate, reported ok by the caller. requirements.md upstream for intent.md is unchanged and intent.md is unchanged, so that hash still holds.",
+      "requirement": "REQ-ACC-001",
+      "location": "docs/specs/CHG-0001/sdd.md:L6-L8",
+      "suggestion": "The orchestrator re-runs the chain gate at b28c58d immediately before harness freeze --supersede."
+    },
+    {
+      "id": "F-6",
+      "severity": "info",
+      "message": "NFR-001 AC-1 names six audited screens while SDD 9, 13, 14 and ADR-0001 L43 speak of eight. The not-found page is bound by REQ-NAV-001 AC-7; the detail page only by SDD prose (pre-existing since the first freeze).",
+      "requirement": "NFR-001",
+      "location": "docs/specs/CHG-0001/requirements.md:L253",
+      "suggestion": "Optionally add a parenthetical to NFR-001 AC-1 naming the detail and not-found pages, or accept as is at the re-freeze."
+    },
+    {
+      "id": "F-7",
+      "severity": "info",
+      "message": "SDD 8 cites analyst defaults 7, 8, 9 and 12 by number but not analyst default 11 (animation stops within 5 seconds); it is implemented by the at most 5 seconds clause but not traced by number.",
+      "requirement": "REQ-NAV-001",
+      "location": "docs/specs/CHG-0001/sdd.md:L422-L425",
+      "suggestion": "Append analyst default 11 to the WCAG 2.2.2 clause."
+    },
+    {
+      "id": "F-8",
+      "severity": "info",
+      "message": "SDD 6.1 quotes the contract FieldError.message description as Human-readable message naming the problem; the contract continues with shown next to the field (NFR-001 AC-3) (todo-api-v1.yaml L757). Not misleading, but the quote is partial.",
+      "requirement": "NFR-006",
+      "location": "docs/specs/CHG-0001/sdd.md:L303-L306",
+      "suggestion": "Quote the description whole."
+    },
+    {
+      "id": "F-9",
+      "severity": "info",
+      "message": "ADR-0008 (absolute 8-hour session) is unchanged and does not record the Q36 decision that the session gives no warning or extension and is accepted under the WCAG 2.2.1 essential exception; that rationale lives only in requirements NFR-001, SDD 4, 9 and 13.",
+      "requirement": "NFR-001",
+      "location": "docs/specs/CHG-0001/adr/0008-absolute-session-lifetime.md:L20-L25",
+      "suggestion": "Optionally add one Consequences bullet citing Q36 and SDD 9 when ADRs are next revisited; not needed for the re-freeze."
+    },
+    {
+      "id": "F-10",
+      "severity": "info",
+      "message": "REQ-NAV-001 AC-4 for /todos/a%2Fb and /todos/% depends on how the pinned React Router version decodes path segments and params (an encoded slash kept inside one segment, a lone % tolerated). If the router treats %2F as a separator, /todos/a%2Fb would match the catch-all and show the not-found page. SDD 14 already lists component tests for these paths, which would catch it.",
+      "requirement": "REQ-NAV-001",
+      "location": "docs/specs/CHG-0001/sdd.md:L429-L436",
+      "suggestion": "Keep those component tests and add an e2e check for /todos/a%2Fb in a real browser, since memory-router decoding can differ from the browser router."
+    },
+    {
+      "id": "F-11",
+      "severity": "info",
+      "message": "The applied files now name @alokkulkarni as author, who is also the freeze approver. The applied text is identical to the agent-authored draft that passed critic round 3 and to what this review read, so review independence holds, but the record should say the human applied, not authored, the content.",
+      "requirement": "REQ-ACC-001",
+      "location": "docs/specs/CHG-0001/sdd.md:L4-L5",
+      "suggestion": "Note in the re-freeze PR that the text was drafted by spec-author (dac02e1, da26a2a, 80b916b) and applied verbatim by the requester."
     }
   ]
 }
