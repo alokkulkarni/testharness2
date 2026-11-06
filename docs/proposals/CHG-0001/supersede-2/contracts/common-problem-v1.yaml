@@ -1,7 +1,3 @@
-# DRAFT (CHG-0001 supersede-2, spec-author run-sup2-d1): shared part of the split of the frozen
-# contracts/todo-api-v1.yaml into three files (Source: clarifications Q56(b)); no wire change.
-# Applying: copy to docs/specs/CHG-0001/contracts/common-problem-v1.yaml, delete contracts/todo-api-v1.yaml, and
-# remove this comment block (see the draft note in docs/proposals/CHG-0001/supersede-2/sdd.md).
 openapi: 3.1.0
 info:
   title: To-do API — common problem model
@@ -10,7 +6,7 @@ info:
     Shared components of the CHG-0001 To-do API (Source: clarifications Q56): the `Problem` error body, its
     `FieldError`, the one closed list of error codes, the shared error responses, the `X-Todo-Client` header and the
     session cookie. It defines no operation. The two module contracts, `identity-api-v1.yaml` (identity module) and
-    `todos-api-v1.yaml` (to-dos module), reference these components by `$ref` (sdd.md §2, adr/0018). Together they
+    `todo-api-v1.yaml` (to-dos module), reference these components by `$ref` (sdd.md §2, adr/0018). Together they
     are the source of truth for every interface between the React SPA and the Spring Boot API; see
     docs/specs/CHG-0001/sdd.md for behaviour and docs/specs/CHG-0001/requirements.md for the requirement IDs cited
     in each operation.

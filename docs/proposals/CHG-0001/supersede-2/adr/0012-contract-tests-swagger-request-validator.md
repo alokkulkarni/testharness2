@@ -1,16 +1,16 @@
 # ADR-0012 Contract tests with openapi-request-validator (formerly swagger-request-validator) and an endpoint inventory
 
-> Draft note for applying supersede-2 (remove when applying): copy to `docs/specs/CHG-0001/adr/0012-contract-tests-swagger-request-validator.md` (file name kept); changed for Q56 and NFR-007 AC-3 (three contract files, renamed validator) and Q60 (Spring Boot 4.x); see the note in `sdd.md`.
-
 Status: proposed (CHG-0001, N03-spec); amended for Q56 and NFR-007 AC-3. Requirements: NFR-004, REQ-AUTH-005 AC-1,
 NFR-007 AC-3, and every requirement whose interface is in `contracts/identity-api-v1.yaml` or
-`contracts/todos-api-v1.yaml`. Split out of ADR-0002 (critic finding F-6, N03-spec round 1). The file name keeps the
-validator's former name.
+`contracts/todo-api-v1.yaml`. Split out of ADR-0002 (critic finding F-6, N03-spec round 1). The file name keeps the
+validator's former name. The to-dos module's contract keeps the first freeze's file name `todo-api-v1.yaml`: that
+contract file is kept rather than removed, because a re-freeze replaces files and removes none, so the to-dos module
+inherits its name; there is no wire change (Source: clarifications Q63).
 
 ## Context
 
 The API contract is three OpenAPI 3.1 files (Source: clarifications Q56): `contracts/identity-api-v1.yaml` (identity
-module), `contracts/todos-api-v1.yaml` (to-dos module) and `contracts/common-problem-v1.yaml` (components only:
+module), `contracts/todo-api-v1.yaml` (to-dos module) and `contracts/common-problem-v1.yaml` (components only:
 `Problem`, `FieldError`, the shared error responses, the `X-Todo-Client` header and the session cookie), linked by
 relative `$ref`s. Together they are the source of truth for the API. Drift between them and the implementation must
 fail the build, no operation may exist that the contract does not list (REQ-AUTH-005 AC-1: no user-listing or
@@ -35,12 +35,12 @@ docs/FEATURES.md, read the same day (summarised, not verbatim), its OpenAPI 3.1 
   file path, or as a test classpath location if the java-engineer adds that directory as a test resource directory.
   Both were verified (below).
 - Every MockMvc integration request and response is validated with an `OpenApiInteractionValidator` built from the
-  module file that defines the request's path (`identity-api-v1.yaml` for `/api/v1/auth/**`, `todos-api-v1.yaml`
+  module file that defines the request's path (`identity-api-v1.yaml` for `/api/v1/auth/**`, `todo-api-v1.yaml`
   for `/api/v1/todos/**`); each module file pulls `common-problem-v1.yaml` in through its `$ref`s.
 - An endpoint-inventory test (default profile) loads both module files and fails the build unless: the union of
   their path-and-method pairs equals the routes Spring MVC has mapped; every path-and-method pair appears in exactly
   one of the two files; and the handler method of each operation is declared by a controller in that file's module
-  package (`identity-api-v1.yaml` → `app.todo.auth`, `todos-api-v1.yaml` → `app.todo.todo`) (NFR-007 AC-3). The
+  package (`identity-api-v1.yaml` → `app.todo.auth`, `todo-api-v1.yaml` → `app.todo.todo`) (NFR-007 AC-3). The
   mapped routes are compared excluding, by name, only `/error` (all methods of `ProblemErrorController`, `common`;
   sdd.md §6); any other mapped route missing from both module files fails the test, and the java-engineer stops and
   reports it as a spec question.
@@ -53,14 +53,14 @@ docs/FEATURES.md, read the same day (summarised, not verbatim), its OpenAPI 3.1 
   contract level: the REQ-AUTH-004 integration tests (every to-do operation without, with an expired and with a
   logged-out session → 401 `UNAUTHENTICATED`) remain its check.
 - Contract lint: `redocly lint` with `extends: [recommended]` (`@redocly/cli`, ADR-0001) is run on the two module
-  roots only, `identity-api-v1.yaml` and `todos-api-v1.yaml`; `common-problem-v1.yaml` is linted through their
+  roots only, `identity-api-v1.yaml` and `todo-api-v1.yaml`; `common-problem-v1.yaml` is linted through their
   `$ref`s. It is not linted on its own: having no operations and no servers, it fails `no-empty-servers` and warns
   `no-unused-components`. The lint runs as the `web/package.json` script `lint:contracts`
   (`pnpm -C web lint:contracts`, `redocly lint` on the two module roots), part of the contract level of sdd.md §14
   and run in the gates.
 
 Source of the tool facts above: tool spikes of 2026-11-06, recorded in
-`docs/proposals/CHG-0001/supersede-2/tool-spikes.md`. In short (java-engineer spikes A and
+`.harness/changes/CHG-0001/tool-spikes.md`. In short (java-engineer spikes A and
 B, JDK Temurin 23.0.2 with `release` 21, Maven 3.10.0, JUnit 5.10.2, `openapi-request-validator-core:3.0.0`): an
 OpenAPI 3.1 module file with `$ref`s to a sibling components-only file (parameter `ClientHeader`, response
 `NotFound` → `Problem`, security scheme `sessionCookie`) loads through
@@ -69,7 +69,7 @@ location; a missing `$ref` header is reported; the `$ref` `NotFound` response ac
 rejects a bad enum value; the first load logs one warning, "Unknown keyword components", and still succeeds; a
 missing `todo_session` cookie gives no validation error, whether the scheme is local or a `$ref`; direct validation
 against `Problem` works with `SchemaValidator` from either the common file or a module file. Lint results:
-react-engineer check of the supersede-2 draft (`@redocly/cli` 2.76.0), §5 of the same file.
+react-engineer check of the three contract files (`@redocly/cli` 2.76.0), §5 of the same file.
 
 ## Consequences
 

@@ -1,7 +1,5 @@
 # ADR-0002 Spring Boot REST API on Java 21
 
-> Draft note for applying supersede-2 (remove when applying): copy to `docs/specs/CHG-0001/adr/0002-spring-boot-rest-api.md`; amended in place for Q51, Q57, Q58 (packages and enforced boundaries) and Q60 (Spring Boot 4.x); see the note in `sdd.md`.
-
 Status: proposed (CHG-0001, N03-spec); amended by ADR-0018 (supersede-2: module packages and enforced boundaries) and for
 Q60 (supersede-2: the Spring Boot line).
 Requirements: NFR-005, NFR-002, NFR-007; constraints C-1, C-2. In round 2 the persistence, validation, error-model,

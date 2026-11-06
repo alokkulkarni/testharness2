@@ -1,7 +1,5 @@
 # ADR-0018 Modular monolith: identity and to-dos modules with boundaries enforced by ArchUnit
 
-> Draft note for applying supersede-2 (remove when applying): copy to `docs/specs/CHG-0001/adr/0018-modular-monolith-module-boundaries.md` (new file, for Q51, Q56, Q57, Q58); see the note in `sdd.md`.
-
 Status: proposed (CHG-0001, N03-spec, supersede-2). Requirements: NFR-007 AC-1..AC-3, REQ-ISO-001, REQ-AUTH-004
 AC-1, REQ-AUTH-002 AC-4; constraint C-2. Amends ADR-0002.
 
@@ -13,7 +11,7 @@ deployable split into strict modules with enforced boundaries, one process and o
 services (Source: clarifications Q51; C-2). Q57 accepted NFR-007: one application, process, SQLite file and
 connection pool (AC-1); a test fails on a use of another module's unpublished type or on a dependency cycle (AC-2);
 an identity module and a to-dos module, each contract operation in exactly one (AC-3). Q56 split the contract into
-`identity-api-v1.yaml`, `todos-api-v1.yaml` and the shared `common-problem-v1.yaml`. Q58 chose ArchUnit to enforce
+`identity-api-v1.yaml`, `todo-api-v1.yaml` and the shared `common-problem-v1.yaml`. Q58 chose ArchUnit to enforce
 the boundaries.
 
 The frozen package layout crossed these lines: `user` held only `UserRepository`; `common` held exceptions only
@@ -29,7 +27,9 @@ only `user_id` and `UserRepository` had no lookup by id.
     `SessionRepository`, `UserRepository` (folded in from the former `user` package, with a new `findById`),
     `SessionCookieAuthenticationFilter`, `PasswordRules`, `IdentifierRules`, `IdentifierTakenException`,
     `InvalidCredentialsException`.
-  - `todo` — the **to-dos module**: the to-do and list operations; contract `todos-api-v1.yaml`; table `todos`.
+  - `todo` — the **to-dos module**: the to-do and list operations; contract `todo-api-v1.yaml`; table `todos`. The
+    first freeze's contract file is kept rather than removed, because a re-freeze replaces files and removes none, so
+    the to-dos module inherits its name `todo-api-v1.yaml`; there is no wire change (Source: clarifications Q63).
   - `common` — the **shared kernel**, not a module of AC-3: the error model (ADR-0011), `ClientHeaderFilter`
     (ADR-0007; it guards both modules' unsafe routes), `RequestIdFilter`, `ClockConfig` (ADR-0013), `Whitespace`.
   - `config` — the **composition root**, not a module: `SecurityConfig` (names both modules' paths, wires the

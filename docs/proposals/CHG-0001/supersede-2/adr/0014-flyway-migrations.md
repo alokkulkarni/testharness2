@@ -1,7 +1,5 @@
 # ADR-0014 Schema managed by Flyway migrations run at start-up
 
-> Draft note for applying supersede-2 (remove when applying): copy to `docs/specs/CHG-0001/adr/0014-flyway-migrations.md`; changed for NFR-007 (table owners, one `V1__init.sql` kept); see the note in `sdd.md`.
-
 Status: proposed (CHG-0001, N03-spec); amended for NFR-007 (ADR-0018). Requirements: REQ-DATA-001 AC-1, AC-3,
 NFR-007 AC-1. Split out of ADR-0003 (critic finding F-6, N03-spec round 1).
 

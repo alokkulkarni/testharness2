@@ -1,7 +1,5 @@
 # ADR-0001 React + TypeScript single-page app built with Vite
 
-> Draft note for applying supersede-2 (remove when applying): copy to `docs/specs/CHG-0001/adr/0001-react-typescript-spa.md`; changed for Q56 (generated API types per module contract); see the note in `sdd.md`.
-
 Status: proposed (CHG-0001, N03-spec); amended for Q56 (one generated types file per module contract). Requirements:
 NFR-005, NFR-001, NFR-002, NFR-003, REQ-NAV-001, NFR-007; constraint C-1.
 
@@ -10,7 +8,7 @@ NFR-005, NFR-001, NFR-002, NFR-003, REQ-NAV-001, NFR-007; constraint C-1.
 The requester fixed the UI as React + TypeScript (Q3, C-1). The repository has no UI code, so the build tool,
 routing, data access and test tooling are open. The UI must meet WCAG 2.1 AA (NFR-001), run locally with no
 hosted service (NFR-002) and show results within 1 second (NFR-003). The API contract is split into one file per
-API module, `contracts/identity-api-v1.yaml` and `contracts/todos-api-v1.yaml`, which share
+API module, `contracts/identity-api-v1.yaml` and `contracts/todo-api-v1.yaml`, which share
 `contracts/common-problem-v1.yaml` by `$ref` (Source: clarifications Q56; ADR-0018).
 
 ## Decision
@@ -23,11 +21,11 @@ API module, `contracts/identity-api-v1.yaml` and `contracts/todos-api-v1.yaml`, 
 - Data access through one small `fetch` wrapper (`web/src/api/client.ts`); no global state library. API types are
   generated with **openapi-typescript** so the UI cannot drift from the contract: one file per module contract,
   `web/src/api/identity.ts` from `contracts/identity-api-v1.yaml` and `web/src/api/todos.ts` from
-  `contracts/todos-api-v1.yaml`, configured in `web/redocly.yaml` (`apis` entries `identity` and `todos`, each with
+  `contracts/todo-api-v1.yaml`, configured in `web/redocly.yaml` (`apis` entries `identity` and `todos`, each with
   its `root` and `x-openapi-ts.output`). The cross-file `$ref`s into `common-problem-v1.yaml` are resolved by the
   generator, so each output carries its own, structurally identical `Problem` type; the SPA imports `Problem` from
   `web/src/api/todos.ts` only (sdd.md §2, §6.1). Source: tool spikes of 2026-11-06, recorded in
-  `docs/proposals/CHG-0001/supersede-2/tool-spikes.md`; react-engineer spike with
+  `.harness/changes/CHG-0001/tool-spikes.md`; react-engineer spike with
   openapi-typescript 7.13.0 and @redocly/cli 2.76.0, Node 26.12.0, pnpm 11.17.0: per-module outputs generated,
   cross-file `$ref`s resolved, each output with its own structurally identical `Problem`, security schemes not
   emitted, unreferenced schemas dropped, and a CLI path argument ignored when a `redocly.yaml` exists. `redocly join`

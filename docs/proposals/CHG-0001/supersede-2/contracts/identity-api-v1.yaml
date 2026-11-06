@@ -1,7 +1,3 @@
-# DRAFT (CHG-0001 supersede-2, spec-author run-sup2-d1): identity-module part of the split of the frozen
-# contracts/todo-api-v1.yaml into three files (Source: clarifications Q56(b)); no wire change.
-# Applying: copy to docs/specs/CHG-0001/contracts/identity-api-v1.yaml, delete contracts/todo-api-v1.yaml, and
-# remove this comment block (see the draft note in docs/proposals/CHG-0001/supersede-2/sdd.md).
 openapi: 3.1.0
 info:
   title: To-do API — identity module
@@ -9,7 +5,7 @@ info:
   description: |
     Identity module of the CHG-0001 To-do API (NFR-007 AC-3; Source: clarifications Q51, Q56, Q57): sign-up, login,
     logout and the current session. Served by package `app.todo.auth` of the one Spring Boot application (sdd.md §2,
-    adr/0018). The to-do and list operations are in `todos-api-v1.yaml`; every operation belongs to exactly one of
+    adr/0018). The to-do and list operations are in `todo-api-v1.yaml`; every operation belongs to exactly one of
     the two files. See docs/specs/CHG-0001/sdd.md for behaviour and docs/specs/CHG-0001/requirements.md for the
     requirement IDs cited in each operation.
 

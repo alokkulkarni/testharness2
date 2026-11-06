@@ -1,7 +1,5 @@
 # ADR-0011 RFC 9457 problem details for every error, built by one `ProblemWriter`
 
-> Draft note for applying supersede-2 (remove when applying): copy to `docs/specs/CHG-0001/adr/0011-problem-details-error-model.md`; changed for Q56 and NFR-007 (shared kernel owns the error model, module exceptions move to their module); see the note in `sdd.md`.
-
 Status: proposed (CHG-0001, N03-spec); amended for Q56 and NFR-007 (ADR-0018). Requirements: NFR-004 AC-2,
 REQ-TODO-002 AC-10, REQ-AUTH-003 AC-3, REQ-AUTH-004 AC-1, REQ-ISO-001 AC-2, NFR-007 AC-2. Split out of ADR-0002 and
 extended for critic finding F-4 (N03-spec round 1).

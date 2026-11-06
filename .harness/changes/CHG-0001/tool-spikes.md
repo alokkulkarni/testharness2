@@ -1,9 +1,8 @@
 # Tool spikes of 2026-11-06 — CHG-0001 supersede-2 (proposal provenance only)
 
-> **Proposal provenance only. This file is NOT applied to `docs/specs/CHG-0001/`**: it is not copied by the apply
-> steps in `sdd.md`'s draft note, is not frozen, and stays in `docs/proposals/CHG-0001/supersede-2/` (supersede-2
-> draft commit). ADR-0012 and ADR-0001 cite it by file path only, as "tool spikes of 2026-11-06, recorded in
-> `docs/proposals/CHG-0001/supersede-2/tool-spikes.md`".
+> **Provenance only, not part of the frozen spec.** This file lives at `.harness/changes/CHG-0001/tool-spikes.md`,
+> beside `clarifications.md`; it is not frozen and is not copied into `docs/specs/CHG-0001/`. ADR-0012 and ADR-0001
+> cite it by file path only, as "tool spikes of 2026-11-06, recorded in `.harness/changes/CHG-0001/tool-spikes.md`".
 >
 > The facts below are recorded as they were reported to the orchestrator by the agents named, and relayed to
 > spec-author (run `run-sup2-d2`). spec-author did not re-run any spike or command and did not re-read any source.
@@ -72,8 +71,8 @@ Toolchain: Node 26.12.0, pnpm 11.17.0, openapi-typescript 7.13.0, @redocly/cli 2
 
 Toolchain: as the react-engineer spike.
 
-- `redocly lint` (rule set `recommended`) on `identity-api-v1.yaml`, `todos-api-v1.yaml` and the frozen
-  `todo-api-v1.yaml`: 0 errors (only the warning kinds of the frozen file: `info-license`,
+- `redocly lint` (rule set `recommended`) on `identity-api-v1.yaml`, the to-dos module's `todo-api-v1.yaml` (then
+  named `todos-api-v1.yaml`; renamed per Q63) and the frozen `todo-api-v1.yaml`: 0 errors (only the warning kinds of the frozen file: `info-license`,
   `no-server-example-com`, `tag-description`).
 - `common-problem-v1.yaml` linted on its own: `no-empty-servers` error plus `no-unused-components` warnings (it has
   no operations and no servers).
