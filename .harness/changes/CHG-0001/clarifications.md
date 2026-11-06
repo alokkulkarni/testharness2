@@ -395,3 +395,44 @@ and freeze stay with the requester.
 **Answer:** @alokkulkarni (in chat): "not sure which specs.. but go wiht your view." — left to the coordinator, who
 chose (a): the spec-author agent drafts the changes (in `requirements.md`, `sdd.md` and, if needed, the contract)
 for the requester to review; the approval and the freeze stay with the requester.
+
+## Q46. Does the not-found page's home link go to `/`, which then sends the user on to `/todos`?
+
+Raised by the critic's round-3 review of the supersede draft (N-4; REQ-NAV-001), relayed by the coordinator: Q37
+says "a link to go back to home" but not what "home" is. The draft reads it as `/`, which redirects to `/todos`.
+(a) Yes, keep that reading. (b) Another destination.
+
+**Answer:** @alokkulkarni (relayed by the coordinator, decision 1): "yes thats correct" — (a) the home link goes to
+`/`, which then sends the user on to `/todos`.
+
+## Q47. Do signed-out visitors who open an unknown address see the not-found page directly, without being sent to login?
+
+Raised by the critic's round-3 review of the supersede draft (N-4; REQ-NAV-001 AC-3), relayed by the coordinator: the
+draft shows the not-found page to everyone, signed in or not, without a login redirect. (a) Yes, as drafted. (b) No,
+signed-out visitors are sent to the login page.
+
+**Answer:** @alokkulkarni (relayed by the coordinator, decision 2): "no they should be sent to login / signin page."
+— (b) signed-out visitors opening an unknown address are sent to the login page, not shown the not-found page. Where
+they land after logging in is not stated in the answer.
+
+## Q48. On the list screen, when a to-do vanished before a done/undone toggle, is the refreshed list the next step, with no "Back to my to-dos" link?
+
+Raised by the critic's round-3 review of the supersede draft (N-5; NFR-006 AC-1), relayed by the coordinator:
+(a) the list screen also shows a "Back to my to-dos" link (which clears filter and search). (b) The refreshed list,
+with "…the list has been refreshed", is the next step on the list screen; the link stays only on the detail page.
+Recommended: (b).
+
+**Answer:** @alokkulkarni (relayed by the coordinator, decision 3): "b is recommended." — (b) on the list screen the
+refreshed list is the next step and no "Back to my to-dos" link is shown; the link stays only on the detail page.
+
+## Q49. Should the critic's optional round-3 notes be folded into the supersede draft?
+
+Raised by the critic's round-3 review of the supersede draft, relayed by the coordinator: N-1 (error page home link
+is a full page load or the error boundary resets on navigation), N-2 (where errors thrown in event handlers are
+shown), N-3 (a form 400 with no field it can show falls back to the try-again message), N-7 (an NFR-006 note on the
+contract's `FieldError.message`, or the SDD rule stated as binding), N-8 (ADR-0001 wording "eight audited screens
+(SDD §13)"), and N-6 (the `upstream.sha256` of requirements.md in sdd.md goes stale once applied). (a) Yes to all.
+(b) Some (say which).
+
+**Answer:** @alokkulkarni (relayed by the coordinator, decision 4): "yes to all" — (a) N-1, N-2, N-3, N-7 and N-8 are
+applied, and N-6 is handled as far as it applies to the draft.
