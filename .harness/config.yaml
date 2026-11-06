@@ -12,7 +12,10 @@ plugins:
   - sdlc-docs
   - sdlc-backend
   - sdlc-web
-stacks: []
+  - sdlc-design
+stacks:
+  - java
+  - react
 executors:
   - claude-code
   - claude-code-headless

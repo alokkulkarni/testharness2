@@ -23,6 +23,11 @@ roster:
       - java-engineer
       - react-engineer
     instances: 2
+  designer:
+    agents:
+      - ux-designer
+      - drawio-architect
+    instances: 1
   documenter:
     agents:
       - okf-documenter
