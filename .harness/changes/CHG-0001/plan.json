@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "title": "Create a to-do list",
+  "mode": "greenfield",
+  "profile": "lite",
+  "specFreeze": null,
+  "intent": {
+    "path": "docs/specs/CHG-0001/intent.md",
+    "sha256": "8465eeb8e5e930d7bd165b4c152e9be5bd62e33d8350a11291867d0b16792c98",
+    "acceptanceRef": "https://github.com/alokkulkarni/testharness2/pull/1#pullrequestreview-5797517809"
+  },
+  "status": "active",
+  "branch": "feature/CHG-0001-create-a-to-do-list",
+  "baseBranch": "develop",
+  "squad": "default",
+  "nodes": [
+    {
+      "id": "N01-clarify",
+      "kind": "agent",
+      "agent": "orchestrator",
+      "phase": "0",
+      "description": "Analyse the request and the code for ambiguity; ask targeted questions and record answers or waivers.",
+      "inputs": [],
+      "outputs": [
+        ".harness/changes/CHG-0001/clarifications.md"
+      ],
+      "dependsOn": [],
+      "gates": [
+        "clarified"
+      ],
+      "executor": "any",
+      "isolation": "none",
+      "status": "pending",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N02-requirements",
+      "kind": "agent",
+      "agent": "requirements-analyst",
+      "phase": "1",
+      "description": "Write the change's requirements with Given/When/Then acceptance criteria.",
+      "inputs": [
+        ".harness/changes/CHG-0001/clarifications.md"
+      ],
+      "outputs": [
+        "docs/specs/CHG-0001/requirements.md"
+      ],
+      "dependsOn": [
+        "N01-clarify"
+      ],
+      "gates": [
+        "critic-verdict"
+      ],
+      "executor": "any",
+      "isolation": "none",
+      "status": "pending",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N03-spec",
+      "kind": "agent",
+      "agent": "spec-author",
+      "phase": "2",
+      "description": "Write the SDD, contracts and ADRs for the change.",
+      "inputs": [
+        "docs/specs/CHG-0001/requirements.md"
+      ],
+      "outputs": [
+        "docs/specs/CHG-0001/sdd.md",
+        "docs/specs/CHG-0001/contracts/",
+        "docs/specs/CHG-0001/adr/"
+      ],
+      "dependsOn": [
+        "N02-requirements"
+      ],
+      "gates": [
+        "critic-verdict"
+      ],
+      "executor": "any",
+      "isolation": "none",
+      "status": "pending",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N04-spec-freeze",
+      "kind": "human-gate",
+      "phase": "2",
+      "description": "A product owner or tech lead approves the spec; harness freeze records the hashes.",
+      "approvers": [
+        "@alokkulkarni"
+      ],
+      "inputs": [
+        "docs/specs/CHG-0001/sdd.md",
+        "docs/specs/CHG-0001/contracts/",
+        "docs/specs/CHG-0001/adr/"
+      ],
+      "outputs": [
+        ".harness/changes/CHG-0001/spec-freeze.json"
+      ],
+      "dependsOn": [
+        "N03-spec"
+      ],
+      "gates": [
+        "spec-freeze-approval"
+      ],
+      "status": "pending"
+    }
+  ]
+}
