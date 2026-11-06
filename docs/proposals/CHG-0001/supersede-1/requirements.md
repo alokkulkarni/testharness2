@@ -18,7 +18,7 @@ upstream:
 CHG-0001 is a new to-do list application (Q1: to-do app only). Individual users sign up, log in, and create and manage
 their own to-dos in a web UI backed by an HTTP API (Q2, Q5, Q11). To-dos persist across restarts (Q4). The first
 release runs locally only (Q10). Source of every requirement is the answered `clarifications.md` (Q1–Q34, and Q36–Q39,
-Q44, Q46 and Q47 for the items added or changed by the first supersede; Q48 and Q49 change only the SDD, not these
+Q44, Q46 and Q47 for the items added or changed by the first supersede; Q48 and Q49 change only the SDD and ADR-0001, not these
 requirements); the Q numbers
 in brackets trace each item. Q33 records that the requester accepted every item the first draft had marked as
 proposed; Q34 settled the three ambiguous criteria. The few points the requester did not decide carry the tag
