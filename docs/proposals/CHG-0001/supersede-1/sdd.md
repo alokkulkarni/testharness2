@@ -16,10 +16,8 @@ upstream:
 > recomputed for this draft and goes stale once the draft `requirements.md` is applied. After the draft
 > `requirements.md` is applied to `docs/specs/CHG-0001/`, re-stamp this value with `harness chain stamp` before the
 > re-freeze; never edit it by hand. (2) N-7: the contract
-> `contracts/todo-api-v1.yaml` is frozen and not part of this draft; §6.1 states that its rule on
-> `FieldError.message` is binding. When applying, the requester may add a matching note to the description of
-> `FieldError.message` in the contract (for example "plain language; says how to fix the field; NFR-006"); this
-> draft does not change the contract.
+> `contracts/todo-api-v1.yaml` is frozen, is not part of this draft and is not changed when it is applied; §6.1
+> states that its rule on `FieldError.message` is binding.
 
 # SDD — CHG-0001 To-do list
 
@@ -302,7 +300,7 @@ export function userMessageFor(failure: Failure, action: UserAction): UserMessag
 | 401 on any other call while `signed-in` | the session-ended flow of §4.1, unchanged | `log-in-again` ("Please log in again.") |
 | 401 from `session-probe` | nothing (§4.1) | — |
 | 404 `NOT_FOUND` on a to-do on the detail or edit page (`load-todo`, `save`, `delete-from-detail`) | a to-do not-found message | `back-to-list` (the **Back to my to-dos** link to `/todos`) |
-| 404 `NOT_FOUND` on a to-do on the list screen (`toggle-done`, `delete-from-list`) (Source: clarifications Q48) | "That to-do no longer exists, and the list has been refreshed."; the SPA re-queries the current URL's list (§8) and shows no **Back to my to-dos** link | `list-refreshed` (the refreshed list itself) |
+| 404 `NOT_FOUND` on a to-do on the list screen (`toggle-done`, `delete-from-list`) (Source: clarifications Q48) | the SPA re-queries the current URL's list (§8); once the re-query succeeds it shows "That to-do no longer exists, and the list has been refreshed."; if the re-query fails it shows the `load-list` message of the `try-again` row below instead; no **Back to my to-dos** link on the list screen | `list-refreshed` (the refreshed list itself); `try-again` when the re-query fails |
 | `network`; any 5xx; 403; 405; 415; `MALFORMED_REQUEST`; `REQUEST_REJECTED`; `VALIDATION_FAILED` on any other action (for example `load-list`, §12.1 item 8); any other status; a body that is not a Problem | a message naming the action that failed (for example that the to-dos could not be loaded); for `session-probe` it is the §4.1 alert, unchanged | `try-again` |
 | `unexpected`, thrown while rendering | `AppErrorBoundary`'s full-page message in place of the broken screen | `reload-or-home` (reload the page, or a link to `/`) |
 | `unexpected`, thrown in an event handler or promise callback (Q49, N-2) | a message naming the action that failed, shown where that screen shows the action's other failures (last bullet below); the screen is not replaced | `reload-or-home` (reload the page, or a link to `/`) |
@@ -324,23 +322,35 @@ export function userMessageFor(failure: Failure, action: UserAction): UserMessag
   (§12.1 item 7):
   - The alert "That to-do no longer exists." on the list screen (a 404 on `toggle-done`, or on `delete-from-list`
     from a row's Delete) reads "That to-do no longer exists, and the list has been refreshed." The SPA re-queries the
-    current URL's list (§8), and the refreshed list is the next step; the list screen shows no **Back to my to-dos**
-    link (Source: clarifications Q48). The same alert after a delete from the detail page (`delete-from-detail`) keeps
-    its **Back to my to-dos** link to `/todos`, as the detail and edit screens' not-found states already have (Q48:
-    the link stays only on the detail page).
+    current URL's list (§8), and the refreshed list is the next step; the alert is shown only once that re-query
+    succeeds. If the re-query fails, the screen shows the `load-list` message (`try-again` row of the table above)
+    instead, and never says that the list has been refreshed. The list screen shows no **Back to my to-dos** link
+    (Source: clarifications Q48). The same alert after a delete from the detail page (`delete-from-detail`) keeps its
+    **Back to my to-dos** link to `/todos`, as the detail and edit screens' not-found states and the edit page's
+    refused save (404) already have (UX design S6, `design/ux/ux-design.md` L344, L347). Q48 is read as removing the link
+    only from the list screen; the detail and edit pages keep it (§12.1 item 7).
   - The refused-login alert reads "Invalid identifier or password. Check them and try again." Its first sentence
     equals the contract's `INVALID_CREDENTIALS` `detail`, but the SPA's text is its own constant in `userMessageFor`,
     never the response's `detail`.
 - `AppErrorBoundary` wraps `AppRoutes` inside the router and catches errors thrown while rendering (NFR-006 AC-3).
-  Its page offers a reload control (`window.location.reload()`) and a router link to `/` (home, Q46). The boundary
-  resets when the location changes (it is keyed on the router location), so following its link to `/` (and on to
-  `/todos`, REQ-NAV-001 AC-1) clears the error and renders the normal page without a full page load; the session
-  state held by `SessionProvider` is kept (Source: clarifications Q49, critic note N-1; this choice, rather than a
-  full page load through `<a href="/">`, is §12.1 item 10).
+  Its page offers a reload control (`window.location.reload()`) and a router link to `/` (home, Q46). Apart from
+  the reload control's full page load, exactly one thing resets the boundary: a change of the router's `location.pathname` while it is showing its error page. The
+  function component reads `location.pathname` with the router's location hook and passes it to an inner class
+  error boundary, which records the pathname at the moment it catches an error and, in `componentDidUpdate`, clears
+  its caught error only when it is in the error state and the pathname it receives differs from the recorded one.
+  The boundary is never given a `key` derived from the location, so no navigation remounts it or `AppRoutes`; when no
+  error is caught, a navigation simply re-renders its children. A change of only the query string (the list
+  screen's filter, search and page changes, §8) never resets or remounts anything, so the list re-queries in place:
+  the existing rows stay until the response arrives and focus stays on the control the user used (UX design S3
+  loading state and §6, `design/ux/ux-design.md` L254, L436; NFR-001 AC-2, REQ-TODO-005 AC-3). Following the error
+  page's link to `/` changes the pathname (and `/` goes on to `/todos`, REQ-NAV-001 AC-1), so it clears the error
+  and renders the normal page without a full page load; the session state held by `SessionProvider` is kept
+  (Source: clarifications Q49, critic note N-1; this choice, rather than a full page load through `<a href="/">`,
+  is §12.1 item 10).
 
   ```tsx
   // web/src/app/AppErrorBoundary.tsx
-  export function AppErrorBoundary(props: { children: React.ReactNode }): JSX.Element; // wraps a class error boundary keyed on the router location
+  export function AppErrorBoundary(props: { children: React.ReactNode }): JSX.Element; // passes location.pathname to an inner class error boundary; no location-derived key
   ```
 - Errors thrown in event handlers and promise callbacks do not reach an error boundary, so each call site maps them
   with `userMessageFor({ kind: 'unexpected' }, action)` and shows the resulting message where that screen shows the
@@ -451,7 +461,8 @@ A missing id, a malformed id and another user's id therefore give the identical 
 - After create: navigate to `/todos` (All, no search, page 1) where the new to-do is first (REQ-TODO-001 AC-1).
   After done toggle, delete or clear: re-query the current URL's list immediately (REQ-TODO-005 AC-3). A done toggle
   or a row's delete that gets a 404 also re-queries the current URL's list, and that refreshed list is the message's
-  next step (§6.1; Source: clarifications Q48).
+  next step; the message is shown once the re-query succeeds, and a failed re-query shows the `load-list` message
+  instead (§6.1; Source: clarifications Q48).
 - Delete: `ConfirmDialog` naming the to-do; Cancel changes nothing (REQ-TODO-006 AC-1..AC-3).
 - Clear completed: before opening the dialog the SPA re-fetches the list and shows `totals.completed` (N) in the
   text (REQ-TODO-007 AC-1..AC-3). For any N other than 1:
@@ -547,7 +558,9 @@ These are product-visible choices the requester did not make; approving the free
    `a;b` with a "try again" message that cannot succeed.
 7. **Next steps added to two approved strings** (§6.1, NFR-006 AC-1). Decided by the requester: on the list screen
    a 404 on a done toggle re-queries the list, the message says the list has been refreshed, and no **Back to my
-   to-dos** link is shown; the link stays only on the detail page (Q48(b), "b is recommended."). Still for the
+   to-dos** link is shown; the link stays only on the detail page (Q48(b), "b is recommended."), which this draft
+   reads as removing it only from the list screen, so the edit page's existing link on a refused save (404) and its
+   not-found state also keep it (UX design S6, `design/ux/ux-design.md` L344, L347). Still for the
    approver, because the requester's words do not settle them: (a) the full sentence "That to-do no longer exists,
    and the list has been refreshed." (Q48 quotes only "…the list has been refreshed"); (b) applying the same
    list-screen rule to a 404 on a row's Delete (`delete-from-list`), which Q48 asks about only for the toggle but
@@ -567,10 +580,11 @@ These are product-visible choices the requester did not make; approving the free
    `returnTo` rule). This is the spec author's default, not the requester's decision. A signed-out visitor on
    `/todos/not-a-uuid` lands on `/todos` in the same way (already the §4.2 rule).
 10. **The error page's home link resets the error boundary** (§6.1, NFR-006 AC-3): Q49 accepts critic note N-1, which
-    offers a full page load (`<a href="/">`) or an error boundary that resets on location change. The draft takes the
-    reset on location change, because it keeps the signed-in session state without a new probe and can be checked by
-    a component test; the page's reload control still does a full reload. The choice between the two is the spec
-    author's.
+    offers a full page load (`<a href="/">`) or an error boundary that resets on navigation. The draft takes the
+    reset, limited to a change of `location.pathname` while the error page is shown (never a query-string-only
+    change, and never by remounting the boundary or the routes through a location-derived `key`), because it keeps
+    the signed-in session state without a new probe and can be checked by a component test; the page's reload
+    control still does a full reload. The choice between the two is the spec author's.
 
 ## 13. Risks
 
@@ -625,4 +639,4 @@ requirement ID and AC.
 | NFR-003 | §3 (indexes), §7; ADR-0015, ADR-0016 | `listTodos` and all write operations | e2e (performance spec, main configuration): user seeded with 500 to-dos; each of list, filter, search, page, create, edit, complete, delete run 20 times, time from action to rendered result, p95 ≤ 1 s |
 | NFR-004 | §4, §5, §6, §11; ADR-0004, ADR-0005, ADR-0007, ADR-0010, ADR-0011 | `Problem` (incl. `code` enum), `BadRequest`, `Unauthenticated`, `ClientHeaderMissing`, `NotFound`, `MethodNotAllowed`, `UnsupportedMediaType`, `RequestRejected`, `InternalError`, `additionalProperties: false` | review + integration: server refuses invalid input sent directly (all REQ-TODO-002/REQ-AUTH-001 cases via API), forced internal error returns generic 500 with no stack trace or SQL; one request per error source — 401 from the security entry point, 403 from `ClientHeaderFilter`, 405 (`PATCH /api/v1/todos/{id}`, `Allow` header present), 415 (`text/plain` body and no `Content-Type` on `createTodo`), 404 unknown route (`/api/v1/nope`), 400 unparseable JSON, 400 `REQUEST_REJECTED` from the firewall (`;` in the path), and `ProblemErrorController` given a forwarded 413 and 500 (error attributes set as the servlet container sets them) — each returns `application/problem+json` valid against the `Problem` schema (directly, where no contract operation exists), with its listed `code` and no stack trace, exception text or SQL, and never the whitelabel or Spring Boot default body; secret scan of the repository in the gates; AC-1 via REQ-AUTH-003 tests and ADR-0005 review |
 | NFR-005 | §2; ADR-0001..0003 | whole contract (HTTP API) | review: `web/package.json` (React, TypeScript), `api/pom.xml` (Spring Boot), sqlite-jdbc driver and `.db` file; e2e exercises browser → HTTP API |
-| NFR-006 | §2, §4.1, §6, §6.1, §8 (Q39, Q48, Q49) | `Problem` (`code`; `title` and `detail` never displayed), `FieldError.message` (§6.1 rule binding, N-7) | unit: `userMessageFor` for every row of the §6.1 table whose text it supplies (all rows except the 400 `VALIDATION_FAILED` form-action row with a shown field and the 409 `IDENTIFIER_TAKEN` row, whose text is `errors[].message`, and the `session-probe` 401 row, which shows nothing), and, outside those three cases, for every `ProblemCode`, statuses 403/405/413/415/500/502, a non-Problem body and `network` across every `UserAction`, returns a non-empty text and a next step; a 400 `VALIDATION_FAILED` on `load-list`, `toggle-done`, `delete-from-list`, `delete-from-detail` and `clear-completed` gives `try-again`, not `fix-fields`; a 400 `VALIDATION_FAILED` on each of `sign-up`, `log-in`, `create` and `save` with `errors: []`, with `errors` absent, and with only an `UNKNOWN_FIELD` error on `owner` gives `try-again`, while one with an error on a field that form shows plus one on `owner` gives `fix-fields` (N-3); a 404 on `toggle-done` and on `delete-from-list` gives `list-refreshed` with the text "That to-do no longer exists, and the list has been refreshed.", and a 404 on `delete-from-detail`, `load-todo` and `save` gives `back-to-list` (Q48); and no text contains a `ProblemCode` value, "Exception", "SQL", "stack", "Failed to fetch" or a request id; a wrong password and an unknown identifier map to identical text and next step (AC-4); component: a 401 from `logIn` whose Problem `detail` holds a sentinel shows the fixed login text of §6.1 and never the sentinel; on the list screen a 404 on a done toggle and a 404 on a row's delete each show "That to-do no longer exists, and the list has been refreshed.", re-query the list (one further `listTodos` call with the current URL's query) and show no **Back to my to-dos** link on the list screen (Q48); on the detail page a 404 on delete shows "That to-do no longer exists." with the **Back to my to-dos** link; on the list, detail, create/edit form, sign-up and login screens and both dialogs, a 500 whose Problem `title` and `detail` hold a sentinel string, and a network error, each show a message naming its next step and never the sentinel; a component that throws while rendering shows the `AppErrorBoundary` page with its reload control and its link to `/`, and (with a signed-in stubbed `SessionProvider` and a memory router) a component that throws only on its first render: after the user follows the page's link to `/`, the normal `/todos` list screen renders and the error page is gone (N-1); a done toggle whose handler throws (a stubbed dependency throwing a plain `Error` with a sentinel message) shows the `unexpected` message in the page-level alert above the list, the list screen stays rendered (not the `AppErrorBoundary` page), and the sentinel is never shown; the same for a create/edit form submit whose handler throws (form-level alert) (N-2); review: the API's `errors[].message` strings are plain language and say how to fix the field; e2e (main): with the list request aborted by Playwright route interception the list screen shows the friendly message with its next step, and after the interception is removed trying again loads the list |
+| NFR-006 | §2, §4.1, §6, §6.1, §8 (Q39, Q48, Q49) | `Problem` (`code`; `title` and `detail` never displayed), `FieldError.message` (§6.1 rule binding, N-7) | unit: `userMessageFor` for every row of the §6.1 table whose text it supplies (all rows except the 400 `VALIDATION_FAILED` form-action row with a shown field and the 409 `IDENTIFIER_TAKEN` row, whose text is `errors[].message`, and the `session-probe` 401 row, which shows nothing), and, outside those three cases, for every `ProblemCode`, statuses 403/405/413/415/500/502, a non-Problem body and `network` across every `UserAction`, returns a non-empty text and a next step; a 400 `VALIDATION_FAILED` on `load-list`, `toggle-done`, `delete-from-list`, `delete-from-detail` and `clear-completed` gives `try-again`, not `fix-fields`; a 400 `VALIDATION_FAILED` on each of `sign-up`, `log-in`, `create` and `save` with `errors: []`, with `errors` absent, and with only an `UNKNOWN_FIELD` error on `owner` gives `try-again`, while one with an error on a field that form shows plus one on `owner` gives `fix-fields` (N-3); a 404 on `toggle-done` and on `delete-from-list` gives `list-refreshed` with the text "That to-do no longer exists, and the list has been refreshed.", and a 404 on `delete-from-detail`, `load-todo` and `save` gives `back-to-list` (Q48); and no text contains a `ProblemCode` value, "Exception", "SQL", "stack", "Failed to fetch" or a request id; a wrong password and an unknown identifier map to identical text and next step (AC-4); component: a 401 from `logIn` whose Problem `detail` holds a sentinel shows the fixed login text of §6.1 and never the sentinel; on the list screen a 404 on a done toggle and a 404 on a row's delete each re-query the list (one further `listTodos` call with the current URL's query, which succeeds), then show "That to-do no longer exists, and the list has been refreshed." and show no **Back to my to-dos** link on the list screen (Q48); a 404 on a done toggle, and a 404 on a row's delete, whose re-query `listTodos` call then fails (network error) each show the `load-list` try-again message and never "…the list has been refreshed." (Q48); on the detail page a 404 on delete shows "That to-do no longer exists." with the **Back to my to-dos** link; on the list, detail, create/edit form, sign-up and login screens and both dialogs, a 500 whose Problem `title` and `detail` hold a sentinel string, and a network error, each show a message naming its next step and never the sentinel; a component that throws while rendering shows the `AppErrorBoundary` page with its reload control and its link to `/`, and (with a signed-in stubbed `SessionProvider` and a memory router) a component that throws only on its first render: after the user follows the page's link to `/`, the normal `/todos` list screen renders and the error page is gone (N-1); with the list screen rendered under `AppErrorBoundary` (signed-in stubbed `SessionProvider`, memory router) and its `listTodos` response for the new query held pending, a filter change on `/todos` (a query-string-only change) leaves focus on the radio the user chose and the existing rows rendered until the response arrives, and the list screen is not remounted (UX design L254, L436); a done toggle whose handler throws (a stubbed dependency throwing a plain `Error` with a sentinel message) shows the `unexpected` message in the page-level alert above the list, the list screen stays rendered (not the `AppErrorBoundary` page), and the sentinel is never shown; the same for a create/edit form submit whose handler throws (form-level alert) (N-2); review: the API's `errors[].message` strings are plain language and say how to fix the field; e2e (main): with the list request aborted by Playwright route interception the list screen shows the friendly message with its next step, and after the interception is removed trying again loads the list |
