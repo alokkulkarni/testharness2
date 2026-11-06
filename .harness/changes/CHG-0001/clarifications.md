@@ -9,7 +9,8 @@ spec treats this as a non-negotiable security requirement for the sign-up and lo
 to the requester as a question.
 
 Note (answer mapping): the requester answered Q18 and Q23–Q29 against a five-point list the coordinator sent them,
-not against these question numbers; and Q31–Q34 against a four-point list (1 = Q31, 2 = Q32, 3 = Q33, 4 = Q34).
+not against these question numbers; and Q31–Q34 against a four-point list (1 = Q31, 2 = Q32, 3 = Q33, 4 = Q34);
+and Q36–Q44 against a nine-point list relayed in chat on 2026-11-06 (1 = Q36 … 9 = Q44, in order).
 Each answer below quotes their words and names which point of that list it came from.
 
 ## Q1. Is this change a to-do list app, as the intent file says?
@@ -300,3 +301,95 @@ edits. (b) Change some (say which). The freeze approval itself is the requester'
 at commit `ebd6cea`, recorded with `harness gate record --human --pr 3`; this answer records only the chat reply.
 
 **Answer:** @alokkulkarni (in chat, relayed by the coordinator): "accept all and approved pull request" — (a) all listed choices are accepted, with no spec edits.
+
+## Q36. Do you accept the essential-timeout exception for the fixed 8-hour session, or want a warning before expiry?
+
+Raised by the UX design (N06, Q-UX-1; REQ-AUTH-002 AC-4, REQ-AUTH-004 AC-4, NFR-001 AC-1), relayed by the
+coordinator: the fixed 8-hour session ends with no warning or extension, and typed form input is lost when it
+expires. Under WCAG 2.2.1 Timing Adjustable this passes only under the "essential" timeout exception. (a) Accept the
+exception in writing. (b) Require a warning before expiry (needs a re-freeze).
+
+**Answer:** @alokkulkarni (point 1): "accept the exception." — (a) the essential-timeout exception is accepted. Not
+yet written into the frozen spec; that needs a re-freeze.
+
+## Q37. What happens at `/` and at unknown routes?
+
+Raised by the UX design (N06, Q-UX-7; sdd §8, REQ-AUTH-004 AC-2), relayed by the coordinator: the spec lists only six
+routes and says nothing about `/` or unknown routes, so neither was designed. Suggested: `/` goes to `/todos`, plus a
+"not found" view. Either choice needs a spec change.
+
+**Answer:** @alokkulkarni (point 2): "for / send as u suggested , not found, create an animated notfound page and link
+to go back to home." — `/` goes to `/todos`; any unknown route shows an animated "not found" page with a link back to
+home. This adds a screen and behaviour with no requirement ID yet, so it needs a re-freeze (not done).
+
+## Q38. Should the clear-completed confirmation use a singular form when one to-do is completed?
+
+Raised by the UX design (N06, Q-UX-6; REQ-TODO-007 AC-1), relayed by the coordinator: the spec sentence is used word
+for word, so one item reads "Delete all 1 completed to-dos?". (a) Approve a singular form. (b) Keep the exact
+wording.
+
+**Answer:** @alokkulkarni (point 3): "approve as singular form" — (a) a singular form is approved for N = 1. The exact
+singular sentence is not yet fixed. It changes a frozen acceptance criterion's wording, so it needs a re-freeze (not
+done).
+
+## Q39. Do you approve the message wording list in the UX design §4?
+
+Raised by the UX design (N06, Q-UX-2; REQ-AUTH-001 AC-2..AC-11, REQ-TODO-002 AC-10, NFR-001 AC-3), relayed by the
+coordinator: the contract fixes very few message strings. (a) Approve the wording list in
+`docs/specs/CHG-0001/design/ux/ux-design.md` §4, which the server and web app must then share. (b) Provide the
+wording.
+
+**Answer:** @alokkulkarni (point 4): "approved for the wording. make sure web shows user frendly errors / exceptions
+and next steps." — (a) the §4 wording list is approved. The requester also asks that the web app show user-friendly
+errors and exceptions with next steps. That second part is a new non-functional requirement and needs a re-freeze
+(not done).
+
+## Q40. Should Delete and Edit appear on every row and on the detail page?
+
+Raised by the UX design (N06, Q-UX-3; REQ-TODO-006 AC-1, REQ-TODO-004), relayed by the coordinator: the spec says
+"choose Delete" but not on which screen. As designed: Delete and Edit on every row and on the detail page; after a
+delete on the detail page the user goes to `/todos`. (a) Approve. (b) Change it.
+
+**Answer:** @alokkulkarni (point 5): "yes" — (a) approved as designed.
+
+## Q41. After saving an edit, should the user land on `/todos/:id`?
+
+Raised by the UX design (N06, Q-UX-4; REQ-TODO-004 AC-1), relayed by the coordinator: the destination after a
+successful edit is not specified. As designed: the to-do's detail page, `/todos/:id`. (a) Approve. (b) Change it.
+
+**Answer:** @alokkulkarni (point 6): "yes" — (a) approved as designed.
+
+## Q42. Should generic failures show an error alert with a Retry button?
+
+Raised by the UX design (N06, Q-UX-5; NFR-004 AC-2, REQ-TODO-003), relayed by the coordinator: the UI for network
+errors, 403 responses and load failures is not specified beyond "never show internals". As designed: generic error
+alerts with a Retry button, using the copy in §4. (a) Approve. (b) Change it.
+
+**Answer:** @alokkulkarni (point 7): "yes" — (a) approved as designed.
+
+## Q43. If the refresh finds nothing completed to clear, should the button be disabled with no dialog?
+
+Raised by the UX design (N06, Q-UX-9; REQ-TODO-007 AC-4), relayed by the coordinator: when "clear all completed"
+re-fetches and finds no completed to-dos (they were cleared elsewhere), no acceptance criterion says what happens. As
+designed: no dialog opens, the button is disabled, and a status message is shown. (a) Approve. (b) Change it.
+
+**Answer:** @alokkulkarni (point 8): "yes" — (a) approved as designed.
+
+## Q44. Which WCAG level should the accessibility audit cite: 2.1 AA (the spec) or 2.2 AA (the design)?
+
+Raised by the UX design (N06, Q-UX-8; NFR-001 AC-1), relayed by the coordinator: NFR-001 says WCAG 2.1 AA; the
+2.2 AA target came from the ux-designer's role and the coordinator's brief, not from the spec. The design meets
+both. The UX design phrased it as "confirm 2.2 is acceptable as the audit target".
+
+**Answer:** @alokkulkarni (point 9): "confirmed." — The reply does not name a level. Read against the UX design's
+wording, it confirms that 2.2 AA is acceptable as the audit target; the coordinator's later summary read it as 2.1 AA.
+Open: which level the audit cites needs the requester to say.
+
+## Q45. Should the spec-author agent draft the spec changes for Q36–Q39, or will you edit the spec yourself?
+
+Raised by the coordinator after Q36–Q44: the answers to Q36, Q37, Q38 and the second part of Q39 change the frozen
+spec, so they need `harness freeze --supersede`, approved by the requester. (a) The spec-author agent drafts the
+changes for the requester to review. (b) The requester edits the spec in their own session. Either way the approval
+and freeze stay with the requester.
+
+**Answer:** not answered yet.
