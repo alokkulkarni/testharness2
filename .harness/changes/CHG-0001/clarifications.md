@@ -520,7 +520,9 @@ tool behaviours (the request validator and the TypeScript generator reading `$re
 before the freeze. Recommended: (a), because one web app calls both modules of one deployable at one version, so a
 second file adds tooling risk and gains nothing.
 
-**Answer:**
+**Answer:** @alokkulkarni (relayed by the coordinator; one reply to Q56-Q59 in order, verbatim: "1 - b\n2 - accept\n3 -
+a\n4 - a"), point 1: "b" — (b) split the contract into `identity-api-v1.yaml`, `todos-api-v1.yaml` and a shared
+`common-problem-v1.yaml` linked by `$ref` (not the recommended (a)).
 
 ## Q57. Do you accept a new requirement NFR-007 "Modular API", worded as below?
 
@@ -536,7 +538,8 @@ list operations), and every contract operation belongs to exactly one of them." 
 not separate services (Q51)" would be added beside C-1. (a) Accept as worded. (b) Change it (say how).
 Recommended: (a).
 
-**Answer:**
+**Answer:** @alokkulkarni (relayed by the coordinator), point 2 of the same reply: "accept" — (a) NFR-007 "Modular
+API" with AC-1 to AC-3 as worded, and constraint C-2, are accepted.
 
 ## Q58. Which tool enforces the module boundaries?
 
@@ -551,7 +554,8 @@ recommends (a), spec-author recommends (b). Recommended: (a), because two module
 need a runtime framework, and a test-only library leaves the running app unchanged; (b) is the better pick if you
 want module documentation and Spring-native module tests.
 
-**Answer:**
+**Answer:** @alokkulkarni (relayed by the coordinator), point 3 of the same reply: "a" — (a) ArchUnit enforces the
+module boundaries.
 
 ## Q59. Should SDD §12.1 items 7 and 9-10 now cite your confirmations in Q53 and Q54?
 
@@ -561,4 +565,5 @@ words do not settle them" and L586 "The choice between the two is the spec autho
 those sentences to say the items were confirmed in Q53 and Q54 (no behaviour change). (b) Leave the text as frozen.
 Recommended: (a), so the frozen SDD does not call settled choices open.
 
-**Answer:**
+**Answer:** @alokkulkarni (relayed by the coordinator), point 4 of the same reply: "a" — (a) in supersede-2, SDD §12.1
+cites the confirmations in Q53 and Q54 (no behaviour change).
