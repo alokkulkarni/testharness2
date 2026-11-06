@@ -6,6 +6,10 @@ authors:
     changeId: CHG-0001
     agent: spec-author
     agentRunId: run-sup2-d1
+  - squadSessionId: SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM
+    changeId: CHG-0001
+    agent: spec-author
+    agentRunId: run-sup2-d2
 upstream:
   - path: docs/specs/CHG-0001/requirements.md
     sha256: e389371395a1feb1fcd3de52506b0fc60cd1060e5b728e7a0849a540cf5789e5
@@ -14,23 +18,30 @@ upstream:
 > **Draft note for applying supersede-2 (remove when applying).** Drafted by spec-author (run `run-sup2-d1`) for
 > clarifications Q50–Q59: the modular monolith (Q51, C-2, NFR-007 accepted in Q57), the contract split into three
 > files (Q56(b)), ArchUnit (Q58), §12.1 citing the confirmations of Q53 and Q54 (Q59), and critic findings F-1 and
-> F-3 (Q55). Sections changed: §1; §2 (modules, ownership table, dependency direction, `CurrentUser` seam,
+> F-3 (Q55); revised by spec-author (run `run-sup2-d2`) for the draft critic's round-1 findings F-1–F-11 and the
+> react-engineer's lint check. Sections changed: §1; §2 (modules, ownership table, dependency direction, `CurrentUser` seam,
 > `getSession` lookup, SPA generated types); §3 (table owners, cross-module foreign key); §4 (principal, `getSession`);
 > §6 and §6.1 (`Problem` and `FieldError` in `common-problem-v1.yaml`, `ApiException`; F-1 wording); §8 (F-3);
-> §10 (user id in the logging context); §12.1 (opening paragraph; items 7, 9, 10 per Q59; new items 11–20); §13
-> (four risks); §14 (architecture level, contract level, rows REQ-AUTH-002, REQ-AUTH-004, REQ-AUTH-005, REQ-ISO-001,
+> §10 (user id in the logging context); §12.1 (opening paragraph; items 7, 9, 10 per Q59; new items 11–21); §13
+> (five risks); §14 (architecture level, contract level, rows REQ-AUTH-002, REQ-AUTH-004, REQ-AUTH-005, REQ-ISO-001,
 > REQ-TODO-007, NFR-004, NFR-005, NFR-006 and new NFR-007). Every other line equals the frozen file.
-> To apply: (1) copy every file under `docs/proposals/CHG-0001/supersede-2/` to `docs/specs/CHG-0001/` at the same
-> relative path (`requirements.md`, `sdd.md`, `contracts/common-problem-v1.yaml`, `contracts/identity-api-v1.yaml`,
+> `tool-spikes.md` in this folder is proposal provenance only (the tool spikes of 2026-11-06 that ADR-0001 and
+> ADR-0012 cite); it is **not** applied to `docs/specs/CHG-0001/` and stays in `docs/proposals/`.
+> To apply: (1) copy exactly these files under `docs/proposals/CHG-0001/supersede-2/` to `docs/specs/CHG-0001/` at
+> the same relative path, and no other (in particular not `tool-spikes.md`): `requirements.md`, `sdd.md`,
+> `contracts/common-problem-v1.yaml`, `contracts/identity-api-v1.yaml`,
 > `contracts/todos-api-v1.yaml`, `adr/0001-react-typescript-spa.md`, `adr/0002-spring-boot-rest-api.md`,
 > `adr/0011-problem-details-error-model.md`, `adr/0012-contract-tests-swagger-request-validator.md`,
-> `adr/0014-flyway-migrations.md`, `adr/0018-modular-monolith-module-boundaries.md`); (2) **delete
+> `adr/0014-flyway-migrations.md`, `adr/0018-modular-monolith-module-boundaries.md`; (2) **delete
 > `docs/specs/CHG-0001/contracts/todo-api-v1.yaml`**; (3) remove this note, the note in `requirements.md`, the
 > one-line note in each ADR and the YAML draft comment block at the top of each contract file; (4) re-stamp with
 > `harness chain stamp docs/specs/CHG-0001/requirements.md`, then `harness chain stamp docs/specs/CHG-0001/sdd.md`
 > (the `upstream` sha256 above is carried over from the frozen file, unverified, and goes stale once
 > `requirements.md` is applied; never hand-edit it). The non-frozen `design/architecture/README.md` and
-> `design/ux/ux-design.md` (L9) still name `todo-api-v1.yaml`; N05 and N06 update them after the re-freeze.
+> `design/ux/ux-design.md` (L9) still name `todo-api-v1.yaml`; N05 and N06 update them after the re-freeze. The
+> front matter `upstream` of `design/ux/ux-design.md` names `contracts/todo-api-v1.yaml`: if `harness gate verify`
+> or `harness freeze --supersede` complains about it once that file is deleted, stop and report (do not edit it; N06
+> updates it after the freeze).
 
 # SDD — CHG-0001 To-do list
 
@@ -585,7 +596,6 @@ NFR-001 AC-1.
 
 The not-found page's animation is hidden from assistive technology and meets WCAG 2.2.2 Pause, Stop, Hide (it plays
 once and ends within 5 seconds, so no pause control is needed) and 2.3.1 Three Flashes (REQ-NAV-001 AC-6, AC-7).
-
 WCAG 2.2.1 Timing Adjustable: the fixed 8-hour session (§4, ADR-0008) gives no warning and no extension; the
 requester accepts this under the criterion's "essential" exception, so the audit records 2.2.1 as met by that
 exception, not as a failure (Source: clarifications Q36; NFR-001 note). The audit level stays WCAG 2.1 AA (Q44).
@@ -597,8 +607,9 @@ not returned to the client), method,
 route template, status, duration, internal user id when authenticated. Never logged: request or response bodies,
 identifiers, passwords, hashes, cookies, session tokens, titles, descriptions, search text (REQ-AUTH-003 AC-3).
 Unexpected exceptions are logged with stack trace and request id. No metrics or tracing (local only).
-The internal user id is put into the logging context by `SessionCookieAuthenticationFilter`, and the request log
-reads it from there, so no `common` class reads `CurrentUser` (§2, ADR-0018).
+The internal user id is put into the logging context by `SessionCookieAuthenticationFilter`, which removes it in a
+`finally` when the request ends, and the request log reads it from there, so no `common` class reads `CurrentUser`
+(§2, ADR-0018).
 
 ## 11. Local run (NFR-002, REQ-DATA-001 AC-3)
 
@@ -636,9 +647,10 @@ No requirement is changed by these decisions.
 
 ### 12.1 For the approver to confirm at freeze
 
-These are product-visible choices the requester did not make; approving the freeze confirms them. Items 7, 9 and 10
-were confirmed by the requester as written in Q53 and Q54. Items 11–20 are engineering choices, not product-visible,
-that C-2, NFR-007 and Q56 leave open (Source: clarifications Q51, Q56–Q58); approving the freeze confirms them too.
+Items 1–6 and 8 are product-visible choices the requester did not make; approving the freeze confirms them. Items 7,
+9 and 10 were confirmed by the requester as written in Q53 and Q54. Items 11–21 are engineering defaults of
+supersede-2, not product-visible, that C-2, NFR-007 and Q56 leave open (Source: clarifications Q51, Q56–Q58);
+approving the freeze confirms them.
 
 1. **Email rule is ASCII-only** (§5, finding 12). It narrows analyst default 2 ("a valid email address",
    REQ-AUTH-001 AC-9): quoted local parts, IP-literal domains, internationalised addresses and punycode top-level
@@ -692,7 +704,7 @@ that C-2, NFR-007 and Q56 leave open (Source: clarifications Q51, Q56–Q58); ap
     control still does a full reload. Confirmed by the requester as written in Q54.
 11. **Module package names** (§2, ADR-0018, NFR-007 AC-3): the identity module is package `app.todo.auth` and the
     to-dos module `app.todo.todo`, with the shared kernel `app.todo.common` and the composition root
-    `app.todo.config`, keeping the first freeze's names (a rename was offered and not taken up). The former `user`
+    `app.todo.config`, keeping the first freeze's names. The former `user`
     package (only `UserRepository`) is folded into `auth`.
 12. **The seam is one published type** (§2, §4, ADR-0018; REQ-ISO-001): `app.todo.auth.api.CurrentUser(long userId)`,
     set as the Spring Security principal by `SessionCookieAuthenticationFilter` and read by `TodoController` with
@@ -714,19 +726,34 @@ that C-2, NFR-007 and Q56 leave open (Source: clarifications Q51, Q56–Q58); ap
     `components.securitySchemes.sessionCookie` entry, a `$ref` into the common file, keep the frozen security
     declaration. The new `info.title` values ("To-do API — identity module", "To-do API — to-dos module", "To-do API
     — common problem model") and the module files' `info.description` text are new wording with no wire effect; the
-    frozen conventions text moves into the common file's `info.description`, changed only from "the operations' own
-    errors listed below" to "… listed in the module contracts". The contract tests read the
-    files where they are frozen, not a copy (ADR-0012).
+    frozen conventions text moves into the common file's `info.description` with exactly these changes, none with a
+    wire effect: (a) a new first paragraph naming the file's shared components and the two module contracts, in
+    place of the frozen first paragraph; (b) a new "Versioning" paragraph (the three files change together, equal
+    `info.version` values, a breaking change to the common file bumps every file); (c) the heading "Conventions
+    (sdd.md "Validation" and "Error model")" gains ", for every operation of both module contracts"; (d) "the
+    operations' own errors listed below" becomes "… listed in the module contracts". Every convention bullet is
+    otherwise unchanged. The common file, components only, has no `servers`, root `security` or `tags`. The contract
+    tests read the files where they are frozen, not a copy (ADR-0012).
 17. **One generated types file per module** (§2, ADR-0001): `web/src/api/identity.ts` and `web/src/api/todos.ts`
     replace `web/src/api/schema.ts`; the SPA imports `Problem` from `todos.ts` only and types a field error as
-    `Problem['errors'][number]`.
+    `Problem['errors'][number]`. Both are configured in `web/redocly.yaml` (`apis` entries `identity` and `todos`,
+    each with its `root` and `x-openapi-ts.output`), and `@redocly/cli` is a dev dependency of `web/`, also used for
+    the contract lint of the two module roots (ADR-0001, ADR-0012).
 18. **One `V1__init.sql` with table owners, and the physical foreign key kept** (§3, ADR-0014, ADR-0018):
     `todos.user_id → users` stays as an accepted coupling of the one-file schema; the to-dos module's SQL never
     names `users` or `sessions`.
 19. **User id in the logging context** (§10, ADR-0018): `SessionCookieAuthenticationFilter` puts the internal user id
-    into the logging context and the request log reads it from there, so `common` needs no `auth` type.
+    into the logging context, removes it in a `finally` when the request ends, and the request log reads it from
+    there, so `common` needs no `auth` type.
 20. **ArchUnit rule set** (§14, ADR-0018; Q58): the rules of the architecture level below, over main classes only,
-    plus a non-vacuity test on a fixture package; a main class outside the listed packages fails the build.
+    plus a non-vacuity test on a fixture root package outside `app.todo` (for example `archfixture`; plain classes,
+    no Spring annotations); a main class outside the listed packages fails the build.
+21. **Contract validator on its v3 line** (§13, §14, ADR-0012; NFR-004, NFR-007 AC-3): the contract tests use
+    `com.atlassian.oai:openapi-request-validator-core` 3.0.0 and its v3 MockMvc adapter
+    (`openapi-request-validator-mockmvc`, artifact id confirmed on Maven Central by the java-engineer when pinning;
+    if it does not exist, the java-engineer stops and reports a spec question), in place of the first freeze's
+    `swagger-request-validator-mockmvc`. Its Spring adapter needs Spring 7 / Spring Boot 4, which ties the build to
+    that line (ADR-0002's current OSS-supported major).
 
 ## 13. Risks
 
@@ -742,10 +769,11 @@ that C-2, NFR-007 and Q56 leave open (Source: clarifications Q51, Q56–Q58); ap
 | One DB connection serialises requests | Performance | Ample for one local user and 500 to-dos; NFR-003 test guards it (ADR-0016) |
 | Flyway's SQLite support packaging differs between majors | Build | java-engineer adds the SQLite module if the pinned major needs it (ADR-0014) |
 | Test-only clock reaching a normal run | Security | Classes only in the test source set, `e2e` profile, started only by `spring-boot:test-run`; default-profile integration test asserts the system clock (ADR-0013) |
-| The contract validator, renamed openapi-request-validator in v3.0.0, needs Spring 7 / Spring Boot 4 for its Spring adapter, and the MockMvc adapter's artifact id was not verified by the spike | Build | ADR-0002 pins the current OSS-supported Spring Boot major; the java-engineer confirms the adapter id when pinning; on an earlier major the 2.x `swagger-request-validator-mockmvc` is used (ADR-0012) |
-| The contract validator does not enforce the cookie `apiKey` security scheme (spike, 2026-11-06), so a missing session cookie passes contract validation | Quality | 401 is tested at the application level: the REQ-AUTH-004 integration tests call every to-do operation without, with an expired and with a logged-out session (§14, ADR-0012) |
+| The contract validator, renamed openapi-request-validator in v3.0.0, needs Spring 7 / Spring Boot 4 for its Spring adapter, and the v3 MockMvc adapter's artifact id was not verified by the tool spikes | Build | ADR-0002 pins the current OSS-supported Spring Boot major (Boot 4, which the v3 adapter supports; §12.1 item 21); the java-engineer confirms the v3 MockMvc adapter's artifact id on Maven Central when pinning and, if it does not exist, stops and reports a spec question rather than switching line or artifact (ADR-0012) |
+| The contract validator does not enforce the cookie `apiKey` security scheme (tool spikes of 2026-11-06, ADR-0012), so a missing session cookie passes contract validation | Quality | 401 is tested at the application level: the REQ-AUTH-004 integration tests call every to-do operation without, with an expired and with a logged-out session (§14, ADR-0012) |
 | Each generated SPA types file has its own `Problem` type, which could drift apart | Quality | Both come from the one `common-problem-v1.yaml`; the SPA imports `Problem` from `todos.ts` only; a type-level test asserts the two `Problem` types are equal (§14, NFR-006 row) |
-| The ArchUnit rules are hand-maintained: a new package could fall outside them, and a rule that matches no class passes silently | Quality | A rule fails the build for a main class outside the listed packages; a non-vacuity test runs every rule on a fixture package with a deliberate violation and expects it to fail (§14, ADR-0018) |
+| The ArchUnit rules are hand-maintained: a new package could fall outside them, and a rule that matches no class passes silently | Quality | A rule fails the build for a main class outside the listed packages; a non-vacuity test runs every rule on a fixture root package outside `app.todo` (for example `archfixture`) with a deliberate violation and expects it to fail (§14, ADR-0018) |
+| `common-problem-v1.yaml` has no operations or servers, so linting it on its own fails (`no-empty-servers` error, `no-unused-components` warnings); `MethodNotAllowed` and `RequestRejected` are defined only there and referenced by no operation (as in the first freeze's file), so they appear in neither module bundle nor generated types file | Quality | Contract lint (`redocly lint`, `extends: [recommended]`) runs on the two module roots only, which lint the common file through their `$ref`s (ADR-0012); the two unreferenced responses are checked by the direct `SchemaValidator` checks against `Problem` (405 and `REQUEST_REJECTED`, NFR-004 row of §14), not by an operation |
 
 ## 14. Verification and traceability
 
@@ -754,7 +782,7 @@ Levels: **unit** (JUnit 5 validators/services with a fixed `Clock`; Vitest for S
 request and response validated with openapi-request-validator against the module file that defines its path,
 `identity-api-v1.yaml` or `todos-api-v1.yaml`, each resolving `common-problem-v1.yaml` through its `$ref`s; error
 bodies outside any operation validated directly against `Problem` with the validator's `SchemaValidator`; plus an
-endpoint-inventory test comparing Spring's mapped routes with the union of the two module files, requiring each
+endpoint-inventory test comparing Spring's mapped routes (less the error-dispatch `/error`, ADR-0012) with the union of the two module files, requiring each
 path and method in exactly one file and its controller in that file's module package; cookie security is not
 checked at this level, so 401 is tested at the integration level; ADR-0012), **architecture** (ArchUnit over the
 API's main classes, ADR-0018), **component** (Vitest + React Testing
@@ -791,4 +819,4 @@ requirement ID and AC.
 | NFR-004 | §4, §5, §6, §11; ADR-0004, ADR-0005, ADR-0007, ADR-0010, ADR-0011, ADR-0012 | `Problem` (incl. `code` enum) and `FieldError` of `common-problem-v1.yaml`, `BadRequest`, `Unauthenticated`, `ClientHeaderMissing`, `NotFound`, `MethodNotAllowed`, `UnsupportedMediaType`, `RequestRejected`, `InternalError`, `additionalProperties: false` | review + integration: server refuses invalid input sent directly (all REQ-TODO-002/REQ-AUTH-001 cases via API), forced internal error returns generic 500 with no stack trace or SQL; one request per error source — 401 from the security entry point, 403 from `ClientHeaderFilter`, 405 (`PATCH /api/v1/todos/{id}`, `Allow` header present), 415 (`text/plain` body and no `Content-Type` on `createTodo`), 404 unknown route (`/api/v1/nope`), 400 unparseable JSON, 400 `REQUEST_REJECTED` from the firewall (`;` in the path), and `ProblemErrorController` given a forwarded 413 and 500 (error attributes set as the servlet container sets them) — each returns `application/problem+json` valid against the `Problem` schema (directly with `SchemaValidator` from `common-problem-v1.yaml`, where no contract operation exists; ADR-0012), with its listed `code` and no stack trace, exception text or SQL, and never the whitelabel or Spring Boot default body; unit: the values of `ProblemCode` equal the `Problem.code` enum of `common-problem-v1.yaml` (ADR-0011); secret scan of the repository in the gates; AC-1 via REQ-AUTH-003 tests and ADR-0005 review |
 | NFR-005 | §2; ADR-0001..0003 | both module contracts (HTTP API) | review: `web/package.json` (React, TypeScript), `api/pom.xml` (Spring Boot), sqlite-jdbc driver and `.db` file; e2e exercises browser → HTTP API |
 | NFR-006 | §2, §4.1, §6, §6.1, §8 (Q39, Q48, Q49) | `Problem` (`code`; `title` and `detail` never displayed), `FieldError.message` (§6.1 rule binding, N-7) | type-level (Vitest `expectTypeOf`): the `Problem` type of `src/api/identity.ts` equals the `Problem` type of `src/api/todos.ts` (§13); unit: `userMessageFor` for every row of the §6.1 table whose text it supplies (all rows except the 400 `VALIDATION_FAILED` form-action row with a shown field and the 409 `IDENTIFIER_TAKEN` row, whose text is `errors[].message`, and the `session-probe` 401 row, which shows nothing), and, outside those three cases, for every `ProblemCode`, statuses 403/405/413/415/500/502, a non-Problem body and `network` across every `UserAction`, returns a non-empty text and a next step; a 400 `VALIDATION_FAILED` on `load-list`, `toggle-done`, `delete-from-list`, `delete-from-detail` and `clear-completed` gives `try-again`, not `fix-fields`; a 400 `VALIDATION_FAILED` on each of `sign-up`, `log-in`, `create` and `save` with `errors: []`, with `errors` absent, and with only an `UNKNOWN_FIELD` error on `owner` gives `try-again`, while one with an error on a field that form shows plus one on `owner` gives `fix-fields` (N-3); a 404 on `toggle-done` and on `delete-from-list` gives `list-refreshed` with the text "That to-do no longer exists, and the list has been refreshed.", and a 404 on `delete-from-detail`, `load-todo` and `save` gives `back-to-list` (Q48); and no text contains a `ProblemCode` value, "Exception", "SQL", "stack", "Failed to fetch" or a request id; a wrong password and an unknown identifier map to identical text and next step (AC-4); component: a 401 from `logIn` whose Problem `detail` holds a sentinel shows the fixed login text of §6.1 and never the sentinel; on the list screen a 404 on a done toggle and a 404 on a row's delete each re-query the list (one further `listTodos` call with the current URL's query, which succeeds), then show "That to-do no longer exists, and the list has been refreshed." and show no **Back to my to-dos** link on the list screen (Q48); a 404 on a done toggle, and a 404 on a row's delete, whose re-query `listTodos` call then fails (network error) each show the `load-list` try-again message and never "…the list has been refreshed.", and when the user's retry then loads the list it is shown without that message (Q48; §12.1 item 7(a)); on the detail page a 404 on delete shows "That to-do no longer exists." with the **Back to my to-dos** link; on the list, detail, create/edit form, sign-up and login screens and both dialogs, a 500 whose Problem `title` and `detail` hold a sentinel string, and a network error, each show a message naming its next step and never the sentinel; a component that throws while rendering shows the `AppErrorBoundary` page with its reload control and its link to `/`, and (with a signed-in stubbed `SessionProvider` and a memory router) a component that throws only on its first render: after the user follows the page's link to `/`, the normal `/todos` list screen renders and the error page is gone (N-1); with the list screen rendered under `AppErrorBoundary` (signed-in stubbed `SessionProvider`, memory router) and its `listTodos` response for the new query held pending, a filter change on `/todos` (a query-string-only change) leaves focus on the radio the user chose and the existing rows rendered until the response arrives, and the list screen is not remounted (UX design L254, L436); in the same setup, on page 1 of a 45-item list, activating the pagination link to page 2 moves focus to the `<h1>` "My to-dos", leaves the existing rows rendered until the response arrives, and does not remount the list screen (UX design L254, L437; NFR-001 AC-2); a done toggle whose handler throws (a stubbed dependency throwing a plain `Error` with a sentinel message) shows the `unexpected` message in the page-level alert above the list, the list screen stays rendered (not the `AppErrorBoundary` page), and the sentinel is never shown; the same for a create/edit form submit whose handler throws (form-level alert) (N-2); review: the API's `errors[].message` strings are plain language and say how to fix the field; e2e (main): with the list request aborted by Playwright route interception the list screen shows the friendly message with its next step, and after the interception is removed trying again loads the list |
-| NFR-007 | §2, §3, §10, §12.1 items 11–20; ADR-0002, ADR-0012, ADR-0014, ADR-0016, ADR-0018 (Q51, Q56, Q57, Q58) | all three contract files; every operation of `identity-api-v1.yaml` and `todos-api-v1.yaml` | AC-1 — integration (default profile): the application context holds exactly one `DataSource` bean, a HikariCP pool with a maximum pool size of 1 whose JDBC URL names the `TODO_DB_PATH` file; review: `api/pom.xml` is the only Maven module (no `<modules>`) and builds one Spring Boot application; e2e (main): the §11 commands start one API process. AC-2 — architecture (ArchUnit, main classes only; `app.todo.TestTodoApplication` and `app.todo.testsupport` excluded): no cycles between `auth`, `todo`, `common` and `config`; `todo` uses only `todo`, `common` and `auth.api`; `auth` and `common` never use `todo`; `common` uses no module and not `config`; only `config` creates a `DataSource` or `HikariConfig`; every main class lies in `auth`, `auth.api`, `todo`, `common`, `config` or the root package; non-vacuity: the same rules, built for a fixture root package in the test source set that holds one deliberate violation of each rule, each fail; review: `TodoRepository`'s SQL names only `todos`. AC-3 — contract: the endpoint-inventory test loads `identity-api-v1.yaml` and `todos-api-v1.yaml`, and passes only when the union of their path-and-method pairs equals Spring's mapped routes, every pair is in exactly one file, and each operation's handler is declared by a controller in that file's module package (`identity-api-v1.yaml` → `app.todo.auth`, `todos-api-v1.yaml` → `app.todo.todo`) |
+| NFR-007 | §2, §3, §10, §12.1 items 11–21; ADR-0002, ADR-0012, ADR-0014, ADR-0016, ADR-0018 (Q51, Q56, Q57, Q58) | all three contract files; every operation of `identity-api-v1.yaml` and `todos-api-v1.yaml` | AC-1 — integration (default profile): the application context holds exactly one `DataSource` bean, a HikariCP pool with a maximum pool size of 1 whose JDBC URL names the `TODO_DB_PATH` file; review: `api/pom.xml` is the only Maven module (no `<modules>`) and builds one Spring Boot application; e2e (main): the §11 commands start one API process. AC-2 — architecture (ArchUnit, main classes only; `app.todo.TestTodoApplication` and `app.todo.testsupport` excluded): no cycles between `auth`, `todo`, `common` and `config`; `todo` uses only `todo`, `common` and `auth.api`; `auth` and `common` never use `todo`; `common` uses no module and not `config`; only `config` creates a `DataSource` or `HikariConfig`; every main class lies in `auth`, `auth.api`, `todo`, `common`, `config` or the root package; non-vacuity: the same rules, built for a fixture root package in the test source set outside `app.todo` (for example `archfixture`; plain classes, no Spring annotations) that holds one deliberate violation of each rule, each fail; review: `TodoRepository`'s SQL names only `todos`. AC-3 — contract: the endpoint-inventory test loads `identity-api-v1.yaml` and `todos-api-v1.yaml`, and passes only when the union of their path-and-method pairs equals Spring's mapped routes (excluding, by name, only the error-dispatch mapping `/error` of `ProblemErrorController` in `common`, §6, and any other mapping that serves only the servlet container's error dispatch, each listed explicitly in the test), every pair is in exactly one file, and each operation's handler is declared by a controller in that file's module package (`identity-api-v1.yaml` → `app.todo.auth`, `todos-api-v1.yaml` → `app.todo.todo`) |

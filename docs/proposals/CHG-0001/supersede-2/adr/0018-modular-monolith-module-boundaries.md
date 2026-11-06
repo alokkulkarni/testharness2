@@ -59,10 +59,12 @@ only `user_id` and `UserRepository` had no lookup by id.
   `common`, `config`; `todo` uses only `todo`, `common`, `auth.api`; `auth` and `common` never use `todo`; `common`
   uses no module and not `config`; only `config` creates a `DataSource` or `HikariConfig`; every main class lies in
   `auth`, `auth.api`, `todo`, `common`, `config` or the root package. The rules are built for a
-  given root package, so a non-vacuity test runs the same rules on a fixture package in the test source set that
-  holds a deliberate violation of each rule and expects each to fail (sdd.md §14).
+  given root package, so a non-vacuity test runs the same rules on a fixture root package in the test source set,
+  outside `app.todo` (for example `archfixture`), made of plain classes with no
+  Spring annotations, that holds a deliberate violation of each rule, and expects each to fail (sdd.md §14).
 - **Logging context.** The per-request log's internal user id (sdd.md §10) is read from the logging context, where
-  `SessionCookieAuthenticationFilter` puts it, so `common` needs no `auth` type.
+  `SessionCookieAuthenticationFilter` puts it and removes it in a `finally` when the request ends, so `common`
+  needs no `auth` type.
 
 Still valid unchanged: ADR-0003 (one SQLite file through sqlite-jdbc), ADR-0016 (one connection; with one
 `DataSource` in `config` it is also NFR-007 AC-1's one pool), NFR-002 (local run, one `./mvnw spring-boot:run`) and

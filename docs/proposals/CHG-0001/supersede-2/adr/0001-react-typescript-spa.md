@@ -26,10 +26,14 @@ API module, `contracts/identity-api-v1.yaml` and `contracts/todos-api-v1.yaml`, 
   `contracts/todos-api-v1.yaml`, configured in `web/redocly.yaml` (`apis` entries `identity` and `todos`, each with
   its `root` and `x-openapi-ts.output`). The cross-file `$ref`s into `common-problem-v1.yaml` are resolved by the
   generator, so each output carries its own, structurally identical `Problem` type; the SPA imports `Problem` from
-  `web/src/api/todos.ts` only (sdd.md §2, §6.1). Source: react-engineer spike of 2026-11-06 (openapi-typescript
-  7.13.0 with @redocly/cli 2.76.0, Node 26, pnpm 11): per-module outputs generated, cross-file `$ref`s resolved,
-  security schemes not emitted, and schemas that no operation reaches are dropped. `redocly join` is not used (it
-  adds tags and servers and keeps only the first `info`).
+  `web/src/api/todos.ts` only (sdd.md §2, §6.1). Source: tool spikes of 2026-11-06, recorded in
+  docs/proposals/CHG-0001/supersede-2/tool-spikes.md (supersede-2 draft commit); react-engineer spike with
+  openapi-typescript 7.13.0 and @redocly/cli 2.76.0, Node 26.12.0, pnpm 11.17.0: per-module outputs generated,
+  cross-file `$ref`s resolved, each output with its own structurally identical `Problem`, security schemes not
+  emitted, unreferenced schemas dropped, and a CLI path argument ignored when a `redocly.yaml` exists. `redocly join`
+  is not used (it adds tags, `x-tagGroups` and `servers: []` and keeps only the first `info`).
+- The contract lint of ADR-0012 (`redocly lint`, `extends: [recommended]`, on the two module roots only) runs with
+  the same `@redocly/cli` dev dependency.
 - Confirmation dialogs use the native HTML `<dialog>` element with `showModal()` (built-in focus containment and
   Escape handling); no UI component library.
 - In development the Vite dev server proxies `/api` to the API, so the SPA and API share one origin.
@@ -40,8 +44,8 @@ API module, `contracts/identity-api-v1.yaml` and `contracts/todos-api-v1.yaml`, 
 Dependencies introduced (all MIT or Apache-2.0, actively maintained): react, react-dom, react-router (MIT); vite,
 typescript (MIT / Apache-2.0); openapi-typescript (MIT); vitest, @testing-library/react, @testing-library/user-event
 (MIT); vitest-axe, axe-core, @axe-core/playwright (MIT / MPL-2.0 for axe-core); @playwright/test (Apache-2.0).
-axe-core is MPL-2.0, used unmodified as a test-only dependency. @redocly/cli (MIT) is added as a dev dependency only
-if the pinned openapi-typescript needs it to read `web/redocly.yaml`; the react-engineer decides when pinning.
+axe-core is MPL-2.0, used unmodified as a test-only dependency. @redocly/cli (MIT) is a dev dependency, for
+`web/redocly.yaml` and the contract lint of ADR-0012; the react-engineer pins its version.
 
 ## Consequences
 
