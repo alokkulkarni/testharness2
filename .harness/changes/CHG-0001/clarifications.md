@@ -567,3 +567,31 @@ Recommended: (a), so the frozen SDD does not call settled choices open.
 
 **Answer:** @alokkulkarni (relayed by the coordinator), point 4 of the same reply: "a" — (a) in supersede-2, SDD §12.1
 cites the confirmations in Q53 and Q54 (no behaviour change).
+
+## Q60. Does the API target the latest Spring Boot 4.x line?
+
+Raised by the critic in round 3 of the supersede-2 draft review (finding F-3; NFR-005, NFR-007): the request
+validator's v3 MockMvc adapter is documented as compatible with Spring 7+ / Spring Boot 4+ (ADR-0012 draft), while the
+frozen ADR-0002 says only "the current OSS-supported Spring Boot major line", so the two pinning rules could diverge.
+(a) Accept that the backend targets Spring Boot 4.x, because of the validator v3 adapter. (b) Another line.
+
+**Answer:** @alokkulkarni (relayed by the coordinator): "Yes boot 4.x latest of springboot"; later, to the numbered
+questions, "1 a" — (a) the backend targets the latest Spring Boot 4.x release.
+
+## Q61. Should the open round-3 minors be fixed in one more spec-author pass before the draft is applied?
+
+Raised by the critic in round 3 of the supersede-2 draft review (findings F-1 to F-3, minor). (a) Apply the draft at
+`b8037ee` as reviewed and let the post-apply critic raise them again. (b) One more spec-author pass first, then a fresh
+critic review.
+
+**Answer:** @alokkulkarni (relayed by the coordinator), to the numbered questions: "2 b" — (b) one more spec-author
+pass on the open round-3 minors before applying.
+
+## Q62. Which round-3 findings does that pass fix?
+
+Follow-up to Q61 (multiple-choice question from the coordinator): the Spring Boot 4.x wording (F-3, Q60), F-1 (the
+request id and status lost from the log line when a filter throws), F-2 ("outermost filter" wording) and F-6 (cite
+`tool-spikes.md` by path, not by commit).
+
+**Answer:** @alokkulkarni (relayed by the coordinator, multiple-choice pick): "Fix all in one pass" — the Boot 4.x
+wording plus round-3 F-1, F-2 and F-6, in one pass.
