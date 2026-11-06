@@ -121,23 +121,17 @@
       "dependsOn": [
         "N04-spec-freeze"
       ],
-      "status": "running",
+      "status": "complete",
       "kind": "agent",
       "agent": "drawio-architect",
       "description": "Architecture diagrams for the frozen spec.",
       "gates": [
         "critic-verdict"
       ],
-      "executor": "any",
+      "executor": "claude-code",
       "isolation": "none",
       "attempts": 0,
-      "maxAttempts": 3,
-      "claim": {
-        "runId": "run-mw53b1i3",
-        "executor": "claude-code",
-        "leaseUntil": "2026-11-06T15:03:49.755Z",
-        "claimedAt": "2026-11-06T14:48:49.755Z"
-      }
+      "maxAttempts": 3
     },
     {
       "id": "N06-design-ux",
