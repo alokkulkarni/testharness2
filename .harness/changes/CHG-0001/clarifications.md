@@ -9,8 +9,8 @@ spec treats this as a non-negotiable security requirement for the sign-up and lo
 to the requester as a question.
 
 Note (answer mapping): the requester answered Q18 and Q23–Q29 against a five-point list the coordinator sent them,
-not against these question numbers. Each answer below quotes their words and names which point of that list it came
-from.
+not against these question numbers; and Q31–Q34 against a four-point list (1 = Q31, 2 = Q32, 3 = Q33, 4 = Q34).
+Each answer below quotes their words and names which point of that list it came from.
 
 ## Q1. Is this change a to-do list app, as the intent file says?
 
@@ -258,7 +258,7 @@ letters, digits, `.`, `_` and `-`. (c) One field that may hold either an email a
 (d) Both: a required email and a separate required username, and login with either. Recommended: (a), because it
 gives one clear format to validate and leaves room for email verification and password reset later.
 
-**Answer:**
+**Answer:** @alokkulkarni (point 1): "c" — (c) one identifier field that may hold either an email address or a username.
 
 ## Q32. Are identifiers unique regardless of letter case?
 
@@ -266,4 +266,25 @@ Raised by the critic's requirements review (N02, finding F-13 item 2). (a) Yes: 
 `alice@example.com` are the same account and the second sign-up is refused. (b) No: they are two different accounts.
 Recommended: (a), because people do not expect letter case to matter in an email address or username.
 
-**Answer:**
+**Answer:** @alokkulkarni (point 2): "yes, cases insensitive" — (a) identifiers are unique regardless of letter case.
+
+## Q33. Do you accept the items the first requirements draft marked "(proposed)"?
+
+Raised by the requirements draft (N02, round 1), relayed as one item. The items: password at least 8 characters;
+a login failure message that does not reveal whether the identifier exists; a logout control and an 8-hour session;
+past due dates accepted; "clear all completed" acts on all of the user's completed to-dos regardless of filter,
+search or page, and its confirmation shows the count; search treats `%`, `_` and quotes literally, and
+whitespace-only search counts as empty; changing the filter or search resets to page 1, and a page past the last one
+shows the last valid page; the database file is created on first start; 95% of actions within 1 second for up to
+500 to-dos. (a) Accept all. (b) Change some (say which).
+
+**Answer:** @alokkulkarni (point 3): "accept all of them" — (a) all of the listed items are accepted.
+
+## Q34. How should the three ambiguous acceptance criteria resolve?
+
+Raised by the critic's requirements review (N02, findings F-2 to F-4), relayed as one item: another user's to-do
+requested by identifier returns "not found" (REQ-ISO-001 AC-2); "clear all completed" is disabled when nothing is
+completed (REQ-TODO-007 AC-4); a page number past the last page shows the last valid page (REQ-LIST-003 AC-6).
+(a) Yes to all. (b) Change some (say which).
+
+**Answer:** @alokkulkarni (point 4): "yes to all. cross user todos should not be acessible." — (a) all three as listed: another user's to-do is not found (and not accessible), the clear-completed control is disabled when nothing is completed, and an out-of-range page shows the last valid page.
