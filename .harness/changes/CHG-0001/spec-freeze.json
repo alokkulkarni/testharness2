@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "files": {
+    "docs/specs/CHG-0001/adr/0001-react-typescript-spa.md": "4b831f4e58baaaf06f8b31da3950a3ba78fbb5bddb0410bf43ea9557a8126b86",
+    "docs/specs/CHG-0001/adr/0002-spring-boot-rest-api.md": "a39e52b3089a181b3363f211e381f43f5436596c76612b5b1020a396ca5e10de",
+    "docs/specs/CHG-0001/adr/0003-sqlite-persistence.md": "2dce862223d3d5361b6e7c76757d6ee8211910771a5b147b9c5c3b00f11125d8",
+    "docs/specs/CHG-0001/adr/0004-server-side-session-cookie.md": "d5ed6e046d4e9046a301504816eea46f7f31618528759fd130b0f29e62431489",
+    "docs/specs/CHG-0001/adr/0005-argon2id-password-hashing.md": "1fa150797da4286689b94a70ba87cddf8b269d8d0bccbce3722c409824725d45",
+    "docs/specs/CHG-0001/adr/0006-last-write-wins-whole-content-replace.md": "0e2e13344f15cd27aea1b5cda2854a896f288dc5be1ee6904959350cbc054c07",
+    "docs/specs/CHG-0001/adr/0007-client-header-cross-site-request-defence.md": "c307a83ebd9c7ae453d992d8f0229686894d3f1154c5ad26ac23938d57bd774e",
+    "docs/specs/CHG-0001/adr/0008-absolute-session-lifetime.md": "a62f2ff3d99701c08b0b00f79a9958e916ea60bc90b2e5fc10af9d650d6024d5",
+    "docs/specs/CHG-0001/adr/0009-spring-jdbc-without-jpa.md": "a99f91db6c7e75595a464ceb75f68c1d5688d4947b64bafacc718bea327b8079",
+    "docs/specs/CHG-0001/adr/0010-explicit-validator-classes.md": "235adc0f9270895cde6aeb4c760702e0abfa5de03ab9365a5adc8c84c68b91bf",
+    "docs/specs/CHG-0001/adr/0011-problem-details-error-model.md": "05f6818a60038ec21dec5023fe50b557c8732857b2b3a36190438800d2c50ab9",
+    "docs/specs/CHG-0001/adr/0012-contract-tests-swagger-request-validator.md": "a862ce1fa0084c69812a5b69d7de9294501e99dfdaf45e963b776f8677ec6130",
+    "docs/specs/CHG-0001/adr/0013-injected-clock-and-e2e-test-clock.md": "e1b0e5ef93a1db8cbb594c432dcbdc6bcca75db2de1d322f89ecd18e246cb977",
+    "docs/specs/CHG-0001/adr/0014-flyway-migrations.md": "ada975522e94b216f21f54902951f45b25d7869fc2f748f26a432fbb2f69a5a5",
+    "docs/specs/CHG-0001/adr/0015-derived-lowercase-columns.md": "2dea5408949a71d39ea14a37708cbe4d8e4cec7694b0fdcfa86664f511ccf6c4",
+    "docs/specs/CHG-0001/adr/0016-single-connection-pool.md": "2afbccda48eceae44b0a41713765ae231b8d3eaf67fdffdac552de326dedcb23",
+    "docs/specs/CHG-0001/adr/0017-timestamps-as-utc-text.md": "ba287880ca0a5e38a60d16ccd5ae4eb405137d74211f91f7cfd6ce46a4342554",
+    "docs/specs/CHG-0001/contracts/todo-api-v1.yaml": "3549665648610d1b66d75aaf42973e02c4fcfcf91b506e47f8e99ea219fed325",
+    "docs/specs/CHG-0001/intent.md": "8465eeb8e5e930d7bd165b4c152e9be5bd62e33d8350a11291867d0b16792c98",
+    "docs/specs/CHG-0001/requirements.md": "b4e11b8435570c1e0ce269019a40bde2cf5a5c11210bef3f22a4df32ee1a87dc",
+    "docs/specs/CHG-0001/sdd.md": "479baa78804961ca249ead50f45591cf3cce6719cc362ff1e3ea3cf22c9fbbd7"
+  },
+  "requestedBy": "@alokkulkarni",
+  "approvedBy": "@alokkulkarni",
+  "approvedAt": "2026-11-06T10:24:41.176Z",
+  "approvalReference": "https://github.com/alokkulkarni/testharness2/pull/3#pullrequestreview-5798799317",
+  "criticVerdict": ".harness/changes/CHG-0001/verdicts/N03-spec.critic-verdict.json"
+}

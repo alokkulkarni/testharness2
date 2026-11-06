@@ -4,7 +4,7 @@
   "title": "Create a to-do list",
   "mode": "greenfield",
   "profile": "lite",
-  "specFreeze": null,
+  "specFreeze": ".harness/changes/CHG-0001/spec-freeze.json",
   "intent": {
     "path": "docs/specs/CHG-0001/intent.md",
     "sha256": "8465eeb8e5e930d7bd165b4c152e9be5bd62e33d8350a11291867d0b16792c98",
