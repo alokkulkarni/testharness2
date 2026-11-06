@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N03-spec",
+  "gate": "critic-verdict",
+  "verdict": "changes-required",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "critic",
+      "agentRunId": "acc9f9ad96c0c6b28"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "spec-author",
+      "agentRunId": "run-mw4rq9pt"
+    }
+  ],
+  "createdAt": "2026-11-06T09:44:27.780Z",
+  "reviewedCommit": "6695a40d5df8c485d880fd55e80b745405e169ec",
+  "diffHash": "e9c967186b1cd1917827da7f1d3ad8669e4560556ecd6e78f89c7229ca3ab97f",
+  "summary": "Spec is largely sound: all 24 REQ/NFR rows are designed and verified in sdd.md section 14; the eight section-12 decisions are consistent with requirements.md, Q33 and Q34; the contract matches the requirements (identifier 3-254, password 8-128, title 1-200 trimmed, description 2000, page size 20, status enum, literal q search, clear-completed 200 deletedCount 0, page clamp, identical 404 for another user, RFC 9457 errors); roster risk recorded. One major author-fixable defect: the SPA 401 handling turns the on-load session probe of a never-signed-in visitor into a session-ended redirect to /login, which breaks deep links to /signup. No finding needs a requester decision; F-8 and F-9 list items for the approver to confirm at freeze.",
+  "findings": [
+    {
+      "id": "F-1",
+      "severity": "major",
+      "message": "The client wrapper treats any 401 other than from login as session ended (clear user, navigate to /login with Your session has ended), and the SPA calls GET /api/v1/auth/session on every load, which returns 401 for a visitor with no session at all (contract getSession and Unauthenticated). As designed, a first-time visitor opening /signup is bounced to /login with a false expiry message, and the SPA cannot tell never-signed-in from expired. REQ-AUTH-004 AC-2 redirects only from to-do pages and AC-4 reserves the log-in-again prompt for expired sessions; the sign-up deep link (REQ-AUTH-001 AC-1, AC-7) is broken.",
+      "requirement": "REQ-AUTH-004",
+      "location": "docs/specs/CHG-0001/sdd.md:L105-L108",
+      "suggestion": "Exempt the on-load getSession probe (and sign-up, login) from session-ended handling; show the session-ended message and navigate only when SessionProvider previously held a signed-in user; leave /signup and /login reachable when signed out. Add component/e2e tests: signed-out visitor opens /signup and sees the sign-up form with no message; signed-in user whose session expires sees the message."
+    },
+    {
+      "id": "F-2",
+      "severity": "minor",
+      "message": "RequireAuth sends users to /login?returnTo=<path>, but the SDD does not say how returnTo is validated after login. An unvalidated value such as //evil.example or an absolute URL is an open redirect. returnTo is also beyond REQ-AUTH-004 AC-2, which only requires sending the user to the login page.",
+      "requirement": "REQ-AUTH-004",
+      "location": "docs/specs/CHG-0001/sdd.md:L105-L106",
+      "suggestion": "State that returnTo is honoured only when it is an in-app path starting with a single / (not //, no scheme) and otherwise /todos is used, and add a unit test; or drop returnTo."
+    },
+    {
+      "id": "F-3",
+      "severity": "minor",
+      "message": "Trimming uses Java String.strip (Character.isWhitespace) and the SDD states that U+00A0 is not trimmed. A title made only of non-breaking spaces (or U+2007, U+202F) is therefore accepted and displays as blank, although REQ-TODO-002 AC-2 refuses a title of only whitespace and these are Unicode White_Space characters. The same rule governs whitespace-only search (REQ-LIST-002 AC-7) and description.",
+      "requirement": "REQ-TODO-002",
+      "location": "docs/specs/CHG-0001/sdd.md:L115-L117",
+      "suggestion": "Define whitespace as the Unicode White_Space property (strip plus U+00A0, U+2007, U+202F, U+FEFF if desired) on server and SPA alike, or keep the narrower rule but list it as a section-12 decision so the approver sees it; add a boundary test for an NBSP-only title."
+    },
+    {
+      "id": "F-4",
+      "severity": "minor",
+      "message": "Section 6 says ProblemDetailsAdvice is the only place error responses are built, but the 401 from SessionCookieAuthenticationFilter and the 403 from ClientHeaderFilter are produced in servlet filters, which a RestControllerAdvice does not handle. Framework-level errors (405 wrong method, 415 wrong or missing Content-Type, 404 unknown route, oversized body) have no Problem code in the contract and would fall to the Spring Boot /error body, which does not match the Problem schema.",
+      "requirement": "NFR-004",
+      "location": "docs/specs/CHG-0001/sdd.md:L140-L144",
+      "suggestion": "Name one shared Problem writer used by the filters and the advice; map 405, 415 and unknown routes to Problem bodies (for example MALFORMED_REQUEST or NOT_FOUND, or new codes added to the contract enum); add an integration test that these responses are application/problem+json with no internals."
+    },
+    {
+      "id": "F-5",
+      "severity": "minor",
+      "message": "The REQ-AUTH-004 verification plans an e2e test where the API clock is advanced to expire a session, but the SDD designs no mechanism for advancing the clock of a running API (only an injected Clock for unit and integration tests). Without one the e2e case cannot be written, or a test-only endpoint may be added ad hoc.",
+      "requirement": "REQ-AUTH-004",
+      "location": "docs/specs/CHG-0001/sdd.md:L289",
+      "suggestion": "State the mechanism: a test profile with a settable Clock bean that is never active by default, or seeding an already-expired session row in the e2e temporary database; and state that no such hook exists in the default run."
+    },
+    {
+      "id": "F-6",
+      "severity": "minor",
+      "message": "ADRs are not one decision each. ADR-0004 bundles session design with a separate security decision (X-Todo-Client header as cross-site request defence, Spring CSRF disabled) that adds a required header to every unsafe operation of the contract. ADR-0002 bundles framework, no-JPA persistence, hand-written validators, error model and contract-test tooling; ADR-0003 bundles driver, Flyway, pool of one, derived lower-cased columns and timestamp format. Alternatives are given for each part, so this is hygiene, not a defect in the decisions.",
+      "requirement": "NFR-004",
+      "location": "docs/specs/CHG-0001/adr/0004-server-side-session-cookie.md:L25-L28",
+      "suggestion": "Split at least the cross-site request defence into its own ADR (context, decision, consequences, alternatives); consider splitting the case-insensitive search and uniqueness strategy out of ADR-0003."
+    },
+    {
+      "id": "F-7",
+      "severity": "info",
+      "message": "The SDD adds a to-do detail page /todos/:id (serving REQ-TODO-003 AC-3), but the a11y verification row audits only the six screens listed in NFR-001 AC-1, so this screen gets no axe or keyboard check.",
+      "requirement": "NFR-001",
+      "location": "docs/specs/CHG-0001/sdd.md:L196-L197",
+      "suggestion": "Add the detail page to the axe and keyboard-only checks in the NFR-001 verification row (sdd.md L305)."
+    },
+    {
+      "id": "F-8",
+      "severity": "info",
+      "message": "For the approver at freeze (no blocking decision): the email rule settling finding 12 is ASCII-only and refuses some RFC-valid addresses (quoted local parts, IP-literal domains, internationalised addresses, punycode TLDs such as xn--p1ai since the last label must be letters only). This narrows analyst default 2 (REQ-AUTH-001 AC-9, valid email address); it is reasonable for a local app.",
+      "requirement": "REQ-AUTH-001",
+      "location": "docs/specs/CHG-0001/sdd.md:L120-L124",
+      "suggestion": "Approver confirms the rule at freeze; optionally allow xn-- labels as the last label."
+    },
+    {
+      "id": "F-9",
+      "severity": "info",
+      "message": "For the approver at freeze (no blocking decision): the 8-hour session is absolute from login, so a user active at 7h59 is asked to log in again at 8h (ADR-0004); and section 12 states analyst defaults 1-6 of requirements.md are designed as written. Both are product-visible and were not decided by the requester.",
+      "requirement": "REQ-AUTH-002",
+      "location": "docs/specs/CHG-0001/sdd.md:L247-L260",
+      "suggestion": "Approver confirms the absolute session lifetime and analyst defaults 1-6 when approving the freeze."
+    },
+    {
+      "id": "F-10",
+      "severity": "info",
+      "message": "Not verified by this review: the sha256 in the sdd.md frontmatter for requirements.md (no hashing tool in the critic grant; git diff shows requirements.md unchanged between ab40c65 and 6695a40), and the PR number #2 in the roster risk (branch squad/add-engineer-roles at 2d415d9 does add java-engineer and react-engineer, consistent with the risk).",
+      "requirement": "REQ-ACC-001",
+      "location": "docs/specs/CHG-0001/sdd.md:L9-L11",
+      "suggestion": "The orchestrator checks the upstream hash at freeze and the PR number with gh."
+    }
+  ]
+}
