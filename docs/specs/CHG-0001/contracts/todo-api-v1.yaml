@@ -8,17 +8,28 @@ info:
     requirement IDs cited in each operation.
 
     Conventions (sdd.md "Validation" and "Error model"):
-    - Request and response bodies are JSON (`application/json`); errors are RFC 9457 problem details
-      (`application/problem+json`, schema `Problem`).
+    - Request and response bodies are JSON. A request body must be sent with `Content-Type: application/json`
+      (a `charset` parameter is allowed); any other or a missing `Content-Type` is refused with 415
+      `UNSUPPORTED_MEDIA_TYPE`.
+    - Every error response from any path under `/api/` is an RFC 9457 problem details body
+      (`application/problem+json`, schema `Problem`) with a `code` from its enum, whatever produced it: the
+      operations' own errors listed below, 401 and 403 from the authentication and client-header checks, an
+      unknown path (404 `NOT_FOUND`), a method not listed for a path (405 `METHOD_NOT_ALLOWED`, response
+      `MethodNotAllowed`, with an `Allow` header), and any other request refused before an operation runs
+      (its 4xx status, `REQUEST_REJECTED`, response `RequestRejected`). See sdd.md §6.
     - "Characters" in every length limit means Unicode code points, on server and client alike.
-    - Where a field is trimmed before it is checked (identifier, title), the limit applies to the trimmed value
-      and is stated in the field description; no raw `maxLength` is declared for such fields.
+    - "Whitespace" means exactly the code points of the Unicode `White_Space` property listed in sdd.md §5
+      (including U+00A0 and the other Unicode spaces; not zero-width characters such as U+200B or U+FEFF).
+    - Where a field is trimmed before it is checked (identifier, title, search text `q`), leading and trailing
+      whitespace is removed and the limit applies to the trimmed value, stated in the field description; no raw
+      `maxLength` is declared for such fields.
     - Request bodies accept only the properties listed (`additionalProperties: false`); an unknown property is
       refused with 400 `VALIDATION_FAILED` (field error code `UNKNOWN_FIELD`).
     - Authentication is an opaque session cookie (`todo_session`) set by login; the session lasts 8 hours from
       login (absolute, not extended by activity).
     - Every POST, PUT and DELETE request must carry the header `X-Todo-Client: web`. On operations that require a
-      session, the session is checked first (401), then the header (403).
+      session, the session is checked first (401), then the header (403), then the path and method (404, 405),
+      then the `Content-Type` (415), then the body (400), then ownership (404).
     - Unknown query parameters are ignored (there is no page-size parameter; the page size is fixed at 20).
 servers:
   - url: http://localhost:8080
@@ -67,6 +78,8 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/Problem'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
         '500':
           $ref: '#/components/responses/InternalError'
   /api/v1/auth/login:
@@ -114,6 +127,8 @@ paths:
                 $ref: '#/components/schemas/Problem'
         '403':
           $ref: '#/components/responses/ClientHeaderMissing'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
         '500':
           $ref: '#/components/responses/InternalError'
   /api/v1/auth/logout:
@@ -144,6 +159,12 @@ paths:
       tags: [auth]
       operationId: getSession
       summary: The current session, used by the SPA on load (REQ-AUTH-002 AC-4, REQ-AUTH-004 AC-2, AC-4)
+      description: |
+        Called once when the SPA loads. A 401 here is the normal answer for a visitor who has never signed in or
+        whose cookie the browser has already dropped; the API does not distinguish these from an ended session.
+        The SPA treats a 401 from this operation as "signed out" (no message, no redirect from /signup or /login),
+        and shows "session ended" only when a later request fails with 401 while it holds a signed-in user
+        (sdd.md §4.1).
       responses:
         '200':
           description: A valid, unexpired session.
@@ -241,6 +262,8 @@ paths:
           $ref: '#/components/responses/Unauthenticated'
         '403':
           $ref: '#/components/responses/ClientHeaderMissing'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
         '500':
           $ref: '#/components/responses/InternalError'
   /api/v1/todos/completed:
@@ -320,6 +343,8 @@ paths:
           $ref: '#/components/responses/ClientHeaderMissing'
         '404':
           $ref: '#/components/responses/NotFound'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
         '500':
           $ref: '#/components/responses/InternalError'
     delete:
@@ -372,6 +397,8 @@ paths:
           $ref: '#/components/responses/ClientHeaderMissing'
         '404':
           $ref: '#/components/responses/NotFound'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
         '500':
           $ref: '#/components/responses/InternalError'
 components:
@@ -398,7 +425,7 @@ components:
       required: true
       description: |
         Must be exactly `web` on every POST, PUT and DELETE. Missing or different: 403 `CLIENT_HEADER_MISSING`
-        (cross-site request defence, sdd.md "Auth and session").
+        (cross-site request defence, sdd.md §4 and adr/0007).
       schema:
         type: string
         const: web
@@ -406,15 +433,18 @@ components:
     BadRequest:
       description: |
         `code` is `VALIDATION_FAILED` (one or more field errors in `errors`, each naming the field; REQ-TODO-002
-        AC-10, REQ-AUTH-001 AC-3) or `MALFORMED_REQUEST` (the body is not parseable JSON; `errors` is empty).
+        AC-10, REQ-AUTH-001 AC-3) or `MALFORMED_REQUEST` (the body is missing or not parseable JSON; `errors` is
+        empty).
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/Problem'
     Unauthenticated:
       description: |
-        No session cookie, an unknown or logged-out session, or an expired session (REQ-AUTH-004 AC-1, AC-3, AC-4).
-        `code` is `UNAUTHENTICATED`. No data is returned or changed.
+        No session cookie, an unknown or logged-out session, or an expired session (REQ-AUTH-004 AC-1, AC-3, AC-4);
+        the body is the same in every case. `code` is `UNAUTHENTICATED`. No data is returned or changed. Produced
+        by the authentication check before any operation runs, so it takes precedence over 403, 404, 405 and 415
+        on paths that require a session.
       content:
         application/problem+json:
           schema:
@@ -429,7 +459,39 @@ components:
       description: |
         No to-do with this identifier is owned by the caller: it does not exist, was deleted, or belongs to another
         user. The body is identical in every case (REQ-ISO-001 AC-2, REQ-TODO-004 AC-3, REQ-TODO-006 AC-4).
-        `code` is `NOT_FOUND`.
+        `code` is `NOT_FOUND`. The same code is used for a path the API does not define.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    MethodNotAllowed:
+      description: |
+        The path exists but the method is not listed for it (for example PATCH /api/v1/todos/{todoId}).
+        `code` is `METHOD_NOT_ALLOWED`; `errors` is empty (NFR-004 AC-2). Not listed per operation, because it
+        answers methods that have no operation.
+      headers:
+        Allow:
+          description: The methods the path supports, e.g. `GET, PUT, DELETE`.
+          schema:
+            type: string
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    UnsupportedMediaType:
+      description: |
+        A request body was sent with a `Content-Type` other than `application/json`, or without one.
+        `code` is `UNSUPPORTED_MEDIA_TYPE`; `errors` is empty (NFR-004 AC-2).
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    RequestRejected:
+      description: |
+        The request was refused before any operation ran and no more specific code applies: for example a path
+        rejected by the server's request firewall (a `;`, an encoded `/` or `..`), or a request the server cannot
+        accept (406, 413, 431). The status is that 4xx; `code` is `REQUEST_REJECTED`; `errors` is empty;
+        `detail` is a fixed sentence (NFR-004 AC-2). Not listed per operation.
       content:
         application/problem+json:
           schema:
@@ -660,6 +722,9 @@ components:
             - UNAUTHENTICATED
             - CLIENT_HEADER_MISSING
             - NOT_FOUND
+            - METHOD_NOT_ALLOWED
+            - UNSUPPORTED_MEDIA_TYPE
+            - REQUEST_REJECTED
             - INTERNAL_ERROR
         errors:
           type: array
