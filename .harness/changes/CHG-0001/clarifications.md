@@ -383,7 +383,7 @@ both. The UX design phrased it as "confirm 2.2 is acceptable as the audit target
 
 **Answer:** @alokkulkarni (point 9): "confirmed." — The reply does not name a level. Read against the UX design's
 wording, it confirms that 2.2 AA is acceptable as the audit target; the coordinator's later summary read it as 2.1 AA.
-Open: which level the audit cites needs the requester to say.
+Follow-up answer: @alokkulkarni (in chat): "2.1 AA" — the audit cites WCAG 2.1 AA, as NFR-001 says.
 
 ## Q45. Should the spec-author agent draft the spec changes for Q36–Q39, or will you edit the spec yourself?
 
@@ -392,4 +392,6 @@ spec, so they need `harness freeze --supersede`, approved by the requester. (a) 
 changes for the requester to review. (b) The requester edits the spec in their own session. Either way the approval
 and freeze stay with the requester.
 
-**Answer:** not answered yet.
+**Answer:** @alokkulkarni (in chat): "not sure which specs.. but go wiht your view." — left to the coordinator, who
+chose (a): the spec-author agent drafts the changes (in `requirements.md`, `sdd.md` and, if needed, the contract)
+for the requester to review; the approval and the freeze stay with the requester.
