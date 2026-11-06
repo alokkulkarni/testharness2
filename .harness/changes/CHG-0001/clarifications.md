@@ -97,7 +97,7 @@ Follow-up to Q1; the intent's "Who has it" and "Outcome wanted" sections are emp
 or correct: "Individual people who want to keep track of their own tasks; the outcome is that each person can
 capture, review and finish their tasks in one place."
 
-**Answer:**
+**Answer:** @alokkulkarni: "users and should be able to use it successfully to create and manage todos"
 
 ## Q12. Will you add a Java and a React engineer role to the squad on `develop`, or should the build phase wait?
 
@@ -106,7 +106,7 @@ changes the squad file. (a) You add `java-engineer` and `react-engineer` to the 
 phase. (b) The change stops after the spec freeze until the roster changes. Recommended: (a); spec work can go on
 while the role is added.
 
-**Answer:**
+**Answer:** @alokkulkarni: "Yes + qa + BA" — (a) the requester adds `java-engineer` and `react-engineer`, plus QA and BA roles, to the squad on `develop` themselves before the build phase.
 
 ## Q13. Which embedded database: SQLite or H2 (file mode)?
 
@@ -114,7 +114,7 @@ Follow-up to Q4. (a) H2 in file mode: native to Java/Spring, no extra driver wor
 tools can open, but a less common fit for Spring Boot and JPA. Recommended: (a), because the backend is Java/Spring
 Boot (Q3).
 
-**Answer:**
+**Answer:** @alokkulkarni: "sqlite" — (b) SQLite.
 
 ## Q14. How do users sign up and log in?
 
@@ -123,7 +123,7 @@ Follow-up to Q5. (a) Self sign-up with email (or username) and password, then a 
 identity provider (e.g. GitHub or Google OAuth). Recommended: (a) with passwords stored as a strong one-way hash, no
 email verification and no password reset in the first release.
 
-**Answer:**
+**Answer:** @alokkulkarni: "a" — (a) self sign-up with email (or username) and password, then a session or token login. (Email verification and password reset are still open: Q27, Q28.)
 
 ## Q15. Is there an admin role?
 
@@ -131,7 +131,7 @@ Follow-up to Q5. (a) No admin; every user sees and manages only their own to-dos
 disable users (but not read their to-dos). (c) An admin can also see all to-dos. Recommended: (a) for the first
 release.
 
-**Answer:**
+**Answer:** @alokkulkarni: "a" — (a) no admin; every user sees and manages only their own to-dos.
 
 ## Q16. Which extra fields: due date, priority, or both?
 
@@ -139,14 +139,14 @@ Follow-up to Q6. (a) Due date only (date, no time). (b) Priority only (Low / Med
 optional on a to-do. Recommended: (c), with due date as a date without time and priority Low / Medium / High,
 default Medium.
 
-**Answer:**
+**Answer:** @alokkulkarni: "both" — (c) both a due date and a priority. (Whether they are optional, whether the due date has a time, and the priority levels and default are still open: Q24, Q25, Q26.)
 
 ## Q17. What are the length limits for title and description?
 
 Follow-up to Q6. Recommended: title required, trimmed, 1–200 characters; description optional, up to 2000
 characters. Please confirm or give other limits.
 
-**Answer:**
+**Answer:** @alokkulkarni: "2000" (What the 2000 applies to, and whether the title is still required, are still open: Q23.)
 
 ## Q18. When two edits to the same to-do arrive at once, is "last write wins" acceptable?
 
@@ -160,14 +160,14 @@ Recommended: (a), because each list belongs to one user (Q5), so simultaneous ed
 Follow-up to Q8. (a) No. (b) Yes, with a confirmation prompt like single delete. Recommended: (a) for the first
 release.
 
-**Answer:**
+**Answer:** @alokkulkarni: "yes" — (b) yes, a "clear all completed" action, with a confirmation prompt like single delete.
 
 ## Q20. Which fields does search look in, and how does it match?
 
 Follow-up to Q9. (a) Title only. (b) Title and description. Matching is case-insensitive "contains". Search
 combines with the active filter. Recommended: (b).
 
-**Answer:**
+**Answer:** @alokkulkarni: "b" — (b) title and description; case-insensitive "contains", combined with the active filter.
 
 ## Q21. How does pagination work, and what is the page size?
 
@@ -175,11 +175,61 @@ Follow-up to Q9. (a) Numbered pages with previous/next, 20 to-dos per page. (b) 
 20 at a time. (c) Another style or size. Recommended: (a), 20 per page, which keeps the API simple
 (page and size parameters).
 
-**Answer:**
+**Answer:** @alokkulkarni: "a" — (a) numbered pages with previous/next. (The page size is still open: Q29.)
 
 ## Q22. How will you judge that the change succeeded?
 
 Follow-up to Q10. Recommended: "A signed-in user can add, see, search, filter, edit, complete and delete their own
 to-dos; another user cannot see them; and the to-dos are still there after a restart."
+
+**Answer:** @alokkulkarni: "correct as mentioned" — accepts the proposed statement: "A signed-in user can add, see, search, filter, edit, complete and delete their own to-dos; another user cannot see them; and the to-dos are still there after a restart."
+
+## Q23. Does the 2000-character limit apply to the title, the description, or both, and is the title still required?
+
+Follow-up to Q17 ("2000"). (a) Description up to 2000; title required, up to 200. (b) Both title and description up
+to 2000; title required. (c) Something else. Recommended: (a), because a 2000-character title would not fit a list
+row.
+
+**Answer:**
+
+## Q24. Are the due date and the priority both optional on a to-do?
+
+Follow-up to Q16 ("both"). (a) Both optional. (b) Due date optional, priority always set (with a default).
+(c) Both required. Recommended: (b), so every to-do can be sorted and shown by priority.
+
+**Answer:**
+
+## Q25. Does the due date include a time of day?
+
+Follow-up to Q16. (a) Date only. (b) Date and time (stored in UTC, shown in the user's local time zone).
+Recommended: (a), because it avoids time-zone handling.
+
+**Answer:**
+
+## Q26. What are the priority levels and the default?
+
+Follow-up to Q16. (a) Low / Medium / High, default Medium. (b) Low / Medium / High, no default (only if Q24 makes it
+optional). (c) Other levels you name. Recommended: (a).
+
+**Answer:**
+
+## Q27. Must a new user verify their email address before using the app?
+
+Follow-up to Q14. (a) No verification in the first release. (b) Yes, by an emailed link (this needs an email
+service, even locally). Recommended: (a), because the app runs locally only (Q10).
+
+**Answer:**
+
+## Q28. Is "forgot password" (password reset) in scope?
+
+Follow-up to Q14. (a) Not in the first release. (b) Yes, by an emailed reset link (needs an email service).
+Recommended: (a), for the same reason as Q27.
+
+**Answer:**
+
+## Q29. How many to-dos are shown per page?
+
+Follow-up to Q21. (a) 20 per page. (b) 10 per page. (c) Another fixed number. (d) The user chooses from a few
+sizes. Recommended: (a).
 
 **Answer:**
