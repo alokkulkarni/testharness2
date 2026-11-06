@@ -20,7 +20,7 @@ to-do list app only; the commit title is a mistake. (b) Something else, or payme
 Recommended: (a), because the file body and the change title both say to-do list. Please also say, in a sentence
 each if you can, who uses it and what outcome you want, since those intent sections are empty.
 
-**Answer:** @alokkulkarni: "yes todo app only" — (a) the to-do list app only. (Who uses it and the outcome wanted are still open: Q11.)
+**Answer:** @alokkulkarni: "yes todo app only" — (a) the to-do list app only. (Who uses it and the outcome wanted: see Q11.)
 
 ## Q2. What shape should the app take?
 
@@ -39,7 +39,7 @@ TypeScript UI with a Java/Spring Boot API. (b) React + TypeScript UI with a .NET
 reviewer), so whichever stack you choose, a person will need to add the matching engineer role to the squad on
 `develop` before the build phase can run. Can you confirm you will do that, or should the build phase wait?
 
-**Answer:** @alokkulkarni: "a" — (a) React + TypeScript UI with a Java/Spring Boot API. (Adding the engineer role on `develop` is still open: Q12.)
+**Answer:** @alokkulkarni: "a" — (a) React + TypeScript UI with a Java/Spring Boot API. (Adding the engineer role on `develop`: see Q12.)
 
 ## Q4. Where are to-dos stored, and must they survive a restart?
 
@@ -47,7 +47,7 @@ reviewer), so whichever stack you choose, a person will need to add the matching
 database such as PostgreSQL. (d) Browser local storage (only with Q2 (c)). Recommended: (b), because data survives a
 restart without needing a database server to run or deploy.
 
-**Answer:** @alokkulkarni: "b" — (b) an embedded file database. (Which one, SQLite or H2, is still open: Q13.)
+**Answer:** @alokkulkarni: "b" — (b) an embedded file database. (Which one, SQLite or H2: see Q13.)
 
 ## Q5. Are there user accounts, or is it a single shared list?
 
@@ -55,7 +55,7 @@ restart without needing a database server to run or deploy.
 Recommended: (a) for the first release, because the intent mentions no accounts, and (b) adds authentication,
 password storage and permissions.
 
-**Answer:** @alokkulkarni: "b" — (b) each user signs in and sees only their own to-dos. (Sign-up and login, and an admin role, are still open: Q14, Q15.)
+**Answer:** @alokkulkarni: "b" — (b) each user signs in and sees only their own to-dos. (Sign-up and login, and an admin role: see Q14, Q15.)
 
 ## Q6. What fields does a to-do have?
 
@@ -63,7 +63,7 @@ password storage and permissions.
 timestamps. (c) As (b) plus a due date and/or priority. Recommended: (b). Please also give the title's limits:
 required, trimmed, and a maximum length (suggested 200 characters); and the description's maximum (suggested 2000).
 
-**Answer:** @alokkulkarni: "c" — (c) title, optional description, done status, created and updated timestamps, plus a due date and/or priority. (Which of due date and priority, and the length limits, are still open: Q16, Q17.)
+**Answer:** @alokkulkarni: "c" — (c) title, optional description, done status, created and updated timestamps, plus a due date and/or priority. (Which of due date and priority, and the length limits: see Q16, Q17.)
 
 ## Q7. What does "update" cover?
 
@@ -71,7 +71,7 @@ required, trimmed, and a maximum length (suggested 200 characters); and the desc
 the text. Recommended: (a). Also, if two edits to the same to-do arrive at once, is "last write wins" acceptable
 (recommended), or must the second be rejected as a conflict?
 
-**Answer:** @alokkulkarni: "a" — (a) editing the title/description and marking done or not done. (Concurrent edits are still open: Q18.)
+**Answer:** @alokkulkarni: "a" — (a) editing the title/description and marking done or not done. (Concurrent edits: see Q18.)
 
 ## Q8. How does delete behave?
 
@@ -79,7 +79,7 @@ the text. Recommended: (a). Also, if two edits to the same to-do arrive at once,
 (hidden, recoverable or with undo). Also: should there be a "clear all completed" action? Recommended: (a), with no
 "clear completed" in the first release.
 
-**Answer:** @alokkulkarni: "a" — (a) permanent delete, with a confirmation prompt in the UI. ("Clear completed" is still open: Q19.)
+**Answer:** @alokkulkarni: "a" — (a) permanent delete, with a confirmation prompt in the UI. ("Clear completed": see Q19.)
 
 ## Q9. How is the list shown?
 
@@ -87,7 +87,7 @@ the text. Recommended: (a). Also, if two edits to the same to-do arrive at once,
 search and pagination. Recommended: (b), with no pagination and an empty-state message when there are no to-dos.
 If you expect many to-dos (more than a few hundred), say so and we will add pagination.
 
-**Answer:** @alokkulkarni: "c" — (c) all to-dos newest first, filters for All / Active / Completed, plus search and pagination. (What search covers and how pagination works are still open: Q20, Q21.)
+**Answer:** @alokkulkarni: "c" — (c) all to-dos newest first, filters for All / Active / Completed, plus search and pagination. (What search covers and how pagination works: see Q20, Q21.)
 
 ## Q10. What non-functional bar applies, and how is the app run?
 
@@ -97,7 +97,7 @@ name the hosting, e.g. a container platform). Recommended: (a) for the first rel
 deployment workflows yet. Please also say how you will judge success (for example: "I can add, see, edit, complete
 and delete a to-do, and it is still there after a restart").
 
-**Answer:** @alokkulkarni: "a" — (a) runs locally only, WCAG 2.1 AA for the UI, no performance target beyond "feels instant" for a few hundred items. (The success measure is still open: Q22.)
+**Answer:** @alokkulkarni: "a" — (a) runs locally only, WCAG 2.1 AA for the UI, no performance target beyond "feels instant" for a few hundred items. (The success measure: see Q22.)
 
 ## Q11. Who uses the app, and what outcome do you want from it?
 
@@ -131,7 +131,7 @@ Follow-up to Q5. (a) Self sign-up with email (or username) and password, then a 
 identity provider (e.g. GitHub or Google OAuth). Recommended: (a) with passwords stored as a strong one-way hash, no
 email verification and no password reset in the first release.
 
-**Answer:** @alokkulkarni: "a" — (a) self sign-up with email (or username) and password, then a session or token login. (Email verification and password reset: see Q27, Q28. Password hashing: see the security-baseline note at the top.)
+**Answer:** @alokkulkarni: "a" — (a) self sign-up with email (or username) and password, then a session or token login. (Email verification and password reset: see Q27, Q28. Password hashing: see the security-baseline note at the top. Which identifier: see Q31.)
 
 ## Q15. Is there an admin role?
 
@@ -249,3 +249,21 @@ be given. (a) Optional: a to-do may have no due date. (b) Required on every to-d
 tasks have no deadline.
 
 **Answer:** @alokkulkarni: "no due date is not optional" — (b) the due date is required on every to-do.
+
+## Q31. What does a user sign up and log in with: an email address, a username, or either?
+
+Raised by the critic's requirements review (N02, finding F-1): Q14 says "email (or username)", which leaves this
+open. (a) Email address only: it must be a valid email format. (b) Username only: for example 3–50 characters of
+letters, digits, `.`, `_` and `-`. (c) One field that may hold either an email address or a username.
+(d) Both: a required email and a separate required username, and login with either. Recommended: (a), because it
+gives one clear format to validate and leaves room for email verification and password reset later.
+
+**Answer:**
+
+## Q32. Are identifiers unique regardless of letter case?
+
+Raised by the critic's requirements review (N02, finding F-13 item 2). (a) Yes: `Alice@Example.com` and
+`alice@example.com` are the same account and the second sign-up is refused. (b) No: they are two different accounts.
+Recommended: (a), because people do not expect letter case to matter in an email address or username.
+
+**Answer:**
