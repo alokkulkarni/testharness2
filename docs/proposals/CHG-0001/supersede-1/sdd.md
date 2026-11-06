@@ -6,6 +6,10 @@ authors:
     changeId: CHG-0001
     agent: spec-author
     agentRunId: run-mw4rq9pt
+  - squadSessionId: SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM
+    changeId: CHG-0001
+    agent: spec-author
+    agentRunId: unknown
 upstream:
   - path: docs/specs/CHG-0001/requirements.md
     sha256: b4e11b8435570c1e0ce269019a40bde2cf5a5c11210bef3f22a4df32ee1a87dc
@@ -52,7 +56,7 @@ API packages (root `app.todo`):
 SPA modules: `src/api/client.ts` (fetch wrapper: JSON, `X-Todo-Client: web` on unsafe methods, 401 reporting to
 `SessionProvider`), `src/api/schema.ts` (generated from the contract), `src/auth/` (`SessionProvider`,
 `RequireAuth`, `LoginPage`, `SignupPage`, `returnTo.ts`), `src/todos/` (`TodoListPage`, `FilterGroup`,
-`SearchForm`, `Pagination`, `TodoRow`, `TodoDetailPage`, `TodoFormPage`, `ConfirmDialog`), `src/validation/`
+`SearchForm`, `Pagination`, `TodoRow`, `TodoDetailPage`, `TodoFormPage`, `ConfirmDialog`, `todoId.ts`, §8), `src/validation/`
 (rules mirroring §5, including `whitespace.ts`), `src/app/` (`AppRoutes` route table, `NotFoundPage`, §8;
 `AppErrorBoundary`, §6.1), `src/errors/userMessage.ts` (§6.1).
 
@@ -280,21 +284,29 @@ export function userMessageFor(failure: Failure, action: UserAction): UserMessag
 |---|---|---|
 | 400 `VALIDATION_FAILED` (any action) | each `errors[].message` beside its field and in the error summary (§9) | `fix-fields`: the field message itself says how to fix it |
 | 409 `IDENTIFIER_TAKEN` (`sign-up`) | the identifier field's message | `choose-other-identifier-or-log-in` |
-| 401 from `log-in` | one fixed message, identical for a wrong password and an unknown identifier (REQ-AUTH-002 AC-2, AC-3; NFR-006 AC-4) | `check-and-retry-login` |
+| 401 from `log-in` | one fixed message from `userMessageFor`, identical for a wrong password and an unknown identifier (REQ-AUTH-002 AC-2, AC-3; NFR-006 AC-4); its text is below | `check-and-retry-login` |
 | 401 on any other call while `signed-in` | the session-ended flow of §4.1, unchanged | `log-in-again` ("Please log in again.") |
 | 401 from `session-probe` | nothing (§4.1) | — |
 | 404 `NOT_FOUND` on a to-do (`load-todo`, `save`, `toggle-done`, `delete`) | a to-do not-found message | `back-to-list` (my to-dos at `/todos`) |
 | `network`; any 5xx; 403; 405; 415; `MALFORMED_REQUEST`; `REQUEST_REJECTED`; any other status; a body that is not a Problem | a message naming the action that failed (for example that the to-dos could not be loaded); for `session-probe` it is the §4.1 alert, unchanged | `try-again` |
 | `unexpected` | `AppErrorBoundary`'s full-page message in place of the broken screen | `reload-or-home` (reload the page, or a link to `/`) |
 
-- From a response the SPA displays only `errors[].message`, and only beside its field. Every other text comes from
-  `userMessageFor`, chosen by `action`, status and `code`. The SPA never displays the response's `title`, `detail`,
-  `code` or raw body, a request id, or the browser's error text (NFR-006 AC-2).
+- From a response the SPA displays only `errors[].message`, and only as its field's message: beside that field and
+  in the error summary (§9). Every other text comes from `userMessageFor`, chosen by `action`, status and `code`. The
+  SPA never displays the response's `title`, `detail`, `code` or raw body, a request id, or the browser's error text
+  (NFR-006 AC-2).
 - Because `errors[].message` is displayed as sent, the API's field messages follow the same rules: plain language,
-  say how to fix the field, and (already required by §6) contain no internals (NFR-006 AC-1, AC-2).
+  say how to fix the field, and (already required by §6) contain no internals (NFR-006 AC-1, AC-2). Their wording is
+  the UX design §4 catalogue approved in Q39(a).
 - Every message gives its next step, either in its text or as a link or control shown with it (for example the
   §4.1 alert's Retry button); which of these each state uses is the UX design's. Exact copy is set by the UX design
   within these rules.
+- Two strings of the UX design §4 (approved in Q39(a)) name no next step, so they are used with these additions
+  (§12.1 item 7): the alert "That to-do no longer exists." (a 404 on `toggle-done` or `delete`) is shown with a
+  **Back to my to-dos** link to `/todos`, as the detail and edit screens' not-found states already have; the
+  refused-login alert reads "Invalid identifier or password. Check them and try again." Its first sentence equals the
+  contract's `INVALID_CREDENTIALS` `detail`, but the SPA's text is its own constant in `userMessageFor`, never the
+  response's `detail`.
 - `AppErrorBoundary` wraps `AppRoutes` at the root and catches errors thrown while rendering (NFR-006 AC-3). Errors
   thrown in event handlers and promise callbacks do not reach an error boundary, so each call site maps them with
   `userMessageFor({ kind: 'unexpected' }, action)`. Nothing is sent to the server (no client telemetry, §10).
@@ -348,8 +360,8 @@ A missing id, a malformed id and another user's id therefore give the identical 
 
 ## 8. SPA behaviour
 
-- Routes (`AppRoutes`): `/` (replaced in history with `/todos`, query not carried, after which the `/todos` rules
-  apply: signed in → the list, signed out → `RequireAuth` sends to `/login?returnTo=/todos`; REQ-NAV-001 AC-1,
+- Routes (`AppRoutes`): `/` (replaced in history with `/todos`, query not carried, which is analyst default 7 of
+  `requirements.md`; after that the `/todos` rules apply: signed in → the list, signed out → `RequireAuth` sends to `/login?returnTo=/todos`; REQ-NAV-001 AC-1,
   AC-2), `/signup`, `/login` (public, §4.1), `/todos?status=&q=&page=`, `/todos/new`, `/todos/:id` (detail:
   description, created and updated timestamps in the viewer's local time, REQ-TODO-003 AC-3), `/todos/:id/edit`
   (the four to-do routes behind `RequireAuth`), and a catch-all `*` for every other path, rendering `NotFoundPage`
@@ -357,17 +369,30 @@ A missing id, a malformed id and another user's id therefore give the identical 
 - **Not-found page** (`NotFoundPage`, REQ-NAV-001; Source: clarifications Q37): the catch-all matches only when no
   other route pattern matches, so `/todos/<anything>` and `/todos/<anything>/edit` stay on the detail and edit
   routes, whose to-do not-found state covers missing, malformed and other users' ids (REQ-NAV-001 AC-4,
-  REQ-ISO-001 AC-2). It is outside `RequireAuth`, renders in every session state without waiting for the probe,
-  never redirects (neither to `/login` nor, for a signed-in visitor, to `/todos`) and itself calls no API (the
+  analyst default 8; REQ-ISO-001 AC-2). It is outside `RequireAuth`, renders in every session state without waiting
+  for the probe, never redirects (neither to `/login` nor, for a signed-in visitor, to `/todos`) and itself calls no API (the
   app-level session probe of §4.1 still runs). Content: an
   `<h1>` saying the page was not found, one sentence, and a link to `/` (home, REQ-NAV-001 AC-5); `document.title`
   and focus as §9. Animation (AC-6): a decorative CSS animation (no new dependency, no animation library) on an
-  element with `aria-hidden="true"`; it plays once (no infinite or repeated iteration), its total duration including
-  delays is at most 5 seconds, and it has no flashing; the heading, sentence and link are visible and operable from
-  the first render and the animation never hides or moves them. Honouring `prefers-reduced-motion` is not required
-  by NFR-001 (WCAG 2.3.3 is Level AAA) and is not part of this design. Exact copy and the motion itself are the UX
-  design's. Paths under `/api` never reach the SPA (Vite proxy, §2); that the dev server answers every other browser
-  navigation with the SPA is verified by the REQ-NAV-001 e2e test, not assumed.
+  element with `aria-hidden="true"`; it plays once (no infinite or repeated iteration; analyst default 9), its total
+  duration including delays is at most 5 seconds (WCAG 2.2.2), and it has no flashing (WCAG 2.3.1); the heading,
+  sentence and link are visible and operable from the first render and the animation never hides or moves them.
+  Exact copy and the motion itself are the UX design's. Paths under `/api` never reach the SPA (Vite proxy, §2);
+  that the dev server answers every other browser navigation with the SPA is verified by the REQ-NAV-001 e2e test,
+  not assumed.
+- **To-do id in the URL** (REQ-NAV-001 AC-4; §12.1 item 6): `TodoDetailPage` and `TodoFormPage` in edit mode test
+  the `:id` route parameter, as the router gives it (decoded), with `isTodoId`, which matches the id part of the
+  §4.2 pattern, `^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$`. When it does not match, the page
+  shows its to-do not-found state at once and calls no API. Without this check some ids (for example `a;b`, `a%2Fb`,
+  `%`) would never reach the API's 404: the firewall refuses them with 400 `REQUEST_REJECTED` (§6), which §6.1
+  shows as "try again". Every other id the pattern refuses gets the same 404 from the API (§7), so the check changes
+  what the user sees only for ids the API refuses before its not-found handling. An id the pattern admits is loaded
+  with `getTodo` as before.
+
+  ```ts
+  // web/src/todos/todoId.ts
+  export function isTodoId(value: string): boolean;
+  ```
 - List rows show title, done status (checkbox), due date and priority as text (REQ-TODO-003 AC-1).
 - Empty states: `totals.all = 0` with filter All and no search → first-use message with an "Add a to-do" link
   (REQ-TODO-003 AC-2); any other `totalItems = 0` (a filter other than All, or a search, is applied) → "No matching
@@ -387,9 +412,10 @@ A missing id, a malformed id and another user's id therefore give the identical 
   text (REQ-TODO-007 AC-1..AC-3). For any N other than 1:
   "Delete all N completed to-dos? This deletes all your completed to-dos, including any not shown because of the
   current page, filter or search. This cannot be undone."
-  For N = 1 (singular form; Source: clarifications Q38):
+  For N = 1 (singular form; Source: clarifications Q38; exact text: §12.1 item 5):
   "Delete 1 completed to-do? This deletes your only completed to-do, even if it is not shown because of the
   current page, filter or search. This cannot be undone."
+  N changes only this sentence; the dialog's heading and buttons are the UX design's (REQ-TODO-007 AC-1).
 - Log out control in the header (REQ-AUTH-004 AC-3).
 
 ## 9. Accessibility (NFR-001)
@@ -462,11 +488,20 @@ These are product-visible choices the requester did not make; approving the free
    labels such as `xn--p1ai` (the last label must be letters only) are refused.
 2. **Session lifetime is 8 hours absolute from login** (ADR-0008, REQ-AUTH-002 AC-4): a user active at 7:59 is
    asked to log in again at 8:00.
-3. **Analyst defaults 1–6** of `requirements.md` are designed exactly as written (§5, §7; REQ-AUTH-001 AC-8..AC-11,
-   REQ-LIST-003 AC-7, NFR-004 AC-2).
+3. **Analyst defaults 1–9** of `requirements.md` are designed exactly as written (§5, §7, §8; REQ-AUTH-001
+   AC-8..AC-11, REQ-LIST-003 AC-7, NFR-004 AC-2, REQ-NAV-001 AC-1, AC-4, AC-6).
 4. **Whitespace is the Unicode `White_Space` set** (§5, REQ-TODO-002 AC-2, REQ-LIST-002 AC-7): non-breaking and
    other Unicode spaces are trimmed; zero-width characters (U+200B–U+200D, U+2060, U+FEFF) are not whitespace and
    are kept.
+5. **Singular clear-completed sentence** (§8, REQ-TODO-007 AC-1): Q38 approves a singular form for N = 1 but not its
+   text; the text is "Delete 1 completed to-do? This deletes your only completed to-do, even if it is not shown
+   because of the current page, filter or search. This cannot be undone."
+6. **A to-do id that is not a UUID is checked in the web app** (§8, REQ-NAV-001 AC-4): the detail and edit pages show
+   the to-do not-found state without calling the API. Chosen over narrowing AC-4, which would leave ids such as
+   `a;b` with a "try again" message that cannot succeed.
+7. **Next steps added to two approved strings** (§6.1, NFR-006 AC-1): "That to-do no longer exists." gets a
+   **Back to my to-dos** link, and the refused-login alert becomes "Invalid identifier or password. Check them and
+   try again." Both change wording of the UX design §4 approved in Q39(a), so the requester decides them.
 
 ## 13. Risks
 
@@ -512,7 +547,7 @@ requirement ID and AC.
 | REQ-LIST-001 | §7, §8 | `listTodos` `status` | integration: all/active/completed, default all, invalid status → 400; component: "No matching to-dos" vs first-use state, including a user with no to-dos who selects Completed or searches (sees "No matching to-dos") |
 | REQ-LIST-002 | §5, §7, §8; ADR-0015 | `listTodos` `q` | integration: case-insensitive title and description match, `%`, `_`, `\`, `'`, `"` literal, whitespace-only = no search (incl. `q` of only U+00A0 and of only U+3000), search AND filter; component: NBSP-only search omits `q`; e2e: search flow |
 | REQ-LIST-003 | §7, §8 | `listTodos` `page`, `TodoPage` | integration: 45 items → pages of 20/20/5, no repeats or gaps, page 99 and a 30-digit page → last page, no matches → page 1 empty, `0`/`-1`/`abc`/`1.5` → 400, `pageSize` ignored; component: controls disabled/hidden, filter change resets page, bad URL page → page 1; e2e: paging flow |
-| REQ-NAV-001 | §2, §4.1, §8, §9 (Q37) | — (SPA routing only; no API operation) | component (router with a stubbed `SessionProvider`): signed-in `/` → `/todos` with the history entry replaced; signed-out `/` → `/login?returnTo=/todos` with no message, and after login `/todos`; `/nope`, `/todos/abc/def` and `/login/extra` render `NotFoundPage` in the `signed-in`, `signed-out` and `unknown` states with no redirect and no API call other than the probe; `/todos/not-a-uuid` and `/todos/not-a-uuid/edit` render the to-do not-found state, not `NotFoundPage`; the home link's target is `/`; `document.title` set and focus on the `<h1>`; the animated element has `aria-hidden="true"` and the heading, sentence and link are present at first render; e2e (main): a fresh browser opening `/` lands on `/login` and after login on `/todos`; opening `/nope` shows the not-found page, `document.getAnimations()` read immediately after navigation returns at least one animation and every entry has an iteration count of 1 and ends within 5 s, and the home link leads to `/` and then `/todos`; a11y: axe (WCAG 2.1 A/AA rules) zero violations on the not-found page and keyboard-only reach and activation of the home link with visible focus |
+| REQ-NAV-001 | §2, §4.1, §8, §9 (Q37) | — (SPA routing only; no API operation) | component (router with a stubbed `SessionProvider`): signed-in `/` → `/todos` with the history entry replaced; signed-out `/` → `/login?returnTo=/todos` with no message, and after login `/todos`; `/nope`, `/todos/abc/def` and `/login/extra` render `NotFoundPage` in the `signed-in`, `signed-out` and `unknown` states with no redirect and no API call other than the probe; signed in, `/todos/not-a-uuid`, `/todos/not-a-uuid/edit`, `/todos/a;b`, `/todos/a;b/edit` and `/todos/a%2Fb` render the to-do not-found state, not `NotFoundPage`, and make no `getTodo` call; unit: `isTodoId` admits a lower-case UUID and refuses an upper-case UUID, `not-a-uuid`, `a;b`, `a/b` and `%`; the home link's target is `/`; `document.title` set and focus on the `<h1>`; the animated element has `aria-hidden="true"` and the heading, sentence and link are present at first render; e2e (main): a fresh browser opening `/` lands on `/login` and after login on `/todos`; opening `/nope` shows the not-found page, `document.getAnimations()` read immediately after navigation returns at least one animation and every entry has an iteration count of 1 and ends within 5 s, and the home link leads to `/` and then `/todos`; a11y: axe (WCAG 2.1 A/AA rules) zero violations on the not-found page and keyboard-only reach and activation of the home link with visible focus; review (web-qa, recorded with the NFR-001 audit): the animation's keyframes and a screen recording of its full run show no flash, so no more than three flashes in any one second (WCAG 2.3.1, AC-6) |
 | REQ-DATA-001 | §3, §11; ADR-0003, ADR-0014 | — (storage, no interface) | integration: write, close the Spring context, start a new context on the same file, data unchanged; start with no file and no directory creates both; e2e: REQ-ACC-001 AC-3 restarts the API process |
 | REQ-DATA-002 | §7; ADR-0006, ADR-0016 | `updateTodo`, `setTodoDone` | integration: two sequential content writes → second stored, no error; done and content writes from "two tabs" do not undo each other; concurrent writes to different to-dos both stored |
 | REQ-ACC-001 | §4–§8 | all `todos` operations | e2e: one scenario for AC-1 (add, see, search, filter, edit, complete, delete), AC-2 (second user by list, search and direct URL), AC-3 (API restart, log in again) |
@@ -521,4 +556,4 @@ requirement ID and AC.
 | NFR-003 | §3 (indexes), §7; ADR-0015, ADR-0016 | `listTodos` and all write operations | e2e (performance spec, main configuration): user seeded with 500 to-dos; each of list, filter, search, page, create, edit, complete, delete run 20 times, time from action to rendered result, p95 ≤ 1 s |
 | NFR-004 | §4, §5, §6, §11; ADR-0004, ADR-0005, ADR-0007, ADR-0010, ADR-0011 | `Problem` (incl. `code` enum), `BadRequest`, `Unauthenticated`, `ClientHeaderMissing`, `NotFound`, `MethodNotAllowed`, `UnsupportedMediaType`, `RequestRejected`, `InternalError`, `additionalProperties: false` | review + integration: server refuses invalid input sent directly (all REQ-TODO-002/REQ-AUTH-001 cases via API), forced internal error returns generic 500 with no stack trace or SQL; one request per error source — 401 from the security entry point, 403 from `ClientHeaderFilter`, 405 (`PATCH /api/v1/todos/{id}`, `Allow` header present), 415 (`text/plain` body and no `Content-Type` on `createTodo`), 404 unknown route (`/api/v1/nope`), 400 unparseable JSON, 400 `REQUEST_REJECTED` from the firewall (`;` in the path), and `ProblemErrorController` given a forwarded 413 and 500 (error attributes set as the servlet container sets them) — each returns `application/problem+json` valid against the `Problem` schema (directly, where no contract operation exists), with its listed `code` and no stack trace, exception text or SQL, and never the whitelabel or Spring Boot default body; secret scan of the repository in the gates; AC-1 via REQ-AUTH-003 tests and ADR-0005 review |
 | NFR-005 | §2; ADR-0001..0003 | whole contract (HTTP API) | review: `web/package.json` (React, TypeScript), `api/pom.xml` (Spring Boot), sqlite-jdbc driver and `.db` file; e2e exercises browser → HTTP API |
-| NFR-006 | §2, §4.1, §6, §6.1, §8 (Q39) | `Problem` (`code`; `title` and `detail` never displayed), `FieldError.message` | unit: `userMessageFor` for every row of the §6.1 table, every `ProblemCode`, statuses 403/405/413/415/500/502, a non-Problem body and `network`, across every `UserAction`, returns a non-empty text and a next step, and no text contains a `ProblemCode` value, "Exception", "SQL", "stack", "Failed to fetch" or a request id; a wrong password and an unknown identifier map to identical text and next step (AC-4); component: on the list, detail, create/edit form, sign-up and login screens and both dialogs, a 500 whose Problem `title` and `detail` hold a sentinel string, and a network error, each show a message naming its next step and never the sentinel; a component that throws while rendering shows the `AppErrorBoundary` page with its reload control and its link to `/`; review: the API's `errors[].message` strings are plain language and say how to fix the field; e2e (main): with the list request aborted by Playwright route interception the list screen shows the friendly message with its next step, and after the interception is removed trying again loads the list |
+| NFR-006 | §2, §4.1, §6, §6.1, §8 (Q39) | `Problem` (`code`; `title` and `detail` never displayed), `FieldError.message` | unit: `userMessageFor` for every row of the §6.1 table, every `ProblemCode`, statuses 403/405/413/415/500/502, a non-Problem body and `network`, across every `UserAction`, returns a non-empty text and a next step, and no text contains a `ProblemCode` value, "Exception", "SQL", "stack", "Failed to fetch" or a request id; a wrong password and an unknown identifier map to identical text and next step (AC-4); component: a 401 from `logIn` whose Problem `detail` holds a sentinel shows the fixed login text of §6.1 and never the sentinel; a 404 on toggle and on delete shows "That to-do no longer exists." with the **Back to my to-dos** link; on the list, detail, create/edit form, sign-up and login screens and both dialogs, a 500 whose Problem `title` and `detail` hold a sentinel string, and a network error, each show a message naming its next step and never the sentinel; a component that throws while rendering shows the `AppErrorBoundary` page with its reload control and its link to `/`; review: the API's `errors[].message` strings are plain language and say how to fix the field; e2e (main): with the list request aborted by Playwright route interception the list screen shows the friendly message with its next step, and after the interception is removed trying again loads the list |
