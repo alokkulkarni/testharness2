@@ -436,3 +436,71 @@ contract's `FieldError.message`, or the SDD rule stated as binding), N-8 (ADR-00
 
 **Answer:** @alokkulkarni (relayed by the coordinator, decision 4): "yes to all" — (a) N-1, N-2, N-3, N-7 and N-8 are
 applied, and N-6 is handled as far as it applies to the draft.
+
+## Q50. Does "ai contract" in the revalidation request mean the API contract?
+
+Raised by the requester after the N05 architecture (in chat, relayed by the coordinator). The request, verbatim:
+"also now that we have the architecture, also revalidate the contract , ai contract and the spec as right now we have
+one api servicng all end points, where we might need different components built as per functionality they serve."
+The change has one interface file, `docs/specs/CHG-0001/contracts/todo-api-v1.yaml`, and no AI contract. (a) The API
+contract (a typo). (b) A separate AI contract.
+
+**Answer:** @alokkulkarni (relayed by the coordinator, multiple-choice pick): "API contract (typo)" — (a) it means
+`docs/specs/CHG-0001/contracts/todo-api-v1.yaml`; there is no separate AI contract.
+
+## Q51. How far should the API be split into components by the functionality they serve?
+
+Follow-up to Q50. (a) Contracts only: split the contract, keep the API design as it is. (b) Modular monolith: one
+Spring Boot deployable split into strict modules (for example identity/auth and to-dos) with enforced boundaries (for
+example Spring Modulith, or package-per-module plus ArchUnit), possibly one contract per module, still one process and
+one SQLite file. (c) Separate services, each its own process.
+
+**Answer:** @alokkulkarni (relayed by the coordinator, multiple-choice pick): "Modular monolith" — (b) one Spring Boot
+deployable split into strict modules with enforced boundaries, possibly one contract per module, still one process and
+one SQLite file; not separate services (c) and not a contracts-only split (a). The answer leaves open whether the
+contract is physically split into one file per module.
+
+## Q52. Is the split drafted as its own supersede, or folded into supersede-1?
+
+Follow-up to Q51. (a) A separate supersede-2, drafted against the re-frozen spec (supersede-1, frozen at `2a0d38e`).
+(b) Reopen supersede-1.
+
+**Answer:** @alokkulkarni (relayed by the coordinator, multiple-choice pick): "Separate supersede-2" — (a) a separate
+supersede-2, drafted against the re-frozen spec.
+
+## Q53. Does the edit page keep its "Back to my to-dos" link (SDD §12.1 item 7(d))?
+
+Raised by the critic in its pre-re-freeze review of N03-spec (finding F-2; NFR-006; `docs/specs/CHG-0001/sdd.md`
+L565-L568): Q48 keeps the link "only on the detail page", and the frozen SDD reads that as removing it from the list
+screen only, so the edit page keeps it in its to-do-not-found state. (a) Keep it on the edit page too, as frozen.
+(b) Remove it from the edit page (changes two UX design states).
+
+**Answer:** @alokkulkarni (relayed by the coordinator, multiple-choice pick): "Keep on edit page too" — (a) the edit
+page keeps "Back to my to-dos" in its to-do-not-found state, as frozen. An explicit confirmation with no spec change;
+it closes F-2 for item 7(d).
+
+## Q54. Do you confirm SDD §12.1 items 7(a), 7(b), 7(c), 9 and 10 as written?
+
+Raised by the critic in its pre-re-freeze review of N03-spec (finding F-2; NFR-006, REQ-NAV-001;
+`docs/specs/CHG-0001/sdd.md` L555-L586): choices the requester did not make. 7(a) the sentence "That to-do no longer
+exists, and the list has been refreshed.", shown only when the re-query after the 404 succeeds; 7(b) the same
+list-screen rule for a 404 on a Delete from a list row; 7(c) the refused-login alert "Invalid identifier or password.
+Check them and try again."; 9 after login from an unknown address the user lands on `/todos` (analyst default 12);
+10 the home link of the error page resets the error boundary on a pathname change. (a) Accept all, no spec change.
+(b) Change some (say which).
+
+**Answer:** @alokkulkarni (relayed by the coordinator, multiple-choice pick): "Accept all" — (a) items 7(a), 7(b),
+7(c), 9 and 10 are confirmed as written, an explicit confirmation like Q35, with no spec change. With Q53 this closes
+F-2.
+
+## Q55. Should the critic findings F-1 and F-3 be folded into supersede-2?
+
+Raised by the critic in its pre-re-freeze review of N03-spec
+(`.harness/changes/CHG-0001/verdicts/N03-spec.critic-verdict.json`): F-1, `sdd.md` still calls itself "the draft"
+or "this supersede" (about L306, L323, L567, L577, L582); F-3, the clear-completed rule says "For any N other than 1"
+(about L462-L469), which includes N = 0, while Q43 says no dialog opens when nothing is completed (REQ-TODO-007).
+(a) Fold both into supersede-2: write "this SDD", reword L306, write "N of 2 or more", state the N = 0 case and add a
+§14 component test for it. (b) Leave them.
+
+**Answer:** @alokkulkarni (relayed by the coordinator, multiple-choice pick): "Fold into supersede-2" — (a) F-1 and
+F-3 are fixed in supersede-2 as described.
