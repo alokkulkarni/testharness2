@@ -29,17 +29,11 @@
       "gates": [
         "clarified"
       ],
-      "executor": "any",
+      "executor": "claude-code",
       "isolation": "none",
-      "status": "running",
+      "status": "complete",
       "attempts": 0,
-      "maxAttempts": 3,
-      "claim": {
-        "runId": "run-mw4q1dz7",
-        "executor": "claude-code",
-        "leaseUntil": "2026-11-06T08:52:24.355Z",
-        "claimedAt": "2026-11-06T08:37:24.355Z"
-      }
+      "maxAttempts": 3
     },
     {
       "id": "N02-requirements",
