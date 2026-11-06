@@ -6,10 +6,6 @@ authors:
     changeId: CHG-0001
     agent: requirements-analyst
     agentRunId: run-mw4qgud8
-  - squadSessionId: SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM
-    changeId: CHG-0001
-    agent: spec-author
-    agentRunId: unknown
 upstream:
   - path: docs/specs/CHG-0001/intent.md
     sha256: 8465eeb8e5e930d7bd165b4c152e9be5bd62e33d8350a11291867d0b16792c98
@@ -67,7 +63,8 @@ A user logs in with identifier and password and receives an authenticated sessio
 - AC-3: Given an identifier that does not exist, when someone attempts login, then the same generic message as AC-2 is shown; the login response must not reveal whether the identifier exists (Q33). Note: sign-up (REQ-AUTH-001 AC-2) necessarily discloses that an identifier is taken, so non-enumeration applies to login only; this is an accepted trade-off following from the single unique, case-insensitive identifier (Q31, Q32) and the local-only first release (Q10).
 - AC-4: Given I am signed in and reload the page, when the app loads, then I remain signed in until I log out or the session expires; the session lifetime is 8 hours (Q33).
 - AC-5: Given a registered identifier, when I log in using a different letter case of it (for example `ALICE@example.com` for `alice@example.com`), then the login succeeds with the correct password (Q32).
-- Note (Q36): the 8-hour session of AC-4 ends with no warning before expiry and cannot be extended; this is accepted under the "essential" exception of WCAG 2.2.1 Timing Adjustable, as recorded in the note under NFR-001. Source: clarifications Q36.
+
+Note (Q36): the 8-hour session of AC-4 ends with no warning before expiry and cannot be extended; this is accepted under the "essential" exception of WCAG 2.2.1 Timing Adjustable, as recorded in the note under NFR-001. Source: clarifications Q36.
 
 ## REQ-AUTH-003 Password storage (M)
 
@@ -167,7 +164,7 @@ Traces: Q8, Q33.
 
 Traces: Q19, Q33, Q34, Q38.
 
-- AC-1: Given I have Completed to-dos, when I choose "Clear all completed", then the UI asks for confirmation that states the number of Completed to-dos that will be deleted, that this covers all of my Completed to-dos and not only those shown, and that deletion is permanent (count shown: Q33). When the number is 1 the sentence that states the number uses the singular ("Delete 1 completed to-do? …"); for any other number it uses the plural ("Delete all N completed to-dos? …"); the full texts of that sentence are fixed in the SDD (singular form: Q38). The rule covers only that sentence, not the dialog's heading or buttons. Source: clarifications Q38.
+- AC-1: Given I have Completed to-dos, when I choose "Clear all completed", then the UI asks for confirmation that states the number of Completed to-dos that will be deleted, that this covers all of my Completed to-dos and not only those shown, and that deletion is permanent (count shown: Q33). When the number is 1 the sentence that states the number uses the singular ("Delete 1 completed to-do? …"); for any other number it uses the plural ("Delete all N completed to-dos? …"); the full texts of that sentence are fixed in the SDD (singular form: Q38; the exact singular text is an analyst default, SDD §12.1 item 5). The rule covers only that sentence, not the dialog's heading or buttons. Source: clarifications Q38.
 - AC-2: Given the confirmation, when I confirm, then all of my Completed to-dos, across all pages and regardless of the current filter or search, are permanently deleted and my Active to-dos are untouched (scope: Q33).
 - AC-3: Given the confirmation, when I cancel, then nothing is deleted.
 - AC-4: Given I have no Completed to-dos, when I view the list, then the "Clear all completed" control is disabled (Q34).
@@ -220,7 +217,7 @@ The web app's root address goes to the to-do list, and an address the web app do
 - AC-3: Given an address that matches none of the web app's pages (for example `/nope`, `/todos/abc/def` or `/login/extra`), when I open it, signed in or not, then a "not found" page is shown with a link back to home, and I am not sent to the login page.
 - AC-4: Given I am signed in and an address of the form `/todos/<id>` or `/todos/<id>/edit` whose id does not name one of my to-dos (including an id that is not a valid to-do identifier), when I open it, then the web app shows its to-do not-found message, the same as for a to-do that does not exist (REQ-ISO-001 AC-2), and not the page of AC-3 (analyst default).
 - AC-5: Given the "not found" page, when I choose the link back to home, then I go to `/`, which behaves as in AC-1 and AC-2.
-- AC-6: Given the "not found" page, when it is shown, then its animation is decorative (the page's heading, text and link are readable and usable without it), it plays once (analyst default) and stops within 5 seconds (WCAG 2.2.2 Pause, Stop, Hide), and it does not flash more than three times in any one second (WCAG 2.3.1 Three Flashes or Below Threshold); both criteria are Level A, so they are part of NFR-001's WCAG 2.1 Level AA.
+- AC-6: Given the "not found" page, when it is shown, then its animation is decorative (the page's heading, text and link are readable and usable without it), it plays once (analyst default) and stops within 5 seconds (WCAG 2.2.2 Pause, Stop, Hide; chosen instead of a pause, stop or hide control, analyst default), and it does not flash more than three times in any one second (WCAG 2.3.1 Three Flashes or Below Threshold); both criteria are Level A, so they are part of NFR-001's WCAG 2.1 Level AA.
 - AC-7: Given the "not found" page, when audited as in NFR-001 AC-1 and operated as in NFR-001 AC-2, then no WCAG 2.1 Level AA failure is found and the link back to home is reachable and operable by keyboard with visible focus.
 
 ## Data
@@ -257,7 +254,8 @@ Traces: Q10, Q36, Q44.
 - AC-1: Given the UI, when audited against WCAG 2.1 Level AA, then no AA failure is found on the sign-up, login, list, create/edit form, delete confirmation and clear-completed confirmation screens.
 - AC-2: Given only a keyboard, when I sign up, log in, and create, edit, complete, delete, filter, search and page, then every action is reachable and operable, and focus is visible and moves into and out of confirmation dialogs.
 - AC-3: Given a validation error, when it appears, then it is associated with its field and announced to assistive technology.
-- Note (Q36): the 8-hour session of REQ-AUTH-002 AC-4 is absolute from login (sdd §4, ADR-0008): it ends with no warning before expiry, it cannot be extended, and input typed but not saved when it ends is lost. The requester accepts this under the "essential" exception of WCAG success criterion 2.2.1 Timing Adjustable, so the audit of AC-1 records 2.2.1 as met by that exception, not as a failure. The audit level stays WCAG 2.1 Level AA (Q44). Source: clarifications Q36.
+
+Note (Q36): the 8-hour session of REQ-AUTH-002 AC-4 is absolute from login (sdd §4, ADR-0008): it ends with no warning before expiry, it cannot be extended, and input typed but not saved when it ends is lost. The requester accepts this under the "essential" exception of WCAG success criterion 2.2.1 Timing Adjustable, so the audit of AC-1 records 2.2.1 as met by that exception, not as a failure. The audit level stays WCAG 2.1 Level AA (Q44). Source: clarifications Q36.
 
 ## NFR-002 Run locally (M)
 
@@ -322,6 +320,8 @@ The requester did not decide these; they are tagged `(analyst default)` above:
 7. `/` goes to `/todos` with filter All, no search and page 1, and any query string on `/` is not carried over (REQ-NAV-001 AC-1); Q37 says only that `/` goes to `/todos`.
 8. `/todos/<id>` and `/todos/<id>/edit` with an id that does not name one of my to-dos, including an id that is not a valid to-do identifier, show the to-do not-found message, not the "not found" page (REQ-NAV-001 AC-4); Q37 says only that unknown routes show the "not found" page.
 9. The "not found" page's animation plays once (REQ-NAV-001 AC-6); Q37 asks only for an animated page.
+10. The exact text of the singular clear-completed sentence for N = 1 (REQ-TODO-007 AC-1; text in SDD §8 and §12.1 item 5); Q38 approves a singular form but not its text.
+11. The "not found" page's animation stops within 5 seconds, so WCAG 2.2.2 Pause, Stop, Hide is met without a pause, stop or hide control (REQ-NAV-001 AC-6); Q37 asks only for an animated page.
 
 ## Open questions
 

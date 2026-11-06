@@ -1,6 +1,6 @@
 # ADR-0001 React + TypeScript single-page app built with Vite
 
-Status: proposed (CHG-0001, N03-spec). Requirements: NFR-005, NFR-001, NFR-002, NFR-003; constraint C-1.
+Status: proposed (CHG-0001, N03-spec). Requirements: NFR-005, NFR-001, NFR-002, NFR-003, REQ-NAV-001; constraint C-1.
 
 ## Context
 
@@ -39,7 +39,7 @@ axe-core is MPL-2.0, used unmodified as a test-only dependency.
 
 - Next.js / Remix: server rendering and a Node server are not needed for a local SPA backed by a Java API.
 - Create React App: unmaintained.
-- A component library (MUI, Chakra): faster styling, but a large dependency for six screens; accessible native
+- A component library (MUI, Chakra): faster styling, but a large dependency for eight screens (SDD §13, §14); accessible native
   elements suffice.
 - TanStack Query / Redux: caching and global state are unnecessary; every change re-queries the list
   (REQ-TODO-005 AC-3).
