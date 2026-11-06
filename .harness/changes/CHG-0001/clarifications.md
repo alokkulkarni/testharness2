@@ -4,6 +4,14 @@ Change: "Create a to-do list". Source: `docs/specs/CHG-0001/intent.md` (title on
 Outcome wanted, Out of scope and How success is observed sections are empty). The repository has no product code
 yet (`.harness/config.yaml` has `stacks: []`; `.harness/platform.yaml` lists the repo stack as `other`).
 
+Note (security baseline, not a requester answer): passwords are stored only as a strong one-way salted hash. The
+spec treats this as a non-negotiable security requirement for the sign-up and login chosen in Q14; it was not put
+to the requester as a question.
+
+Note (answer mapping): the requester answered Q18 and Q23–Q29 against a five-point list the coordinator sent them,
+not against these question numbers. Each answer below quotes their words and names which point of that list it came
+from.
+
 ## Q1. Is this change a to-do list app, as the intent file says?
 
 The intent file's title and body describe "a new todo list app where user can create, list, delete and update
@@ -123,7 +131,7 @@ Follow-up to Q5. (a) Self sign-up with email (or username) and password, then a 
 identity provider (e.g. GitHub or Google OAuth). Recommended: (a) with passwords stored as a strong one-way hash, no
 email verification and no password reset in the first release.
 
-**Answer:** @alokkulkarni: "a" — (a) self sign-up with email (or username) and password, then a session or token login. (Email verification and password reset are still open: Q27, Q28.)
+**Answer:** @alokkulkarni: "a" — (a) self sign-up with email (or username) and password, then a session or token login. (Email verification and password reset: see Q27, Q28. Password hashing: see the security-baseline note at the top.)
 
 ## Q15. Is there an admin role?
 
@@ -139,21 +147,21 @@ Follow-up to Q6. (a) Due date only (date, no time). (b) Priority only (Low / Med
 optional on a to-do. Recommended: (c), with due date as a date without time and priority Low / Medium / High,
 default Medium.
 
-**Answer:** @alokkulkarni: "both" — (c) both a due date and a priority. (Whether they are optional, whether the due date has a time, and the priority levels and default are still open: Q24, Q25, Q26.)
+**Answer:** @alokkulkarni: "both" — (c) both a due date and a priority. (Details: Q24, Q25, Q26, Q30.)
 
 ## Q17. What are the length limits for title and description?
 
 Follow-up to Q6. Recommended: title required, trimmed, 1–200 characters; description optional, up to 2000
 characters. Please confirm or give other limits.
 
-**Answer:** @alokkulkarni: "2000" (What the 2000 applies to, and whether the title is still required, are still open: Q23.)
+**Answer:** @alokkulkarni: "2000" (Clarified in Q23.)
 
 ## Q18. When two edits to the same to-do arrive at once, is "last write wins" acceptable?
 
 Follow-up to Q7. (a) Last write wins. (b) The second edit is rejected as a conflict and the user reloads.
 Recommended: (a), because each list belongs to one user (Q5), so simultaneous edits are rare.
 
-**Answer:**
+**Answer:** @alokkulkarni (point 2): "yes last write wins" — (a) last write wins.
 
 ## Q19. Should there be a "clear all completed" action?
 
@@ -175,7 +183,7 @@ Follow-up to Q9. (a) Numbered pages with previous/next, 20 to-dos per page. (b) 
 20 at a time. (c) Another style or size. Recommended: (a), 20 per page, which keeps the API simple
 (page and size parameters).
 
-**Answer:** @alokkulkarni: "a" — (a) numbered pages with previous/next. (The page size is still open: Q29.)
+**Answer:** @alokkulkarni: "a" — (a) numbered pages with previous/next. (Page size: Q29.)
 
 ## Q22. How will you judge that the change succeeded?
 
@@ -190,46 +198,54 @@ Follow-up to Q17 ("2000"). (a) Description up to 2000; title required, up to 200
 to 2000; title required. (c) Something else. Recommended: (a), because a 2000-character title would not fit a list
 row.
 
-**Answer:**
+**Answer:** @alokkulkarni (point 1): "title 200 and description 2000" — (a) title up to 200 characters, description up to 2000; the title stays required, as in Q6 ("title, optional description").
 
 ## Q24. Are the due date and the priority both optional on a to-do?
 
 Follow-up to Q16 ("both"). (a) Both optional. (b) Due date optional, priority always set (with a default).
 (c) Both required. Recommended: (b), so every to-do can be sorted and shown by priority.
 
-**Answer:**
+**Answer:** @alokkulkarni (point 3): "due date is date only and priority is correct with default as medium"; and (to Q30): "no due date is not optional" — (c) both required: the due date is required (date only), and the priority is always set, with default Medium.
 
 ## Q25. Does the due date include a time of day?
 
 Follow-up to Q16. (a) Date only. (b) Date and time (stored in UTC, shown in the user's local time zone).
 Recommended: (a), because it avoids time-zone handling.
 
-**Answer:**
+**Answer:** @alokkulkarni (point 3): "due date is date only" — (a) date only, no time of day.
 
 ## Q26. What are the priority levels and the default?
 
 Follow-up to Q16. (a) Low / Medium / High, default Medium. (b) Low / Medium / High, no default (only if Q24 makes it
 optional). (c) Other levels you name. Recommended: (a).
 
-**Answer:**
+**Answer:** @alokkulkarni (point 3): "priority is correct with default as medium" — (a) Low / Medium / High, default Medium.
 
 ## Q27. Must a new user verify their email address before using the app?
 
 Follow-up to Q14. (a) No verification in the first release. (b) Yes, by an emailed link (this needs an email
 service, even locally). Recommended: (a), because the app runs locally only (Q10).
 
-**Answer:**
+**Answer:** @alokkulkarni (point 5, to "is it OK to have no email verification and no password reset in the first release?"): "yes" — (a) no email verification in the first release.
 
 ## Q28. Is "forgot password" (password reset) in scope?
 
 Follow-up to Q14. (a) Not in the first release. (b) Yes, by an emailed reset link (needs an email service).
 Recommended: (a), for the same reason as Q27.
 
-**Answer:**
+**Answer:** @alokkulkarni (point 5, to "is it OK to have no email verification and no password reset in the first release?"): "yes" — (a) password reset is not in the first release.
 
 ## Q29. How many to-dos are shown per page?
 
 Follow-up to Q21. (a) 20 per page. (b) 10 per page. (c) Another fixed number. (d) The user chooses from a few
 sizes. Recommended: (a).
 
-**Answer:**
+**Answer:** @alokkulkarni (point 4): "20" — (a) 20 per page.
+
+## Q30. Is the due date optional on a to-do?
+
+Follow-up to Q24: the answer settled that priority is always set (default Medium) but not whether a due date must
+be given. (a) Optional: a to-do may have no due date. (b) Required on every to-do. Recommended: (a), because many
+tasks have no deadline.
+
+**Answer:** @alokkulkarni: "no due date is not optional" — (b) the due date is required on every to-do.
