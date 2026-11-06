@@ -8,13 +8,6 @@ upstream:
     sha256: e389371395a1feb1fcd3de52506b0fc60cd1060e5b728e7a0849a540cf5789e5
 ---
 
-> (1) N-6: the `upstream.sha256` above is carried over unchanged from the frozen `sdd.md`; it was not verified or
-> recomputed for this draft and goes stale once the draft `requirements.md` is applied. After the draft
-> `requirements.md` is applied to `docs/specs/CHG-0001/`, re-stamp this value with `harness chain stamp` before the
-> re-freeze; never edit it by hand. (2) N-7: the contract
-> `contracts/todo-api-v1.yaml` is frozen, is not part of this draft and is not changed when it is applied; §6.1
-> states that its rule on `FieldError.message` is binding.
-
 # SDD — CHG-0001 To-do list
 
 ## 1. Context and goals
