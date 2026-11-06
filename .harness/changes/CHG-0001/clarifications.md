@@ -504,3 +504,61 @@ or "this supersede" (about L306, L323, L567, L577, L582); F-3, the clear-complet
 
 **Answer:** @alokkulkarni (relayed by the coordinator, multiple-choice pick): "Fold into supersede-2" — (a) F-1 and
 F-3 are fixed in supersede-2 as described.
+
+## Q56. Should the API contract be split into one file per module?
+
+Raised by the supersede-2 revalidation (spec-author and drawio-architect, read-only, 2026-11-06; Q51 leaves this
+open; NFR-004, NFR-007 proposed). The contract already tags its operations `auth` and `todos`
+(`docs/specs/CHG-0001/contracts/todo-api-v1.yaml` L41-L43). (a) Keep one file, `todo-api-v1.yaml`: each operation
+gets an `x-module: identity|todos` marker, `info.version` goes to 1.0.1 with no wire change, and the endpoint-inventory
+contract test (ADR-0012) also checks that each operation is served by a controller of its module; the generated
+`web/src/api/schema.ts` and the validator set-up stay as they are. (b) One file per module, `identity-api-v1.yaml` and
+`todos-api-v1.yaml`, plus a shared `common-problem-v1.yaml` for `Problem`, `FieldError`, the error responses, the
+client header and the session cookie, referenced by `$ref`: the `ProblemCode` list stays one closed list in the shared
+file, versions stay coupled through it, six frozen places that name the file change (SDD, ADR-0001, ADR-0012), and two
+tool behaviours (the request validator and the TypeScript generator reading `$ref` across files) must be checked
+before the freeze. Recommended: (a), because one web app calls both modules of one deployable at one version, so a
+second file adds tooling risk and gains nothing.
+
+**Answer:**
+
+## Q57. Do you accept a new requirement NFR-007 "Modular API", worded as below?
+
+Raised by the supersede-2 revalidation. Without a requirement, the module design and its test map to no requirement
+ID (CLAUDE.md rule 5); NFR-005 covers the stack, not the structure. Proposed wording (analyst default):
+"NFR-007 Modular API (M). The API is one deployable split into modules by the functionality they serve, with
+boundaries an automated test enforces. Source: clarifications Q51. AC-1: Given the delivered API, when it is built and
+started, then it is one Spring Boot application in one process using one SQLite file and one connection pool.
+AC-2: Given the API source, when the build runs its tests, then a test fails if code in one module uses a type another
+module does not publish as its interface, or if module dependencies form a cycle. AC-3: Given the API, when its
+modules are listed, then there is an identity module (sign-up, login, logout, session) and a to-dos module (to-do and
+list operations), and every contract operation belongs to exactly one of them." A constraint C-2 "modular monolith,
+not separate services (Q51)" would be added beside C-1. (a) Accept as worded. (b) Change it (say how).
+Recommended: (a).
+
+**Answer:**
+
+## Q58. Which tool enforces the module boundaries?
+
+Raised by the supersede-2 revalidation (NFR-007 AC-2 proposed; a new ADR-0018 either way). Both are Apache-2.0 and
+add a dependency under C-1. (a) ArchUnit: a test-only library with hand-written rules (no cycles; to-dos may use only
+its own code, the shared kernel and the published identity type; identity never uses to-dos; only the shared
+database configuration may create a connection pool), plus package-private classes; no runtime effect.
+(b) Spring Modulith: `ApplicationModules.verify()` in a test checks cycles and access to module internals out of the
+box; its version follows the Spring Boot line, its test-support classes must be excluded from module detection, and
+its event-publication starter (extra tables outside Flyway) is not used. The two reviewers differed: drawio-architect
+recommends (a), spec-author recommends (b). Recommended: (a), because two modules and a small shared kernel do not
+need a runtime framework, and a test-only library leaves the running app unchanged; (b) is the better pick if you
+want module documentation and Spring-native module tests.
+
+**Answer:**
+
+## Q59. Should SDD §12.1 items 7 and 9-10 now cite your confirmations in Q53 and Q54?
+
+Raised by the supersede-2 revalidation (spec-author; NFR-006, REQ-NAV-001). Q53 and Q54 confirmed those items "with no
+spec change", so `docs/specs/CHG-0001/sdd.md` L557-L558 still says "Still for the approver, because the requester's
+words do not settle them" and L586 "The choice between the two is the spec author's". (a) In supersede-2, change only
+those sentences to say the items were confirmed in Q53 and Q54 (no behaviour change). (b) Leave the text as frozen.
+Recommended: (a), so the frozen SDD does not call settled choices open.
+
+**Answer:**
