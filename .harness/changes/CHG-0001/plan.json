@@ -110,16 +110,172 @@
       "status": "complete"
     },
     {
-      "id": "N05-security",
-      "phase": "6",
+      "id": "N05-design-arch",
+      "phase": "3",
       "inputs": [
         ".harness/changes/CHG-0001/spec-freeze.json"
+      ],
+      "outputs": [
+        "docs/specs/CHG-0001/design/architecture/"
+      ],
+      "dependsOn": [
+        "N04-spec-freeze"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "drawio-architect",
+      "description": "Architecture diagrams for the frozen spec.",
+      "gates": [
+        "critic-verdict"
+      ],
+      "executor": "any",
+      "isolation": "none",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N06-design-ux",
+      "phase": "3",
+      "inputs": [
+        ".harness/changes/CHG-0001/spec-freeze.json"
+      ],
+      "outputs": [
+        "docs/specs/CHG-0001/design/ux/"
+      ],
+      "dependsOn": [
+        "N04-spec-freeze"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "ux-designer",
+      "description": "UX design spec and tokens for the frozen spec.",
+      "gates": [
+        "critic-verdict"
+      ],
+      "executor": "any",
+      "isolation": "none",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N07-tests-backend",
+      "phase": "4",
+      "inputs": [
+        "docs/specs/CHG-0001/design/architecture/",
+        "docs/specs/CHG-0001/design/ux/"
+      ],
+      "outputs": [
+        "tests/backend/"
+      ],
+      "dependsOn": [
+        "N05-design-arch",
+        "N06-design-ux"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "backend-qa",
+      "description": "Failing backend tests for the acceptance criteria, committed first.",
+      "gates": [
+        "critic-verdict",
+        "tests-red-first"
+      ],
+      "executor": "any",
+      "isolation": "worktree",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N08-tests-web",
+      "phase": "4",
+      "inputs": [
+        "docs/specs/CHG-0001/design/architecture/",
+        "docs/specs/CHG-0001/design/ux/"
+      ],
+      "outputs": [
+        "tests/web/"
+      ],
+      "dependsOn": [
+        "N05-design-arch",
+        "N06-design-ux"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "web-qa",
+      "description": "Failing web tests for the acceptance criteria, committed first.",
+      "gates": [
+        "critic-verdict",
+        "tests-red-first"
+      ],
+      "executor": "any",
+      "isolation": "worktree",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N09-build-java",
+      "phase": "5",
+      "inputs": [
+        "tests/backend/",
+        "tests/web/"
+      ],
+      "outputs": [
+        "src/java/"
+      ],
+      "dependsOn": [
+        "N07-tests-backend",
+        "N08-tests-web"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "java-engineer",
+      "description": "Make the java tests pass in an isolated worktree.",
+      "gates": [
+        "critic-verdict"
+      ],
+      "executor": "any",
+      "isolation": "worktree",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N10-build-react",
+      "phase": "5",
+      "inputs": [
+        "tests/backend/",
+        "tests/web/"
+      ],
+      "outputs": [
+        "src/react/"
+      ],
+      "dependsOn": [
+        "N07-tests-backend",
+        "N08-tests-web"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "react-engineer",
+      "description": "Make the react tests pass in an isolated worktree.",
+      "gates": [
+        "critic-verdict"
+      ],
+      "executor": "any",
+      "isolation": "worktree",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N11-security",
+      "phase": "6",
+      "inputs": [
+        "src/java/",
+        "src/react/"
       ],
       "outputs": [
         ".harness/changes/CHG-0001/evidence/scan-report/"
       ],
       "dependsOn": [
-        "N04-spec-freeze"
+        "N09-build-java",
+        "N10-build-react"
       ],
       "status": "pending",
       "kind": "agent",
@@ -134,16 +290,18 @@
       "maxAttempts": 3
     },
     {
-      "id": "N06-validate",
+      "id": "N12-validate",
       "phase": "6",
       "inputs": [
-        ".harness/changes/CHG-0001/spec-freeze.json"
+        "src/java/",
+        "src/react/"
       ],
       "outputs": [
         ".harness/changes/CHG-0001/traceability.json"
       ],
       "dependsOn": [
-        "N04-spec-freeze"
+        "N09-build-java",
+        "N10-build-react"
       ],
       "status": "pending",
       "kind": "agent",
@@ -158,16 +316,18 @@
       "maxAttempts": 3
     },
     {
-      "id": "N07-pr-review",
+      "id": "N13-pr-review",
       "phase": "6",
       "inputs": [
-        ".harness/changes/CHG-0001/spec-freeze.json"
+        "src/java/",
+        "src/react/"
       ],
       "outputs": [
         ".harness/changes/CHG-0001/verdicts/"
       ],
       "dependsOn": [
-        "N04-spec-freeze"
+        "N09-build-java",
+        "N10-build-react"
       ],
       "status": "pending",
       "kind": "agent",
@@ -182,7 +342,7 @@
       "maxAttempts": 3
     },
     {
-      "id": "N08-docs",
+      "id": "N14-docs",
       "phase": "8",
       "inputs": [
         ".harness/changes/CHG-0001/evidence/scan-report/",
@@ -193,9 +353,9 @@
         "docs/knowledge/"
       ],
       "dependsOn": [
-        "N05-security",
-        "N06-validate",
-        "N07-pr-review"
+        "N11-security",
+        "N12-validate",
+        "N13-pr-review"
       ],
       "status": "pending",
       "kind": "agent",
@@ -204,6 +364,34 @@
       "gates": [
         "critic-verdict",
         "docs-valid"
+      ],
+      "executor": "any",
+      "isolation": "none",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N15-docs-diagrams",
+      "phase": "8",
+      "inputs": [
+        ".harness/changes/CHG-0001/evidence/scan-report/",
+        ".harness/changes/CHG-0001/traceability.json",
+        ".harness/changes/CHG-0001/verdicts/"
+      ],
+      "outputs": [
+        "docs/architecture/"
+      ],
+      "dependsOn": [
+        "N11-security",
+        "N12-validate",
+        "N13-pr-review"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "drawio-architect",
+      "description": "Update the diagrams for the merged change.",
+      "gates": [
+        "critic-verdict"
       ],
       "executor": "any",
       "isolation": "none",
