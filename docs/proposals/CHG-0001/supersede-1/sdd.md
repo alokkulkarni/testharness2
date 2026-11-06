@@ -11,6 +11,16 @@ upstream:
     sha256: b4e11b8435570c1e0ce269019a40bde2cf5a5c11210bef3f22a4df32ee1a87dc
 ---
 
+> **Draft note for applying this supersede (remove this note when applying; Q49, critic notes N-6 and N-7).**
+> (1) N-6: the `upstream.sha256` above is carried over unchanged from the frozen `sdd.md`; it was not verified or
+> recomputed for this draft and goes stale once the draft `requirements.md` is applied. After the draft
+> `requirements.md` is applied to `docs/specs/CHG-0001/`, re-stamp this value with `harness chain stamp` before the
+> re-freeze; never edit it by hand. (2) N-7: the contract
+> `contracts/todo-api-v1.yaml` is frozen and not part of this draft; §6.1 states that its rule on
+> `FieldError.message` is binding. When applying, the requester may add a matching note to the description of
+> `FieldError.message` in the contract (for example "plain language; says how to fix the field; NFR-006"); this
+> draft does not change the contract.
+
 # SDD — CHG-0001 To-do list
 
 ## 1. Context and goals
@@ -135,10 +145,11 @@ type SessionState =
   stays `unknown` and an alert "The app could not reach the server." with a Retry button is shown.
 - **Public routes** `/signup` and `/login` render for `signed-out` visitors with no session message. They wait for
   the probe to finish; a `signed-in` visitor is sent to `/todos`.
-- **`RequireAuth`** wraps only the to-do routes (`/todos`, `/todos/new`, `/todos/:id`, `/todos/:id/edit`). While
-  `unknown` it renders nothing, so a reload never redirects a signed-in user (REQ-AUTH-002 AC-4). When
+- **`RequireAuth`** wraps the to-do routes (`/todos`, `/todos/new`, `/todos/:id`, `/todos/:id/edit`) and the
+  catch-all `*` route of the not-found page (§8; REQ-NAV-001 AC-3, AC-8; Source: clarifications Q47), and no other
+  route. While `unknown` it renders nothing, so a reload never redirects a signed-in user (REQ-AUTH-002 AC-4). When
   `signed-out` it replaces the location with `/login?returnTo=<current path and query>` and shows no message
-  (REQ-AUTH-004 AC-2).
+  (REQ-AUTH-004 AC-2, REQ-NAV-001 AC-8).
 - **Session ended**: the client wrapper reports every 401 to `SessionProvider`, except the probe's and `logIn`'s
   (whose 401 means invalid credentials). Only when the state is `signed-in` at that moment does the provider switch
   to `signed-out` and navigate to `/login?returnTo=<current path and query>` with the message "Your session has
@@ -165,6 +176,12 @@ by a query string, i.e. it matches
 only a path that starts with exactly one `/`, has no scheme, no host, no `//`, no `\` and no fragment. Anything
 else — absent, empty, `//evil.example`, `https://evil.example`, `/\evil.example`, `javascript:…`, `/login`,
 `/signup`, a non-UUID id — gives `/todos` (the user's list, REQ-AUTH-002 AC-1).
+
+An address the web app does not define (for example `/nope`) does not match the pattern either, so a signed-out
+visitor sent to the login page from it (REQ-NAV-001 AC-8, Q47) lands on `/todos` after logging in, not on the
+not-found page; the same holds for a signed-out visitor on `/todos/not-a-uuid`. Q47 does not say where such a visitor
+lands, so this is an analyst default (analyst default 12 of `requirements.md`, §12.1 item 9): it keeps the pattern
+above unchanged and adds no behaviour.
 
 ## 5. Validation (server authoritative, SPA mirrors; NFR-004 AC-2, ADR-0010)
 
@@ -268,24 +285,27 @@ export type Failure =
   | { kind: 'unexpected' };                              // an error inside the SPA itself
 export type UserAction =
   | 'session-probe' | 'sign-up' | 'log-in' | 'log-out' | 'load-list' | 'load-todo'
-  | 'create' | 'save' | 'toggle-done' | 'delete' | 'clear-completed';
+  | 'create' | 'save' | 'toggle-done' | 'delete-from-list' | 'delete-from-detail' | 'clear-completed';
 export type NextStep =
   | 'fix-fields' | 'try-again' | 'log-in-again' | 'check-and-retry-login'
-  | 'choose-other-identifier-or-log-in' | 'back-to-list' | 'reload-or-home';
+  | 'choose-other-identifier-or-log-in' | 'back-to-list' | 'list-refreshed' | 'reload-or-home';
 export interface UserMessage { text: string; nextStep: NextStep }
 export function userMessageFor(failure: Failure, action: UserAction): UserMessage;
 ```
 
 | Failure | What the user sees | Next step the message names |
 |---|---|---|
-| 400 `VALIDATION_FAILED` on a form action (`sign-up`, `log-in`, `create`, `save`) | each `errors[].message` beside its field and in the error summary (§9) | `fix-fields`: the field message itself says how to fix it |
+| 400 `VALIDATION_FAILED` on a form action (`sign-up`, `log-in`, `create`, `save`) with at least one entry of `errors[]` whose `field` is a field that form shows (`sign-up` and `log-in`: `identifier`, `password`; `create` and `save`: `title`, `description`, `dueDate`, `priority`) | each such `errors[].message` beside its field and in the error summary (§9); entries naming any other field are not displayed | `fix-fields`: the field message itself says how to fix it |
+| 400 `VALIDATION_FAILED` on a form action whose `errors[]` is empty, absent, or names no field that form shows (for example only `UNKNOWN_FIELD` on `owner`) (Q49, N-3) | a form-level message naming the action that failed, as in the `try-again` row below | `try-again` |
 | 409 `IDENTIFIER_TAKEN` (`sign-up`) | the identifier field's message | `choose-other-identifier-or-log-in` |
 | 401 from `log-in` | one fixed message from `userMessageFor`, identical for a wrong password and an unknown identifier (REQ-AUTH-002 AC-2, AC-3; NFR-006 AC-4); its text is below | `check-and-retry-login` |
 | 401 on any other call while `signed-in` | the session-ended flow of §4.1, unchanged | `log-in-again` ("Please log in again.") |
 | 401 from `session-probe` | nothing (§4.1) | — |
-| 404 `NOT_FOUND` on a to-do (`load-todo`, `save`, `toggle-done`, `delete`) | a to-do not-found message | `back-to-list` (my to-dos at `/todos`) |
+| 404 `NOT_FOUND` on a to-do on the detail or edit page (`load-todo`, `save`, `delete-from-detail`) | a to-do not-found message | `back-to-list` (the **Back to my to-dos** link to `/todos`) |
+| 404 `NOT_FOUND` on a to-do on the list screen (`toggle-done`, `delete-from-list`) (Source: clarifications Q48) | "That to-do no longer exists, and the list has been refreshed."; the SPA re-queries the current URL's list (§8) and shows no **Back to my to-dos** link | `list-refreshed` (the refreshed list itself) |
 | `network`; any 5xx; 403; 405; 415; `MALFORMED_REQUEST`; `REQUEST_REJECTED`; `VALIDATION_FAILED` on any other action (for example `load-list`, §12.1 item 8); any other status; a body that is not a Problem | a message naming the action that failed (for example that the to-dos could not be loaded); for `session-probe` it is the §4.1 alert, unchanged | `try-again` |
-| `unexpected` | `AppErrorBoundary`'s full-page message in place of the broken screen | `reload-or-home` (reload the page, or a link to `/`) |
+| `unexpected`, thrown while rendering | `AppErrorBoundary`'s full-page message in place of the broken screen | `reload-or-home` (reload the page, or a link to `/`) |
+| `unexpected`, thrown in an event handler or promise callback (Q49, N-2) | a message naming the action that failed, shown where that screen shows the action's other failures (last bullet below); the screen is not replaced | `reload-or-home` (reload the page, or a link to `/`) |
 
 - From a response the SPA displays only `errors[].message`, and only as its field's message: beside that field and
   in the error summary (§9). Every other text comes from `userMessageFor`, chosen by `action`, status and `code`. The
@@ -293,19 +313,41 @@ export function userMessageFor(failure: Failure, action: UserAction): UserMessag
   (NFR-006 AC-2).
 - Because `errors[].message` is displayed as sent, the API's field messages follow the same rules: plain language,
   say how to fix the field, and (already required by §6) contain no internals (NFR-006 AC-1, AC-2). Their wording is
-  the UX design §4 catalogue approved in Q39(a).
+  the UX design §4 catalogue approved in Q39(a). This rule is binding for every `FieldError.message` the API sends:
+  the contract's description of `FieldError.message` ("Human-readable message naming the problem") says less, and
+  where it says less this SDD rule governs (Source: clarifications Q49, critic note N-7). The contract itself is not
+  changed by this supersede.
 - Every message gives its next step, either in its text or as a link or control shown with it (for example the
   §4.1 alert's Retry button); which of these each state uses is the UX design's. Exact copy is set by the UX design
   within these rules.
 - Two strings of the UX design §4 (approved in Q39(a)) name no next step, so they are used with these additions
-  (§12.1 item 7): the alert "That to-do no longer exists." (a 404 on `toggle-done` or `delete`) is shown with a
-  **Back to my to-dos** link to `/todos`, as the detail and edit screens' not-found states already have; the
-  refused-login alert reads "Invalid identifier or password. Check them and try again." Its first sentence equals the
-  contract's `INVALID_CREDENTIALS` `detail`, but the SPA's text is its own constant in `userMessageFor`, never the
-  response's `detail`.
-- `AppErrorBoundary` wraps `AppRoutes` at the root and catches errors thrown while rendering (NFR-006 AC-3). Errors
-  thrown in event handlers and promise callbacks do not reach an error boundary, so each call site maps them with
-  `userMessageFor({ kind: 'unexpected' }, action)`. Nothing is sent to the server (no client telemetry, §10).
+  (§12.1 item 7):
+  - The alert "That to-do no longer exists." on the list screen (a 404 on `toggle-done`, or on `delete-from-list`
+    from a row's Delete) reads "That to-do no longer exists, and the list has been refreshed." The SPA re-queries the
+    current URL's list (§8), and the refreshed list is the next step; the list screen shows no **Back to my to-dos**
+    link (Source: clarifications Q48). The same alert after a delete from the detail page (`delete-from-detail`) keeps
+    its **Back to my to-dos** link to `/todos`, as the detail and edit screens' not-found states already have (Q48:
+    the link stays only on the detail page).
+  - The refused-login alert reads "Invalid identifier or password. Check them and try again." Its first sentence
+    equals the contract's `INVALID_CREDENTIALS` `detail`, but the SPA's text is its own constant in `userMessageFor`,
+    never the response's `detail`.
+- `AppErrorBoundary` wraps `AppRoutes` inside the router and catches errors thrown while rendering (NFR-006 AC-3).
+  Its page offers a reload control (`window.location.reload()`) and a router link to `/` (home, Q46). The boundary
+  resets when the location changes (it is keyed on the router location), so following its link to `/` (and on to
+  `/todos`, REQ-NAV-001 AC-1) clears the error and renders the normal page without a full page load; the session
+  state held by `SessionProvider` is kept (Source: clarifications Q49, critic note N-1; this choice, rather than a
+  full page load through `<a href="/">`, is §12.1 item 10).
+
+  ```tsx
+  // web/src/app/AppErrorBoundary.tsx
+  export function AppErrorBoundary(props: { children: React.ReactNode }): JSX.Element; // wraps a class error boundary keyed on the router location
+  ```
+- Errors thrown in event handlers and promise callbacks do not reach an error boundary, so each call site maps them
+  with `userMessageFor({ kind: 'unexpected' }, action)` and shows the resulting message where that screen shows the
+  same action's other failures, for example: on the list screen the page-level alert above the list, on the create/edit form,
+  sign-up and login screens the form-level alert, inside an open dialog its inline alert, and on the detail page its
+  page-level alert. The screen is not replaced (Source: clarifications Q49, critic note N-2). Nothing is sent to the
+  server (no client telemetry, §10).
 
 ## 7. To-do operations, list semantics and isolation
 
@@ -360,16 +402,19 @@ A missing id, a malformed id and another user's id therefore give the identical 
   `requirements.md`; after that the `/todos` rules apply: signed in → the list, signed out → `RequireAuth` sends to `/login?returnTo=/todos`; REQ-NAV-001 AC-1,
   AC-2), `/signup`, `/login` (public, §4.1), `/todos?status=&q=&page=`, `/todos/new`, `/todos/:id` (detail:
   description, created and updated timestamps in the viewer's local time, REQ-TODO-003 AC-3), `/todos/:id/edit`
-  (the four to-do routes behind `RequireAuth`), and a catch-all `*` for every other path, rendering `NotFoundPage`
-  (REQ-NAV-001 AC-3).
-- **Not-found page** (`NotFoundPage`, REQ-NAV-001; Source: clarifications Q37): the catch-all matches only when no
-  other route pattern matches, so `/todos/<anything>` and `/todos/<anything>/edit` stay on the detail and edit
+  (the four to-do routes behind `RequireAuth`), and a catch-all `*` for every other path, also behind `RequireAuth`,
+  rendering `NotFoundPage` for a signed-in user (REQ-NAV-001 AC-3, AC-8).
+- **Not-found page** (`NotFoundPage`, REQ-NAV-001; Source: clarifications Q37, Q46, Q47): the catch-all matches only
+  when no other route pattern matches, so `/todos/<anything>` and `/todos/<anything>/edit` stay on the detail and edit
   routes, whose to-do not-found state covers missing, malformed and other users' ids (REQ-NAV-001 AC-4,
-  analyst default 8; REQ-ISO-001 AC-2). It is outside `RequireAuth`, renders in every session state without waiting
-  for the probe, never redirects (neither to `/login` nor, for a signed-in visitor, to `/todos`) and itself calls no API (the
-  app-level session probe of §4.1 still runs). Content: an
-  `<h1>` saying the page was not found, one sentence, and a link to `/` (home, REQ-NAV-001 AC-5); `document.title`
-  and focus as §9. Animation (AC-6): a decorative CSS animation (no new dependency, no animation library) on an
+  analyst default 8; REQ-ISO-001 AC-2). The catch-all is inside `RequireAuth` (§4.1; Q47), so it waits for the
+  session probe like the to-do routes: while the state is `unknown` it renders what the to-do routes render then
+  (nothing, plus the §4.1 alert if the probe fails), never `NotFoundPage`; when `signed-out` it replaces the location
+  with `/login?returnTo=<current path and query>` with no message (REQ-NAV-001 AC-8), and after login `safeReturnTo`
+  gives `/todos` (§4.2, analyst default 12); when `signed-in` it renders `NotFoundPage` (AC-3). `NotFoundPage` never
+  redirects (not to `/todos`) and itself calls no API. Content: an `<h1>` saying the page was not found, one sentence,
+  and a link to `/` (home, which sends the user on to `/todos`; REQ-NAV-001 AC-5; Source: clarifications Q46);
+  `document.title` and focus as §9. Animation (AC-6): a decorative CSS animation (no new dependency, no animation library) on an
   element with `aria-hidden="true"`; it plays once (no infinite or repeated iteration; analyst default 9), its total
   duration including delays is at most 5 seconds (WCAG 2.2.2), and it has no flashing (WCAG 2.3.1); the heading,
   sentence and link are visible and operable from the first render and the animation never hides or moves them.
@@ -404,7 +449,9 @@ A missing id, a malformed id and another user's id therefore give the identical 
 - Pagination: Previous, numbered links (first, last, current ±2, with ellipses), Next; Previous disabled on page 1,
   Next disabled on the last page; hidden when `totalPages ≤ 1` (REQ-LIST-003 AC-1, AC-3, AC-4).
 - After create: navigate to `/todos` (All, no search, page 1) where the new to-do is first (REQ-TODO-001 AC-1).
-  After done toggle, delete or clear: re-query the current URL's list immediately (REQ-TODO-005 AC-3).
+  After done toggle, delete or clear: re-query the current URL's list immediately (REQ-TODO-005 AC-3). A done toggle
+  or a row's delete that gets a 404 also re-queries the current URL's list, and that refreshed list is the message's
+  next step (§6.1; Source: clarifications Q48).
 - Delete: `ConfirmDialog` naming the to-do; Cancel changes nothing (REQ-TODO-006 AC-1..AC-3).
 - Clear completed: before opening the dialog the SPA re-fetches the list and shows `totals.completed` (N) in the
   text (REQ-TODO-007 AC-1..AC-3). For any N other than 1:
@@ -486,9 +533,9 @@ These are product-visible choices the requester did not make; approving the free
    labels such as `xn--p1ai` (the last label must be letters only) are refused.
 2. **Session lifetime is 8 hours absolute from login** (ADR-0008, REQ-AUTH-002 AC-4): a user active at 7:59 is
    asked to log in again at 8:00.
-3. **Analyst defaults 1–11** of `requirements.md` are designed exactly as written (§5, §7, §8; REQ-AUTH-001
-   AC-8..AC-11, REQ-LIST-003 AC-7, NFR-004 AC-2, REQ-NAV-001 AC-1, AC-4, AC-6, REQ-TODO-007 AC-1); default 10 is
-   item 5 below.
+3. **Analyst defaults 1–12** of `requirements.md` are designed exactly as written (§4.2, §5, §7, §8; REQ-AUTH-001
+   AC-8..AC-11, REQ-LIST-003 AC-7, NFR-004 AC-2, REQ-NAV-001 AC-1, AC-4, AC-6, AC-8, REQ-TODO-007 AC-1); default 10
+   is item 5 below and default 12 is item 9 below.
 4. **Whitespace is the Unicode `White_Space` set** (§5, REQ-TODO-002 AC-2, REQ-LIST-002 AC-7): non-breaking and
    other Unicode spaces are trimmed; zero-width characters (U+200B–U+200D, U+2060, U+FEFF) are not whitespace and
    are kept.
@@ -498,14 +545,32 @@ These are product-visible choices the requester did not make; approving the free
 6. **A to-do id that is not a UUID is checked in the web app** (§8, REQ-NAV-001 AC-4): the detail and edit pages show
    the to-do not-found state without calling the API. Chosen over narrowing AC-4, which would leave ids such as
    `a;b` with a "try again" message that cannot succeed.
-7. **Next steps added to two approved strings** (§6.1, NFR-006 AC-1): "That to-do no longer exists." gets a
-   **Back to my to-dos** link, and the refused-login alert becomes "Invalid identifier or password. Check them and
-   try again." Both change wording of the UX design §4 approved in Q39(a), so the requester decides them.
+7. **Next steps added to two approved strings** (§6.1, NFR-006 AC-1). Decided by the requester: on the list screen
+   a 404 on a done toggle re-queries the list, the message says the list has been refreshed, and no **Back to my
+   to-dos** link is shown; the link stays only on the detail page (Q48(b), "b is recommended."). Still for the
+   approver, because the requester's words do not settle them: (a) the full sentence "That to-do no longer exists,
+   and the list has been refreshed." (Q48 quotes only "…the list has been refreshed"); (b) applying the same
+   list-screen rule to a 404 on a row's Delete (`delete-from-list`), which Q48 asks about only for the toggle but
+   whose option (b) states for the list screen as a whole, while a delete from the detail page keeps the link; (c)
+   the refused-login alert "Invalid identifier or password. Check them and try again.", which changes wording of the
+   UX design §4 approved in Q39(a).
 8. **A 400 outside a form has no field to fix** (§6.1, §8, NFR-006 AC-1): `fix-fields` is used only for the form
    actions (`sign-up`, `log-in`, `create`, `save`); a 400 `VALIDATION_FAILED` on any other action gets `try-again`.
    So that a bookmarked `/todos?status=bogus` does not fail on every try, the SPA removes an unknown `status` from
    the URL (filter All) before calling the API, as it already does for a bad `page`. Chosen over a new "Show all
-   to-dos" next step, which would add a `NextStep` value and new copy.
+   to-dos" next step, which would add a `NextStep` value and new copy. A 400 `VALIDATION_FAILED` on a form action
+   whose `errors[]` names no field that form shows also gets `try-again` (Q49, critic note N-3; §6.1).
+9. **Landing after login from an unknown address** (§4.2, §8, REQ-NAV-001 AC-8; analyst default 12): Q47 decides
+   that a signed-out visitor on an address the web app does not define is sent to the login page, but not where they
+   land after logging in. The draft keeps `safeReturnTo` unchanged, so such an address is not honoured and the user
+   lands on `/todos` (the alternative, honouring it so that the user then sees the not-found page, would widen the
+   `returnTo` rule). This is the spec author's default, not the requester's decision. A signed-out visitor on
+   `/todos/not-a-uuid` lands on `/todos` in the same way (already the §4.2 rule).
+10. **The error page's home link resets the error boundary** (§6.1, NFR-006 AC-3): Q49 accepts critic note N-1, which
+    offers a full page load (`<a href="/">`) or an error boundary that resets on location change. The draft takes the
+    reset on location change, because it keeps the signed-in session state without a new probe and can be checked by
+    a component test; the page's reload control still does a full reload. The choice between the two is the spec
+    author's.
 
 ## 13. Risks
 
@@ -538,7 +603,7 @@ requirement ID and AC.
 | REQ-AUTH-001 | §3, §4, §4.1, §5 | `signUp`, `SignupRequest`, `SignupResult` | unit: `IdentifierRules`, email rule, `PasswordRules` boundaries (2/3/254/255 identifier, 7/8/128/129 password, code points), identifier padded with U+00A0 and U+3000 trimmed; integration: create, 409 duplicate incl. case variants and concurrent duplicate, 400 per field; component: one identifier field, field messages, a signed-out visitor opening `/signup` directly (probe 401) sees the sign-up form with no message and no redirect; e2e: a fresh browser opens `/signup` directly, signs up, then logs in, no verification step |
 | REQ-AUTH-002 | §4, §4.1, §4.2; ADR-0008 | `logIn`, `getSession`, `LoginRequest`, `Session`, `sessionCookie` | integration: success, wrong password and unknown identifier give byte-identical 401 bodies, case-variant and whitespace-padded login (incl. U+00A0 padding), cookie attributes, expiry at login + 8 h with a fixed `Clock`; component: reload on `/todos` while signed in renders nothing until the probe resolves and does not redirect; a probe network error or 500 keeps `unknown`, shows the alert with Retry, and never redirects or clears the user; after login the user lands on `/todos` when there is no valid `returnTo`; e2e: reload stays signed in |
 | REQ-AUTH-003 | §3, §4, §6, §10; ADR-0005 | `SignupRequest.password`, `InternalError` (no hash in any schema) | integration: stored hash is `$argon2id$`, two equal passwords give different hashes, no password or hash in any response body or captured log line; unit: 100-character passwords differing only after byte 72 do not cross-verify |
-| REQ-AUTH-004 | §4, §4.1, §4.2, §11; ADR-0004, ADR-0007, ADR-0008, ADR-0013 | `logOut`, `getSession`, `Unauthenticated`, `ClientHeader`, `ClientHeaderMissing` | integration: every to-do operation without, with expired, and with logged-out session → 401 `UNAUTHENTICATED` Problem and DB unchanged; 403 without `X-Todo-Client`; in the default profile the `Clock` bean is the system UTC clock and no `OffsetFileClock` bean exists; unit: `safeReturnTo` honours `/todos`, `/todos?status=active&page=2`, `/todos/<uuid>`, `/todos/<uuid>/edit`, `/todos/new` and gives `/todos` for absent, empty, `//evil.example`, `https://evil.example`, `/\evil.example`, `javascript:alert(1)`, `/login`, `/todos/not-a-uuid`; component: signed-out visitor on a to-do route → `/login?returnTo=…` with no message; a `signed-in` user whose request gets 401 → `/login` with "Your session has ended. Please log in again."; a 401 from `logIn` or the probe never shows that message; typed `/login` never shows it; reload on a to-do route with no cookie (after expiry) → `/login` with no message; e2e (main): a fresh browser opening `/todos` lands on `/login` with no message, logs in and returns to `/todos`, log out then back → login page; e2e (session-expiry configuration): log in, write `PT8H1M` to the offset file, change the filter → login page with the session-ended message |
+| REQ-AUTH-004 | §4, §4.1, §4.2, §11; ADR-0004, ADR-0007, ADR-0008, ADR-0013 | `logOut`, `getSession`, `Unauthenticated`, `ClientHeader`, `ClientHeaderMissing` | integration: every to-do operation without, with expired, and with logged-out session → 401 `UNAUTHENTICATED` Problem and DB unchanged; 403 without `X-Todo-Client`; in the default profile the `Clock` bean is the system UTC clock and no `OffsetFileClock` bean exists; unit: `safeReturnTo` honours `/todos`, `/todos?status=active&page=2`, `/todos/<uuid>`, `/todos/<uuid>/edit`, `/todos/new` and gives `/todos` for absent, empty, `//evil.example`, `https://evil.example`, `/\evil.example`, `javascript:alert(1)`, `/login`, `/todos/not-a-uuid`, `/nope` (REQ-NAV-001 AC-8, analyst default 12); component: signed-out visitor on a to-do route → `/login?returnTo=…` with no message; a `signed-in` user whose request gets 401 → `/login` with "Your session has ended. Please log in again."; a 401 from `logIn` or the probe never shows that message; typed `/login` never shows it; reload on a to-do route with no cookie (after expiry) → `/login` with no message; e2e (main): a fresh browser opening `/todos` lands on `/login` with no message, logs in and returns to `/todos`, log out then back → login page; e2e (session-expiry configuration): log in, write `PT8H1M` to the offset file, change the filter → login page with the session-ended message |
 | REQ-AUTH-005 | §3, §7 | whole contract (no user-listing operation), `User` | contract: endpoint inventory equals the contract (no user-listing or cross-user operation); integration: after migration the `users` table has no role or permission column, and two new accounts get identical responses on every operation |
 | REQ-ISO-001 | §7; ADR-0009 | `TodoId`, `NotFound`, `listTodos`, `clearCompletedTodos` | integration: two users; list/search/filter/page never return B's rows; get/update/done/delete on B's id → 404 identical to a random UUID and to a malformed id, B's row unchanged; clear completed deletes only A's; e2e: REQ-ACC-001 AC-2 |
 | REQ-TODO-001 | §7, §8; ADR-0013, ADR-0017 | `createTodo`, `TodoCreate`, `Todo` | integration: create with/without priority (→ MEDIUM) and description, timestamps set, `done=false`, first in list; e2e: create then reload |
@@ -551,13 +616,13 @@ requirement ID and AC.
 | REQ-LIST-001 | §7, §8 | `listTodos` `status` | integration: all/active/completed, default all, invalid status → 400; component: "No matching to-dos" vs first-use state, including a user with no to-dos who selects Completed or searches (sees "No matching to-dos"); a URL `status=bogus` is removed from the URL (filter All) and no `listTodos` call carries the bad value |
 | REQ-LIST-002 | §5, §7, §8; ADR-0015 | `listTodos` `q` | integration: case-insensitive title and description match, `%`, `_`, `\`, `'`, `"` literal, whitespace-only = no search (incl. `q` of only U+00A0 and of only U+3000), search AND filter; component: NBSP-only search omits `q`; e2e: search flow |
 | REQ-LIST-003 | §7, §8 | `listTodos` `page`, `TodoPage` | integration: 45 items → pages of 20/20/5, no repeats or gaps, page 99 and a 30-digit page → last page, no matches → page 1 empty, `0`/`-1`/`abc`/`1.5` → 400, `pageSize` ignored; component: controls disabled/hidden, filter change resets page, bad URL page → page 1; e2e: paging flow |
-| REQ-NAV-001 | §2, §4.1, §8, §9 (Q37) | — (SPA routing only; no API operation) | component (router with a stubbed `SessionProvider`): signed-in `/` → `/todos` with the history entry replaced; signed-out `/` → `/login?returnTo=/todos` with no message, and after login `/todos`; `/nope`, `/todos/abc/def` and `/login/extra` render `NotFoundPage` in the `signed-in`, `signed-out` and `unknown` states with no redirect and no API call other than the probe; signed in, `/todos/not-a-uuid`, `/todos/not-a-uuid/edit`, `/todos/a;b`, `/todos/a;b/edit` and `/todos/a%2Fb` render the to-do not-found state, not `NotFoundPage`, and make no `getTodo` call; unit: `isTodoId` admits a lower-case UUID and refuses an upper-case UUID, `not-a-uuid`, `a;b`, `a/b` and `%`; the home link's target is `/`; `document.title` set and focus on the `<h1>`; the animated element has `aria-hidden="true"` and the heading, sentence and link are present at first render; e2e (main): a fresh browser opening `/` lands on `/login` and after login on `/todos`; opening `/nope` shows the not-found page, and an init script (`page.addInitScript`) registered before the navigation records `document.getAnimations()` at the first `animationstart` event, so the check does not depend on when the test reads it: at least one animation is recorded and every entry has an iteration count of 1 and a `getComputedTiming().endTime` of at most 5000 ms; the home link leads to `/` and then `/todos`; a11y: axe (WCAG 2.1 A/AA rules) zero violations on the not-found page and keyboard-only reach and activation of the home link with visible focus; review (web-qa, recorded with the NFR-001 audit): the animation's keyframes and a screen recording of its full run show no flash, so no more than three flashes in any one second (WCAG 2.3.1, AC-6) |
+| REQ-NAV-001 | §2, §4.1, §4.2, §8, §9 (Q37, Q46, Q47) | — (SPA routing only; no API operation) | component (router with a stubbed `SessionProvider`): signed-in `/` → `/todos` with the history entry replaced; signed-out `/` → `/login?returnTo=/todos` with no message, and after login `/todos`; for each of `/nope`, `/todos/abc/def` and `/login/extra`: `signed-in` renders `NotFoundPage` with no redirect and no API call other than the probe (AC-3); `unknown` (probe in flight) renders what a to-do route renders in that state (nothing), not `NotFoundPage`, and does not redirect; `unknown` after a failed probe shows the §4.1 alert, not `NotFoundPage`; `signed-out` replaces the location with `/login?returnTo=<that path>` with no message and never renders `NotFoundPage` (AC-8, Q47), and after login the user lands on `/todos` (analyst default 12); signed-out `/todos/not-a-uuid` → `/login?returnTo=/todos/not-a-uuid` and after login `/todos`; signed in, `/todos/not-a-uuid`, `/todos/not-a-uuid/edit`, `/todos/a;b`, `/todos/a;b/edit` and `/todos/a%2Fb` render the to-do not-found state, not `NotFoundPage`, and make no `getTodo` call; unit: `isTodoId` admits a lower-case UUID and refuses an upper-case UUID, `not-a-uuid`, `a;b`, `a/b` and `%`; the home link's target is `/` (Q46); `document.title` set and focus on the `<h1>`; the animated element has `aria-hidden="true"` and the heading, sentence and link are present at first render; e2e (main): a fresh browser opening `/` lands on `/login` and after login on `/todos`; a fresh (signed-out) browser opening `/nope` lands on `/login` with no message and never shows the not-found page, and after login lands on `/todos` (AC-8, analyst default 12); a fresh browser opening `/todos/not-a-uuid` lands on `/login` and after login on `/todos`; signed in, opening `/nope` shows the not-found page, and an init script (`page.addInitScript`) registered before the navigation records `document.getAnimations()` at the first `animationstart` event, so the check does not depend on when the test reads it: at least one animation is recorded and every entry has an iteration count of 1 and a `getComputedTiming().endTime` of at most 5000 ms; the home link leads to `/` and then `/todos` (AC-5, Q46); a11y (signed in): axe (WCAG 2.1 A/AA rules) zero violations on the not-found page and keyboard-only reach and activation of the home link with visible focus; review (web-qa, recorded with the NFR-001 audit): the animation's keyframes and a screen recording of its full run show no flash, so no more than three flashes in any one second (WCAG 2.3.1, AC-6) |
 | REQ-DATA-001 | §3, §11; ADR-0003, ADR-0014 | — (storage, no interface) | integration: write, close the Spring context, start a new context on the same file, data unchanged; start with no file and no directory creates both; e2e: REQ-ACC-001 AC-3 restarts the API process |
 | REQ-DATA-002 | §7; ADR-0006, ADR-0016 | `updateTodo`, `setTodoDone` | integration: two sequential content writes → second stored, no error; done and content writes from "two tabs" do not undo each other; concurrent writes to different to-dos both stored |
 | REQ-ACC-001 | §4–§8 | all `todos` operations | e2e: one scenario for AC-1 (add, see, search, filter, edit, complete, delete), AC-2 (second user by list, search and direct URL), AC-3 (API restart, log in again) |
-| NFR-001 | §4, §9; ADR-0001, ADR-0008 | `FieldError.message` | a11y: axe (WCAG 2.1 A/AA rules) zero violations on sign-up, login, list, create/edit form, delete dialog, clear-completed dialog, the to-do detail page `/todos/:id` and the not-found page; keyboard-only Playwright scripts for every action incl. dialog focus in/out and reaching, reading and leaving the detail page (to edit and back to the list); component: error `aria-describedby` and alert summary; manual screen-reader and contrast pass on the same eight screens recorded by web-qa; the audit record lists 2.2.1 Timing Adjustable as met under the "essential" exception accepted in Q36 (fixed 8-hour session, no warning or extension), not as a failure |
+| NFR-001 | §4, §9; ADR-0001, ADR-0008 | `FieldError.message` | a11y: axe (WCAG 2.1 A/AA rules) zero violations on sign-up, login, list, create/edit form, delete dialog, clear-completed dialog, the to-do detail page `/todos/:id` and the not-found page (opened while signed in, REQ-NAV-001 AC-3, Q47); keyboard-only Playwright scripts for every action incl. dialog focus in/out and reaching, reading and leaving the detail page (to edit and back to the list); component: error `aria-describedby` and alert summary; manual screen-reader and contrast pass on the same eight screens recorded by web-qa; the audit record lists 2.2.1 Timing Adjustable as met under the "essential" exception accepted in Q36 (fixed 8-hour session, no warning or extension), not as a failure |
 | NFR-002 | §2, §11 | `servers` (localhost) | e2e: the main configuration starts the API and SPA with the documented §11 commands and talks only to `localhost`; review: README run steps on a fresh checkout, no cloud/email/hosted-DB configuration, no deployment workflow, no test-clock profile or variable in `.env.example` or the README |
 | NFR-003 | §3 (indexes), §7; ADR-0015, ADR-0016 | `listTodos` and all write operations | e2e (performance spec, main configuration): user seeded with 500 to-dos; each of list, filter, search, page, create, edit, complete, delete run 20 times, time from action to rendered result, p95 ≤ 1 s |
 | NFR-004 | §4, §5, §6, §11; ADR-0004, ADR-0005, ADR-0007, ADR-0010, ADR-0011 | `Problem` (incl. `code` enum), `BadRequest`, `Unauthenticated`, `ClientHeaderMissing`, `NotFound`, `MethodNotAllowed`, `UnsupportedMediaType`, `RequestRejected`, `InternalError`, `additionalProperties: false` | review + integration: server refuses invalid input sent directly (all REQ-TODO-002/REQ-AUTH-001 cases via API), forced internal error returns generic 500 with no stack trace or SQL; one request per error source — 401 from the security entry point, 403 from `ClientHeaderFilter`, 405 (`PATCH /api/v1/todos/{id}`, `Allow` header present), 415 (`text/plain` body and no `Content-Type` on `createTodo`), 404 unknown route (`/api/v1/nope`), 400 unparseable JSON, 400 `REQUEST_REJECTED` from the firewall (`;` in the path), and `ProblemErrorController` given a forwarded 413 and 500 (error attributes set as the servlet container sets them) — each returns `application/problem+json` valid against the `Problem` schema (directly, where no contract operation exists), with its listed `code` and no stack trace, exception text or SQL, and never the whitelabel or Spring Boot default body; secret scan of the repository in the gates; AC-1 via REQ-AUTH-003 tests and ADR-0005 review |
 | NFR-005 | §2; ADR-0001..0003 | whole contract (HTTP API) | review: `web/package.json` (React, TypeScript), `api/pom.xml` (Spring Boot), sqlite-jdbc driver and `.db` file; e2e exercises browser → HTTP API |
-| NFR-006 | §2, §4.1, §6, §6.1, §8 (Q39) | `Problem` (`code`; `title` and `detail` never displayed), `FieldError.message` | unit: `userMessageFor` for every row of the §6.1 table whose text it supplies (all rows except the 400 `VALIDATION_FAILED` form-action row and the 409 `IDENTIFIER_TAKEN` row, whose text is `errors[].message`, and the `session-probe` 401 row, which shows nothing), and, outside those three cases, for every `ProblemCode`, statuses 403/405/413/415/500/502, a non-Problem body and `network` across every `UserAction`, returns a non-empty text and a next step; a 400 `VALIDATION_FAILED` on `load-list`, `toggle-done`, `delete` and `clear-completed` gives `try-again`, not `fix-fields`; and no text contains a `ProblemCode` value, "Exception", "SQL", "stack", "Failed to fetch" or a request id; a wrong password and an unknown identifier map to identical text and next step (AC-4); component: a 401 from `logIn` whose Problem `detail` holds a sentinel shows the fixed login text of §6.1 and never the sentinel; a 404 on toggle and on delete shows "That to-do no longer exists." with the **Back to my to-dos** link; on the list, detail, create/edit form, sign-up and login screens and both dialogs, a 500 whose Problem `title` and `detail` hold a sentinel string, and a network error, each show a message naming its next step and never the sentinel; a component that throws while rendering shows the `AppErrorBoundary` page with its reload control and its link to `/`; review: the API's `errors[].message` strings are plain language and say how to fix the field; e2e (main): with the list request aborted by Playwright route interception the list screen shows the friendly message with its next step, and after the interception is removed trying again loads the list |
+| NFR-006 | §2, §4.1, §6, §6.1, §8 (Q39, Q48, Q49) | `Problem` (`code`; `title` and `detail` never displayed), `FieldError.message` (§6.1 rule binding, N-7) | unit: `userMessageFor` for every row of the §6.1 table whose text it supplies (all rows except the 400 `VALIDATION_FAILED` form-action row with a shown field and the 409 `IDENTIFIER_TAKEN` row, whose text is `errors[].message`, and the `session-probe` 401 row, which shows nothing), and, outside those three cases, for every `ProblemCode`, statuses 403/405/413/415/500/502, a non-Problem body and `network` across every `UserAction`, returns a non-empty text and a next step; a 400 `VALIDATION_FAILED` on `load-list`, `toggle-done`, `delete-from-list`, `delete-from-detail` and `clear-completed` gives `try-again`, not `fix-fields`; a 400 `VALIDATION_FAILED` on each of `sign-up`, `log-in`, `create` and `save` with `errors: []`, with `errors` absent, and with only an `UNKNOWN_FIELD` error on `owner` gives `try-again`, while one with an error on a field that form shows plus one on `owner` gives `fix-fields` (N-3); a 404 on `toggle-done` and on `delete-from-list` gives `list-refreshed` with the text "That to-do no longer exists, and the list has been refreshed.", and a 404 on `delete-from-detail`, `load-todo` and `save` gives `back-to-list` (Q48); and no text contains a `ProblemCode` value, "Exception", "SQL", "stack", "Failed to fetch" or a request id; a wrong password and an unknown identifier map to identical text and next step (AC-4); component: a 401 from `logIn` whose Problem `detail` holds a sentinel shows the fixed login text of §6.1 and never the sentinel; on the list screen a 404 on a done toggle and a 404 on a row's delete each show "That to-do no longer exists, and the list has been refreshed.", re-query the list (one further `listTodos` call with the current URL's query) and show no **Back to my to-dos** link on the list screen (Q48); on the detail page a 404 on delete shows "That to-do no longer exists." with the **Back to my to-dos** link; on the list, detail, create/edit form, sign-up and login screens and both dialogs, a 500 whose Problem `title` and `detail` hold a sentinel string, and a network error, each show a message naming its next step and never the sentinel; a component that throws while rendering shows the `AppErrorBoundary` page with its reload control and its link to `/`, and (with a signed-in stubbed `SessionProvider` and a memory router) a component that throws only on its first render: after the user follows the page's link to `/`, the normal `/todos` list screen renders and the error page is gone (N-1); a done toggle whose handler throws (a stubbed dependency throwing a plain `Error` with a sentinel message) shows the `unexpected` message in the page-level alert above the list, the list screen stays rendered (not the `AppErrorBoundary` page), and the sentinel is never shown; the same for a create/edit form submit whose handler throws (form-level alert) (N-2); review: the API's `errors[].message` strings are plain language and say how to fix the field; e2e (main): with the list request aborted by Playwright route interception the list screen shows the friendly message with its next step, and after the interception is removed trying again loads the list |

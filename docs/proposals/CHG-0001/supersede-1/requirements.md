@@ -17,8 +17,8 @@ upstream:
 
 CHG-0001 is a new to-do list application (Q1: to-do app only). Individual users sign up, log in, and create and manage
 their own to-dos in a web UI backed by an HTTP API (Q2, Q5, Q11). To-dos persist across restarts (Q4). The first
-release runs locally only (Q10). Source of every requirement is the answered `clarifications.md` (Q1–Q34, and Q36–Q39
-and Q44 for the items added or changed by the first supersede); the Q numbers
+release runs locally only (Q10). Source of every requirement is the answered `clarifications.md` (Q1–Q34, and Q36–Q39,
+Q44 and Q46–Q49 for the items added or changed by the first supersede); the Q numbers
 in brackets trace each item. Q33 records that the requester accepted every item the first draft had marked as
 proposed; Q34 settled the three ambiguous criteria. The few points the requester did not decide carry the tag
 `(analyst default)` and are listed under "Analyst defaults" for the approver to confirm at freeze.
@@ -210,15 +210,16 @@ Traces: Q9, Q21, Q29, Q33, Q34.
 
 ## REQ-NAV-001 Home route and not-found page (M)
 
-The web app's root address goes to the to-do list, and an address the web app does not define shows an animated "not found" page with a link back to home. "Home" is the root address `/`. Traces: Q37. Source: clarifications Q37.
+The web app's root address goes to the to-do list, and an address the web app does not define shows a signed-in user an animated "not found" page with a link back to home, while a signed-out visitor is sent to the login page. "Home" is the root address `/`, which sends the user on to `/todos` (Q46). Traces: Q37, Q46, Q47. Source: clarifications Q37, Q46, Q47.
 
 - AC-1: Given I am signed in, when I open `/`, then I am sent to my to-do list at `/todos` (filter All, no search, page 1, whatever query string `/` had; analyst default).
 - AC-2: Given I am not signed in, when I open `/`, then I am sent to `/todos` and from there to the login page as for any to-do page (REQ-AUTH-004 AC-2), and after a successful login I see my to-do list.
-- AC-3: Given an address that matches none of the web app's pages (for example `/nope`, `/todos/abc/def` or `/login/extra`), when I open it, signed in or not, then a "not found" page is shown with a link back to home, and I am not sent to the login page.
+- AC-3: Given I am signed in and an address that matches none of the web app's pages (for example `/nope`, `/todos/abc/def` or `/login/extra`), when I open it, then a "not found" page is shown with a link back to home (Q37).
 - AC-4: Given I am signed in and an address of the form `/todos/<id>` or `/todos/<id>/edit` whose id does not name one of my to-dos (including an id that is not a valid to-do identifier), when I open it, then the web app shows its to-do not-found message, the same as for a to-do that does not exist (REQ-ISO-001 AC-2), and not the page of AC-3 (analyst default).
-- AC-5: Given the "not found" page, when I choose the link back to home, then I go to `/`, which behaves as in AC-1 and AC-2.
+- AC-5: Given the "not found" page, when I choose the link back to home, then I go to `/`, which behaves as in AC-1 and AC-2 (Q46).
 - AC-6: Given the "not found" page, when it is shown, then its animation is decorative (the page's heading, text and link are readable and usable without it), it plays once (analyst default) and stops within 5 seconds (WCAG 2.2.2 Pause, Stop, Hide; chosen instead of a pause, stop or hide control, analyst default), and it does not flash more than three times in any one second (WCAG 2.3.1 Three Flashes or Below Threshold); both criteria are Level A, so they are part of NFR-001's WCAG 2.1 Level AA.
 - AC-7: Given the "not found" page, when audited as in NFR-001 AC-1 and operated as in NFR-001 AC-2, then no WCAG 2.1 Level AA failure is found and the link back to home is reachable and operable by keyboard with visible focus.
+- AC-8: Given I am not signed in and an address that matches none of the web app's pages (as in AC-3), when I open it, then I am sent to the login page as for any to-do page (REQ-AUTH-004 AC-2) and the "not found" page is not shown (Q47); after a successful login I see my to-do list at `/todos`, not the address I opened (analyst default).
 
 ## Data
 
@@ -322,6 +323,7 @@ The requester did not decide these; they are tagged `(analyst default)` above:
 9. The "not found" page's animation plays once (REQ-NAV-001 AC-6); Q37 asks only for an animated page.
 10. The exact text of the singular clear-completed sentence for N = 1 (REQ-TODO-007 AC-1; text in SDD §8 and §12.1 item 5); Q38 approves a singular form but not its text.
 11. The "not found" page's animation stops within 5 seconds, so WCAG 2.2.2 Pause, Stop, Hide is met without a pause, stop or hide control (REQ-NAV-001 AC-6); Q37 asks only for an animated page.
+12. A signed-out visitor sent to the login page from an address the web app does not define lands on `/todos` after logging in, not on that address (so not on the "not found" page) (REQ-NAV-001 AC-8; SDD §4.2 and §12.1 item 9); Q47 says only that such visitors are sent to the login page, not where they land after logging in.
 
 ## Open questions
 
