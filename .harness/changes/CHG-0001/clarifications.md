@@ -288,3 +288,15 @@ completed (REQ-TODO-007 AC-4); a page number past the last page shows the last v
 (a) Yes to all. (b) Change some (say which).
 
 **Answer:** @alokkulkarni (point 4): "yes to all. cross user todos should not be acessible." — (a) all three as listed: another user's to-do is not found (and not accessible), the clear-completed control is disabled when nothing is completed, and an out-of-range page shows the last valid page.
+
+## Q35. Do you accept the choices listed for the approver to confirm at freeze?
+
+Raised at the spec-freeze review (PR #3), relayed by the coordinator: the requirements' "Analyst defaults" section;
+SDD §12.1 "For the approver to confirm at freeze" (ASCII-only email rule, 8-hour session counted from login, the
+analyst defaults, the trimmed whitespace set); the spec critic's F-11 (after login the user returns to the to-do page
+first opened) and F-12 (a reload after the session expired shows the plain login page, with no "session ended"
+message); and the three wording points left open by the requirements critic (round 2). (a) Accept all, no spec
+edits. (b) Change some (say which). The freeze approval itself is the requester's Comment review "Approved" on PR #3
+at commit `ebd6cea`, recorded with `harness gate record --human --pr 3`; this answer records only the chat reply.
+
+**Answer:** @alokkulkarni (in chat, relayed by the coordinator): "accept all and approved pull request" — (a) all listed choices are accepted, with no spec edits.
