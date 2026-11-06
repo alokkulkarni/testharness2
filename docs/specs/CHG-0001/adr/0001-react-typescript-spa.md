@@ -1,6 +1,6 @@
 # ADR-0001 React + TypeScript single-page app built with Vite
 
-Status: proposed (CHG-0001, N03-spec). Requirements: NFR-005, NFR-001, NFR-002, NFR-003; constraint C-1.
+Status: proposed (CHG-0001, N03-spec). Requirements: NFR-005, NFR-001, NFR-002, NFR-003, REQ-NAV-001; constraint C-1.
 
 ## Context
 
@@ -11,8 +11,10 @@ hosted service (NFR-002) and show results within 1 second (NFR-003).
 ## Decision
 
 - A client-rendered SPA in `web/`, built with **Vite** and TypeScript in `strict` mode, using **React** (current
-  major) and **React Router** for routes (`/signup`, `/login`, `/todos`, `/todos/new`, `/todos/:id`,
-  `/todos/:id/edit`). List state (`status`, `q`, `page`) lives in the URL query string.
+  major) and **React Router** for routes (`/`, `/signup`, `/login`, `/todos`, `/todos/new`, `/todos/:id`,
+  `/todos/:id/edit`, and a catch-all `*` for the not-found page, behind the same auth guard as the to-do routes;
+  `/` and `*`: Q37, Q46, Q47, REQ-NAV-001). List state
+  (`status`, `q`, `page`) lives in the URL query string.
 - Data access through one small `fetch` wrapper (`web/src/api/client.ts`); no global state library. API types are
   generated from `contracts/todo-api-v1.yaml` with **openapi-typescript** so the UI cannot drift from the contract.
 - Confirmation dialogs use the native HTML `<dialog>` element with `showModal()` (built-in focus containment and
@@ -38,7 +40,7 @@ axe-core is MPL-2.0, used unmodified as a test-only dependency.
 
 - Next.js / Remix: server rendering and a Node server are not needed for a local SPA backed by a Java API.
 - Create React App: unmaintained.
-- A component library (MUI, Chakra): faster styling, but a large dependency for six screens; accessible native
+- A component library (MUI, Chakra): faster styling, but a large dependency for eight audited screens (SDD §13); accessible native
   elements suffice.
 - TanStack Query / Redux: caching and global state are unnecessary; every change re-queries the list
   (REQ-TODO-005 AC-3).

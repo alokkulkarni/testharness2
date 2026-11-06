@@ -17,7 +17,9 @@ upstream:
 
 CHG-0001 is a new to-do list application (Q1: to-do app only). Individual users sign up, log in, and create and manage
 their own to-dos in a web UI backed by an HTTP API (Q2, Q5, Q11). To-dos persist across restarts (Q4). The first
-release runs locally only (Q10). Source of every requirement is the answered `clarifications.md` (Q1–Q34); the Q numbers
+release runs locally only (Q10). Source of every requirement is the answered `clarifications.md` (Q1–Q34, and Q36–Q39,
+Q44, Q46 and Q47 for the items added or changed by the first supersede; Q48 and Q49 change only the SDD and ADR-0001, not these
+requirements); the Q numbers
 in brackets trace each item. Q33 records that the requester accepted every item the first draft had marked as
 proposed; Q34 settled the three ambiguous criteria. The few points the requester did not decide carry the tag
 `(analyst default)` and are listed under "Analyst defaults" for the approver to confirm at freeze.
@@ -55,13 +57,15 @@ A new person creates an account with one identifier (an email address or a usern
 
 ## REQ-AUTH-002 Login (M)
 
-A user logs in with identifier and password and receives an authenticated session. Traces: Q14, Q31, Q32, Q33.
+A user logs in with identifier and password and receives an authenticated session. Traces: Q14, Q31, Q32, Q33, Q36.
 
 - AC-1: Given a registered user, when they submit the correct identifier and password, then they are signed in and see their own to-do list.
 - AC-2: Given a registered user, when they submit a wrong password, then login is refused with a generic "invalid identifier or password" message and no session is created.
 - AC-3: Given an identifier that does not exist, when someone attempts login, then the same generic message as AC-2 is shown; the login response must not reveal whether the identifier exists (Q33). Note: sign-up (REQ-AUTH-001 AC-2) necessarily discloses that an identifier is taken, so non-enumeration applies to login only; this is an accepted trade-off following from the single unique, case-insensitive identifier (Q31, Q32) and the local-only first release (Q10).
 - AC-4: Given I am signed in and reload the page, when the app loads, then I remain signed in until I log out or the session expires; the session lifetime is 8 hours (Q33).
 - AC-5: Given a registered identifier, when I log in using a different letter case of it (for example `ALICE@example.com` for `alice@example.com`), then the login succeeds with the correct password (Q32).
+
+Note (Q36): the 8-hour session of AC-4 ends with no warning before expiry and cannot be extended; this is accepted under the "essential" exception of WCAG 2.2.1 Timing Adjustable, as recorded in the note under NFR-001. Source: clarifications Q36.
 
 ## REQ-AUTH-003 Password storage (M)
 
@@ -159,9 +163,9 @@ Traces: Q8, Q33.
 
 ## REQ-TODO-007 Clear all completed (M)
 
-Traces: Q19, Q33, Q34.
+Traces: Q19, Q33, Q34, Q38.
 
-- AC-1: Given I have Completed to-dos, when I choose "Clear all completed", then the UI asks for confirmation that states the number of Completed to-dos that will be deleted, that this covers all of my Completed to-dos and not only those shown, and that deletion is permanent (count shown: Q33).
+- AC-1: Given I have Completed to-dos, when I choose "Clear all completed", then the UI asks for confirmation that states the number of Completed to-dos that will be deleted, that this covers all of my Completed to-dos and not only those shown, and that deletion is permanent (count shown: Q33). When the number is 1 the sentence that states the number uses the singular ("Delete 1 completed to-do? …"); for any other number it uses the plural ("Delete all N completed to-dos? …"); the full texts of that sentence are fixed in the SDD (singular form: Q38; the exact singular text is an analyst default, SDD §12.1 item 5). The rule covers only that sentence, not the dialog's heading or buttons. Source: clarifications Q38.
 - AC-2: Given the confirmation, when I confirm, then all of my Completed to-dos, across all pages and regardless of the current filter or search, are permanently deleted and my Active to-dos are untouched (scope: Q33).
 - AC-3: Given the confirmation, when I cancel, then nothing is deleted.
 - AC-4: Given I have no Completed to-dos, when I view the list, then the "Clear all completed" control is disabled (Q34).
@@ -203,6 +207,21 @@ Traces: Q9, Q21, Q29, Q33, Q34.
 - AC-7: Given a page number that is zero, negative or not a number, when requested, then the API refuses it with a validation error (analyst default).
 - AC-8: Given the page size, when the list is requested, then it is fixed at 20 and the user cannot change it (Q29).
 
+## Navigation
+
+## REQ-NAV-001 Home route and not-found page (M)
+
+The web app's root address goes to the to-do list, and an address the web app does not define shows a signed-in user an animated "not found" page with a link back to home, while a signed-out visitor is sent to the login page. "Home" is the root address `/`, which sends the user on to `/todos` (Q46). Traces: Q37, Q46, Q47. Source: clarifications Q37, Q46, Q47.
+
+- AC-1: Given I am signed in, when I open `/`, then I am sent to my to-do list at `/todos` (filter All, no search, page 1, whatever query string `/` had; analyst default).
+- AC-2: Given I am not signed in, when I open `/`, then I am sent to `/todos` and from there to the login page as for any to-do page (REQ-AUTH-004 AC-2), and after a successful login I see my to-do list.
+- AC-3: Given I am signed in and an address that matches none of the web app's pages (for example `/nope`, `/todos/abc/def` or `/login/extra`), when I open it, then a "not found" page is shown with a link back to home (Q37).
+- AC-4: Given I am signed in and an address of the form `/todos/<id>` or `/todos/<id>/edit` whose id does not name one of my to-dos (including an id that is not a valid to-do identifier), when I open it, then the web app shows its to-do not-found message, the same as for a to-do that does not exist (REQ-ISO-001 AC-2), and not the page of AC-3 (analyst default).
+- AC-5: Given the "not found" page, when I choose the link back to home, then I go to `/`, which behaves as in AC-1 and AC-2 (Q46).
+- AC-6: Given the "not found" page, when it is shown, then its animation is decorative (the page's heading, text and link are readable and usable without it), it plays once (analyst default) and stops within 5 seconds (WCAG 2.2.2 Pause, Stop, Hide; chosen instead of a pause, stop or hide control, analyst default), and it does not flash more than three times in any one second (WCAG 2.3.1 Three Flashes or Below Threshold); both criteria are Level A, so they are part of NFR-001's WCAG 2.1 Level AA.
+- AC-7: Given the "not found" page, when audited as in NFR-001 AC-1 and operated as in NFR-001 AC-2, then no WCAG 2.1 Level AA failure is found and the link back to home is reachable and operable by keyboard with visible focus.
+- AC-8: Given I am not signed in and an address that matches none of the web app's pages (as in AC-3), when I open it, then I am sent to the login page as for any to-do page (REQ-AUTH-004 AC-2) and the "not found" page is not shown (Q47); after a successful login I see my to-do list at `/todos`, not the address I opened (analyst default).
+
 ## Data
 
 ## REQ-DATA-001 Persistence (M)
@@ -232,11 +251,13 @@ Traces: Q22 ("A signed-in user can add, see, search, filter, edit, complete and 
 
 ## NFR-001 Accessibility (M)
 
-Traces: Q10.
+Traces: Q10, Q36, Q44.
 
 - AC-1: Given the UI, when audited against WCAG 2.1 Level AA, then no AA failure is found on the sign-up, login, list, create/edit form, delete confirmation and clear-completed confirmation screens.
 - AC-2: Given only a keyboard, when I sign up, log in, and create, edit, complete, delete, filter, search and page, then every action is reachable and operable, and focus is visible and moves into and out of confirmation dialogs.
 - AC-3: Given a validation error, when it appears, then it is associated with its field and announced to assistive technology.
+
+Note (Q36): the 8-hour session of REQ-AUTH-002 AC-4 is absolute from login (sdd §4, ADR-0008): it ends with no warning before expiry, it cannot be extended, and input typed but not saved when it ends is lost. The requester accepts this under the "essential" exception of WCAG success criterion 2.2.1 Timing Adjustable, so the audit of AC-1 records 2.2.1 as met by that exception, not as a failure. The audit level stays WCAG 2.1 Level AA (Q44). Source: clarifications Q36.
 
 ## NFR-002 Run locally (M)
 
@@ -265,6 +286,15 @@ Traces: Q2, Q3, Q4, Q13.
 
 - AC-1: Given the delivered system, when inspected, then the UI is React + TypeScript, the API is Java/Spring Boot, the browser talks to the API over HTTP, and storage is SQLite.
 
+## NFR-006 User-friendly error messages (M)
+
+The web app shows every error, and every unexpected failure of its own, as a user-friendly message with next steps. Traces: Q39, NFR-004 AC-2. Source: clarifications Q39.
+
+- AC-1: Given any operation in the web app fails (a refused input, a to-do that no longer exists, a refused login, a taken identifier, an ended session, an unreachable server, or any other error response), when the web app shows the failure, then the message says in plain language what went wrong and gives at least one next step I can take (for example correct the named field, try again, log in again, or go back to my to-dos).
+- AC-2: Given any failure message the web app shows, when inspected, then it contains no technical internals: no stack trace, exception or class name, SQL, error `code` value (such as `INTERNAL_ERROR`), request id, the response body as a whole, or browser error text (such as "Failed to fetch"), consistent with NFR-004 AC-2.
+- AC-3: Given an unexpected error inside the web app itself (one not reported by the API), when it occurs, then instead of a blank or broken screen a user-friendly message is shown with a way to continue (reload the page or go to home), and with no technical detail as in AC-2.
+- AC-4: Given a refused login, when the message and its next step are shown, then they are identical for a wrong password and for an identifier that does not exist (REQ-AUTH-002 AC-2, AC-3 still hold).
+
 ## Out of scope
 
 - Email verification (Q27) and password reset or "forgot password" (Q28) in the first release.
@@ -289,6 +319,12 @@ The requester did not decide these; they are tagged `(analyst default)` above:
 4. Password maximum 128 characters (REQ-AUTH-001 AC-11).
 5. A page number that is zero, negative or not a number is refused with a validation error (REQ-LIST-003 AC-7); Q33 and Q34 cover only a page past the last.
 6. Server-side input validation and no stack traces or SQL errors in API responses, as a security baseline elaboration (NFR-004 AC-2).
+7. `/` goes to `/todos` with filter All, no search and page 1, and any query string on `/` is not carried over (REQ-NAV-001 AC-1); Q37 says only that `/` goes to `/todos`.
+8. `/todos/<id>` and `/todos/<id>/edit` with an id that does not name one of my to-dos, including an id that is not a valid to-do identifier, show the to-do not-found message, not the "not found" page (REQ-NAV-001 AC-4); Q37 says only that unknown routes show the "not found" page.
+9. The "not found" page's animation plays once (REQ-NAV-001 AC-6); Q37 asks only for an animated page.
+10. The exact text of the singular clear-completed sentence for N = 1 (REQ-TODO-007 AC-1; text in SDD §8 and §12.1 item 5); Q38 approves a singular form but not its text.
+11. The "not found" page's animation stops within 5 seconds, so WCAG 2.2.2 Pause, Stop, Hide is met without a pause, stop or hide control (REQ-NAV-001 AC-6); Q37 asks only for an animated page.
+12. A signed-out visitor sent to the login page from an address the web app does not define lands on `/todos` after logging in, not on that address (so not on the "not found" page) (REQ-NAV-001 AC-8; SDD §4.2 and §12.1 item 9); Q47 says only that such visitors are sent to the login page, not where they land after logging in.
 
 ## Open questions
 
