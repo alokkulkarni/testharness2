@@ -3,7 +3,7 @@
   "changeId": "CHG-0001",
   "node": "N02-requirements",
   "gate": "critic-verdict",
-  "verdict": "changes-required",
+  "verdict": "pass",
   "reviewer": {
     "kind": "agent",
     "id": "critic",
@@ -11,7 +11,7 @@
       "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
       "changeId": "CHG-0001",
       "agent": "critic",
-      "agentRunId": "a1dcf7f28b7fa03fb"
+      "agentRunId": "abe7c0081dc2a9db7"
     },
     "modelAlias": "harness/critic"
   },
@@ -23,122 +23,114 @@
       "agentRunId": "run-mw4qgud8"
     }
   ],
-  "createdAt": "2026-11-06T08:55:28.166Z",
-  "reviewedCommit": "c72423aa7381b3dc79899aab25f32297bed266e1",
-  "diffHash": "4e253ede6f98c0d9c4795c548bd356715c162925c2b673ba60c002922a1e0210",
-  "summary": "Traceability to Q1-Q30 and the security-baseline note is complete and nothing contradicts a clarification. Four majors: the identifier shape (one free-form field vs email vs username vs separate fields) is an unresolved product decision mislabelled as non-blocking and needs the requester; three ACs offer alternative outcomes and are not testable. Minors on unflagged elaborations and AC precision. Proposed items 1,3,5,6,8,9,10,11 are acceptable low-risk elaborations, 4 is an SDD-level default, 7 is acceptable with a clearer confirmation, 2 hangs on the identifier decision.",
+  "createdAt": "2026-11-06T09:23:59.614Z",
+  "reviewedCommit": "1585d46e66883fa6cd3f997c02e52daed8dd407e",
+  "diffHash": "c59f8a73691ea51b138d2573609a5a55daf3bc85eb407f78fa47b5092475d342",
+  "summary": "Round 2 re-review of 1585d46. Round-1 F-1 to F-14 all fixed: F-1 (Q31/Q32, L28, L49-L50, L273, L295), F-2 (L95), F-3 (L202, residual API detail now F-5), F-4 (L167 UI; API outcome now F-4), F-5 (L51-L54), F-6 (L135, L140), F-7 (L106), F-8 (L164), F-9 (L147), F-10 (L148), F-11 (L259-L260), F-12 (L62), F-13 (Q33, L282-L291), F-14 (L276). Every answer Q1-Q34 is captured and traced; no AC contradicts an answer; the six analyst defaults are tagged and listed and none is risky. No finding needs a requester decision before freeze. New: nine minors and four infos.",
   "findings": [
     {
       "id": "F-1",
-      "severity": "major",
-      "message": "HUMAN DECISION NEEDED. The identifier shape is unresolved: Q14 answer (a) is worded email (or username) and the requester never chose between them. Treating it as one free-form field is a product decision that fixes the data model, whether email syntax is validated, the sign-up/login labels, and whether case-insensitive uniqueness (REQ-AUTH-001 AC-6) is standard (email) or a choice (username). The Open questions section says None that block the spec and in the next sentence asks for an answer before freeze, which is self-contradictory and conflicts with CLAUDE.md rule 5 (ambiguous: ask, never guess).",
-      "requirement": "REQ-AUTH-001",
-      "location": "docs/specs/CHG-0001/requirements.md:L287-L289",
-      "suggestion": "Raise it to @alokkulkarni as Q31 (options: email only; username only; one free-form field accepting either; separate email and username fields) and record the answer in clarifications.md, then update the Glossary (L26), REQ-AUTH-001 and REQ-AUTH-002; at minimum list it as a blocking open question for the freeze approver and drop None that block."
+      "severity": "minor",
+      "message": "Identifier trimming is specified only when it is saved at sign-up (AC-8); login (REQ-AUTH-002) states case-insensitive matching (AC-5) but not whether the submitted identifier is trimmed, so a login with a trailing space has no defined outcome.",
+      "requirement": "REQ-AUTH-002",
+      "location": "docs/specs/CHG-0001/requirements.md:L51-L64",
+      "suggestion": "Add to REQ-AUTH-002 that login trims the submitted identifier the same way as sign-up before the case-insensitive match (tag analyst default)."
     },
     {
       "id": "F-2",
-      "severity": "major",
-      "message": "REQ-ISO-001 AC-2 allows two outcomes, refused as not found (or forbidden), so no single test or API contract can be written against it.",
-      "requirement": "REQ-ISO-001",
-      "location": "docs/specs/CHG-0001/requirements.md:L87-L87",
-      "suggestion": "Pick one; not found is consistent with the existence-hiding rationale already used in REQ-AUTH-002 AC-3."
+      "severity": "minor",
+      "message": "The 8-hour session lifetime does not say whether it is absolute (from login) or an idle timeout renewed by activity; the two need different tests.",
+      "requirement": "REQ-AUTH-002",
+      "location": "docs/specs/CHG-0001/requirements.md:L63-L63",
+      "suggestion": "State one, for example: the session expires 8 hours after login regardless of activity (analyst default), and list it under Analyst defaults."
     },
     {
       "id": "F-3",
-      "severity": "major",
-      "message": "REQ-LIST-003 AC-6 offers alternatives at both layers: the API returns an empty page with the total (or a validation error), and the UI shows the last valid page or the empty state. The criterion is not deterministic and cannot be tested as written.",
-      "requirement": "REQ-LIST-003",
-      "location": "docs/specs/CHG-0001/requirements.md:L193-L193",
-      "suggestion": "Choose one API behaviour (for example an empty page with the correct total count) and one UI behaviour (for example navigate to the last valid page), keeping the proposed marker."
+      "severity": "minor",
+      "message": "The Glossary defines Identifier as the value a user signs up and logs in with, but REQ-ISO-001 AC-2 (by its identifier, an identifier that does not exist) and REQ-ACC-001 AC-2 (direct identifier) use the same word for a to-do ID.",
+      "requirement": "REQ-ISO-001",
+      "location": "docs/specs/CHG-0001/requirements.md:L95-L95",
+      "suggestion": "Use to-do ID in REQ-ISO-001 AC-2 and REQ-ACC-001 AC-2 (L228), or add a glossary entry for it."
     },
     {
       "id": "F-4",
-      "severity": "major",
-      "message": "REQ-TODO-007 AC-4 says the action is disabled or does nothing harmful; does nothing harmful is not observable and the two alternatives need different tests.",
+      "severity": "minor",
+      "message": "REQ-TODO-007 AC-4 now fixes the UI (control disabled) but the API outcome of a clear-completed request when the user has no completed to-dos is unspecified (follow-up of round-1 F-4).",
       "requirement": "REQ-TODO-007",
-      "location": "docs/specs/CHG-0001/requirements.md:L158-L158",
-      "suggestion": "State one behaviour, for example: the Clear all completed control is disabled in the UI, and the API call with no completed to-dos succeeds deleting 0 items with no error."
+      "location": "docs/specs/CHG-0001/requirements.md:L167-L167",
+      "suggestion": "Add: the API call succeeds, deletes nothing, reports 0 deleted and returns no error (analyst default)."
     },
     {
       "id": "F-5",
       "severity": "minor",
-      "message": "A valid identifier is defined only as non-empty: no maximum length, format (email syntax or not) or allowed characters; the password has a proposed minimum but no maximum. REQ-AUTH-001 AC-1 and AC-3 therefore cannot cover invalid non-empty input.",
-      "requirement": "REQ-AUTH-001",
-      "location": "docs/specs/CHG-0001/requirements.md:L42-L46",
-      "suggestion": "Once F-1 is answered, add identifier format and length rules and a password maximum length as ACs (marked proposed where not stated by the requester)."
+      "message": "REQ-LIST-003 AC-6 says the last valid page is shown but not what the API returns (the last page items and the effective page number), which the contract needs; its second sentence (the empty or no matching to-dos state) reads as either/or on its own.",
+      "requirement": "REQ-LIST-003",
+      "location": "docs/specs/CHG-0001/requirements.md:L202-L202",
+      "suggestion": "State that the API returns the items of the last page with that page number and the total count, and that with no matches the first-use empty state (REQ-TODO-003 AC-2) applies when the user has no to-dos at all and the no matching state (REQ-LIST-001 AC-4, REQ-LIST-002 AC-4) otherwise."
     },
     {
       "id": "F-6",
       "severity": "minor",
-      "message": "REQ-TODO-004 AC-1 lets the user edit due date and priority, but its only trace is Q7, which covers title/description and predates Q16. A reasonable elaboration, but unflagged; clearing the optional description on edit is also not stated.",
-      "requirement": "REQ-TODO-004",
-      "location": "docs/specs/CHG-0001/requirements.md:L127-L129",
-      "suggestion": "Trace to Q7 and Q16 (or mark the due date/priority editing as proposed) and add whether the description can be cleared on edit."
+      "message": "REQ-LIST-003 AC-7 defines only the API response to a page that is zero, negative or not a number; AC-6 covers a page requested by URL, but the UI outcome for such an invalid page in the URL is undefined.",
+      "requirement": "REQ-LIST-003",
+      "location": "docs/specs/CHG-0001/requirements.md:L203-L203",
+      "suggestion": "Add the UI behaviour, for example the UI shows page 1 with no error (analyst default), and list it under Analyst defaults item 5."
     },
     {
       "id": "F-7",
       "severity": "minor",
-      "message": "REQ-TODO-001 AC-2 is UI-framed (Given I do not choose a priority); it does not say the API applies Medium when priority is omitted, so the server-side default is untested.",
+      "message": "REQ-TODO-001 AC-1 says a new to-do appears at the top of my list, which holds only with the All or Active filter, no search and page 1; with the Completed filter or a non-matching search it is not shown.",
       "requirement": "REQ-TODO-001",
-      "location": "docs/specs/CHG-0001/requirements.md:L98-L98",
-      "suggestion": "State that a create request with no priority is stored with priority Medium, for both UI and API."
+      "location": "docs/specs/CHG-0001/requirements.md:L105-L105",
+      "suggestion": "Qualify it: given the All filter, no search and page 1, the new to-do appears first; otherwise the list follows REQ-LIST-001 to REQ-LIST-003."
     },
     {
       "id": "F-8",
       "severity": "minor",
-      "message": "Clear all completed deletes across all pages, filters and search (AC-2, proposed), but the confirmation in AC-1 only says they will be deleted permanently; a user viewing a search result could expect only the visible items to go.",
-      "requirement": "REQ-TODO-007",
-      "location": "docs/specs/CHG-0001/requirements.md:L155-L156",
-      "suggestion": "Require the confirmation to state the number of completed to-dos to be deleted and that it covers all completed to-dos, not only those shown."
+      "message": "Three elaborations are neither traced to an answer nor tagged analyst default, so the Analyst defaults list is not complete: REQ-AUTH-003 AC-3 (no password or hash in responses or logs; the security-baseline note covers hashing only, L72), REQ-TODO-002 AC-1 title trimming (from the Q6/Q17 question text, not stated in an answer, L114), and REQ-LIST-001 AC-5 All selected by default (L179). All are low risk.",
+      "requirement": "REQ-AUTH-003",
+      "location": "docs/specs/CHG-0001/requirements.md:L282-L291",
+      "suggestion": "Tag each (analyst default or security baseline elaboration) and add them to the Analyst defaults list for the approver."
     },
     {
       "id": "F-9",
       "severity": "minor",
-      "message": "REQ-TODO-005 AC-2 (mark not done) does not say the updated timestamp advances, while AC-1 and REQ-TODO-004 AC-1 do; the rule is inconsistent.",
-      "requirement": "REQ-TODO-005",
-      "location": "docs/specs/CHG-0001/requirements.md:L138-L138",
-      "suggestion": "Add that marking not done persists and advances the updated timestamp."
+      "message": "REQ-LIST-002 AC-7 (search text that is only leading or trailing whitespace) is unclear, and whether a non-empty term with surrounding spaces (\"  milk \") is trimmed before matching is not stated.",
+      "requirement": "REQ-LIST-002",
+      "location": "docs/specs/CHG-0001/requirements.md:L191-L191",
+      "suggestion": "Reword: search text is trimmed before matching; text that is empty after trimming applies no search restriction (Q33)."
     },
     {
       "id": "F-10",
-      "severity": "minor",
-      "message": "REQ-TODO-005 AC-3 says the to-do leaves the Active view on the next refresh of the list, which does not say whether that is immediate after the toggle or only after a manual reload.",
-      "requirement": "REQ-TODO-005",
-      "location": "docs/specs/CHG-0001/requirements.md:L139-L139",
-      "suggestion": "State the observable timing, for example: the list re-queries after the toggle and the to-do is no longer shown in the Active view."
+      "severity": "info",
+      "message": "A 128-character password maximum (analyst default) exceeds the 72-byte input limit of bcrypt, which silently truncates; characters versus bytes is also not stated.",
+      "requirement": "REQ-AUTH-001",
+      "location": "docs/specs/CHG-0001/requirements.md:L54-L54",
+      "suggestion": "For the SDD: choose Argon2id, scrypt or PBKDF2 (or document a pre-hash) so REQ-AUTH-003 holds for 128-character passwords, and define length in characters."
     },
     {
       "id": "F-11",
-      "severity": "minor",
-      "message": "NFR-004 AC-2 (server-side validation, no stack traces or SQL errors) and AC-3 (no committed secrets) go beyond the security-baseline note, which covers only password hashing, and are neither traced nor marked proposed.",
-      "requirement": "NFR-004",
-      "location": "docs/specs/CHG-0001/requirements.md:L247-L251",
-      "suggestion": "Trace AC-3 to CLAUDE.md rule 10 and mark AC-2 as a security baseline elaboration (or proposed)."
+      "severity": "info",
+      "message": "Last write wins (REQ-DATA-002 AC-1) implies the later write replaces the whole record, so a stale field from a second tab can overwrite a change made in the first; partial updates would behave differently. Both satisfy Q18.",
+      "requirement": "REQ-DATA-002",
+      "location": "docs/specs/CHG-0001/requirements.md:L220-L220",
+      "suggestion": "For the SDD: state whether an edit is a full replace or a partial update and test that outcome."
     },
     {
       "id": "F-12",
       "severity": "info",
-      "message": "Sign-up AC-2 reveals that an identifier is taken, so the non-enumeration goal of REQ-AUTH-002 AC-3 is only partial. Acceptable for a local-only first release, but it should be recorded as an accepted trade-off so the security review does not read it as a contradiction.",
-      "requirement": "REQ-AUTH-002",
-      "location": "docs/specs/CHG-0001/requirements.md:L43-L55",
-      "suggestion": "Add a note under REQ-AUTH-002 AC-3 that sign-up necessarily discloses identifier existence and that this is accepted."
+      "message": "REQ-AUTH-001 AC-9 requires a valid email address without naming the syntax rule (for example, whether non-ASCII local parts are allowed), which also affects case-insensitive uniqueness (AC-6).",
+      "requirement": "REQ-AUTH-001",
+      "location": "docs/specs/CHG-0001/requirements.md:L52-L52",
+      "suggestion": "For the SDD: name the email validation rule and the case-folding used for uniqueness."
     },
     {
       "id": "F-13",
       "severity": "info",
-      "message": "Assessment of the Proposed list: items 1 (password min 8), 3 (generic login error, really security baseline), 5 (logout), 6 (past due dates), 8 (search literals/whitespace), 9 (pagination edges, once F-3 is fixed), 10 (DB auto-create) and 11 (quantified feels instant; 1 s is loose but testable) are acceptable low-risk elaborations; 4 (8 h session) is an engineering default the SDD can own; 7 (clear-all scope) is acceptable with F-8; 2 (case-insensitive uniqueness) depends on F-1 and goes to the requester with it. All still need confirmation by the freeze approver.",
+      "message": "Analyst default 1 allows usernames up to 254 characters, while the Q31 option (b) example suggested 3-50; not a contradiction, since the requester chose (c), but the approver may want to tighten it.",
       "requirement": "REQ-AUTH-001",
-      "location": "docs/specs/CHG-0001/requirements.md:L271-L285",
-      "suggestion": "Split the list into product decisions for the requester (identifier, case rule) and engineering defaults for the SDD, so the approver sees only what is theirs."
-    },
-    {
-      "id": "F-14",
-      "severity": "info",
-      "message": "Out of scope does not mention sorting by due date or priority, although the Q24 option text mentioned sorting by priority; only newest-first ordering was requested (Q9).",
-      "requirement": "REQ-TODO-003",
-      "location": "docs/specs/CHG-0001/requirements.md:L259-L269",
-      "suggestion": "Add user-selectable sorting (by due date or priority) to Out of scope."
+      "location": "docs/specs/CHG-0001/requirements.md:L286-L288",
+      "suggestion": "Approver to confirm 3-254 for both forms at freeze, or set a separate username maximum."
     }
   ]
 }
