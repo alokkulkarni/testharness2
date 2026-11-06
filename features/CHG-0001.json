@@ -11,13 +11,5 @@
   "links": {
     "branch": "feature/CHG-0001-create-a-to-do-list"
   },
-  "running": [
-    {
-      "node": "N06-design-ux",
-      "role": "designer",
-      "runId": "run-mw4ytv3k",
-      "holder": "any",
-      "leaseUntil": "2026-11-06T12:58:29.840Z"
-    }
-  ]
+  "running": []
 }
