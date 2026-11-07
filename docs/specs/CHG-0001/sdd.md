@@ -2,10 +2,13 @@
 stage: sdd
 changeId: CHG-0001
 authors:
-  - login: "@alokkulkarni"
+  - squadSessionId: SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM
+    changeId: CHG-0001
+    agent: spec-author
+    agentRunId: run-sup2-d5
 upstream:
   - path: docs/specs/CHG-0001/requirements.md
-    sha256: e389371395a1feb1fcd3de52506b0fc60cd1060e5b728e7a0849a540cf5789e5
+    sha256: 266b5b6d3d319d635b6fbe7e01d1750d017d704a0a24dada7243c8b6264241bb
 ---
 
 # SDD — CHG-0001 To-do list
@@ -14,11 +17,16 @@ upstream:
 
 A new, locally run to-do app: people sign up, log in, and manage only their own to-dos through a web UI backed by
 an HTTP API, stored in SQLite. Requirements: `requirements.md` — REQ-AUTH-001..005, REQ-ISO-001, REQ-TODO-001..007,
-REQ-LIST-001..003, REQ-NAV-001, REQ-DATA-001..002, REQ-ACC-001, NFR-001..006. Stack fixed by C-1 (NFR-005).
+REQ-LIST-001..003, REQ-NAV-001, REQ-DATA-001..002, REQ-ACC-001, NFR-001..007. Stack fixed by C-1 (NFR-005);
+structure fixed by C-2, a modular monolith (NFR-007).
 
-Interfaces: **[contracts/todo-api-v1.yaml](contracts/todo-api-v1.yaml)** (OpenAPI 3.1) is the source of truth for
-every endpoint, schema, limit and error; this document does not repeat it. Decisions: [adr/](adr/) 0001–0017
-(0007–0017 split out of 0002–0004 in round 2; 0001–0006 keep their numbers).
+Interfaces: **[contracts/identity-api-v1.yaml](contracts/identity-api-v1.yaml)** (identity module),
+**[contracts/todo-api-v1.yaml](contracts/todo-api-v1.yaml)** (to-dos module) and
+**[contracts/common-problem-v1.yaml](contracts/common-problem-v1.yaml)** (components only: `Problem`, `FieldError`,
+the shared error responses, the `X-Todo-Client` header and the session cookie), OpenAPI 3.1 files linked by relative
+`$ref`s (Source: clarifications Q56, Q63), are together the source of truth for every endpoint, schema, limit and error;
+this document does not repeat them. Decisions: [adr/](adr/) 0001–0018 (0007–0017 split out of 0002–0004 in round 2;
+0001–0006 keep their numbers; 0018 records the module split, Q51, Q57, Q58).
 
 Nothing outside the requirements is designed here (no admin, password reset, email, sorting, page sizes, sharing).
 
@@ -32,28 +40,75 @@ Nothing outside the requirements is designed here (no admin, password reset, ema
 
 Browser → (same origin via Vite proxy) → API `/api/v1/**` → SQLite. No other process or network service (NFR-002).
 
-API packages (root `app.todo`):
+API packages (root `app.todo`): one Spring Boot application in one process, split into two modules over a shared
+kernel and wired by a composition root (NFR-007, ADR-0018; Source: clarifications Q51, Q57, Q58):
 
-- `auth`: `AuthController` (sign-up, login, logout, session), `AuthService`, `SessionService`, `SessionRepository`,
-  `SessionCookieAuthenticationFilter`, `ClientHeaderFilter` (ADR-0007), `PasswordRules`, `IdentifierRules`.
-- `user`: `UserRepository`.
-- `todo`: `TodoController`, `TodoService`, `TodoRepository`, `TodoValidator`, `TodoQuery` (status, q, page).
-- `common`: `ProblemWriter`, `ProblemCode`, `ProblemDetailsAdvice`, `ProblemAuthenticationEntryPoint`,
-  `ProblemRequestRejectedHandler`, `ProblemErrorController` (§6, ADR-0011); `ApiException` subtypes
-  (`ValidationException`, `NotFoundException`, `IdentifierTakenException`, `InvalidCredentialsException`);
-  `Whitespace` (§5); `ClockConfig` (ADR-0013); `RequestIdFilter`.
-- `config`: `SecurityConfig`, `DatabaseConfig` (creates the parent directory of `TODO_DB_PATH`, SQLite pragmas).
+- `auth` — **identity module**: `AuthController` (sign-up, login, logout, session), `AuthService`, `SessionService`,
+  `SessionRepository`, `UserRepository`, `SessionCookieAuthenticationFilter`, `PasswordRules`, `IdentifierRules`,
+  `IdentifierTakenException`, `InvalidCredentialsException`; published package `auth.api`: `CurrentUser`.
+- `todo` — **to-dos module**: `TodoController`, `TodoService`, `TodoRepository`, `TodoValidator`, `TodoQuery`
+  (status, q, page).
+- `common` — **shared kernel**: `ProblemWriter`, `ProblemCode`, `ProblemDetailsAdvice`,
+  `ProblemAuthenticationEntryPoint`, `ProblemRequestRejectedHandler`, `ProblemErrorController` (§6, ADR-0011);
+  `ApiException` and the subtypes both modules use (`ValidationException`, `NotFoundException`);
+  `ClientHeaderFilter` (ADR-0007); `Whitespace` (§5); `ClockConfig` (ADR-0013); `RequestIdFilter`.
+- `config` — **composition root**: `SecurityConfig`, `DatabaseConfig` (the only `DataSource`; creates the parent
+  directory of `TODO_DB_PATH`, SQLite pragmas). The root package `app.todo` holds only the application's main class
+  and belongs to the composition root.
 - Test source set only (never in the application, §11): `app.todo.TestTodoApplication`,
   `app.todo.testsupport.E2eClockConfiguration`, `app.todo.testsupport.OffsetFileClock` (ADR-0013).
 
+Ownership (NFR-007 AC-3; every contract operation, table and class belongs to exactly one row):
+
+| Module | Package | Contract and operations | Endpoints | Tables |
+|---|---|---|---|---|
+| Identity | `app.todo.auth` (published: `app.todo.auth.api`) | `identity-api-v1.yaml`: `signUp`, `logIn`, `logOut`, `getSession` | `/api/v1/auth/signup`, `/api/v1/auth/login`, `/api/v1/auth/logout`, `/api/v1/auth/session` | `users`, `sessions` |
+| To-dos | `app.todo.todo` | `todo-api-v1.yaml`: `listTodos`, `createTodo`, `getTodo`, `updateTodo`, `setTodoDone`, `deleteTodo`, `clearCompletedTodos` | `/api/v1/todos`, `/api/v1/todos/completed`, `/api/v1/todos/{todoId}`, `/api/v1/todos/{todoId}/done` | `todos` |
+| Shared kernel (not a module) | `app.todo.common` | `common-problem-v1.yaml` (components only, no operation) | none; it shapes the error body of every path (§6) | none |
+| Composition root (not a module) | `app.todo.config`, `app.todo` | none | none | `flyway_schema_history` (ADR-0014) |
+
+Dependency direction (no cycles; checked by the architecture test, §14): `todo` uses only `todo`, `common` and
+`auth.api`; `auth` uses only `auth` and `common`; `common` uses no module and not `config`; `config` and the root
+package may use any. Libraries are outside these rules. Repositories are package-private in their module, and only
+`config` creates a `DataSource` or `HikariConfig` (one pool of one connection, ADR-0016; NFR-007 AC-1).
+
+**Seam between the modules** (REQ-ISO-001, REQ-AUTH-004 AC-1). The identity module publishes one type:
+
+```java
+// app.todo.auth.api.CurrentUser — the only type auth publishes to other modules
+public record CurrentUser(long userId)
+```
+
+`SessionCookieAuthenticationFilter` makes each valid session an authenticated request whose Spring Security principal
+is a `CurrentUser` (§4). `TodoController` takes it with `@AuthenticationPrincipal CurrentUser` and passes `userId` to
+`TodoService` and every `TodoRepository` method (§7). The to-dos module never reads a cookie, a session or a `users`
+row; `userId` is an opaque number to it.
+
+**`getSession`** (REQ-AUTH-002 AC-4, contract `Session.user.identifier`): `sessions` holds only `user_id`, so the
+identity module reads the identifier inside `auth` with a lookup by id; the filter also records the loaded session's
+`expiresAt` in the authentication's details (an `auth`-internal type), from which `getSession` returns it. A session
+whose user row is missing cannot occur (`sessions.user_id` cascades on delete, §3); if it did, it is an unexpected
+error (500 `INTERNAL_ERROR`, §6).
+
+```java
+// app.todo.auth.UserRepository (package-private; ADR-0009) — added beside the lookup by identifier key and the insert
+Optional<UserRow> findById(long userId);
+```
+
 SPA modules: `src/api/client.ts` (fetch wrapper: JSON, `X-Todo-Client: web` on unsafe methods, 401 reporting to
-`SessionProvider`), `src/api/schema.ts` (generated from the contract), `src/auth/` (`SessionProvider`,
+`SessionProvider`), `src/api/identity.ts` and `src/api/todos.ts` (generated from `identity-api-v1.yaml` and
+`todo-api-v1.yaml`, one file per module contract, ADR-0001; the SPA imports `Problem` from `src/api/todos.ts`
+only), `src/auth/` (`SessionProvider`,
 `RequireAuth`, `LoginPage`, `SignupPage`, `returnTo.ts`), `src/todos/` (`TodoListPage`, `FilterGroup`,
 `SearchForm`, `Pagination`, `TodoRow`, `TodoDetailPage`, `TodoFormPage`, `ConfirmDialog`, `todoId.ts`, §8), `src/validation/`
 (rules mirroring §5, including `whitespace.ts`), `src/app/` (`AppRoutes` route table, `NotFoundPage`, §8;
 `AppErrorBoundary`, §6.1), `src/errors/userMessage.ts` (§6.1).
 
-## 3. Data model (Flyway `V1__init.sql`; ADR-0014, ADR-0015, ADR-0017)
+## 3. Data model (Flyway `V1__init.sql`; ADR-0014, ADR-0015, ADR-0017, ADR-0018)
+
+Table owners (NFR-007, ADR-0018): `users` and `sessions` belong to the identity module (`auth`), `todos` to the
+to-dos module (`todo`), `flyway_schema_history` to `config`; only a table's owner reads or writes it. One
+`V1__init.sql` creates all of them (ADR-0014).
 
 **users**
 
@@ -89,6 +144,10 @@ No role column: every account has the same permissions (REQ-AUTH-005 AC-2).
 Indexes: `ix_todos_user_created (user_id, created_at DESC, id DESC)`,
 `ix_todos_user_done_created (user_id, done, created_at DESC, id DESC)`.
 
+`todos.user_id → users` is the only foreign key between two modules' tables. It is kept as an accepted coupling of
+the shared schema (one SQLite file, C-2; ADR-0018): the to-dos module takes `user_id` only from `CurrentUser` (§2)
+and its SQL names only `todos`, never `users` or `sessions`.
+
 ## 4. Auth and session (ADR-0004, ADR-0005, ADR-0007, ADR-0008)
 
 - **Sign-up** (`signUp`): trim identifier (§5); validate (§5); hash password (Argon2id); insert. A `UNIQUE`
@@ -105,10 +164,13 @@ Indexes: `ix_todos_user_created (user_id, created_at DESC, id DESC)`,
   ends is lost. This is accepted under the "essential" exception of WCAG 2.2.1 Timing Adjustable (Source:
   clarifications Q36; NFR-001 note, §9).
 - **Each request**: `SessionCookieAuthenticationFilter` hashes the cookie token and loads the session; missing,
-  unknown or `expires_at <= now` → unauthenticated (expired row deleted). All `/api/v1/todos/**` and
+  unknown or `expires_at <= now` → unauthenticated (expired row deleted). A valid session makes the request
+  authenticated with a `CurrentUser(userId)` principal (§2). All `/api/v1/todos/**` and
   `GET /api/v1/auth/session` require a session; Spring Security answers an unauthenticated request to them through
   `ProblemAuthenticationEntryPoint` (401 `UNAUTHENTICATED`, §6). Sign-up, login and logout do not require a session;
   any other path passes security and is answered by §6 (404 for an unknown route).
+- **Session** (`getSession`): returns the identifier as stored at sign-up, read with `UserRepository.findById`, and
+  the session's `expiresAt` (§2; REQ-AUTH-002 AC-4).
 - **Order of checks** on protected unsafe requests: session (401) → `X-Todo-Client` header (403, ADR-0007) → route
   and method (404 / 405) → `Content-Type` (415) → body parsing (400 `MALFORMED_REQUEST`) → validation
   (400 `VALIDATION_FAILED`) → ownership (404). Unauthenticated requests never reach a repository (REQ-AUTH-004 AC-1).
@@ -223,8 +285,9 @@ Schema `maxLength`.
 ## 6. Error model (ADR-0011)
 
 Every error response under `/api/**` is RFC 9457 `application/problem+json` with `code` and
-`errors[{field, code, message}]` exactly as the contract's `Problem` schema, whatever its source. One component
-builds and writes the body:
+`errors[{field, code, message}]` exactly as the `Problem` and `FieldError` schemas of
+[contracts/common-problem-v1.yaml](contracts/common-problem-v1.yaml), whatever its source and whichever module's
+path it answers. One component builds and writes the body:
 
 ```java
 // app.todo.common.ProblemWriter
@@ -238,6 +301,17 @@ It sets `Content-Type: application/problem+json` and writes directly to the resp
 `ProblemRequestRejectedHandler` (Spring Security firewall rejections) and `ProblemErrorController` (anything the
 servlet container forwards to `/error`; the whitelabel page is disabled and the error dispatch is permitted by
 `SecurityConfig`). No other code builds an error body.
+
+`ProblemCode` is one closed enum whose values are exactly the `Problem.code` enum of `common-problem-v1.yaml`. Every
+application exception extends `ApiException`, which carries what the body needs; `ProblemDetailsAdvice` maps any
+`ApiException` from those values and names no module's exception type, so `common` depends on no module
+(ADR-0011, ADR-0018). `ValidationException` and `NotFoundException` are in `common`; `IdentifierTakenException` and
+`InvalidCredentialsException` are in `auth`.
+
+```java
+// app.todo.common.ApiException (abstract, extends RuntimeException)
+protected ApiException(int status, ProblemCode code, String detail, List<FieldError> errors);
+```
 
 | Cause | Status | `code` |
 |---|---|---|
@@ -266,6 +340,7 @@ every screen. `src/api/client.ts` turns each failed call into a `Failure` and ne
 
 ```ts
 // web/src/errors/userMessage.ts
+// `Problem` is the generated type imported from web/src/api/todos.ts (§2); a field error is Problem['errors'][number]
 export type Failure =
   | { kind: 'network' }                                  // the request did not reach the API (fetch rejected)
   | { kind: 'http'; status: number; problem?: Problem }  // non-2xx; `problem` absent when the body is not a valid Problem
@@ -301,9 +376,9 @@ export function userMessageFor(failure: Failure, action: UserAction): UserMessag
 - Because `errors[].message` is displayed as sent, the API's field messages follow the same rules: plain language,
   say how to fix the field, and (already required by §6) contain no internals (NFR-006 AC-1, AC-2). Their wording is
   the UX design §4 catalogue approved in Q39(a). This rule is binding for every `FieldError.message` the API sends:
-  the contract's description of `FieldError.message` ("Human-readable message naming the problem") says less, and
-  where it says less this SDD rule governs (Source: clarifications Q49, critic note N-7). The contract itself is not
-  changed by this supersede.
+  the contract's description of `FieldError.message` in `common-problem-v1.yaml` ("Human-readable message naming
+  the problem") says less, and where it says less this SDD rule governs (Source: clarifications Q49, critic note
+  N-7). That description itself is unchanged; this rule adds to it.
 - Every message gives its next step, either in its text or as a link or control shown with it (for example the
   §4.1 alert's Retry button); which of these each state uses is the UX design's. Exact copy is set by the UX design
   within these rules.
@@ -320,8 +395,8 @@ export function userMessageFor(failure: Failure, action: UserAction): UserMessag
     (Source: clarifications Q48). The same alert after a delete from the detail page (`delete-from-detail`) keeps its
     **Back to my to-dos** link to `/todos`, as the detail and edit screens' not-found states and the edit page's
     refused save (404) already have (UX design S5 and S6, `design/ux/ux-design.md` L376; L344, L347). Q48 keeps the
-    link on the detail page; that the edit page also keeps it is this draft's reading of Q48, not the requester's
-    words (§12.1 item 7(d)).
+    link on the detail page; that the edit page also keeps it is this SDD's reading of Q48, confirmed by the
+    requester in Q53 (§12.1 item 7(d)).
   - The refused-login alert reads "Invalid identifier or password. Check them and try again." Its first sentence
     equals the contract's `INVALID_CREDENTIALS` `detail`, but the SPA's text is its own constant in `userMessageFor`,
     never the response's `detail`.
@@ -460,13 +535,17 @@ A missing id, a malformed id and another user's id therefore give the identical 
   instead (§6.1; Source: clarifications Q48).
 - Delete: `ConfirmDialog` naming the to-do; Cancel changes nothing (REQ-TODO-006 AC-1..AC-3).
 - Clear completed: before opening the dialog the SPA re-fetches the list and shows `totals.completed` (N) in the
-  text (REQ-TODO-007 AC-1..AC-3). For any N other than 1:
+  text (REQ-TODO-007 AC-1..AC-3). For any N of 2 or more:
   "Delete all N completed to-dos? This deletes all your completed to-dos, including any not shown because of the
   current page, filter or search. This cannot be undone."
   For N = 1 (singular form; Source: clarifications Q38; exact text: §12.1 item 5):
   "Delete 1 completed to-do? This deletes your only completed to-do, even if it is not shown because of the
   current page, filter or search. This cannot be undone."
   N changes only this sentence; the dialog's heading and buttons are the UX design's (REQ-TODO-007 AC-1).
+  For N = 0 (nothing is completed any more when the re-fetch returns, for example after a clear in another tab) no
+  dialog opens and no `clearCompletedTodos` call is made; the control is disabled (REQ-TODO-007 AC-4) and the polite
+  live region (§9) announces "There are no completed to-dos to clear." (UX design D2, `design/ux/ux-design.md`
+  L299–L302; Source: clarifications Q43).
 - Log out control in the header (REQ-AUTH-004 AC-3).
 
 ## 9. Accessibility (NFR-001)
@@ -491,11 +570,35 @@ exception, not as a failure (Source: clarifications Q36; NFR-001 note). The audi
 
 ## 10. Observability
 
-Structured (JSON) logs per request: request id (generated by `RequestIdFilter`, held in the logging context only and
-not returned to the client), method,
+Structured (JSON) logs per request: request id (generated by `RequestIdFilter`, held in the logging context and, between the REQUEST
+and ERROR dispatches, in a request attribute, and never returned to the client), method,
 route template, status, duration, internal user id when authenticated. Never logged: request or response bodies,
 identifiers, passwords, hashes, cookies, session tokens, titles, descriptions, search text (REQ-AUTH-003 AC-3).
 Unexpected exceptions are logged with stack trace and request id. No metrics or tracing (local only).
+
+`RequestIdFilter` (in `common`) is a servlet filter registered ahead of the Spring Security filter chain (not inside
+it), by a `FilterRegistrationBean` in `config` for the `REQUEST` and `ERROR` dispatches, so on both dispatches it runs
+before and around every other filter, including `SessionCookieAuthenticationFilter` and `ClientHeaderFilter`:
+
+- **REQUEST dispatch**: it generates the request id, puts it into the logging context and stores it in the request
+  attribute `app.todo.requestId`, then runs the chain. In its `finally`, before it clears the logging context, it
+  writes the request's one per-request log line: with the response's status when the chain returned normally; when an
+  exception is propagating out of the chain, with status 500 (the status the container then sends) and, as a separate
+  entry, the exception's stack trace, both with the request id. It then clears the whole logging context and rethrows
+  the exception unchanged. When the request failed before a route was matched, the line has no route template.
+- **ERROR dispatch** (the container's forward to `/error`, §6): it restores the request id from the request attribute
+  into the logging context, so whatever `ProblemErrorController` logs carries it, runs the chain, clears the logging
+  context in its `finally`, and writes no second per-request line. Only if the attribute is absent (the container
+  refused the request before any REQUEST dispatch reached the filter) does it generate an id and write the per-request
+  line as on a REQUEST dispatch.
+- Each unexpected exception's stack trace is logged once, with the request id: by `ProblemDetailsAdvice` when the
+  exception reaches it (the logging context is still set), and by `RequestIdFilter` when it escapes the filter chain;
+  `ProblemErrorController` logs no stack trace. `SessionCookieAuthenticationFilter` does not catch unexpected
+  exceptions (for example from the session lookup) and runs on the REQUEST dispatch only, so the ERROR dispatch repeats
+  no session lookup. A filter's exception therefore reaches the client as the generic 500 `INTERNAL_ERROR` Problem
+  that `ProblemErrorController` writes on the ERROR dispatch (§6, ADR-0011).
+- `SessionCookieAuthenticationFilter` only puts the internal user id into the logging context under a plain
+  logging-context key, so `common` names no `auth` type (§2, ADR-0018).
 
 ## 11. Local run (NFR-002, REQ-DATA-001 AC-3)
 
@@ -533,7 +636,10 @@ No requirement is changed by these decisions.
 
 ### 12.1 For the approver to confirm at freeze
 
-These are product-visible choices the requester did not make; approving the freeze confirms them.
+Items 1–6 and 8 are product-visible choices the requester did not make; approving the freeze confirms them. Items 7,
+9 and 10 were confirmed by the requester as written in Q53 and Q54. Items 11–20 are engineering defaults of
+supersede-2, not product-visible, that C-2, NFR-007 and Q56 leave open (Source: clarifications Q51, Q56–Q58, Q63);
+approving the freeze confirms them. Item 21 was decided by the requester in Q60.
 
 1. **Email rule is ASCII-only** (§5, finding 12). It narrows analyst default 2 ("a valid email address",
    REQ-AUTH-001 AC-9): quoted local parts, IP-literal domains, internationalised addresses and punycode top-level
@@ -554,18 +660,19 @@ These are product-visible choices the requester did not make; approving the free
    `a;b` with a "try again" message that cannot succeed.
 7. **Next steps added to two approved strings** (§6.1, NFR-006 AC-1). Decided by the requester: on the list screen
    a 404 on a done toggle re-queries the list, the message says the list has been refreshed, and no **Back to my
-   to-dos** link is shown; the link stays only on the detail page (Q48(b), "b is recommended."). Still for the
-   approver, because the requester's words do not settle them: (a) the full sentence "That to-do no longer exists,
-   and the list has been refreshed." (Q48 quotes only "…the list has been refreshed"), shown only when the re-query
-   that follows the 404 succeeds; when that re-query fails and a later retry of the list succeeds, the list is shown
-   without the message (default: the least behaviour, the message is not kept for a later load); (b) applying the same
-   list-screen rule to a 404 on a row's Delete (`delete-from-list`), which Q48 asks about only for the toggle but
-   whose option (b) states for the list screen as a whole, while a delete from the detail page keeps the link; (c)
-   the refused-login alert "Invalid identifier or password. Check them and try again.", which changes wording of the
-   UX design §4 approved in Q39(a); (d) the edit page keeping its existing **Back to my to-dos** link on a refused
-   save (404) and in its not-found state (UX design S6, `design/ux/ux-design.md` L344, L347): Q48's words keep the
-   link "only on the detail page", and this draft reads them as removing it only from the list screen (a reading,
-   tagged as a default; the alternative, removing the link from the edit page, would change two UX design states).
+   to-dos** link is shown; the link stays only on the detail page (Q48(b), "b is recommended."). Not settled by
+   Q48's words, and confirmed by the requester as written in Q54 ((a)–(c)) and Q53 ((d)): (a) the full sentence "That
+   to-do no longer exists, and the list has been refreshed." (Q48 quotes only "…the list has been refreshed"), shown
+   only when the re-query that follows the 404 succeeds; when that re-query fails and a later retry of the list
+   succeeds, the list is shown without the message (the least behaviour, the message is not kept for a later load);
+   (b) applying the same list-screen rule to a 404 on a row's Delete (`delete-from-list`), which Q48 asks about only
+   for the toggle but whose option (b) states for the list screen as a whole, while a delete from the detail page
+   keeps the link; (c) the refused-login alert "Invalid identifier or password. Check them and try again.", which
+   changes wording of the UX design §4 approved in Q39(a); (d) the edit page keeping its existing **Back to my
+   to-dos** link on a refused save (404) and in its not-found state (UX design S6, `design/ux/ux-design.md` L344,
+   L347): Q48's words keep the link "only on the detail page", and this SDD reads them as removing it only from the
+   list screen, a reading the requester confirmed in Q53 (the alternative, removing the link from the edit page,
+   would have changed two UX design states).
 8. **A 400 outside a form has no field to fix** (§6.1, §8, NFR-006 AC-1): `fix-fields` is used only for the form
    actions (`sign-up`, `log-in`, `create`, `save`); a 400 `VALIDATION_FAILED` on any other action gets `try-again`.
    So that a bookmarked `/todos?status=bogus` does not fail on every try, the SPA removes an unknown `status` from
@@ -574,16 +681,75 @@ These are product-visible choices the requester did not make; approving the free
    whose `errors[]` names no field that form shows also gets `try-again` (Q49, critic note N-3; §6.1).
 9. **Landing after login from an unknown address** (§4.2, §8, REQ-NAV-001 AC-8; analyst default 12): Q47 decides
    that a signed-out visitor on an address the web app does not define is sent to the login page, but not where they
-   land after logging in. The draft keeps `safeReturnTo` unchanged, so such an address is not honoured and the user
+   land after logging in. This SDD keeps `safeReturnTo` unchanged, so such an address is not honoured and the user
    lands on `/todos` (the alternative, honouring it so that the user then sees the not-found page, would widen the
-   `returnTo` rule). This is analyst default 12, not the requester's decision. A signed-out visitor on
+   `returnTo` rule). This is analyst default 12, confirmed by the requester as written in Q54. A signed-out visitor on
    `/todos/not-a-uuid` lands on `/todos` in the same way (already the §4.2 rule).
 10. **The error page's home link resets the error boundary** (§6.1, NFR-006 AC-3): Q49 accepts critic note N-1, which
-    offers a full page load (`<a href="/">`) or an error boundary that resets on navigation. The draft takes the
+    offers a full page load (`<a href="/">`) or an error boundary that resets on navigation. This SDD takes the
     reset, limited to a change of `location.pathname` while the error page is shown (never a query-string-only
     change, and never by remounting the boundary or the routes through a location-derived `key`), because it keeps
     the signed-in session state without a new probe and can be checked by a component test; the page's reload
-    control still does a full reload. The choice between the two is the spec author's.
+    control still does a full reload. Confirmed by the requester as written in Q54.
+11. **Module package names** (§2, ADR-0018, NFR-007 AC-3): the identity module is package `app.todo.auth` and the
+    to-dos module `app.todo.todo`, with the shared kernel `app.todo.common` and the composition root
+    `app.todo.config`, keeping the first freeze's names. The former `user`
+    package (only `UserRepository`) is folded into `auth`.
+12. **The seam is one published type** (§2, §4, ADR-0018; REQ-ISO-001): `app.todo.auth.api.CurrentUser(long userId)`,
+    set as the Spring Security principal by `SessionCookieAuthenticationFilter` and read by `TodoController` with
+    `@AuthenticationPrincipal`. Repositories are package-private in their module.
+13. **Shared kernel contents** (§2, §6, ADR-0011): `ClientHeaderFilter` moves from `auth` to `common`, because it
+    guards both modules' unsafe routes; `IdentifierTakenException` and `InvalidCredentialsException` move from
+    `common` to `auth`; `ProblemCode` stays one closed enum in `common`, matching the one list in
+    `common-problem-v1.yaml`; `ProblemDetailsAdvice` maps the `ApiException` base generically. No behaviour changes.
+14. **Composition root** (§2, ADR-0018): `SecurityConfig` (which names both modules' paths) and `DatabaseConfig` (the
+    only `DataSource`) are in `config`, which, with the root package's main class, may depend on every module; it is
+    not a module of NFR-007 AC-3.
+15. **`getSession` reads the identifier by id inside `auth`** (§2, §4; REQ-AUTH-002 AC-4): `UserRepository.findById`,
+    with `expiresAt` from the authentication's details set by the filter; a session with no user row (prevented by
+    the cascading foreign key) would be a 500.
+16. **Contract files and versions** (§1; Q56, Q63): file names keep `-v1`, and the to-dos module's file keeps the
+    first freeze's name `todo-api-v1.yaml` (Q63); the three files' `info.version` values move
+    together (they are coupled through `common-problem-v1.yaml`), and a breaking change to the common file bumps
+    every file. All shared error responses are in the common file, including `NotFound`, which only to-dos
+    operations list but which also answers an unknown route; each module file's root `security` and its local
+    `components.securitySchemes.sessionCookie` entry, a `$ref` into the common file, keep the frozen security
+    declaration. The new `info.title` values ("To-do API — identity module", "To-do API — to-dos module", "To-do API
+    — common problem model") and the module files' `info.description` text are new wording with no wire effect; the
+    frozen conventions text moves into the common file's `info.description` with exactly these changes, none with a
+    wire effect: (a) a new first paragraph naming the file's shared components and the two module contracts, in
+    place of the frozen first paragraph; (b) a new "Versioning" paragraph (the three files change together, equal
+    `info.version` values, a breaking change to the common file bumps every file); (c) the heading "Conventions
+    (sdd.md "Validation" and "Error model")" gains ", for every operation of both module contracts"; (d) "the
+    operations' own errors listed below" becomes "… listed in the module contracts". Every convention bullet is
+    otherwise unchanged. The common file, components only, has no `servers`, root `security` or `tags`. The contract
+    tests read the files where they are frozen, not a copy (ADR-0012).
+17. **One generated types file per module** (§2, ADR-0001): `web/src/api/identity.ts` and `web/src/api/todos.ts`
+    replace `web/src/api/schema.ts`; the SPA imports `Problem` from `todos.ts` only and types a field error as
+    `Problem['errors'][number]`. Both are configured in `web/redocly.yaml` (`apis` entries `identity` and `todos`,
+    each with its `root` and `x-openapi-ts.output`), and `@redocly/cli` is a dev dependency of `web/`, also used for
+    the contract lint of the two module roots (ADR-0001, ADR-0012).
+18. **One `V1__init.sql` with table owners, and the physical foreign key kept** (§3, ADR-0014, ADR-0018):
+    `todos.user_id → users` stays as an accepted coupling of the one-file schema; the to-dos module's SQL never
+    names `users` or `sessions`.
+19. **Request id and user id in the logging context** (§10, ADR-0018): `RequestIdFilter` (in `common`) is a servlet
+    filter registered ahead of the Spring Security filter chain (not inside it), for the `REQUEST` and `ERROR`
+    dispatches. It writes the one per-request log line in its `finally`, before clearing the logging context (status
+    500 and the stack trace, with the request id, when an exception escapes the chain, which it then rethrows), keeps
+    the request id in a request attribute and restores it on the ERROR dispatch without a second line, exactly as §10
+    describes; `SessionCookieAuthenticationFilter` only puts the internal user id into the logging context under a
+    plain logging-context key, so `common` names no `auth` type.
+20. **ArchUnit rule set** (§14, ADR-0018; Q58): the rules of the architecture level below, over main classes only,
+    plus a non-vacuity test on a fixture root package outside `app.todo` (for example `archfixture`; plain classes,
+    no Spring annotations); a main class outside the listed packages fails the build.
+21. **Spring Boot 4.x and the contract validator on its v3 line** (§13, §14, ADR-0002, ADR-0012; NFR-004, NFR-005,
+    NFR-007 AC-3): decided by the requester in Q60(a). The backend targets the latest Spring Boot 4.x release, pinned
+    exactly in `api/pom.xml` by the java-engineer (Source: clarifications Q60). The contract tests use
+    `com.atlassian.oai:openapi-request-validator-core` 3.0.0 and its v3 MockMvc adapter
+    (`openapi-request-validator-mockmvc`, artifact id confirmed on Maven Central by the java-engineer when pinning;
+    if it does not exist, the java-engineer stops and reports a spec question), in place of the first freeze's
+    `swagger-request-validator-mockmvc`. The v3 adapter is documented as compatible with Spring 7+ / Spring Boot 4+
+    (tool spikes of 2026-11-06 §1, cited in ADR-0012), which the Boot line of Q60 meets.
 
 ## 13. Risks
 
@@ -599,13 +765,29 @@ These are product-visible choices the requester did not make; approving the free
 | One DB connection serialises requests | Performance | Ample for one local user and 500 to-dos; NFR-003 test guards it (ADR-0016) |
 | Flyway's SQLite support packaging differs between majors | Build | java-engineer adds the SQLite module if the pinned major needs it (ADR-0014) |
 | Test-only clock reaching a normal run | Security | Classes only in the test source set, `e2e` profile, started only by `spring-boot:test-run`; default-profile integration test asserts the system clock (ADR-0013) |
+| The contract validator, renamed openapi-request-validator in v3.0.0, has a v3 adapter documented as compatible with Spring 7+ / Spring Boot 4+ (tool spikes of 2026-11-06 §1, cited in ADR-0012), and the v3 MockMvc adapter's artifact id was not verified by the tool spikes | Build | The backend targets the latest Spring Boot 4.x release, pinned exactly in `api/pom.xml` by the java-engineer (Source: clarifications Q60; §12.1 item 21), which the v3 adapter supports; the java-engineer confirms the v3 MockMvc adapter's artifact id on Maven Central when pinning and, if it does not exist, stops and reports a spec question rather than switching line or artifact (ADR-0012) |
+| The contract validator does not enforce the cookie `apiKey` security scheme (tool spikes of 2026-11-06, ADR-0012), so a missing session cookie passes contract validation | Quality | 401 is tested at the application level: the REQ-AUTH-004 integration tests call every to-do operation without, with an expired and with a logged-out session (§14, ADR-0012) |
+| Each generated SPA types file has its own `Problem` type, which could drift apart | Quality | Both come from the one `common-problem-v1.yaml`; the SPA imports `Problem` from `todos.ts` only; a type-level test asserts the two `Problem` types are equal (§14, NFR-006 row) |
+| The ArchUnit rules are hand-maintained: a new package could fall outside them, and a rule that matches no class passes silently | Quality | A rule fails the build for a main class outside the listed packages; a non-vacuity test runs every rule on a fixture root package outside `app.todo` (for example `archfixture`) with a deliberate violation and expects it to fail (§14, ADR-0018) |
+| `common-problem-v1.yaml` has no operations or servers, so linting it on its own fails (`no-empty-servers` error, `no-unused-components` warnings); `MethodNotAllowed` and `RequestRejected` are defined only there and referenced by no operation (as in the first freeze's file), so they appear in neither module bundle nor generated types file | Quality | Contract lint (`redocly lint`, `extends: [recommended]`) runs on the two module roots only, which lint the common file through their `$ref`s (ADR-0012); the two unreferenced responses are checked by the direct `SchemaValidator` checks against `Problem` (405 and `REQUEST_REJECTED`, NFR-004 row of §14), not by an operation |
 
 ## 14. Verification and traceability
 
 Levels: **unit** (JUnit 5 validators/services with a fixed `Clock`; Vitest for SPA logic), **integration**
-(Spring Boot + MockMvc against a fresh temporary SQLite file per test class), **contract** (every integration
-response validated against `todo-api-v1.yaml` with swagger-request-validator, plus an endpoint-inventory test
-comparing Spring's mapped routes with the contract's operations; ADR-0012), **component** (Vitest + React Testing
+(Spring Boot + MockMvc against a fresh temporary SQLite file per test class; only the NFR-004 filter-exception test
+runs on the embedded container at a random port, because MockMvc performs no ERROR dispatch, and validates its
+exchange with the core validator's `OpenApiInteractionValidator` instead of the MockMvc adapter, §10), **contract** (every integration
+request and response validated with openapi-request-validator against the module file that defines its path,
+`identity-api-v1.yaml` or `todo-api-v1.yaml`, each resolving `common-problem-v1.yaml` through its `$ref`s; error
+bodies outside any operation validated directly against `Problem` with the validator's `SchemaValidator`; plus an
+endpoint-inventory test comparing Spring's mapped routes, excluding, by name, only `/error` (all methods of
+`ProblemErrorController`, `common`), with the union of the two module files, requiring each
+path and method in exactly one file and its controller in that file's module package; any other mapped route
+missing from both module files fails the test, and the java-engineer stops and reports it as a spec question;
+plus the contract lint, the `web/package.json` script `lint:contracts` (`pnpm -C web lint:contracts`), which runs
+`redocly lint` on the two module roots and runs in the gates; cookie security is not
+checked at this level, so 401 is tested at the integration level; ADR-0012), **architecture** (ArchUnit over the
+API's main classes, ADR-0018), **component** (Vitest + React Testing
 Library), **e2e** (Playwright against the real API and SPA with a temporary DB; the main configuration uses the §11
 commands, the session-expiry configuration the test-only clock of §11), **a11y** (vitest-axe,
 @axe-core/playwright, Playwright keyboard-only scripts, manual screen-reader pass). Test names start with the
@@ -614,18 +796,18 @@ requirement ID and AC.
 | Requirement | SDD § | Contract element | Verified by |
 |---|---|---|---|
 | REQ-AUTH-001 | §3, §4, §4.1, §5 | `signUp`, `SignupRequest`, `SignupResult` | unit: `IdentifierRules`, email rule, `PasswordRules` boundaries (2/3/254/255 identifier, 7/8/128/129 password, code points), identifier padded with U+00A0 and U+3000 trimmed; integration: create, 409 duplicate incl. case variants and concurrent duplicate, 400 per field; component: one identifier field, field messages, a signed-out visitor opening `/signup` directly (probe 401) sees the sign-up form with no message and no redirect; e2e: a fresh browser opens `/signup` directly, signs up, then logs in, no verification step |
-| REQ-AUTH-002 | §4, §4.1, §4.2; ADR-0008 | `logIn`, `getSession`, `LoginRequest`, `Session`, `sessionCookie` | integration: success, wrong password and unknown identifier give byte-identical 401 bodies, case-variant and whitespace-padded login (incl. U+00A0 padding), cookie attributes, expiry at login + 8 h with a fixed `Clock`; component: reload on `/todos` while signed in renders nothing until the probe resolves and does not redirect; a probe network error or 500 keeps `unknown`, shows the alert with Retry, and never redirects or clears the user; after login the user lands on `/todos` when there is no valid `returnTo`; e2e: reload stays signed in |
-| REQ-AUTH-003 | §3, §4, §6, §10; ADR-0005 | `SignupRequest.password`, `InternalError` (no hash in any schema) | integration: stored hash is `$argon2id$`, two equal passwords give different hashes, no password or hash in any response body or captured log line; unit: 100-character passwords differing only after byte 72 do not cross-verify |
-| REQ-AUTH-004 | §4, §4.1, §4.2, §11; ADR-0004, ADR-0007, ADR-0008, ADR-0013 | `logOut`, `getSession`, `Unauthenticated`, `ClientHeader`, `ClientHeaderMissing` | integration: every to-do operation without, with expired, and with logged-out session → 401 `UNAUTHENTICATED` Problem and DB unchanged; 403 without `X-Todo-Client`; in the default profile the `Clock` bean is the system UTC clock and no `OffsetFileClock` bean exists; unit: `safeReturnTo` honours `/todos`, `/todos?status=active&page=2`, `/todos/<uuid>`, `/todos/<uuid>/edit`, `/todos/new` and gives `/todos` for absent, empty, `//evil.example`, `https://evil.example`, `/\evil.example`, `javascript:alert(1)`, `/login`, `/todos/not-a-uuid`, `/nope` (REQ-NAV-001 AC-8, analyst default 12); component: signed-out visitor on a to-do route → `/login?returnTo=…` with no message; a `signed-in` user whose request gets 401 → `/login` with "Your session has ended. Please log in again."; a 401 from `logIn` or the probe never shows that message; typed `/login` never shows it; reload on a to-do route with no cookie (after expiry) → `/login` with no message; e2e (main): a fresh browser opening `/todos` lands on `/login` with no message, logs in and returns to `/todos`, log out then back → login page; e2e (session-expiry configuration): log in, write `PT8H1M` to the offset file, change the filter → login page with the session-ended message |
-| REQ-AUTH-005 | §3, §7 | whole contract (no user-listing operation), `User` | contract: endpoint inventory equals the contract (no user-listing or cross-user operation); integration: after migration the `users` table has no role or permission column, and two new accounts get identical responses on every operation |
-| REQ-ISO-001 | §7; ADR-0009 | `TodoId`, `NotFound`, `listTodos`, `clearCompletedTodos` | integration: two users; list/search/filter/page never return B's rows; get/update/done/delete on B's id → 404 identical to a random UUID and to a malformed id, B's row unchanged; clear completed deletes only A's; e2e: REQ-ACC-001 AC-2 |
+| REQ-AUTH-002 | §2, §4, §4.1, §4.2; ADR-0008, ADR-0018 | `logIn`, `getSession`, `LoginRequest`, `Session`, `sessionCookie` | integration: success, wrong password and unknown identifier give byte-identical 401 bodies, case-variant and whitespace-padded login (incl. U+00A0 padding), cookie attributes, expiry at login + 8 h with a fixed `Clock`; `getSession` after a login with a case-variant identifier returns `user.identifier` exactly as stored at sign-up (original case, read by `UserRepository.findById`) and the `expiresAt` set at login; component: reload on `/todos` while signed in renders nothing until the probe resolves and does not redirect; a probe network error or 500 keeps `unknown`, shows the alert with Retry, and never redirects or clears the user; after login the user lands on `/todos` when there is no valid `returnTo`; e2e: reload stays signed in |
+| REQ-AUTH-003 | §3, §4, §6, §10; ADR-0005 | `SignupRequest.password`, `InternalError` (no hash in any schema) | integration: stored hash is `$argon2id$`, two equal passwords give different hashes, no password or hash in any response body or captured log line, including the log of a request whose filter throws (the NFR-004 filter-exception test, §10); unit: 100-character passwords differing only after byte 72 do not cross-verify |
+| REQ-AUTH-004 | §2, §4, §4.1, §4.2, §11; ADR-0004, ADR-0007, ADR-0008, ADR-0012, ADR-0013 | `logOut`, `getSession`, `Unauthenticated`, `ClientHeader`, `ClientHeaderMissing` | integration (the 401 check of record, because the contract validator does not enforce cookie security, ADR-0012): every to-do operation without, with expired, and with logged-out session → 401 `UNAUTHENTICATED` Problem and DB unchanged; 403 without `X-Todo-Client`; in the default profile the `Clock` bean is the system UTC clock and no `OffsetFileClock` bean exists; unit: `safeReturnTo` honours `/todos`, `/todos?status=active&page=2`, `/todos/<uuid>`, `/todos/<uuid>/edit`, `/todos/new` and gives `/todos` for absent, empty, `//evil.example`, `https://evil.example`, `/\evil.example`, `javascript:alert(1)`, `/login`, `/todos/not-a-uuid`, `/nope` (REQ-NAV-001 AC-8, analyst default 12); component: signed-out visitor on a to-do route → `/login?returnTo=…` with no message; a `signed-in` user whose request gets 401 → `/login` with "Your session has ended. Please log in again."; a 401 from `logIn` or the probe never shows that message; typed `/login` never shows it; reload on a to-do route with no cookie (after expiry) → `/login` with no message; e2e (main): a fresh browser opening `/todos` lands on `/login` with no message, logs in and returns to `/todos`, log out then back → login page; e2e (session-expiry configuration): log in, write `PT8H1M` to the offset file, change the filter → login page with the session-ended message |
+| REQ-AUTH-005 | §3, §7 | both module contracts (no user-listing operation), `User` | contract: endpoint inventory equals the union of `identity-api-v1.yaml` and `todo-api-v1.yaml` (no user-listing or cross-user operation); integration: after migration the `users` table has no role or permission column, and two new accounts get identical responses on every operation |
+| REQ-ISO-001 | §2, §7; ADR-0009, ADR-0018 | `TodoId`, `NotFound`, `listTodos`, `clearCompletedTodos` | integration: two users; list/search/filter/page never return B's rows; get/update/done/delete on B's id → 404 identical to a random UUID and to a malformed id, B's row unchanged; clear completed deletes only A's; e2e: REQ-ACC-001 AC-2 |
 | REQ-TODO-001 | §7, §8; ADR-0013, ADR-0017 | `createTodo`, `TodoCreate`, `Todo` | integration: create with/without priority (→ MEDIUM) and description, timestamps set, `done=false`, first in list; e2e: create then reload |
 | REQ-TODO-002 | §5, §6; ADR-0010 | `TodoCreate`, `TodoUpdate`, `DueDate`, `Priority`, `BadRequest`, `FieldError` | unit (API and SPA, same table): `Whitespace`/`whitespace.ts` trim each of the 25 code points and keep U+001C–U+001F, U+200B, U+FEFF; `TodoValidator` boundaries (title 0/1/200/201 after trim, whitespace-only, a title of only U+00A0, of only U+2007 + U+202F, of only U+3000 → refused `BLANK`, a title padded with U+00A0 stored trimmed, description 2000/2001, description of only U+00A0 → no description, `2026-02-30`, free text, past date, priority values); integration: each refusal names its field, NBSP-only title refused with nothing saved; component: date shown identically under `TZ=Pacific/Kiritimati` and `TZ=Pacific/Pago_Pago`, NBSP-only title refused in the form |
 | REQ-TODO-003 | §7, §8; ADR-0017 | `listTodos`, `getTodo`, `TodoPage`, `TodoTotals` | integration: order by created desc with tie-break; component: row fields, first-use empty state, detail view fields |
 | REQ-TODO-004 | §5, §7; ADR-0006, ADR-0013 | `updateTodo`, `TodoUpdate`, `NotFound` | integration: whole-content replace, `updatedAt` advances and `createdAt` unchanged, invalid edit leaves row unchanged, 404 on deleted id with no row created, clearing description; e2e: edit flow |
 | REQ-TODO-005 | §7, §8; ADR-0006, ADR-0013 | `setTodoDone`, `TodoDoneUpdate` | integration: done true/false, `updatedAt` strictly advances within the same millisecond; e2e: toggling under Active removes the row without reload |
 | REQ-TODO-006 | §7, §8 | `deleteTodo`, `NotFound`, `listTodos` (page clamp) | component: confirm and cancel; integration: delete then 404 on update and delete; e2e: deleting the only item on the last page shows the previous page; restart persistence covered by REQ-DATA-001 |
-| REQ-TODO-007 | §7, §8 | `clearCompletedTodos`, `ClearCompletedResult`, `TodoTotals.completed` | integration: deletes all completed across pages regardless of params, keeps active, 200 `deletedCount: 0` when none; component: dialog text with count and scope, exactly the §8 singular text when `totals.completed = 1` and exactly the §8 plural text when it is 2 and when it is 21 (Q38), disabled when `totals.completed = 0`, cancel deletes nothing |
+| REQ-TODO-007 | §7, §8 | `clearCompletedTodos`, `ClearCompletedResult`, `TodoTotals.completed` | integration: deletes all completed across pages regardless of params, keeps active, 200 `deletedCount: 0` when none; component: dialog text with count and scope, exactly the §8 singular text when `totals.completed = 1` and exactly the §8 plural text when it is 2 and when it is 21 (Q38), disabled when `totals.completed = 0`, cancel deletes nothing; with the control enabled (the list showed `totals.completed = 1`) and the re-fetch before opening returning `totals.completed = 0`: no dialog opens, the control is disabled, the polite live region announces "There are no completed to-dos to clear." and no `clearCompletedTodos` call is made (Q43, AC-4; §8) |
 | REQ-LIST-001 | §7, §8 | `listTodos` `status` | integration: all/active/completed, default all, invalid status → 400; component: "No matching to-dos" vs first-use state, including a user with no to-dos who selects Completed or searches (sees "No matching to-dos"); a URL `status=bogus` is removed from the URL (filter All) and no `listTodos` call carries the bad value |
 | REQ-LIST-002 | §5, §7, §8; ADR-0015 | `listTodos` `q` | integration: case-insensitive title and description match, `%`, `_`, `\`, `'`, `"` literal, whitespace-only = no search (incl. `q` of only U+00A0 and of only U+3000), search AND filter; component: NBSP-only search omits `q`; e2e: search flow |
 | REQ-LIST-003 | §7, §8 | `listTodos` `page`, `TodoPage` | integration: 45 items → pages of 20/20/5, no repeats or gaps, page 99 and a 30-digit page → last page, no matches → page 1 empty, `0`/`-1`/`abc`/`1.5` → 400, `pageSize` ignored; component: controls disabled/hidden, filter change resets page, bad URL page → page 1; e2e: paging flow |
@@ -636,6 +818,7 @@ requirement ID and AC.
 | NFR-001 | §4, §9; ADR-0001, ADR-0008 | `FieldError.message` | a11y: axe (WCAG 2.1 A/AA rules) zero violations on sign-up, login, list, create/edit form, delete dialog, clear-completed dialog, the to-do detail page `/todos/:id` and the not-found page (opened while signed in, REQ-NAV-001 AC-3, Q47); keyboard-only Playwright scripts for every action incl. dialog focus in/out and reaching, reading and leaving the detail page (to edit and back to the list); component: error `aria-describedby` and alert summary; manual screen-reader and contrast pass on the same eight screens recorded by web-qa; the audit record lists 2.2.1 Timing Adjustable as met under the "essential" exception accepted in Q36 (fixed 8-hour session, no warning or extension), not as a failure |
 | NFR-002 | §2, §11 | `servers` (localhost) | e2e: the main configuration starts the API and SPA with the documented §11 commands and talks only to `localhost`; review: README run steps on a fresh checkout, no cloud/email/hosted-DB configuration, no deployment workflow, no test-clock profile or variable in `.env.example` or the README |
 | NFR-003 | §3 (indexes), §7; ADR-0015, ADR-0016 | `listTodos` and all write operations | e2e (performance spec, main configuration): user seeded with 500 to-dos; each of list, filter, search, page, create, edit, complete, delete run 20 times, time from action to rendered result, p95 ≤ 1 s |
-| NFR-004 | §4, §5, §6, §11; ADR-0004, ADR-0005, ADR-0007, ADR-0010, ADR-0011 | `Problem` (incl. `code` enum), `BadRequest`, `Unauthenticated`, `ClientHeaderMissing`, `NotFound`, `MethodNotAllowed`, `UnsupportedMediaType`, `RequestRejected`, `InternalError`, `additionalProperties: false` | review + integration: server refuses invalid input sent directly (all REQ-TODO-002/REQ-AUTH-001 cases via API), forced internal error returns generic 500 with no stack trace or SQL; one request per error source — 401 from the security entry point, 403 from `ClientHeaderFilter`, 405 (`PATCH /api/v1/todos/{id}`, `Allow` header present), 415 (`text/plain` body and no `Content-Type` on `createTodo`), 404 unknown route (`/api/v1/nope`), 400 unparseable JSON, 400 `REQUEST_REJECTED` from the firewall (`;` in the path), and `ProblemErrorController` given a forwarded 413 and 500 (error attributes set as the servlet container sets them) — each returns `application/problem+json` valid against the `Problem` schema (directly, where no contract operation exists), with its listed `code` and no stack trace, exception text or SQL, and never the whitelabel or Spring Boot default body; secret scan of the repository in the gates; AC-1 via REQ-AUTH-003 tests and ADR-0005 review |
-| NFR-005 | §2; ADR-0001..0003 | whole contract (HTTP API) | review: `web/package.json` (React, TypeScript), `api/pom.xml` (Spring Boot), sqlite-jdbc driver and `.db` file; e2e exercises browser → HTTP API |
-| NFR-006 | §2, §4.1, §6, §6.1, §8 (Q39, Q48, Q49) | `Problem` (`code`; `title` and `detail` never displayed), `FieldError.message` (§6.1 rule binding, N-7) | unit: `userMessageFor` for every row of the §6.1 table whose text it supplies (all rows except the 400 `VALIDATION_FAILED` form-action row with a shown field and the 409 `IDENTIFIER_TAKEN` row, whose text is `errors[].message`, and the `session-probe` 401 row, which shows nothing), and, outside those three cases, for every `ProblemCode`, statuses 403/405/413/415/500/502, a non-Problem body and `network` across every `UserAction`, returns a non-empty text and a next step; a 400 `VALIDATION_FAILED` on `load-list`, `toggle-done`, `delete-from-list`, `delete-from-detail` and `clear-completed` gives `try-again`, not `fix-fields`; a 400 `VALIDATION_FAILED` on each of `sign-up`, `log-in`, `create` and `save` with `errors: []`, with `errors` absent, and with only an `UNKNOWN_FIELD` error on `owner` gives `try-again`, while one with an error on a field that form shows plus one on `owner` gives `fix-fields` (N-3); a 404 on `toggle-done` and on `delete-from-list` gives `list-refreshed` with the text "That to-do no longer exists, and the list has been refreshed.", and a 404 on `delete-from-detail`, `load-todo` and `save` gives `back-to-list` (Q48); and no text contains a `ProblemCode` value, "Exception", "SQL", "stack", "Failed to fetch" or a request id; a wrong password and an unknown identifier map to identical text and next step (AC-4); component: a 401 from `logIn` whose Problem `detail` holds a sentinel shows the fixed login text of §6.1 and never the sentinel; on the list screen a 404 on a done toggle and a 404 on a row's delete each re-query the list (one further `listTodos` call with the current URL's query, which succeeds), then show "That to-do no longer exists, and the list has been refreshed." and show no **Back to my to-dos** link on the list screen (Q48); a 404 on a done toggle, and a 404 on a row's delete, whose re-query `listTodos` call then fails (network error) each show the `load-list` try-again message and never "…the list has been refreshed.", and when the user's retry then loads the list it is shown without that message (Q48; §12.1 item 7(a)); on the detail page a 404 on delete shows "That to-do no longer exists." with the **Back to my to-dos** link; on the list, detail, create/edit form, sign-up and login screens and both dialogs, a 500 whose Problem `title` and `detail` hold a sentinel string, and a network error, each show a message naming its next step and never the sentinel; a component that throws while rendering shows the `AppErrorBoundary` page with its reload control and its link to `/`, and (with a signed-in stubbed `SessionProvider` and a memory router) a component that throws only on its first render: after the user follows the page's link to `/`, the normal `/todos` list screen renders and the error page is gone (N-1); with the list screen rendered under `AppErrorBoundary` (signed-in stubbed `SessionProvider`, memory router) and its `listTodos` response for the new query held pending, a filter change on `/todos` (a query-string-only change) leaves focus on the radio the user chose and the existing rows rendered until the response arrives, and the list screen is not remounted (UX design L254, L436); in the same setup, on page 1 of a 45-item list, activating the pagination link to page 2 moves focus to the `<h1>` "My to-dos", leaves the existing rows rendered until the response arrives, and does not remount the list screen (UX design L254, L437; NFR-001 AC-2); a done toggle whose handler throws (a stubbed dependency throwing a plain `Error` with a sentinel message) shows the `unexpected` message in the page-level alert above the list, the list screen stays rendered (not the `AppErrorBoundary` page), and the sentinel is never shown; the same for a create/edit form submit whose handler throws (form-level alert) (N-2); review: the API's `errors[].message` strings are plain language and say how to fix the field; e2e (main): with the list request aborted by Playwright route interception the list screen shows the friendly message with its next step, and after the interception is removed trying again loads the list |
+| NFR-004 | §4, §5, §6, §10, §11; ADR-0004, ADR-0005, ADR-0007, ADR-0010, ADR-0011, ADR-0012 | `Problem` (incl. `code` enum) and `FieldError` of `common-problem-v1.yaml`, `BadRequest`, `Unauthenticated`, `ClientHeaderMissing`, `NotFound`, `MethodNotAllowed`, `UnsupportedMediaType`, `RequestRejected`, `InternalError`, `additionalProperties: false` | review + integration: server refuses invalid input sent directly (all REQ-TODO-002/REQ-AUTH-001 cases via API), forced internal error returns generic 500 with no stack trace or SQL; a forced internal error inside a filter (§10; on the embedded container at a random port, not MockMvc, because MockMvc performs no ERROR dispatch): with a test double for the session lookup that throws a runtime exception with a fixed message, `POST /api/v1/auth/login` with `X-Todo-Client: web`, a `todo_session` cookie and a body whose identifier and password are sentinels returns the generic 500 `INTERNAL_ERROR` Problem (request and response validated against the `logIn` operation of `identity-api-v1.yaml`, whose `500` is `InternalError`, with the core validator's `OpenApiInteractionValidator`; no stack trace, exception text or SQL), and the captured log holds exactly one per-request line for the request, with status 500 and a request id, and a stack-trace entry of the thrown exception with the same request id; every entry logged by the application's own loggers (`app.todo`) for the request carries that id; and no captured entry, the container's own included, contains the sentinel identifier, the sentinel password, the cookie's token or its hash (also REQ-AUTH-003 AC-3); one request per error source — 401 from the security entry point, 403 from `ClientHeaderFilter`, 405 (`PATCH /api/v1/todos/{id}`, `Allow` header present), 415 (`text/plain` body and no `Content-Type` on `createTodo`), 404 unknown route (`/api/v1/nope`), 400 unparseable JSON, 400 `REQUEST_REJECTED` from the firewall (`;` in the path), and `ProblemErrorController` given a forwarded 413 and 500 (error attributes set as the servlet container sets them) — each returns `application/problem+json` valid against the `Problem` schema (directly with `SchemaValidator` from `common-problem-v1.yaml`, where no contract operation exists; ADR-0012), with its listed `code` and no stack trace, exception text or SQL, and never the whitelabel or Spring Boot default body; unit: the values of `ProblemCode` equal the `Problem.code` enum of `common-problem-v1.yaml` (ADR-0011); secret scan of the repository in the gates; AC-1 via REQ-AUTH-003 tests and ADR-0005 review |
+| NFR-005 | §2; ADR-0001..0003 | both module contracts (HTTP API) | review: `web/package.json` (React, TypeScript), `api/pom.xml` (Spring Boot: the latest Spring Boot 4.x release, pinned exactly in `api/pom.xml` by the java-engineer, Source: clarifications Q60; §12.1 item 21), sqlite-jdbc driver and `.db` file; e2e exercises browser → HTTP API |
+| NFR-006 | §2, §4.1, §6, §6.1, §8 (Q39, Q48, Q49) | `Problem` (`code`; `title` and `detail` never displayed), `FieldError.message` (§6.1 rule binding, N-7) | type-level (Vitest `expectTypeOf`): the `Problem` type of `src/api/identity.ts` equals the `Problem` type of `src/api/todos.ts` (§13); unit: `userMessageFor` for every row of the §6.1 table whose text it supplies (all rows except the 400 `VALIDATION_FAILED` form-action row with a shown field and the 409 `IDENTIFIER_TAKEN` row, whose text is `errors[].message`, and the `session-probe` 401 row, which shows nothing), and, outside those three cases, for every `ProblemCode`, statuses 403/405/413/415/500/502, a non-Problem body and `network` across every `UserAction`, returns a non-empty text and a next step; a 400 `VALIDATION_FAILED` on `load-list`, `toggle-done`, `delete-from-list`, `delete-from-detail` and `clear-completed` gives `try-again`, not `fix-fields`; a 400 `VALIDATION_FAILED` on each of `sign-up`, `log-in`, `create` and `save` with `errors: []`, with `errors` absent, and with only an `UNKNOWN_FIELD` error on `owner` gives `try-again`, while one with an error on a field that form shows plus one on `owner` gives `fix-fields` (N-3); a 404 on `toggle-done` and on `delete-from-list` gives `list-refreshed` with the text "That to-do no longer exists, and the list has been refreshed.", and a 404 on `delete-from-detail`, `load-todo` and `save` gives `back-to-list` (Q48); and no text contains a `ProblemCode` value, "Exception", "SQL", "stack", "Failed to fetch" or a request id; a wrong password and an unknown identifier map to identical text and next step (AC-4); component: a 401 from `logIn` whose Problem `detail` holds a sentinel shows the fixed login text of §6.1 and never the sentinel; on the list screen a 404 on a done toggle and a 404 on a row's delete each re-query the list (one further `listTodos` call with the current URL's query, which succeeds), then show "That to-do no longer exists, and the list has been refreshed." and show no **Back to my to-dos** link on the list screen (Q48); a 404 on a done toggle, and a 404 on a row's delete, whose re-query `listTodos` call then fails (network error) each show the `load-list` try-again message and never "…the list has been refreshed.", and when the user's retry then loads the list it is shown without that message (Q48; §12.1 item 7(a)); on the detail page a 404 on delete shows "That to-do no longer exists." with the **Back to my to-dos** link; on the list, detail, create/edit form, sign-up and login screens and both dialogs, a 500 whose Problem `title` and `detail` hold a sentinel string, and a network error, each show a message naming its next step and never the sentinel; a component that throws while rendering shows the `AppErrorBoundary` page with its reload control and its link to `/`, and (with a signed-in stubbed `SessionProvider` and a memory router) a component that throws only on its first render: after the user follows the page's link to `/`, the normal `/todos` list screen renders and the error page is gone (N-1); with the list screen rendered under `AppErrorBoundary` (signed-in stubbed `SessionProvider`, memory router) and its `listTodos` response for the new query held pending, a filter change on `/todos` (a query-string-only change) leaves focus on the radio the user chose and the existing rows rendered until the response arrives, and the list screen is not remounted (UX design L254, L436); in the same setup, on page 1 of a 45-item list, activating the pagination link to page 2 moves focus to the `<h1>` "My to-dos", leaves the existing rows rendered until the response arrives, and does not remount the list screen (UX design L254, L437; NFR-001 AC-2); a done toggle whose handler throws (a stubbed dependency throwing a plain `Error` with a sentinel message) shows the `unexpected` message in the page-level alert above the list, the list screen stays rendered (not the `AppErrorBoundary` page), and the sentinel is never shown; the same for a create/edit form submit whose handler throws (form-level alert) (N-2); review: the API's `errors[].message` strings are plain language and say how to fix the field; e2e (main): with the list request aborted by Playwright route interception the list screen shows the friendly message with its next step, and after the interception is removed trying again loads the list |
+| NFR-007 | §2, §3, §10, §12.1 items 11–21; ADR-0002, ADR-0012, ADR-0014, ADR-0016, ADR-0018 (Q51, Q56, Q57, Q58, Q63) | all three contract files; every operation of `identity-api-v1.yaml` and `todo-api-v1.yaml` | AC-1 — integration (default profile): the application context holds exactly one `DataSource` bean, a HikariCP pool with a maximum pool size of 1 whose JDBC URL names the `TODO_DB_PATH` file; review: `api/pom.xml` is the only Maven module (no `<modules>`) and builds one Spring Boot application; e2e (main): the §11 commands start one API process. AC-2 — architecture (ArchUnit, main classes only; `app.todo.TestTodoApplication` and `app.todo.testsupport` excluded): no cycles between `auth`, `todo`, `common` and `config`; `todo` uses only `todo`, `common` and `auth.api`; `auth` and `common` never use `todo`; `common` uses no module and not `config`; only `config` creates a `DataSource` or `HikariConfig`; every main class lies in `auth`, `auth.api`, `todo`, `common`, `config` or the root package; non-vacuity: the same rules, built for a fixture root package in the test source set outside `app.todo` (for example `archfixture`; plain classes, no Spring annotations) that holds one deliberate violation of each rule, each fail; review: `TodoRepository`'s SQL names only `todos`. AC-3 — contract: the endpoint-inventory test loads `identity-api-v1.yaml` and `todo-api-v1.yaml`, and passes only when the union of their path-and-method pairs equals Spring's mapped routes, excluding, by name, only `/error` (all methods of `ProblemErrorController`, `common`; §6), every pair is in exactly one file, and each operation's handler is declared by a controller in that file's module package (`identity-api-v1.yaml` → `app.todo.auth`, `todo-api-v1.yaml` → `app.todo.todo`); any other mapped route missing from both module files fails the test, and the java-engineer stops and reports it as a spec question |

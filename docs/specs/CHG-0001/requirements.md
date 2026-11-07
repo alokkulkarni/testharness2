@@ -2,7 +2,10 @@
 stage: requirements
 changeId: CHG-0001
 authors:
-  - login: "@alokkulkarni"
+  - squadSessionId: SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM
+    changeId: CHG-0001
+    agent: spec-author
+    agentRunId: run-sup2-d5
 upstream:
   - path: docs/specs/CHG-0001/intent.md
     sha256: 8465eeb8e5e930d7bd165b4c152e9be5bd62e33d8350a11291867d0b16792c98
@@ -16,7 +19,8 @@ CHG-0001 is a new to-do list application (Q1: to-do app only). Individual users 
 their own to-dos in a web UI backed by an HTTP API (Q2, Q5, Q11). To-dos persist across restarts (Q4). The first
 release runs locally only (Q10). Source of every requirement is the answered `clarifications.md` (Q1–Q34, and Q36–Q39,
 Q44, Q46 and Q47 for the items added or changed by the first supersede; Q48 and Q49 change only the SDD and ADR-0001, not these
-requirements); the Q numbers
+requirements; Q51 and Q57 add constraint C-2 and NFR-007 in the second supersede, whose other answers, Q50, Q52–Q56, Q58, Q59,
+Q60 and Q63, change only the SDD, the ADRs and the contract files); the Q numbers
 in brackets trace each item. Q33 records that the requester accepted every item the first draft had marked as
 proposed; Q34 settled the three ambiguous criteria. The few points the requester did not decide carry the tag
 `(analyst default)` and are listed under "Analyst defaults" for the approver to confirm at freeze.
@@ -33,6 +37,7 @@ proposed; Q34 settled the three ambiguous criteria. The few points the requester
 ## Constraints (recorded, not designed here)
 
 - C-1: Web UI backed by an HTTP API (Q2); React + TypeScript UI and Java/Spring Boot API (Q3); SQLite embedded file database (Q4, Q13). These are fixed by the requester; the SDD decides everything else.
+- C-2: Modular monolith, not separate services (Q51; accepted in Q57).
 
 ## Accounts and access
 
@@ -291,6 +296,14 @@ The web app shows every error, and every unexpected failure of its own, as a use
 - AC-2: Given any failure message the web app shows, when inspected, then it contains no technical internals: no stack trace, exception or class name, SQL, error `code` value (such as `INTERNAL_ERROR`), request id, the response body as a whole, or browser error text (such as "Failed to fetch"), consistent with NFR-004 AC-2.
 - AC-3: Given an unexpected error inside the web app itself (one not reported by the API), when it occurs, then instead of a blank or broken screen a user-friendly message is shown with a way to continue (reload the page or go to home), and with no technical detail as in AC-2.
 - AC-4: Given a refused login, when the message and its next step are shown, then they are identical for a wrong password and for an identifier that does not exist (REQ-AUTH-002 AC-2, AC-3 still hold).
+
+## NFR-007 Modular API (M)
+
+The API is one deployable split into modules by the functionality they serve, with boundaries an automated test enforces. Traces: Q51, Q57; constraint C-2. Source: clarifications Q51; accepted as worded in Q57.
+
+- AC-1: Given the delivered API, when it is built and started, then it is one Spring Boot application in one process using one SQLite file and one connection pool.
+- AC-2: Given the API source, when the build runs its tests, then a test fails if code in one module uses a type another module does not publish as its interface, or if module dependencies form a cycle.
+- AC-3: Given the API, when its modules are listed, then there is an identity module (sign-up, login, logout, session) and a to-dos module (to-do and list operations), and every contract operation belongs to exactly one of them.
 
 ## Out of scope
 
