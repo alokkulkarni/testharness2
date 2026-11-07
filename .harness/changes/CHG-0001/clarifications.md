@@ -608,3 +608,22 @@ recommended option: keep the file name `todo-api-v1.yaml` for the to-dos module'
 — `contracts/todo-api-v1.yaml` stays and becomes the to-dos module's contract (the content of the draft's
 `todos-api-v1.yaml` under the old name); `identity-api-v1.yaml` and `common-problem-v1.yaml` are added; it is still a
 three-file split, and still a re-freeze; references change from `todos-api-v1.yaml` to `todo-api-v1.yaml`.
+
+## Q64. Do you accept that spec-author, not requirements-analyst, wrote the supersede-2 draft of requirements.md?
+
+Raised by the critic in its review of the supersede-2 draft (finding F-6; verdict `pass` on N03-spec, reviewed commit
+`6e039a9`): D-45 names requirements-analyst as the author of a `requirements.md` draft, and spec-author wrote
+`docs/proposals/CHG-0001/supersede-2/requirements.md`. (a) Accept the draft as is. (b) Have requirements-analyst
+write it again before the re-freeze.
+
+**Answer:** @alokkulkarni (relayed by the coordinator; one reply to the two numbered points, verbatim: "1, 2 approved
+and pr approved"), point 1: "approved" — (a) F-6 is accepted as is; the draft is not rewritten.
+
+## Q65. May the supersede-2 draft be approved with the critic's round-1 minor findings F-1 to F-5 left as follow-ups?
+
+Raised by the same critic review (findings F-1 to F-5, minor; the verdict passes with them). (a) Approve the draft as
+reviewed at `6e039a9` and carry F-1 to F-5 as follow-ups. (b) One more pass on them before the approval.
+
+**Answer:** @alokkulkarni (relayed by the coordinator), point 2 of the same reply: "approved" — (a) the draft is approved
+as reviewed, with F-1 to F-5 left as follow-ups; the same reply adds "pr approved" (the approval itself is the
+review on PR #3).
