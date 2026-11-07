@@ -11,13 +11,5 @@
   "links": {
     "branch": "feature/CHG-0001-create-a-to-do-list"
   },
-  "running": [
-    {
-      "node": "N05-design-arch",
-      "role": "designer",
-      "runId": "run-mw639odc",
-      "holder": "claude-code",
-      "leaseUntil": "2026-11-07T07:50:32.256Z"
-    }
-  ]
+  "running": []
 }
