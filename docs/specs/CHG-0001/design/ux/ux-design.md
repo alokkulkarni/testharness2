@@ -20,7 +20,7 @@ companion: tokens.json (same directory)
 
 This document designs the screens, states, components, copy and accessibility behaviour of the React SPA in the frozen
 spec. It adds no behaviour: each screen, state and component cites the requirement and acceptance criterion (AC-n) it
-serves. An unavoidable design choice is marked **[proposed]**. Section 11 records the design decisions.
+serves. An unavoidable design choice is marked **[proposed]**. Section 11 records the design decisions and lists every [proposed] item.
 
 Conventions: "AC-n" always refers to the requirement named in the same row or heading. SDD references are `sdd §n`.
 Copy in quotation marks is the exact text to render unless marked as a template (`{n}`, `{title}`).
@@ -95,13 +95,13 @@ S3 filter/search change -> URL page removed -> page 1                           
 Serves: REQ-AUTH-004 AC-3 (Log out in header), NFR-001 AC-2 (landmarks, skip link), REQ-AUTH-002 AC-4 (probe).
 
 - **Skip link** "Skip to main content" is the first focusable element; visible on focus; targets `<main id="main">`.
-- **Header** (`<header>`): app name "To-do list" (plain text, not a heading). When `signed-in`: the user's identifier
-  as text ("Signed in as {identifier}") and a **Log out** button (secondary style). Public routes: header shows the
+- **Header** (`<header>`): app name "To-do list" (plain text, not a heading). When `signed-in`: a **Log out** button
+  (secondary style); no other text (no identifier shown; the spec asks for none). Public routes: header shows the
   app name only. Log out is a `<button>`, 44 px minimum target.
 - **Main** (`<main>`): content column `size.content.maxWidth` (720) centred; auth screens `size.content.authMaxWidth`
   (420). Page padding `space.inset.md` (16) at 320 px.
 - `<html lang="en">`. Each route sets `document.title` to "{Screen name} - To-do list" and moves focus to the page
-  `<h1>` (tabindex -1) on navigation (sdd §9). Titles: "Sign up", "Log in", "My to-dos", "Add a to-do",
+  `<h1>` (tabindex -1) on a pathname change, not on a query-string-only change (sdd §9). Titles: "Sign up", "Log in", "My to-dos", "Add a to-do",
   "{title}" (detail), "Edit to-do", "Page not found", "Something went wrong".
 
 States of the session probe (sdd §4.1):
@@ -179,7 +179,7 @@ Fields:
 | Order | Label | Control | Notes (AC) |
 |---|---|---|---|
 | 1 | "Email address or username (required)" | `<input type="text" autocomplete="username" autocapitalize="none" spellcheck="false">` | One field accepts either (AUTH-001 AC-7). Help text under label: "Use an email address, or a username of letters, digits, . _ -. 3 to 254 characters." (id for `aria-describedby`, combined with error id when invalid) |
-| 2 | "Password (required)" | `<input type="password" autocomplete="new-password">` | Help text: "8 to 128 characters." (AC-5, AC-11). A **Show password** checkbox below the field toggles type to text (label "Show password"). No composition rules beyond length |
+| 2 | "Password (required)" | `<input type="password" autocomplete="new-password">` | Help text: "8 to 128 characters." (AC-5, AC-11). No composition rules beyond length |
 
 Submit button: "Sign up" (primary). No email-verification text, no confirm-password field (not in spec).
 
@@ -201,7 +201,7 @@ Layout: `<h1>` "Log in"; optional message region directly under the `<h1>` (befo
 yet? Sign up".
 
 Fields: "Email address or username (required)" (`autocomplete="username"`), "Password (required)"
-(`autocomplete="current-password"`, with **Show password** checkbox). No format hints and no format validation beyond
+(`autocomplete="current-password"`). No format hints and no format validation beyond
 non-empty (sdd §4). Submit: "Log in".
 
 | State | Behaviour and copy | Spec |
@@ -251,18 +251,18 @@ States:
 
 | State | Rendered (copy exact) | Spec |
 |---|---|---|
-| Loading (first load or any re-query) | In place of the list: text "Loading your to-dos..." with `role="status"`. Previous rows are removed during first load; on re-query (filter, search or page change) the existing rows stay until the response arrives (no flicker, no remount) and the list region has `aria-busy="true"` | NFR-003 AC-1; sdd §6.1 |
+| Loading (first load or any re-query) | First load: text "Loading your to-dos..." (`role="status"`) in place of the list. Re-query (filter, search or page change): the existing rows stay until the response arrives (no flicker, no remount), the list region has `aria-busy="true"` and no replacement text is shown | NFR-003 AC-1; sdd §6.1 |
 | Populated | Rows, summary, pagination as above | TODO-003 AC-1 |
 | First-use empty (`totals.all = 0`, filter All, no search) | Empty-state panel replaces the list (no table/list, no filter-no-match text): `<h2>` "You have no to-dos yet" + text "Add your first to-do to start keeping track of your tasks." + link-button **Add a to-do** (to `/todos/new`). Filter and search controls still shown; **Clear all completed** disabled | TODO-003 AC-2; sdd §8 |
-| No matching (`totalItems = 0` with filter other than All, or a search applied; including a user with no to-dos who picks Completed or searches) | `<h2>` "No matching to-dos" + text "Try a different search or filter." + (if a search or filter is applied) link **Show all to-dos** that clears `status`, `q` and `page`. A search matching only another user's data looks identical and reveals nothing | LIST-001 AC-4, LIST-002 AC-4, REQ-ISO-001 AC-4 |
+| No matching (`totalItems = 0` with filter other than All, or a search applied; including a user with no to-dos who picks Completed or searches) | `<h2>` "No matching to-dos" + text "Try a different search or filter."; no link or other control is added (the filter and search controls stay on screen). A search matching only another user's data looks identical and reveals nothing | LIST-001 AC-4, LIST-002 AC-4, REQ-ISO-001 AC-4 |
 | Page past last / bad page / bad status in URL | URL is replaced (history replace) with the effective page; the user sees the last valid page, no error. Bad `page` (0, negative, non-numeric) becomes page 1. A `status` other than all, active, completed is removed from the URL (filter All) before any request | LIST-003 AC-6, AC-7; LIST-001 AC-5; sdd §8, §12.1 item 8; TODO-006 AC-5 |
 | Single page (`totalPages <= 1`) | No pagination | LIST-003 AC-4 |
 | Clear all completed disabled | `totals.completed = 0`: button natively `disabled`, muted style (`color.surface.muted`, `color.text.disabled`) | TODO-007 AC-4 |
 | Row toggle in flight | The checkbox is `aria-disabled` until the response; no double-submit | TODO-005 |
 | Toggle done under Active filter | After the 200, the list is re-queried; the row is gone. Live region says: "Marked done: {title}." Focus moves to the `<h1>`, see section 6 | TODO-005 AC-3 |
-| Toggle failure (non-401, non-404) | Page-level alert above the list: "That to-do could not be updated. Please try again."; checkbox reverts to server state | NFR-006 AC-1; sdd §6.1 |
+| Toggle failure (non-401, non-404) | Page-level alert above the list: "That to-do could not be updated. Please try again." **[proposed]** (sec. 11); checkbox reverts to server state; focus stays on the checkbox | NFR-006 AC-1; sdd §6.1 |
 | 404 on toggle (to-do deleted elsewhere) | The current URL's list is re-queried. Once that succeeds, page-level alert "That to-do no longer exists, and the list has been refreshed." and no **Back to my to-dos** link. If the re-query fails, the "Your to-dos could not be loaded. Please try again." state with **Retry** is shown instead, never the "refreshed" sentence; after a successful retry the list shows without it | TODO-005; REQ-ISO-001 AC-2; sdd §6.1, §8; Q48, Q54 |
-| List fetch failure (non-401) | Alert in place of list: "Your to-dos could not be loaded. Please try again." + button **Retry** | NFR-006 AC-1; sdd §6.1; Q42 |
+| List fetch failure (non-401) | Alert in place of list: "Your to-dos could not be loaded. Please try again." **[proposed]** (sec. 11) + button **Retry** | NFR-006 AC-1; sdd §6.1; Q42 |
 | Session ended (401 while signed in) | Navigates to S2 with the session-ended message | AUTH-004 AC-4 |
 
 Filtered/searched view resets: the URL carries `status`, `q`, `page` (ADR-0001), so the Back button restores them.
@@ -289,7 +289,7 @@ Invoked from a row's **Delete** (S3) or the **Delete** button on S5. Native `<di
 | Success (204) | Dialog closes; list re-queried (S3) or navigate to `/todos` (S5; Q40); live region "Deleted: {title}." If the last item of the last page was deleted the last valid page is shown. Focus goes to the `<h1>` because the invoking row no longer exists | TODO-006 AC-3, AC-5 |
 | 404, opened from S3 | Dialog closes; same as "404 on toggle" in S3: list re-queried, then "That to-do no longer exists, and the list has been refreshed." (no Back link); a failed re-query shows the load-failure state instead | TODO-006 AC-4; sdd §6.1; Q54 |
 | 404, opened from S5 | Dialog closes; S5 page-level alert "That to-do no longer exists." with link **Back to my to-dos** to `/todos`; no list re-query | TODO-006 AC-4; sdd §6.1; Q48 |
-| Other error | Dialog stays open; error text inside dialog above buttons, `role="alert"`: "The to-do could not be deleted. Please try again." | NFR-006 AC-1 |
+| Other error | Dialog stays open; error text inside dialog above buttons, `role="alert"`: "The to-do could not be deleted. Please try again." **[proposed]** (sec. 11) | NFR-006 AC-1 |
 | 401 | Session-ended flow | AUTH-004 AC-4 |
 
 ### D2 Clear-completed confirmation (dialog)
@@ -311,6 +311,7 @@ region announces "There are no completed to-dos to clear." (Q43; sdd §8).
 | State | Behaviour | Spec |
 |---|---|---|
 | Open | As D1 | TODO-007 AC-1 |
+| Opening re-fetch fails (network, 5xx, other non-401, non-404) | No dialog opens; the button leaves its busy state; page-level alert above the list (S3 surface): "Your to-dos could not be loaded. Please try again." (the `load-list` message, sdd §6.1; next step: activate **Clear all completed** again); nothing is deleted; focus stays on **Clear all completed**. A 401 is the session-ended flow | NFR-006 AC-1; sdd §6.1, §9 |
 | Cancel / Escape | Closes, nothing deleted, focus back to **Clear all completed** | TODO-007 AC-3 |
 | Confirm in flight | Busy "Deleting..." | |
 | Success (200 `deletedCount`) | Dialog closes; list re-queried (active to-dos untouched); live region "Deleted {deletedCount} completed to-dos." ("Deleted 1 completed to-do." for 1, **[proposed]**); if now `totals.completed = 0` the trigger is disabled, so focus goes to the `<h1>` | TODO-007 AC-2, AC-4 |
@@ -319,8 +320,7 @@ region announces "There are no completed to-dos to clear." (Q43; sdd §8).
 
 ### S4 Add a to-do — `/todos/new` and S6 Edit a to-do — `/todos/:id/edit`
 
-One form component (`TodoForm`), two modes. Serves: REQ-TODO-001 AC-1..AC-4, REQ-TODO-002 AC-1..AC-10,
-REQ-TODO-004 AC-1..AC-4, REQ-DATA-002 (no conflict UI), NFR-001.
+One form component (`TodoForm`), two modes. Serves: REQ-TODO-001 AC-1..AC-4, REQ-TODO-002 AC-1..AC-10, REQ-TODO-004 AC-1..AC-4, REQ-DATA-002 (no conflict UI), NFR-001.
 
 `<h1>`: "Add a to-do" (S4) / "Edit to-do" (S6).
 
@@ -349,6 +349,7 @@ Buttons: primary **Add to-do** (S4) / **Save changes** (S6); secondary **Cancel*
 | S4 success (201) | Navigate to `/todos` (All, no search, page 1); the new to-do is first; live region on arrival not needed (focus goes to `<h1>`) | TODO-001 AC-1; sdd §8 |
 | S6 success (200) | Navigate to `/todos/:id` showing new values and the advanced Updated time | TODO-004 AC-1; Q41 |
 | Concurrent edit elsewhere | No conflict message ever; the last save wins silently | REQ-DATA-002 AC-1 |
+| S6 load error (`getTodo` non-401, non-404) | In place of the form: alert "This to-do could not be loaded. Please try again." + **Retry** (as S5) | NFR-006 AC-1; sdd §6.1 |
 
 ### S5 To-do detail — `/todos/:id`
 
@@ -365,9 +366,8 @@ Layout: `<h1>` = the to-do's title. A definition list (`<dl>`) with visible term
 | Created | "{d} {Mon} {yyyy}, {HH:mm}" in the viewer's local time (sdd §8) |
 | Updated | same format |
 
-Actions: **Edit** (primary link-button to `/todos/:id/edit`), **Delete** (danger, opens D1), link **Back to my to-dos**
-(to `/todos`). (A Mark done control is not placed here: the spec requires it on the list only through the row
-checkbox, and adding it would add behaviour.)
+Actions: **Edit** (primary link-button to `/todos/:id/edit`), **Delete** (danger, opens D1), link **Back to my to-dos** (to `/todos`).
+(A Mark done control is not placed here: the spec requires it on the list only through the row checkbox, and adding it would add behaviour.)
 
 | State | Behaviour and copy | Spec |
 |---|---|---|
@@ -392,7 +392,6 @@ the SPA modules in sdd §2.
 | `Button` (primary, secondary, danger; busy via `aria-disabled`; disabled) | all | default, hover, focus-visible, busy, disabled | NFR-001 AC-2 |
 | `LinkButton` (anchor styled as button) | "Add a to-do", "Edit", "Cancel", "Back", "Go to home" | default, hover, focus-visible | NFR-001 AC-2 |
 | `Message` (info, success, danger variants; `role="status"` or `role="alert"`; optional action: Retry button or link) | S2, S3, S5, forms, dialogs | text + variant surface; always a text prefix word where severity matters ("Error:") | AUTH-001 AC-1; AUTH-004 AC-4; NFR-006 |
-| `ShowPasswordToggle` (checkbox) | S1, S2 | checked / unchecked | WCAG 3.3.8 aid |
 | `SearchForm` | S3 | `role="search"`, labelled input, Search button | LIST-002 |
 | `FilterGroup` (fieldset + 3 radios) | S3 | selected / unselected, focus | LIST-001 |
 | `ResultSummary` (polite live region) | S3 | "Showing a-b of n" | NFR-001 AC-2; sdd §9 |
@@ -408,6 +407,7 @@ the SPA modules in sdd §2.
 | `AppErrorBoundary` page | E1 | heading, sentence, Reload control, home link | NFR-006 AC-3 |
 
 Why new: no component library is permitted (ADR-0001) and the repo has none.
+Not designed (no requirement asks for them): a Show password control, an identifier display in the header.
 
 ### Component sizing and tokens
 
@@ -432,7 +432,7 @@ Why new: no component library is permitted (ADR-0001) and the repo has none.
 
 | Event | Focus goes to | Announcement (live region) |
 |---|---|---|
-| Route change (incl. S7, E1) | page `<h1>` | (title via `document.title`) |
+| Pathname change (incl. S7, E1); not a query-string-only change | page `<h1>` | (title via `document.title`) |
 | List re-query after filter / search change | stays on the control the user used (no remount) | "Showing a-b of n", or the empty-state heading text |
 | Pagination link activated | `<h1>` "My to-dos" (a focus move, not a remount) | "Showing a-b of n" |
 | Toggle done/not done, row remains | stays on the checkbox | "Marked done: {title}." / "Marked not done: {title}." |
@@ -445,6 +445,11 @@ Why new: no component library is permitted (ADR-0001) and the repo has none.
 | Refused submit | Error summary | summary read (`role="alert"`) |
 | S2 invalid credentials | identifier field | alert text |
 | Probe error | the alert | alert text |
+| D2 opening re-fetch fails | stays on **Clear all completed** | alert text (page-level alert above the list) |
+| S3 404 on toggle, after the refresh | `<h1>` (the row may be gone) | the "no longer exists" alert |
+| D1 closes on a 404, opened from S3 | `<h1>` | the "no longer exists" alert |
+| D1 closes on a 404, opened from S5 | `<h1>` (the S5 alert follows it) | the S5 alert text |
+| Toggle failure | stays on the checkbox | alert text |
 
 One polite live region (`role="status"`) in the app shell carries the toggle/delete/clear messages so they survive
 removal of the invoking element. The list "Loading" state does not steal focus. Using `<h1>` as the fall-back focus
@@ -500,12 +505,13 @@ named field, go back to my to-dos, the refreshed list, or reload / home. Copy is
 |---|---|---|
 | session-probe | "The app could not reach the server." + **Retry** (sdd §4.1) | G1 |
 | sign-up / log-in | "Your account could not be created. Please try again." / "You could not be logged in. Please try again." | form-level alert |
-| log-out | "You could not be logged out. Please try again." | alert at top of `<main>` |
+| log-out | "You could not be logged out. Please try again." | alert at top of `<main>`; the user stays signed in on the same screen; focus moves to the alert |
 | load-list / load-todo | "Your to-dos could not be loaded. Please try again." / "This to-do could not be loaded. Please try again." + **Retry** | in place of the content |
 | create / save | "Your to-do could not be added. Please try again." / "Your changes could not be saved. Please try again." | form-level alert |
 | toggle-done | "That to-do could not be updated. Please try again." | alert above the list |
 | delete-from-list / -detail | "The to-do could not be deleted. Please try again." | inside D1 |
 | clear-completed | "Completed to-dos could not be deleted. Please try again." | inside D2 |
+| clear-completed, opening re-fetch | the `load-list` message "Your to-dos could not be loaded. Please try again." | page-level alert above the list; no dialog opens |
 
 An unexpected error in an event handler or promise callback (sdd §6.1) uses the same sentence with "Reload the page,
 or go to home." in place of "Please try again.", shown in the same place with a **Reload the page** button and a
@@ -603,11 +609,15 @@ values were computed by hand from the hex values in `tokens.json` using the WCAG
 | 1.1.1 Non-text content | A | No icon-only controls. The S7 illustration is decorative and `aria-hidden` | Met |
 | 1.3.1 Info and relationships | A | Real labels, fieldset/legend for filter, `<dl>` on S5, `<ul>` for rows, `<nav>` Pagination, headings in order (h1 then h2 in empty states and dialogs), landmarks header/main/search/nav | Met |
 | 1.3.2 Meaningful sequence | A | DOM order equals visual order; Cancel precedes Delete in dialogs | Met |
+| 1.2.x Time-based media | A/AA | No audio or video | N/A |
+| 1.3.3 Sensory characteristics | A | Instructions name controls by text ("Search", "Retry"), never by shape, colour or position | Met |
 | 1.3.4 Orientation | AA | No orientation lock | Met |
 | 1.3.5 Identify input purpose | AA | `autocomplete="username"`, `new-password`, `current-password` | Met |
 | 1.4.1 Use of colour | A | Priority is the text "Priority: High"; done is checkbox + "Completed" text; errors have "Error:" prefix + text; selected filter has radio dot; current page has `aria-current` and bold/underline | Met |
+| 1.4.2 Audio control | A | No audio | N/A |
 | 1.4.3 Contrast (min) | AA | `text.primary` 17.7:1, `secondary` 7.6:1, `link` 6.7:1, `danger` 6.5:1, `success` 7.1:1, white on `action.primary` 6.7:1, on `action.danger` 6.5:1, priority medium 7.1:1; also on tinted surfaces (see tokens `$extensions`). All >= 4.5:1. Disabled text is exempt | Met (verify by tool) |
 | 1.4.4 Resize text | AA | rem units; layout reflows at 200% | Met |
+| 1.4.5 Images of text | AA | All text is real text; the S7 illustration carries no text | Met |
 | 1.4.10 Reflow | AA | 320 px, no 2-D scroll (section 5) | Met |
 | 1.4.11 Non-text contrast | AA | Input/select/checkbox/radio border `gray.500` 4.8:1 on white; focus ring `blue.700` 6.7:1 (>= 5.9 on all surfaces); danger border 6.5:1 | Met (verify by tool) |
 | 1.4.12 Text spacing | AA | No fixed heights on text containers | Met |
@@ -621,6 +631,7 @@ values were computed by hand from the hex values in `tokens.json` using the WCAG
 | 2.4.2 Page titled | A | Per-route `document.title` | Met |
 | 2.4.3 Focus order | A | Section 6 | Met |
 | 2.4.4 Link purpose | A | Title links name the to-do; Edit/Delete carry visually hidden text "{title}" so each is unique ("Edit {title}", "Delete {title}") | Met |
+| 2.4.5 Multiple ways | AA | Applies to a set of web pages; in a task-based app every to-do page is reached by the list links, with search and filter as a second way. Other screens are steps of a process (exempt) | Met (note) |
 | 2.4.6 Headings and labels | AA | Descriptive | Met |
 | 2.4.7 Focus visible | AA | Every focusable element: `focus.width` 2px ring in `color.focus.ring`, offset `focus.offset` 2px; never `outline: none` without replacement; S7 home link included | Met |
 | 2.5.1 Pointer gestures | A | No path-based or multipoint gestures | N/A |
@@ -628,6 +639,7 @@ values were computed by hand from the hex values in `tokens.json` using the WCAG
 | 2.5.3 Label in name | A | Visible text equals accessible name start ("Delete" button's name "Delete {title}" starts with visible "Delete") | Met |
 | 2.5.4 Motion actuation | A | No motion-triggered function | N/A |
 | 3.1.1 Language of page | A | `lang="en"` | Met |
+| 3.1.2 Language of parts | AA | All copy is English; user-entered text is shown as typed with no language claim | Met |
 | 3.2.1 / 3.2.2 On focus / on input | A | Filter radios change the list on selection: a change of content on input, announced by the live summary and expected for a filter group; no navigation or context switch occurs. Search needs Enter/Search | Met (note) |
 | 3.2.3 / 3.2.4 Consistent navigation / identification | AA | One header and one set of component names on every screen | Met |
 | 3.3.1 Error identification | A | Section 4 | Met |
@@ -643,7 +655,7 @@ values were computed by hand from the hex values in `tokens.json` using the WCAG
 2.4.11 Focus not obscured (min): no sticky header or footer. 2.5.7 Dragging: no drag interactions. 2.5.8 Target size
 (min): 44 px design target, 24 px floor (`size.target.wcagMin`). 3.2.6 Consistent help: no help mechanism. 3.3.7
 Redundant entry: create and edit are prefilled. 3.3.8 Accessible authentication (min): no cognitive test; paste and
-password managers allowed; Show password. The design meets these; the audit does not depend on them.
+password managers allowed. The design meets these; the audit does not depend on them.
 
 ### 9.3 Screen-reader text (accessible names)
 
@@ -676,6 +688,28 @@ variables in `tokens.json`. No node ids, links or read-backs exist and none are 
 |---|---|---|
 | DD-1 | The design tokens stay in `docs/specs/CHG-0001/design/ux/tokens.json`; no root `design/tokens.json` is created by this node. The react-engineer generates the CSS custom properties (`--color-text-primary` etc.) in `web/` from it and does not edit values in the generated output. | This node may write only under `docs/specs/CHG-0001/design/ux/`; the frozen spec names no tokens path; one source file beside the design avoids two copies drifting; the generated stylesheet is product code owned by the build node. |
 | DD-2 | No per-filter counts (`totals.active`, `totals.completed`) are shown beside the filter radios (REQ-LIST-001). | The spec does not ask for them; showing them adds a feature. `totals.completed` is used only to enable or disable **Clear all completed** and in the D2 text. |
+
+**Removed additions (round 2):** Show password control (S1, S2), "Show all to-dos" link in the no-match state (sdd §12.1
+item 8 rejected that next step), "Signed in as {identifier}" in the header. No cited requirement needs any of them.
+
+**Discrepancy for spec-author (do not edit the SDD):** sdd.md L155 and L209 quote the sign-up message as "Account
+created — log in."; this design uses the Q39(a)-approved "Account created. Log in." (sdd §6.1 and §8 give exact copy to
+the UX design; the SDD quote predates Q39). Align the SDD at the next re-freeze. Testers assert the Q39(a) text.
+
+**Every [proposed] item** (none needs a requester decision unless stated; all are design-owned under sdd §6.1 / §8):
+
+| Item | Reason | Owner |
+|---|---|---|
+| D2 heading "Clear completed to-dos?" | Same for every N; avoids "all" when N = 1 (sdd §8 varies only the sentence) | design (sdd §8) |
+| D2 singular live-region text "Deleted 1 completed to-do." | Singular form for N = 1 (Q38); "Deleted 0 completed to-dos." is accepted if a parallel clear left none | design (sdd §8) |
+| Focus to `<h1>` when D2 does not open | The trigger becomes disabled | design (sdd §9) |
+| D2 opening re-fetch failure: `load-list` alert above the list, focus stays on the trigger | NFR-006 AC-1; sdd §6.1 (re-query failure uses `load-list`), §9 | design (sdd §6.1) |
+| S7 copy, layout and motion (section 7.2) | sdd §8 delegates them | design (sdd §8) |
+| E1 copy (section 7.3) | NFR-006 AC-3; sdd §6.1 | design (sdd §6.1) |
+| Section 7.3 failure messages | NFR-006 AC-1: name the failed action and a next step | design (sdd §6.1) |
+| Reworded from Q39(a)/Q42 text: "That to-do could not be updated. Please try again."; "Your to-dos could not be loaded. Please try again."; "The to-do could not be deleted. Please try again."; "Completed to-dos could not be deleted. Please try again."; generic "Something went wrong. Please try again." | Reworded to name the failed action and a next step (NFR-006 AC-1; sdd §6.1). If the requester prefers the earlier wording, say so before build | design (sdd §6.1) |
+| Log-out failure keeps the session and screen; focus to the alert | sdd §4.1 is silent; NFR-006 AC-1 | design |
+| S6 load-error state | NFR-006 AC-1; mirrors S5 | design |
 
 **Open questions for the requester:** none. The questions of the first pass are settled by the frozen spec: session
 timeout without warning (Q36; NFR-001 note), message wording (Q39(a)), Delete and Edit placement (Q40), destination
