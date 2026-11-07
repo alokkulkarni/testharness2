@@ -145,23 +145,17 @@
       "dependsOn": [
         "N04-spec-freeze"
       ],
-      "status": "running",
+      "status": "complete",
       "kind": "agent",
       "agent": "ux-designer",
       "description": "UX design spec and tokens for the frozen spec.",
       "gates": [
         "critic-verdict"
       ],
-      "executor": "any",
+      "executor": "claude-code",
       "isolation": "none",
       "attempts": 1,
-      "maxAttempts": 3,
-      "claim": {
-        "runId": "run-mw62aq5l",
-        "executor": "claude-code",
-        "leaseUntil": "2026-11-07T07:50:06.746Z",
-        "claimedAt": "2026-11-07T07:08:21.609Z"
-      }
+      "maxAttempts": 3
     },
     {
       "id": "N07-tests-backend",
