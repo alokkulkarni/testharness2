@@ -3,7 +3,7 @@
   "changeId": "CHG-0001",
   "node": "N05-design-arch",
   "gate": "critic-verdict",
-  "verdict": "pass",
+  "verdict": "changes-required",
   "reviewer": {
     "kind": "agent",
     "id": "critic",
@@ -11,7 +11,7 @@
       "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
       "changeId": "CHG-0001",
       "agent": "critic",
-      "agentRunId": "a576b4877d0401034"
+      "agentRunId": "a1bf705fbcebb0cbc"
     },
     "modelAlias": "harness/critic"
   },
@@ -20,14 +20,20 @@
       "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
       "changeId": "CHG-0001",
       "agent": "drawio-architect",
-      "agentRunId": "run-mw53b1i3"
+      "agentRunId": "a1b4e275022c93b3b"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "drawio-architect",
+      "agentRunId": "aa377598e2b225ad9"
     }
   ],
-  "createdAt": "2026-11-06T15:14:28.490Z",
-  "specFreezeHash": "108a2158f902444a131977e20baa46715f7504c950c32bb7c0ecf20da5f78818",
-  "reviewedCommit": "a8bf5f23d2e33f6a45d1e39fa4322025ab58be24",
-  "diffHash": "4c74f3b3c5619de0f13ea3ccdc9ee2c28e2fdb947f29067e03d74b5749803567",
-  "summary": "Review of a8bf5f2 (nine drawio sources, PNG/PDF exports, README). Context, container, deployment and data model match sdd 2, 3, 11 and ADR-0003/0004/0005/0014-0017 column for column; sequences match the contract paths, codes, cookie attributes, Argon2id, header defence, owner-scoped SQL, clamped paging and clear completed. No feature creep; the unfrozen supersede is kept out. No blocker or major. Minors: component PNG overprinted labels and ambiguous repository routing, two error-path inaccuracies in the component view, the 403 path drawn from the SPA, README trace overclaims and ADR-column drift, screen flow missing edges its own source states. Ruling on the two reported gaps: omitting Save-to-detail is acceptable (frozen sdd silent, ux tags it proposed); omitting the detail-page delete is inconsistent because the flow already takes its ids from ux-design 2, which states that edge without a proposed tag. Export --check could not be run by the critic role.",
+  "createdAt": "2026-11-07T18:03:41.202Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "reviewedCommit": "fd05fda7d5a2e3daca0be95934d78c87ec0234d3",
+  "diffHash": "2fe1f88389180e2fc82fcc43a651901fca486ec3a14707986c070db49a83a087",
+  "summary": "round 2, delta since a8bf5f23d2e33f6a45d1e39fa4322025ab58be24: F-9 fixed (orchestrator ran export --check: 9 diagrams, exports current). No previous blocker or major. Diagrams unchanged; the delta reviewed is the re-frozen spec (2a0d38e: REQ-NAV-001, NFR-006; 06f6005: modules, NFR-007, ADR-0018, three contract files), so diagrams that no longer depict it are frozen-spec departures raised at rubric severity. Contract wire format unchanged, so sequence paths, codes and cookie labels hold. New majors: F-10 README says supersede-1 is unfrozen and undrawn; F-12 component view lacks the module split and CurrentUser seam; F-13 data model lacks table owners; F-14 screen flow lacks / and the catch-all not-found route. F-1..F-8 carried. Totals: 0 blocker, 4 major, 15 minor, 3 info.",
   "findings": [
     {
       "id": "F-1",
@@ -94,12 +100,116 @@
       "suggestion": "Optionally draw it as a dashed edge labelled ux-design proposed, approved Q41; redraw solid after any re-freeze that adopts it."
     },
     {
-      "id": "F-9",
+      "id": "F-10",
+      "severity": "major",
+      "message": "The README section Pending, not drawn states that supersede-1 (the / to /todos redirect, the animated not-found route REQ-NAV-001, NFR-006 user-friendly errors) is proposed but not frozen, is not authority and appears in no diagram, and that after a re-freeze the screen flow, component view and sequence error paths must be updated. That re-freeze has happened (commit 2a0d38e; requirements.md now holds REQ-NAV-001, NFR-006 and, from supersede-2, NFR-007 and C-2), and no diagram was updated, so the README now tells readers that frozen requirements are out of scope.",
+      "requirement": "REQ-NAV-001",
+      "location": "docs/specs/CHG-0001/design/architecture/README.md:L34-L38",
+      "suggestion": "Remove the pending section, update the diagrams it names (see F-12, F-13, F-14, F-15) and state the freeze the diagrams were drawn against."
+    },
+    {
+      "id": "F-11",
+      "severity": "minor",
+      "message": "The README names its frozen sources as contracts/todo-api-v1.yaml and adr/0001..0017. The frozen spec now has three contract files (identity-api-v1.yaml for signUp, logIn, logOut, getSession; todo-api-v1.yaml for the to-do operations; common-problem-v1.yaml, components only) and ADR-0001..0018 (sdd 1 L23-L29), so the README names the wrong contract for the sign-up and login sequence.",
+      "requirement": "NFR-007",
+      "location": "docs/specs/CHG-0001/design/architecture/README.md:L3-L4",
+      "suggestion": "List the three contract files and adr/0001..0018 as sources."
+    },
+    {
+      "id": "F-12",
+      "severity": "major",
+      "message": "The component view draws the API as one undivided boundary (title: root package app.todo). The frozen sdd 2 L43-L85 and ADR-0018 L24-L50 split it into the identity module (auth: AuthController, AuthService, SessionService, SessionRepository, UserRepository, SessionCookieAuthenticationFilter, PasswordRules, IdentifierRules), the to-dos module (todo: TodoController, TodoService, TodoRepository, TodoValidator, TodoQuery), the shared kernel (common: problem components, ClientHeaderFilter, RequestIdFilter, ClockConfig, Whitespace) and the composition root (config: SecurityConfig, DatabaseConfig), with allowed dependencies todo to todo, common, auth.api and auth to auth, common, and one published seam, auth.api.CurrentUser, set as principal by SessionCookieAuthenticationFilter and read by TodoController with @AuthenticationPrincipal. None of this is shown, and the title traces neither NFR-007 nor ADR-0018, so the view does not depict NFR-007 AC-3 (which module owns which component) or the seam REQ-ISO-001 relies on.",
+      "requirement": "NFR-007",
+      "location": "docs/specs/CHG-0001/design/architecture/c4-component-api.drawio:L7-L15",
+      "suggestion": "Group the components in four labelled package boundaries (auth with an auth.api CurrentUser box, todo, common, config with SecurityConfig and DatabaseConfig), draw the CurrentUser edge from SessionCookieAuthenticationFilter to TodoController, note the allowed dependency directions in the legend, add NFR-007 and ADR-0018 to the title trace, and re-export."
+    },
+    {
+      "id": "F-13",
+      "severity": "major",
+      "message": "The data model shows no table owner. Frozen sdd 3 L109-L111 and ADR-0014/ADR-0018 assign users and sessions to the identity module (auth), todos to the to-dos module (todo) and flyway_schema_history to the composition root (config), only the owner reads or writes a table, and sdd 3 L147-L149 marks todos.user_id to users as the only cross-module foreign key, kept as an accepted coupling of the shared schema. The diagram omits the owners and flyway_schema_history, draws the todos to users edge like any other foreign key, and its title traces neither NFR-007 nor ADR-0018.",
+      "requirement": "NFR-007",
+      "location": "docs/specs/CHG-0001/design/architecture/data-model.drawio:L7-L20",
+      "suggestion": "Label each table with its owning module and package, add flyway_schema_history owned by config, label edge e2 as the accepted cross-module coupling (ADR-0018; todo SQL never names users or sessions), add NFR-007 and ADR-0018 to the title, and re-export."
+    },
+    {
+      "id": "F-14",
+      "severity": "major",
+      "message": "The screen flow, which the README describes as routes and guards, omits two frozen routes of sdd 8 L481-L503 and sdd 4.1 L197-L201: / (replaced in history with /todos, query dropped; REQ-NAV-001 AC-1, AC-2) and the catch-all * inside RequireAuth, which renders S7 NotFoundPage for a signed-in user with a home link to /, sends a signed-out visitor to /login?returnTo=path with no message, and after login lands on /todos (AC-3, AC-5, AC-8; analyst default 12). ux-design.md 2 L47 and L54 list both. Edge e2 still says signed out, to-do route only, and the title traces no REQ-NAV-001.",
+      "requirement": "REQ-NAV-001",
+      "location": "docs/specs/CHG-0001/design/architecture/screen-flow.drawio:L7-L48",
+      "suggestion": "Add a / node with a replace edge to /todos, an S7 node for * behind RequireAuth with its signed-out edge to /login and its home link to /, widen e2 to to-do route or unknown address, add REQ-NAV-001 to the title, and re-export."
+    },
+    {
+      "id": "F-15",
+      "severity": "minor",
+      "message": "The screen flow omits the application error page E1 (AppErrorBoundary: reload control and a router link to / that resets the boundary; sdd 6.1 L403-L419, NFR-006 AC-3) and the probe-failure state of G1 (alert with Retry, state stays unknown, never redirects; sdd 4.1 L192-L194), both listed in ux-design.md 2 L57-L58.",
+      "requirement": "NFR-006",
+      "location": "docs/specs/CHG-0001/design/architecture/screen-flow.drawio:L10-L12",
+      "suggestion": "Add an E1 node reachable from any screen with its link to /, and a probe-failed branch from the start state with Retry."
+    },
+    {
+      "id": "F-16",
+      "severity": "minor",
+      "message": "The UserRepository box lists Find by identifier_key, insert. Frozen sdd 2 L87-L96 and ADR-0018 L54-L55 add findById(userId), used by getSession to return the identifier as stored at sign-up, with expiresAt from the authentication details set by the filter. No view shows how getSession obtains Session.user.identifier.",
+      "requirement": "REQ-AUTH-002",
+      "location": "docs/specs/CHG-0001/design/architecture/c4-component-api.drawio:L52-L53",
+      "suggestion": "Add findById to the UserRepository label and an edge from AuthController (getSession) to UserRepository labelled findById."
+    },
+    {
+      "id": "F-17",
+      "severity": "minor",
+      "message": "Edges e17 and e18 run from ClockConfig to TodoService and SessionService, and the legend reads every arrow as call or dependency. ClockConfig is in common, and frozen sdd 2 L70-L73 and ADR-0018 L45-L47 forbid common from using any module, so the drawn direction contradicts the dependency rule the ArchUnit test enforces.",
+      "requirement": "NFR-007",
+      "location": "docs/specs/CHG-0001/design/architecture/c4-component-api.drawio:L97-L98",
+      "suggestion": "Reverse e17 and e18 (TodoService and SessionService use the Clock from ClockConfig) and re-export."
+    },
+    {
+      "id": "F-18",
+      "severity": "minor",
+      "message": "The note quotes only the plural dialog sentence (Delete all N completed to-dos?). Frozen REQ-TODO-007 AC-1 and sdd 8 L541-L543 now require the singular sentence for N = 1 (Delete 1 completed to-do? This deletes your only completed to-do ...).",
+      "requirement": "REQ-TODO-007",
+      "location": "docs/specs/CHG-0001/design/architecture/seq-clear-completed.drawio:L24-L25",
+      "suggestion": "Name both sentences (plural for N of 2 or more, singular for N = 1) or cite sdd 8 instead of quoting one form."
+    },
+    {
+      "id": "F-19",
+      "severity": "minor",
+      "message": "After step 2 the note opens ConfirmDialog for any N. Frozen sdd 8 L545-L548 (Q43) says that when the re-fetch returns N = 0 no dialog opens, no clearCompletedTodos call is made, the control is disabled and the polite live region announces There are no completed to-dos to clear.",
+      "requirement": "REQ-TODO-007",
+      "location": "docs/specs/CHG-0001/design/architecture/seq-clear-completed.drawio:L23-L25",
+      "suggestion": "Add an N = 0 branch after step 2: no dialog, no call, control disabled, live-region announcement."
+    },
+    {
+      "id": "F-20",
+      "severity": "minor",
+      "message": "The container view describes the API container without the modular-monolith decision: frozen C-2, NFR-007 AC-1 and ADR-0018 make it one Spring Boot application in one process with one SQLite file and one pool, split into identity and to-dos modules. Not wrong, but the title traces neither NFR-007 nor ADR-0018.",
+      "requirement": "NFR-007",
+      "location": "docs/specs/CHG-0001/design/architecture/c4-container.drawio:L7-L23",
+      "suggestion": "Add modular monolith: identity and to-dos modules, one process, one pool (NFR-007, ADR-0018) to the API box and title trace."
+    },
+    {
+      "id": "F-21",
+      "severity": "minor",
+      "message": "The README trace cells and sequence titles cite operations (signUp, logIn, createTodo, updateTodo, listTodos, clearCompletedTodos) without the contract file that now defines them (identity-api-v1.yaml or todo-api-v1.yaml), and no row traces ADR-0018, NFR-007 or NFR-006.",
+      "requirement": "NFR-007",
+      "location": "docs/specs/CHG-0001/design/architecture/README.md:L11-L19",
+      "suggestion": "Prefix each contract cell with its file and add the new trace IDs to the rows whose diagrams are updated."
+    },
+    {
+      "id": "F-22",
       "severity": "info",
-      "message": "Could not verify README L6 (export --check passes): the harness hook refused harness docs diagram export --check for the critic role as not on its command list. PNGs for screen-flow, c4-component-api, seq-signup-login and data-model were viewed and match their sources text for text; manifest hashes were not recomputed.",
-      "requirement": "REQ-ACC-001",
-      "location": "docs/specs/CHG-0001/design/architecture/diagram-exports.json:L3-L13",
-      "suggestion": "Orchestrator runs harness docs diagram export --check before completing the node."
+      "message": "The sequences say the owner comes from the session (seq-todo-crud-list step 2, seq-clear-completed step 4); the frozen seam is the CurrentUser(userId) principal that TodoController reads with @AuthenticationPrincipal (sdd 2 L82-L85). Consistent, but the seam is not named.",
+      "requirement": "REQ-ISO-001",
+      "location": "docs/specs/CHG-0001/design/architecture/seq-todo-crud-list.drawio:L29",
+      "suggestion": "Reword to: CurrentUser(userId) principal from the session filter."
+    },
+    {
+      "id": "F-23",
+      "severity": "info",
+      "message": "RequestIdFilter is labelled only as giving a request id for logs. Frozen sdd 10 L579-L601 now registers it ahead of the Spring Security chain for the REQUEST and ERROR dispatches, writing the one per-request line and the stack trace when an exception escapes the chain, which then reaches the client as the 500 that ProblemErrorController writes on the ERROR dispatch.",
+      "requirement": "NFR-004",
+      "location": "docs/specs/CHG-0001/design/architecture/c4-component-api.drawio:L16-L17",
+      "suggestion": "Optionally add REQUEST and ERROR dispatch to the label and a dashed filter-exception edge to ProblemErrorController."
     }
   ]
 }
