@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N06-design-ux",
+  "gate": "critic-verdict",
+  "verdict": "changes-required",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "critic",
+      "agentRunId": "a29d581b345caef82"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "ux-designer",
+      "agentRunId": "a2b14cf53301ba804"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "ux-designer",
+      "agentRunId": "a3bdb608009a41c5b"
+    }
+  ],
+  "createdAt": "2026-11-07T07:28:34.023Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "reviewedCommit": "a040b5aed547176bbfc62aa3051c6e7a42a7a186",
+  "diffHash": "d6f327fc925ed7fbfe172f4b83b0346c200024ad18c77b57e3b724726833308e",
+  "summary": "Round 1 (exhaustive) of N06-design-ux at e1965ab: 4 major, 8 minor, 3 info. SDD line citations L254, L299-L302, L344, L347, L376, L436-L437 still hold; the Q39(a) catalogue (L148-L164) is identical to 161def0; D2 singular and plural sentences match sdd section 8 exactly; N = 0 opens no dialog; Q36, Q44, Q46-Q48, Q53, Q54 and DD-1/DD-2 are as frozen; upstream lists the three contracts; section 11 removals all map to answered questions. Majors: an undefined failure state for the D2 pre-dialog re-fetch (NFR-006 AC-1), and three unmarked additions with no requirement (Show password, Show all to-dos, Signed in as). Sign-up wording mismatch with sdd L155/L209 judged minor: sdd section 6.1 and section 8 give exact copy to the UX design, Q39(a) approved Account created. Log in., and the SDD quote predates that approval.",
+  "findings": [
+    {
+      "id": "F-1",
+      "severity": "major",
+      "message": "The Clear all completed click re-fetches the list before D2 opens, but the design defines no state for a failure of that re-fetch (network, 5xx, other non-401). Section 7.3 maps clear-completed only to inside D2, which is not open yet, and no page-level alert, copy, next step or focus target is given for this path. NFR-006 AC-1 requires a message with a next step for any failed operation, and sdd section 6.1 leaves which surface each state uses to the UX design.",
+      "requirement": "NFR-006 AC-1; REQ-TODO-007 AC-1",
+      "location": "docs/specs/CHG-0001/design/ux/ux-design.md:L299-L302",
+      "suggestion": "Add a D2 opening-sequence failure row: no dialog opens, the button leaves its busy state, a page-level alert above the list (e.g. the clear-completed or load-list try-again message, named explicitly) with its next step, and focus stays on Clear all completed; add the row to section 7.3 (L508) and section 6. Keep L299-L302 on their current lines because sdd section 8 cites them."
+    },
+    {
+      "id": "F-2",
+      "severity": "major",
+      "message": "A Show password checkbox on S1 and S2 is a behaviour no requirement, AC or clarification states, and it is not marked [proposed]. Its only stated reason is WCAG 3.3.8, a 2.2 criterion that section 9.2 itself says is not part of the NFR-001 audit level (Q44: 2.1 AA). L22 claims the design adds no behaviour.",
+      "requirement": "REQ-AUTH-001 AC-7; REQ-AUTH-002; NFR-001 AC-1 (Q44)",
+      "location": "docs/specs/CHG-0001/design/ux/ux-design.md:L182, L204, L395",
+      "suggestion": "Remove the Show password control from S1, S2 and the component inventory, or mark it [proposed] with a reason and list it in section 11 as a question for the requester before build."
+    },
+    {
+      "id": "F-3",
+      "severity": "major",
+      "message": "The No matching to-dos state adds a Show all to-dos link that clears status, q and page. REQ-LIST-001 AC-4 and REQ-LIST-002 AC-4 require only the state; the link is new navigation behaviour with no requirement and no [proposed] mark (sdd section 12.1 item 8 records a Show all to-dos next step as a rejected option, and Q48 declined a filter-clearing link on the list screen in another case).",
+      "requirement": "REQ-LIST-001 AC-4; REQ-LIST-002 AC-4",
+      "location": "docs/specs/CHG-0001/design/ux/ux-design.md:L257",
+      "suggestion": "Drop the link (the filter and search controls stay on screen, and the copy already says try a different search or filter), or mark it [proposed] and list it in section 11 for the requester."
+    },
+    {
+      "id": "F-4",
+      "severity": "major",
+      "message": "The signed-in header shows Signed in as {identifier}. No requirement or SDD section asks the UI to display the identifier; it is an unmarked addition (the contract returning Session.user.identifier does not by itself make it a UI requirement).",
+      "requirement": "REQ-AUTH-004 AC-3; REQ-AUTH-002 AC-4",
+      "location": "docs/specs/CHG-0001/design/ux/ux-design.md:L98-L99",
+      "suggestion": "Remove the identifier text from the header (keep the app name and Log out), or mark it [proposed] with a reason and list it in section 11 for the requester."
+    },
+    {
+      "id": "F-5",
+      "severity": "minor",
+      "message": "The sign-up success message is Account created. Log in. in the design, but sdd.md L155 and L209 quote Account created — log in. The design text is the one approved in Q39(a) (already present at 161def0 L209) and sdd section 6.1 L382-L384 and section 8 give exact copy to the UX design; the SDD quote predates Q39 (b36e7df). Testers reading the SDD could assert the wrong string, and the design does not record the discrepancy.",
+      "requirement": "REQ-AUTH-001 AC-1",
+      "location": "docs/specs/CHG-0001/design/ux/ux-design.md:L70, L194, L210, L521 (vs docs/specs/CHG-0001/sdd.md:L155, L209)",
+      "suggestion": "Keep the design wording; add a note in section 11 that the Q39(a) text governs and that sdd L155/L209 should be aligned at the next re-freeze; the orchestrator raises it."
+    },
+    {
+      "id": "F-6",
+      "severity": "minor",
+      "message": "Section 9.1 claims a WCAG 2.1 Level AA review but omits several 2.1 A/AA criteria: 1.3.3 Sensory characteristics, 1.4.5 Images of text, 2.4.5 Multiple ways, 3.1.2 Language of parts, and the N/A rows 1.2.x and 1.4.2.",
+      "requirement": "NFR-001 AC-1 (Q44)",
+      "location": "docs/specs/CHG-0001/design/ux/ux-design.md:L599-L639",
+      "suggestion": "Add the missing rows with their disposition (2.4.5 in particular needs a stated basis, e.g. list links plus search)."
+    },
+    {
+      "id": "F-7",
+      "severity": "minor",
+      "message": "The S3 Loading row says the loading text is shown in place of the list for first load or any re-query, and in the same cell that on re-query the existing rows stay; it also says previous rows are removed during first load, when there are none. The two cases read as contradictory.",
+      "requirement": "NFR-003 AC-1; NFR-001 AC-2",
+      "location": "docs/specs/CHG-0001/design/ux/ux-design.md:L254",
+      "suggestion": "Within the same line (sdd cites L254): first load shows the loading text in place of the list; a re-query keeps the rows with aria-busy and shows no replacement text."
+    },
+    {
+      "id": "F-8",
+      "severity": "minor",
+      "message": "Section 3 says each route moves focus to the h1 on navigation, and section 6 says Route change; a filter, search or page change is also a router navigation, so read literally this conflicts with L436. sdd section 9 L560 states the rule as a route (pathname) change.",
+      "requirement": "NFR-001 AC-2",
+      "location": "docs/specs/CHG-0001/design/ux/ux-design.md:L103-L104, L435",
+      "suggestion": "Say on a pathname change (not on a query-string-only change), matching sdd section 9."
+    },
+    {
+      "id": "F-9",
+      "severity": "minor",
+      "message": "Section 6 gives no focus target for paths whose invoking control disappears or whose dialog closes on an error: the S3 404 on toggle then refresh, D1 404 opened from S3, D1 404 on S5, and toggle failure. sdd section 9 gives a fallback rule, but the design table that the build follows is silent.",
+      "requirement": "NFR-001 AC-2",
+      "location": "docs/specs/CHG-0001/design/ux/ux-design.md:L433-L447",
+      "suggestion": "Add rows: focus to the h1 (or the alert) after a 404 refresh and after D1 closes on a 404; stays on the checkbox after a toggle failure."
+    },
+    {
+      "id": "F-10",
+      "severity": "minor",
+      "message": "L23 says section 11 records the design decisions, but the remaining [proposed] items (D2 heading L304, singular live-region text L316, focus after D2 not opened L444, all S7 copy and motion L467-L468, E1 copy L493, section 7.3 copy L497) are not collected there; the approver cannot see what still awaits confirmation versus what sdd sections 6.1 and 8 already delegate to the design.",
+      "requirement": "NFR-006; REQ-NAV-001 AC-6; REQ-TODO-007 AC-1",
+      "location": "docs/specs/CHG-0001/design/ux/ux-design.md:L23, L671-L683",
+      "suggestion": "List every [proposed] item in section 11 with its reason and whether it needs a requester decision or is design-owned under sdd section 6.1 L382-L384 or section 8 L501."
+    },
+    {
+      "id": "F-11",
+      "severity": "minor",
+      "message": "Copy that stood in section 4 when Q39(a) and Q42 approved it was reworded without a recorded reason: Could not update that to-do. Try again.; Your to-dos could not be loaded.; The to-do could not be deleted. Try again.; Completed to-dos could not be deleted. Try again.; the D2 heading Delete all completed to-dos?; and the generic Something went wrong. Please try again. The changes follow NFR-006 and sdd section 6.1 (name the failed action and a next step), but S3/D1/D2 tables show them without the [proposed] mark that section 7.3 L497 applies.",
+      "requirement": "NFR-006 AC-1; Q39(a); Q42",
+      "location": "docs/specs/CHG-0001/design/ux/ux-design.md:L263, L265, L292, L304, L317, L499-L508",
+      "suggestion": "Record in section 11 each approved string that changed, its new text and the reason (NFR-006 / sdd section 6.1), and mark them consistently."
+    },
+    {
+      "id": "F-12",
+      "severity": "minor",
+      "message": "The S6 state table has no load-error state (getTodo fails with a non-401, non-404), while S5 has one at L377; only the generic load-todo row of section 7.3 covers it.",
+      "requirement": "NFR-006 AC-1; REQ-TODO-004",
+      "location": "docs/specs/CHG-0001/design/ux/ux-design.md:L339-L351",
+      "suggestion": "Add an S6 load-error row: This to-do could not be loaded. Please try again. with Retry, in place of the form."
+    },
+    {
+      "id": "F-13",
+      "severity": "info",
+      "message": "The log-out failure message is defined but not whether the user stays signed in and on the same screen after it (sdd section 4.1 is also silent).",
+      "requirement": "REQ-AUTH-004 AC-3; NFR-006 AC-1",
+      "location": "docs/specs/CHG-0001/design/ux/ux-design.md:L503",
+      "suggestion": "State that the session state and screen are unchanged and focus moves to the alert."
+    },
+    {
+      "id": "F-14",
+      "severity": "info",
+      "message": "Two hand-computed contrast figures look slightly off: text.danger on surface.danger computes to about 5.9:1 (stated 6.0:1) and focus.ring on surface.danger to about 6.1:1 (stated 5.9:1). Both stay above their thresholds, and section 9 already asks web-qa to verify by tool.",
+      "requirement": "NFR-001 AC-1",
+      "location": "docs/specs/CHG-0001/design/ux/tokens.json:L97, L118",
+      "suggestion": "Correct the figures when web-qa verifies them."
+    },
+    {
+      "id": "F-15",
+      "severity": "info",
+      "message": "D2 success can return deletedCount 0 (cleared in another tab after the dialog opened); the live-region text then reads Deleted 0 completed to-dos. No requirement covers it.",
+      "requirement": "REQ-TODO-007 AC-2",
+      "location": "docs/specs/CHG-0001/design/ux/ux-design.md:L316",
+      "suggestion": "Optionally note the 0 case wording, or accept the plural as written."
+    }
+  ]
+}
