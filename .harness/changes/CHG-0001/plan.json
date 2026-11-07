@@ -1,0 +1,402 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "title": "Create a to-do list",
+  "mode": "greenfield",
+  "profile": "lite",
+  "specFreeze": ".harness/changes/CHG-0001/spec-freeze.json",
+  "intent": {
+    "path": "docs/specs/CHG-0001/intent.md",
+    "sha256": "8465eeb8e5e930d7bd165b4c152e9be5bd62e33d8350a11291867d0b16792c98",
+    "acceptanceRef": "https://github.com/alokkulkarni/testharness2/pull/1#pullrequestreview-5797517809"
+  },
+  "status": "active",
+  "branch": "feature/CHG-0001-create-a-to-do-list",
+  "baseBranch": "develop",
+  "squad": "default",
+  "nodes": [
+    {
+      "id": "N01-clarify",
+      "kind": "agent",
+      "agent": "orchestrator",
+      "phase": "0",
+      "description": "Analyse the request and the code for ambiguity; ask targeted questions and record answers or waivers.",
+      "inputs": [],
+      "outputs": [
+        ".harness/changes/CHG-0001/clarifications.md"
+      ],
+      "dependsOn": [],
+      "gates": [
+        "clarified"
+      ],
+      "executor": "claude-code",
+      "isolation": "none",
+      "status": "complete",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N02-requirements",
+      "kind": "agent",
+      "agent": "requirements-analyst",
+      "phase": "1",
+      "description": "Write the change's requirements with Given/When/Then acceptance criteria.",
+      "inputs": [
+        ".harness/changes/CHG-0001/clarifications.md"
+      ],
+      "outputs": [
+        "docs/specs/CHG-0001/requirements.md"
+      ],
+      "dependsOn": [
+        "N01-clarify"
+      ],
+      "gates": [
+        "critic-verdict"
+      ],
+      "executor": "claude-code",
+      "isolation": "none",
+      "status": "complete",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N03-spec",
+      "kind": "agent",
+      "agent": "spec-author",
+      "phase": "2",
+      "description": "Write the SDD, contracts and ADRs for the change.",
+      "inputs": [
+        "docs/specs/CHG-0001/requirements.md"
+      ],
+      "outputs": [
+        "docs/specs/CHG-0001/sdd.md",
+        "docs/specs/CHG-0001/contracts/",
+        "docs/specs/CHG-0001/adr/"
+      ],
+      "dependsOn": [
+        "N02-requirements"
+      ],
+      "gates": [
+        "critic-verdict"
+      ],
+      "executor": "claude-code",
+      "isolation": "none",
+      "status": "complete",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N04-spec-freeze",
+      "kind": "human-gate",
+      "phase": "2",
+      "description": "A product owner or tech lead approves the spec; harness freeze records the hashes.",
+      "approvers": [
+        "@alokkulkarni"
+      ],
+      "inputs": [
+        "docs/specs/CHG-0001/sdd.md",
+        "docs/specs/CHG-0001/contracts/",
+        "docs/specs/CHG-0001/adr/"
+      ],
+      "outputs": [
+        ".harness/changes/CHG-0001/spec-freeze.json"
+      ],
+      "dependsOn": [
+        "N03-spec"
+      ],
+      "gates": [
+        "spec-freeze-approval"
+      ],
+      "status": "complete"
+    },
+    {
+      "id": "N05-design-arch",
+      "phase": "3",
+      "inputs": [
+        ".harness/changes/CHG-0001/spec-freeze.json"
+      ],
+      "outputs": [
+        "docs/specs/CHG-0001/design/architecture/"
+      ],
+      "dependsOn": [
+        "N04-spec-freeze"
+      ],
+      "status": "complete",
+      "kind": "agent",
+      "agent": "drawio-architect",
+      "description": "Architecture diagrams for the frozen spec.",
+      "gates": [
+        "critic-verdict"
+      ],
+      "executor": "claude-code",
+      "isolation": "none",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N06-design-ux",
+      "phase": "3",
+      "inputs": [
+        ".harness/changes/CHG-0001/spec-freeze.json"
+      ],
+      "outputs": [
+        "docs/specs/CHG-0001/design/ux/"
+      ],
+      "dependsOn": [
+        "N04-spec-freeze"
+      ],
+      "status": "complete",
+      "kind": "agent",
+      "agent": "ux-designer",
+      "description": "UX design spec and tokens for the frozen spec.",
+      "gates": [
+        "critic-verdict"
+      ],
+      "executor": "claude-code",
+      "isolation": "none",
+      "attempts": 1,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N07-tests-backend",
+      "phase": "4",
+      "inputs": [
+        "docs/specs/CHG-0001/design/architecture/",
+        "docs/specs/CHG-0001/design/ux/"
+      ],
+      "outputs": [
+        "tests/backend/"
+      ],
+      "dependsOn": [
+        "N05-design-arch",
+        "N06-design-ux"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "backend-qa",
+      "description": "Failing backend tests for the acceptance criteria, committed first.",
+      "gates": [
+        "critic-verdict",
+        "tests-red-first"
+      ],
+      "executor": "any",
+      "isolation": "worktree",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N08-tests-web",
+      "phase": "4",
+      "inputs": [
+        "docs/specs/CHG-0001/design/architecture/",
+        "docs/specs/CHG-0001/design/ux/"
+      ],
+      "outputs": [
+        "tests/web/"
+      ],
+      "dependsOn": [
+        "N05-design-arch",
+        "N06-design-ux"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "web-qa",
+      "description": "Failing web tests for the acceptance criteria, committed first.",
+      "gates": [
+        "critic-verdict",
+        "tests-red-first"
+      ],
+      "executor": "any",
+      "isolation": "worktree",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N09-build-java",
+      "phase": "5",
+      "inputs": [
+        "tests/backend/",
+        "tests/web/"
+      ],
+      "outputs": [
+        "src/java/"
+      ],
+      "dependsOn": [
+        "N07-tests-backend",
+        "N08-tests-web"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "java-engineer",
+      "description": "Make the java tests pass in an isolated worktree.",
+      "gates": [
+        "critic-verdict"
+      ],
+      "executor": "any",
+      "isolation": "worktree",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N10-build-react",
+      "phase": "5",
+      "inputs": [
+        "tests/backend/",
+        "tests/web/"
+      ],
+      "outputs": [
+        "src/react/"
+      ],
+      "dependsOn": [
+        "N07-tests-backend",
+        "N08-tests-web"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "react-engineer",
+      "description": "Make the react tests pass in an isolated worktree.",
+      "gates": [
+        "critic-verdict"
+      ],
+      "executor": "any",
+      "isolation": "worktree",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N11-security",
+      "phase": "6",
+      "inputs": [
+        "src/java/",
+        "src/react/"
+      ],
+      "outputs": [
+        ".harness/changes/CHG-0001/evidence/scan-report/"
+      ],
+      "dependsOn": [
+        "N09-build-java",
+        "N10-build-react"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "security-reviewer",
+      "description": "Security scans, SBOM and findings on the PR delta.",
+      "gates": [
+        "security"
+      ],
+      "executor": "any",
+      "isolation": "none",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N12-validate",
+      "phase": "6",
+      "inputs": [
+        "src/java/",
+        "src/react/"
+      ],
+      "outputs": [
+        ".harness/changes/CHG-0001/traceability.json"
+      ],
+      "dependsOn": [
+        "N09-build-java",
+        "N10-build-react"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "validator",
+      "description": "Map the PR delta to the frozen requirements (traceability).",
+      "gates": [
+        "validator"
+      ],
+      "executor": "any",
+      "isolation": "none",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N13-pr-review",
+      "phase": "6",
+      "inputs": [
+        "src/java/",
+        "src/react/"
+      ],
+      "outputs": [
+        ".harness/changes/CHG-0001/verdicts/"
+      ],
+      "dependsOn": [
+        "N09-build-java",
+        "N10-build-react"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "critic",
+      "description": "Review the PR delta against the frozen spec (critic-verdict).",
+      "gates": [
+        "critic-verdict"
+      ],
+      "executor": "any",
+      "isolation": "none",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N14-docs",
+      "phase": "8",
+      "inputs": [
+        ".harness/changes/CHG-0001/evidence/scan-report/",
+        ".harness/changes/CHG-0001/traceability.json",
+        ".harness/changes/CHG-0001/verdicts/"
+      ],
+      "outputs": [
+        "docs/knowledge/"
+      ],
+      "dependsOn": [
+        "N11-security",
+        "N12-validate",
+        "N13-pr-review"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "okf-documenter",
+      "description": "Fold the change into the OKF bundle.",
+      "gates": [
+        "critic-verdict",
+        "docs-valid"
+      ],
+      "executor": "any",
+      "isolation": "none",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N15-docs-diagrams",
+      "phase": "8",
+      "inputs": [
+        ".harness/changes/CHG-0001/evidence/scan-report/",
+        ".harness/changes/CHG-0001/traceability.json",
+        ".harness/changes/CHG-0001/verdicts/"
+      ],
+      "outputs": [
+        "docs/architecture/"
+      ],
+      "dependsOn": [
+        "N11-security",
+        "N12-validate",
+        "N13-pr-review"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "drawio-architect",
+      "description": "Update the diagrams for the merged change.",
+      "gates": [
+        "critic-verdict"
+      ],
+      "executor": "any",
+      "isolation": "none",
+      "attempts": 0,
+      "maxAttempts": 3
+    }
+  ]
+}

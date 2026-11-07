@@ -1,0 +1,50 @@
+<mxfile host="sdlc-harness">
+  <diagram id="seq-todo-crud-list" name="Sequence create edit list">
+    <mxGraphModel grid="1" gridSize="10" page="1" pageWidth="1800" pageHeight="1000">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title" value="&lt;b&gt;To-do list · Sequence: create, edit and list with search, filter and pagination&lt;/b&gt;&lt;br&gt;CHG-0001 · frozen spec · drawn 2026-11-06 · Traces: REQ-TODO-001..005, REQ-LIST-001..003, REQ-ISO-001, REQ-DATA-002; sdd §5, §7; ADR-0006, 0009, 0010, 0013, 0015, 0016, 0017; contract createTodo, updateTodo, listTodos" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="1600" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="L1" value="SPA [browser]" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="40" y="100" width="120" height="760" as="geometry"/>
+        </mxCell>
+        <mxCell id="L2" value="SessionCookie filter + ClientHeaderFilter" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#85BBF0;strokeColor=#78A8D8;" vertex="1" parent="1">
+          <mxGeometry x="340" y="100" width="120" height="760" as="geometry"/>
+        </mxCell>
+        <mxCell id="L3" value="TodoController" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#85BBF0;strokeColor=#78A8D8;" vertex="1" parent="1">
+          <mxGeometry x="640" y="100" width="120" height="760" as="geometry"/>
+        </mxCell>
+        <mxCell id="L4" value="TodoService (+ TodoValidator, Clock)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#85BBF0;strokeColor=#78A8D8;" vertex="1" parent="1">
+          <mxGeometry x="940" y="100" width="120" height="760" as="geometry"/>
+        </mxCell>
+        <mxCell id="L5" value="TodoRepository" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#85BBF0;strokeColor=#78A8D8;" vertex="1" parent="1">
+          <mxGeometry x="1240" y="100" width="120" height="760" as="geometry"/>
+        </mxCell>
+        <mxCell id="L6" value="SQLite file" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="1540" y="100" width="120" height="760" as="geometry"/>
+        </mxCell>
+        <mxCell id="m0" value="1. POST /api/v1/todos + cookie todo_session + X-Todo-Client: web [HTTP/JSON]" style="html=1;endArrow=block;verticalAlign=bottom;spacingBottom=3;exitX=0.5;exitY=0.0789;entryX=0.5;entryY=0.0789;" edge="1" parent="1" source="L1" target="L2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="m1" value="2. session valid, header ok; owner from the session only [call]" style="html=1;endArrow=block;verticalAlign=bottom;spacingBottom=3;exitX=0.5;exitY=0.1316;entryX=0.5;entryY=0.1316;" edge="1" parent="1" source="L2" target="L3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="m2" value="3. create(userId, body); validate fields [call]" style="html=1;endArrow=block;verticalAlign=bottom;spacingBottom=3;exitX=0.5;exitY=0.1842;entryX=0.5;entryY=0.1842;" edge="1" parent="1" source="L3" target="L4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="m3" value="4. insert(userId, NewTodo); created_at = updated_at = Clock now [call]" style="html=1;endArrow=block;verticalAlign=bottom;spacingBottom=3;exitX=0.5;exitY=0.2368;entryX=0.5;entryY=0.2368;" edge="1" parent="1" source="L4" target="L5"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="m4" value="5. INSERT todos (public_id UUID v4, title_search lower-cased) [JDBC]" style="html=1;endArrow=block;verticalAlign=bottom;spacingBottom=3;exitX=0.5;exitY=0.2895;entryX=0.5;entryY=0.2895;" edge="1" parent="1" source="L5" target="L6"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="m5" value="6. 201 Todo (priority defaults MEDIUM); invalid: 400 VALIDATION_FAILED with all field errors [HTTP/JSON]" style="html=1;endArrow=open;dashed=1;verticalAlign=bottom;spacingBottom=3;exitX=0.5;exitY=0.3421;entryX=0.5;entryY=0.3421;" edge="1" parent="1" source="L3" target="L1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="m6" value="7. PUT /api/v1/todos/{todoId} whole content: title, description, dueDate, priority [HTTP/JSON]" style="html=1;endArrow=block;verticalAlign=bottom;spacingBottom=3;exitX=0.5;exitY=0.3947;entryX=0.5;entryY=0.3947;" edge="1" parent="1" source="L1" target="L3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="m7" value="8. update(userId, todoId, body) after the same checks [call]" style="html=1;endArrow=block;verticalAlign=bottom;spacingBottom=3;exitX=0.5;exitY=0.4474;entryX=0.5;entryY=0.4474;" edge="1" parent="1" source="L3" target="L4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="m8" value="9. updateContent(..., updatedAt = max(now, previous + 1 ms)) [call]" style="html=1;endArrow=block;verticalAlign=bottom;spacingBottom=3;exitX=0.5;exitY=0.5;entryX=0.5;entryY=0.5;" edge="1" parent="1" source="L4" target="L5"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="m9" value="10. UPDATE todos WHERE public_id = ? AND user_id = ?; last write wins [JDBC]" style="html=1;endArrow=block;verticalAlign=bottom;spacingBottom=3;exitX=0.5;exitY=0.5526;entryX=0.5;entryY=0.5526;" edge="1" parent="1" source="L5" target="L6"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="m10" value="11. 200 Todo; zero rows changed (missing, malformed or another user's id): same 404 NOT_FOUND [HTTP/JSON]" style="html=1;endArrow=open;dashed=1;verticalAlign=bottom;spacingBottom=3;exitX=0.5;exitY=0.6053;entryX=0.5;entryY=0.6053;" edge="1" parent="1" source="L3" target="L1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="m11" value="12. GET /api/v1/todos?status=&amp;amp;q=&amp;amp;page= (URL query is the list state) [HTTP/JSON]" style="html=1;endArrow=block;verticalAlign=bottom;spacingBottom=3;exitX=0.5;exitY=0.6579;entryX=0.5;entryY=0.6579;" edge="1" parent="1" source="L1" target="L3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="m12" value="13. list(userId, TodoQuery): q trimmed, page validated [call]" style="html=1;endArrow=block;verticalAlign=bottom;spacingBottom=3;exitX=0.5;exitY=0.7105;entryX=0.5;entryY=0.7105;" edge="1" parent="1" source="L3" target="L4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="m13" value="14. list + totals(userId) in one read transaction [call]" style="html=1;endArrow=block;verticalAlign=bottom;spacingBottom=3;exitX=0.5;exitY=0.7632;entryX=0.5;entryY=0.7632;" edge="1" parent="1" source="L4" target="L5"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="m14" value="15. SELECT: instr(title_search / description_search, :q), done filter, ORDER BY created_at DESC, id DESC, 20 per page [JDBC]" style="html=1;endArrow=block;verticalAlign=bottom;spacingBottom=3;exitX=0.5;exitY=0.8158;entryX=0.5;entryY=0.8158;" edge="1" parent="1" source="L5" target="L6"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="m15" value="16. 200 TodoPage {items, page clamped to last page, totalPages, totals}; bad page: 400 [HTTP/JSON]" style="html=1;endArrow=open;dashed=1;verticalAlign=bottom;spacingBottom=3;exitX=0.5;exitY=0.8684;entryX=0.5;entryY=0.8684;" edge="1" parent="1" source="L3" target="L1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="legend" value="&lt;b&gt;Legend&lt;/b&gt;&lt;br&gt;Boxes at the top are participants (dark blue: container or datastore, light blue: components); vertical dashed line: lifeline.&lt;br&gt;Solid arrow: request or call, numbered in order; dashed arrow: response. Labels end with the protocol or mechanism." style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="40" y="890" width="800" height="70" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

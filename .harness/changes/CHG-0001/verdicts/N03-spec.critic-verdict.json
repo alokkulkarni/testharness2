@@ -1,0 +1,199 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N03-spec",
+  "gate": "critic-verdict",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "critic",
+      "agentRunId": "a9e34623a7a9c2f9e"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "spec-author",
+      "agentRunId": "a066c9deebb6ce3f3"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "spec-author",
+      "agentRunId": "a3e19e5093870ca67"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "spec-author",
+      "agentRunId": "a6b977211fc5f040e"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "spec-author",
+      "agentRunId": "a6f7c7b95e495e3ed"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "spec-author",
+      "agentRunId": "aafa578fd8d832674"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "spec-author",
+      "agentRunId": "ac06db47df17fdbe8"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "spec-author",
+      "agentRunId": "acc94bf2296757658"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "spec-author",
+      "agentRunId": "ace0cd1bc4e0d42b7"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "spec-author",
+      "agentRunId": "adb682a304cfb260f"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "spec-author",
+      "agentRunId": "ae5ce3af27cea1335"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "spec-author",
+      "agentRunId": "aead285e735d23bf9"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "spec-author",
+      "agentRunId": "af3af15564ff7d8ab"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "spec-author",
+      "agentRunId": "af49701c94d7966d6"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "spec-author",
+      "agentRunId": "af87c0dc2d586e85d"
+    }
+  ],
+  "createdAt": "2026-11-06T21:40:26.828Z",
+  "specFreezeHash": "90a67418d90d00de3ead88d8ec7d68a9e7c916160071714b176e40828dc15a99",
+  "reviewedCommit": "6e039a96b335f9985fe9ef3a4d5ad66ce48b9d66",
+  "diffHash": "4630cadff9513c9723c7ea704d0d0e0de9ca8e911b6429f89c4ef16f29b99fa5",
+  "summary": "round 1 (draft supersede-2 at 6e039a9): exhaustive review of all 11 draft files against the frozen spec (docs/specs unchanged since 2a0d38e). Q50-Q63 are implemented; NFR-007 and C-2 match Q57 verbatim; SDD sections 2, 3, 6, 10, 12.1, 13 and 14, ADR-0001/0002/0011/0012/0014/0018 and the three contracts are consistent; every requirement traces to section 14. D-45 form holds: no draft notes, YAML comment blocks or copy/delete steps; nothing outside requirements.md, sdd.md, contracts/ and adr/; no frozen file removed (contracts/todo-api-v1.yaml present). Q63 complete: no todos-api-v1.yaml in the draft, every cross-file ref resolves to an existing component of common-problem-v1.yaml, and ADR-0012 L5-L8 and ADR-0018 L30-L32 state why the to-dos file keeps its name. tool-spikes.md citations resolve. No blocker or major; 6 minor and 5 info findings.",
+  "findings": [
+    {
+      "id": "F-1",
+      "severity": "minor",
+      "message": "The context paragraph lists the second supersede answers that change only the SDD, ADRs and contracts as Q50, Q52-Q56, Q58, Q59, Q60 and Q63, but omits Q61 and Q62; Q62 changed SDD section 10, section 12.1 item 19, ADR-0012 and ADR-0018 (round-3 F-1, F-2, F-6).",
+      "requirement": "NFR-007",
+      "location": "docs/proposals/CHG-0001/supersede-2/requirements.md:L20-L23",
+      "suggestion": "Write Q50, Q52-Q56 and Q58-Q63 (or name Q61 and Q62 explicitly)."
+    },
+    {
+      "id": "F-2",
+      "severity": "minor",
+      "message": "The section 12.1 lead cites Q51, Q56-Q58 and Q63 as the source of items 11-20, but item 19 (RequestIdFilter on REQUEST and ERROR dispatches) comes from Q62; and it says item 21 was decided by the requester in Q60, while Q60 decided only the Spring Boot 4.x line, not the switch to openapi-request-validator-core 3.0.0 and its v3 MockMvc adapter, which is an engineering consequence for the approver to confirm.",
+      "requirement": "NFR-005, NFR-007",
+      "location": "docs/proposals/CHG-0001/supersede-2/sdd.md:L639-L642",
+      "suggestion": "Add Q62 to the sources of items 11-20, and say the Boot 4.x line of item 21 was decided in Q60 while its validator choice follows from it and is confirmed by approving the freeze."
+    },
+    {
+      "id": "F-3",
+      "severity": "minor",
+      "message": "Q60 moved the backend to the latest Spring Boot 4.x line, but the starter list on the same page is unchanged from the frozen file (spring-boot-starter-web, spring-boot-starter-test). Spring Boot 4.0 modularised its starters (the web starter is superseded by spring-boot-starter-webmvc, Flyway auto-configuration needs its own starter, test slices moved to per-technology test starters); ADR-0014 likewise still assumes Flyway auto-configures from the Flyway dependency alone. Stated from knowledge of the 4.0 release, not verified against a primary source in this session.",
+      "requirement": "NFR-005",
+      "location": "docs/proposals/CHG-0001/supersede-2/adr/0002-spring-boot-rest-api.md:L20-L22",
+      "suggestion": "Name the Boot 4.x starters, or state that the java-engineer uses the starter names the pinned 4.x release defines (including the Flyway starter, with a matching note in ADR-0014)."
+    },
+    {
+      "id": "F-4",
+      "severity": "minor",
+      "message": "The Context still says the module layout is open, then in the next sentence says the requester chose a modular monolith (C-2), and the Boot line is now fixed by Q60; one line also runs far past the file wrap width.",
+      "requirement": "NFR-007",
+      "location": "docs/proposals/CHG-0001/supersede-2/adr/0002-spring-boot-rest-api.md:L10-L12",
+      "suggestion": "Say only the Java version, build tool and starters were open; the module layout is fixed by C-2 (Q51) and ADR-0018. Rewrap the paragraph."
+    },
+    {
+      "id": "F-5",
+      "severity": "minor",
+      "message": "The licence and maintenance of the new v3 validator artifacts are stated as unverified, not rechecked for v3, and no check is assigned, unlike the artifact id, which the java-engineer must confirm. ADR-0001 holds the dependency set to MIT or Apache-2.0.",
+      "requirement": "NFR-004",
+      "location": "docs/proposals/CHG-0001/supersede-2/adr/0012-contract-tests-swagger-request-validator.md:L27-L29",
+      "suggestion": "Have the java-engineer confirm the Apache-2.0 licence in the Maven Central POM of both v3 artifacts when pinning, and stop and report a spec question if it differs; drop the parenthetical."
+    },
+    {
+      "id": "F-6",
+      "severity": "minor",
+      "message": "D-45 step 1 names requirements-analyst as the author of a requirements.md draft; this draft was written by spec-author (commit 8eefb35, Drafted by spec-author) and stamped with agent spec-author. The content is the Q57 wording accepted verbatim, so this is a process departure, not a content defect; the stamp itself must not be hand-edited.",
+      "requirement": "NFR-007",
+      "location": "docs/proposals/CHG-0001/supersede-2/requirements.md:L4-L8",
+      "suggestion": "Orchestrator: record the departure on the PR, or have requirements-analyst confirm the draft and re-stamp with that agent if the harness expects it."
+    },
+    {
+      "id": "F-7",
+      "severity": "info",
+      "message": "The label supersede-2 (the proposal folder name) remains as provenance in the SDD and ADR status lines; it parallels the frozen round 2 and first supersede wording, so it is not a D-45 draft note, but requirements.md calls the same thing the second supersede.",
+      "requirement": "NFR-007",
+      "location": "docs/proposals/CHG-0001/supersede-2/sdd.md:L640-L641",
+      "suggestion": "Optionally use the second supersede consistently (also adr/0002 L3-L4, adr/0018 L3)."
+    },
+    {
+      "id": "F-8",
+      "severity": "info",
+      "message": "The first freeze is used for the state this supersede replaces (sdd.md L696, L712, L750; adr/0012 L6, L19, L28; adr/0018 L8, L24, L31), although the current frozen state is the supersede-1 re-freeze at 2a0d38e; the names referred to date from the first freeze and were kept, so the text is accurate but could be read as skipping supersede-1.",
+      "requirement": "NFR-007",
+      "location": "docs/proposals/CHG-0001/supersede-2/adr/0018-modular-monolith-module-boundaries.md:L8",
+      "suggestion": "Optionally say the frozen spec or before this supersede."
+    },
+    {
+      "id": "F-9",
+      "severity": "info",
+      "message": "The contract lint (web script lint:contracts, redocly lint, @redocly/cli dev dependency) is a new verification step no Q50-Q63 answer asked for; it is disclosed as an engineering default in section 12.1 item 17 and section 13, so the approver confirms it with the freeze.",
+      "requirement": "NFR-007",
+      "location": "docs/proposals/CHG-0001/supersede-2/sdd.md:L787-L789",
+      "suggestion": "None required; the approver should note it."
+    },
+    {
+      "id": "F-10",
+      "severity": "info",
+      "message": "The shared NotFound response keeps the frozen to-do-specific description in the common file, which the identity module never lists; acknowledged in section 12.1 item 16.",
+      "requirement": "NFR-004",
+      "location": "docs/proposals/CHG-0001/supersede-2/contracts/common-problem-v1.yaml:L86-L94",
+      "suggestion": "None; frozen wording kept with no wire effect."
+    },
+    {
+      "id": "F-11",
+      "severity": "info",
+      "message": "Tool facts cited by ADR-0001 and ADR-0012 resolve to .harness/changes/CHG-0001/tool-spikes.md sections 1-5 and match them; they are relayed results (spike projects not in the repository), so they cannot be re-run here. The section 5 lint result (at 8eefb35) still applies: git diff 8eefb35 HEAD on the contracts shows only removed comment blocks and the todos-api to todo-api rename.",
+      "requirement": "NFR-004, NFR-007",
+      "location": ".harness/changes/CHG-0001/tool-spikes.md:L1-L85",
+      "suggestion": "None; the lint runs again in the gates."
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+<mxfile host="sdlc-harness">
+  <diagram id="data-model" name="Data model">
+    <mxGraphModel grid="1" gridSize="10" page="1" pageWidth="1900" pageHeight="800">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title" value="&lt;b&gt;To-do list · Data model (ERD) · Flyway V1__init.sql&lt;/b&gt;&lt;br&gt;CHG-0001 · frozen spec · drawn 2026-11-06 · Traces: sdd §3; ADR-0003, 0004, 0005, 0008, 0014, 0015, 0016, 0017; REQ-AUTH-001 AC-6, REQ-AUTH-005 AC-2, REQ-ISO-001, REQ-DATA-001" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="1500" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="sessions" value="&lt;b&gt;sessions&lt;/b&gt; [table]&lt;hr&gt;token_hash TEXT PK (SHA-256 hex of the cookie token)&lt;br&gt;user_id INTEGER NOT NULL FK users, ON DELETE CASCADE&lt;br&gt;created_at TEXT NOT NULL&lt;br&gt;expires_at TEXT NOT NULL (created + 8 h, absolute)&lt;hr&gt;Index ix_sessions_expires_at (expires_at)" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="40" y="120" width="440" height="190" as="geometry"/>
+        </mxCell>
+        <mxCell id="users" value="&lt;b&gt;users&lt;/b&gt; [table]&lt;hr&gt;id INTEGER PK (internal, never returned)&lt;br&gt;identifier TEXT NOT NULL (trimmed, original case)&lt;br&gt;identifier_key TEXT NOT NULL UNIQUE (lower-cased, Locale.ROOT)&lt;br&gt;password_hash TEXT NOT NULL (Argon2id encoded string)&lt;br&gt;created_at TEXT NOT NULL (UTC)&lt;hr&gt;No role column: one permission level (REQ-AUTH-005 AC-2)" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="760" y="120" width="440" height="190" as="geometry"/>
+        </mxCell>
+        <mxCell id="todos" value="&lt;b&gt;todos&lt;/b&gt; [table]&lt;hr&gt;id INTEGER PK AUTOINCREMENT (internal, tie-break)&lt;br&gt;public_id TEXT NOT NULL UNIQUE (UUID v4, the API id)&lt;br&gt;user_id INTEGER NOT NULL FK users, ON DELETE CASCADE (owner)&lt;br&gt;title TEXT NOT NULL (trimmed, 1-200 code points)&lt;br&gt;title_search TEXT NOT NULL (lower-cased title)&lt;br&gt;description TEXT NULL (at most 2000 code points)&lt;br&gt;description_search TEXT NULL (lower-cased)&lt;br&gt;due_date TEXT NOT NULL (YYYY-MM-DD)&lt;br&gt;priority TEXT NOT NULL CHECK LOW, MEDIUM, HIGH&lt;br&gt;done INTEGER NOT NULL CHECK 0, 1&lt;br&gt;created_at, updated_at TEXT NOT NULL (UTC yyyy-MM-ddTHH:mm:ss.SSSZ)&lt;hr&gt;Indexes: ix_todos_user_created (user_id, created_at DESC, id DESC); ix_todos_user_done_created (user_id, done, created_at DESC, id DESC)" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=8;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="1440" y="120" width="440" height="380" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1" value="many sessions per user (cascade delete)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=ERmandOne;startArrow=ERmany;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="sessions" target="users"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" value="many to-dos per user (cascade delete)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=ERmandOne;startArrow=ERmany;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="todos" target="users"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="notes" value="&lt;b&gt;Storage rules&lt;/b&gt;&lt;br&gt;SQLite file at TODO_DB_PATH (ADR-0003); schema owned by Flyway (ADR-0014)&lt;br&gt;Pragmas: journal_mode=WAL, foreign_keys=ON, busy_timeout=5000; one pooled connection (ADR-0016)&lt;br&gt;Timestamps are UTC text, so text order is time order (ADR-0017)&lt;br&gt;*_search and identifier_key are derived lower-case columns (ADR-0015)&lt;br&gt;The database never holds a usable session token or plain password (ADR-0004, ADR-0005)" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="700" y="400" width="560" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend" value="&lt;b&gt;Legend&lt;/b&gt;&lt;br&gt;Blue box: table (columns, types, rules) · Crow's-foot line: many-to-one foreign key, labelled with relationship and delete rule" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="40" y="660" width="700" height="50" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
