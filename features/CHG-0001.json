@@ -26,18 +26,11 @@
   },
   "running": [
     {
-      "node": "N07-tests-backend",
-      "role": "tester",
-      "runId": "run-mw7otysm",
-      "holder": "claude-code",
-      "leaseUntil": "2026-11-08T10:41:56.998Z"
-    },
-    {
       "node": "N08-tests-web",
       "role": "tester",
       "runId": "run-mw7ou657",
       "holder": "claude-code",
-      "leaseUntil": "2026-11-08T10:42:06.523Z"
+      "leaseUntil": "2026-11-08T11:10:28.741Z"
     }
   ],
   "overlaps": []
