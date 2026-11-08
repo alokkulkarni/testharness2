@@ -12,7 +12,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
-import java.util.Map;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -50,18 +49,21 @@ class PersistenceTest {
         // The application class is the one class under app.todo that carries @SpringBootApplication.
         var scanner = new ClassPathScanningCandidateComponentProvider(false);
         scanner.addIncludeFilter(new AnnotationTypeFilter(SpringBootApplication.class));
-        var found = scanner.findCandidateComponents("app.todo");
+        // test-only launchers such as app.todo.TestTodoApplication (ADR-0013) are not the application
+        var found = scanner.findCandidateComponents("app.todo").stream()
+                .filter(bd -> !bd.getBeanClassName().startsWith("app.todo.Test") && !bd.getBeanClassName().startsWith("app.todo.testsupport."))
+                .toList();
         assertThat(found).as("exactly one @SpringBootApplication class under app.todo").hasSize(1);
-        Class<?> application = Class.forName(found.iterator().next().getBeanClassName());
+        Class<?> application = Class.forName(found.get(0).getBeanClassName());
         SpringApplication app = new SpringApplication(application);
-        app.setDefaultProperties(Map.of(
-                "server.port", "0",
-                "spring.main.banner-mode", "off",
-                "TODO_DB_PATH", dbFile.toString(),
-                "todo.db.path", dbFile.toString(),
-                "TODO_COOKIE_SECURE", "false",
-                "todo.cookie.secure", "false"));
-        return app.run();
+        // command-line arguments have the highest precedence, so no application.properties can override the test file
+        return app.run(
+                "--server.port=0",
+                "--spring.main.banner-mode=off",
+                "--TODO_DB_PATH=" + dbFile,
+                "--todo.db.path=" + dbFile,
+                "--TODO_COOKIE_SECURE=false",
+                "--todo.cookie.secure=false");
     }
 
     private static ApiClient clientOf(ConfigurableApplicationContext ctx) {
