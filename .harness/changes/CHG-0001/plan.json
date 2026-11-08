@@ -165,7 +165,7 @@
         "docs/specs/CHG-0001/design/ux/"
       ],
       "outputs": [
-        "tests/backend/"
+        "api/src/test/"
       ],
       "dependsOn": [
         "N05-design-arch",
@@ -192,7 +192,7 @@
         "docs/specs/CHG-0001/design/ux/"
       ],
       "outputs": [
-        "tests/web/"
+        "web/"
       ],
       "dependsOn": [
         "N05-design-arch",
@@ -215,11 +215,11 @@
       "id": "N09-build-java",
       "phase": "5",
       "inputs": [
-        "tests/backend/",
-        "tests/web/"
+        "api/src/test/",
+        "web/"
       ],
       "outputs": [
-        "src/java/"
+        "api/"
       ],
       "dependsOn": [
         "N07-tests-backend",
@@ -241,11 +241,11 @@
       "id": "N10-build-react",
       "phase": "5",
       "inputs": [
-        "tests/backend/",
-        "tests/web/"
+        "api/src/test/",
+        "web/"
       ],
       "outputs": [
-        "src/react/"
+        "web/"
       ],
       "dependsOn": [
         "N07-tests-backend",
@@ -267,8 +267,8 @@
       "id": "N11-security",
       "phase": "6",
       "inputs": [
-        "src/java/",
-        "src/react/"
+        "api/",
+        "web/"
       ],
       "outputs": [
         ".harness/changes/CHG-0001/evidence/scan-report/"
@@ -293,8 +293,8 @@
       "id": "N12-validate",
       "phase": "6",
       "inputs": [
-        "src/java/",
-        "src/react/"
+        "api/",
+        "web/"
       ],
       "outputs": [
         ".harness/changes/CHG-0001/traceability.json"
@@ -319,8 +319,8 @@
       "id": "N13-pr-review",
       "phase": "6",
       "inputs": [
-        "src/java/",
-        "src/react/"
+        "api/",
+        "web/"
       ],
       "outputs": [
         ".harness/changes/CHG-0001/verdicts/"
