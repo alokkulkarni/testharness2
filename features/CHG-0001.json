@@ -14,12 +14,48 @@
         "paths": [
           "api/src/test",
           "intent/a-new-todo-list-app-where-user-can-creat.md",
-          "web"
+          "web",
+          "web/.gitignore",
+          "web/.nvmrc",
+          "web/e2e/a11y.spec.ts",
+          "web/e2e/acceptance.spec.ts",
+          "web/e2e/auth.spec.ts",
+          "web/e2e/global-setup.session-expiry.ts",
+          "web/e2e/global-setup.ts",
+          "web/e2e/keyboard.spec.ts",
+          "web/e2e/navigation.spec.ts",
+          "web/e2e/performance.spec.ts",
+          "web/e2e/playwright.session-expiry.config.ts",
+          "web/e2e/restart.spec.ts",
+          "web/e2e/session-expiry.spec.ts",
+          "web/e2e/states.spec.ts",
+          "web/e2e/support/api-process.ts",
+          "web/e2e/support/app.ts",
+          "web/e2e/support/launch.ts",
+          "web/eslint.config.js",
+          "web/package.json",
+          "web/playwright.config.ts",
+          "web/pnpm-lock.yaml",
+          "web/tests/component/a11y.test.tsx",
+          "web/tests/component/auth.test.tsx",
+          "web/tests/component/errors.test.tsx",
+          "web/tests/component/list.test.tsx",
+          "web/tests/component/navigation.test.tsx",
+          "web/tests/component/todo-form.test.tsx",
+          "web/tests/helpers/fakeApi.ts",
+          "web/tests/helpers/lazy.ts",
+          "web/tests/helpers/renderApp.tsx",
+          "web/tests/setup.ts",
+          "web/tests/unit/routing-helpers.test.ts",
+          "web/tests/unit/userMessage.test.ts",
+          "web/tests/unit/whitespace.test.ts",
+          "web/tsconfig.json",
+          "web/vitest.config.ts"
         ]
       }
     ],
     "source": "diff",
-    "updatedAt": "2026-11-08T10:55:30.964Z"
+    "updatedAt": "2026-11-08T11:08:44.576Z"
   },
   "links": {
     "branch": "feature/CHG-0001-create-a-to-do-list"
