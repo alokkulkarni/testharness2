@@ -24,7 +24,9 @@
           "web/e2e/global-setup.ts",
           "web/e2e/keyboard.spec.ts",
           "web/e2e/navigation.spec.ts",
+          "web/e2e/network.spec.ts",
           "web/e2e/performance.spec.ts",
+          "web/e2e/playwright.restart.config.ts",
           "web/e2e/playwright.session-expiry.config.ts",
           "web/e2e/restart.spec.ts",
           "web/e2e/session-expiry.spec.ts",
@@ -36,6 +38,7 @@
           "web/package.json",
           "web/playwright.config.ts",
           "web/pnpm-lock.yaml",
+          "web/tests/README.md",
           "web/tests/component/a11y.test.tsx",
           "web/tests/component/auth.test.tsx",
           "web/tests/component/errors.test.tsx",
@@ -45,6 +48,7 @@
           "web/tests/helpers/fakeApi.ts",
           "web/tests/helpers/lazy.ts",
           "web/tests/helpers/renderApp.tsx",
+          "web/tests/helpers/status.ts",
           "web/tests/setup.ts",
           "web/tests/unit/routing-helpers.test.ts",
           "web/tests/unit/userMessage.test.ts",
@@ -55,7 +59,7 @@
       }
     ],
     "source": "diff",
-    "updatedAt": "2026-11-08T11:08:44.576Z"
+    "updatedAt": "2026-11-08T19:55:48.336Z"
   },
   "links": {
     "branch": "feature/CHG-0001-create-a-to-do-list"
