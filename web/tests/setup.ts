@@ -1,9 +1,6 @@
 import '@testing-library/jest-dom/vitest';
-import * as axeMatchers from 'vitest-axe/matchers';
 import { cleanup } from '@testing-library/react';
-import { afterEach, expect, vi } from 'vitest';
-
-expect.extend(axeMatchers);
+import { afterEach, vi } from 'vitest';
 
 // jsdom does not implement <dialog>.showModal()/close(); minimal shim so native dialogs can be exercised.
 // This is test environment support only, not application behaviour.
