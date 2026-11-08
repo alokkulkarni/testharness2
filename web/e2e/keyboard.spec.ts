@@ -38,7 +38,8 @@ test('NFR-001 AC-2 create, search, filter, complete and page with the keyboard o
   await tabTo(page, page.getByLabel(/^title/i));
   await page.keyboard.type('Typed by keyboard');
   await tabTo(page, page.getByLabel(/^due date/i));
-  await page.keyboard.type('11062026');
+  // typing digits into a date input depends on the browser engine and locale, and is not the point here
+  await page.getByLabel(/^due date/i).fill('2026-11-06');
   await page.keyboard.press('Enter');
   await expect(listHeading(page)).toBeVisible();
   await expect(rows(page).first()).toContainText('Typed by keyboard');
@@ -130,6 +131,18 @@ test('NFR-001 AC-2 the detail page is reached, read and left by keyboard (to edi
   await tabTo(page, page.getByRole('link', { name: 'Back to my to-dos' }));
   await page.keyboard.press('Enter');
   await expect(listHeading(page)).toBeVisible();
+});
+
+test('NFR-001 AC-2 a to-do is edited and saved by keyboard; the detail page shows the new title and focus is on its heading', async ({ page }) => {
+  await signedInUser(page);
+  const todo = await apiCreateTodo(page.request, { title: 'Before keyboard edit' });
+  await page.goto(`/todos/${todo.id}/edit`);
+  await tabTo(page, page.getByLabel(/^title/i));
+  await page.keyboard.press('ControlOrMeta+A');
+  await page.keyboard.type('After keyboard edit');
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(new RegExp(`/todos/${todo.id}$`));
+  await expect(page.getByRole('heading', { level: 1, name: 'After keyboard edit' })).toBeFocused();
 });
 
 test('NFR-001 AC-2 keyboard focus is always visible on the list controls', async ({ page }) => {

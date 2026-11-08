@@ -33,7 +33,7 @@ test.describe('REQ-NAV-001 against the real stack', () => {
     await apiSignUp(page.request, account);
     await page.goto('/');
     await expect(page).toHaveURL(/\/login/);
-    await expect(page.getByRole('status')).toHaveCount(0);
+    await expect(page.getByText(/session has ended|account created/i)).toHaveCount(0);
     await uiLogIn(page, account);
     await expect(page).toHaveURL(/\/todos$/);
     await expect(listHeading(page)).toBeVisible();
@@ -55,7 +55,7 @@ test.describe('REQ-NAV-001 against the real stack', () => {
       await expect(page).toHaveURL(/\/login\?returnTo=/);
       await expect(page.getByRole('heading', { level: 1, name: 'Log in' })).toBeVisible();
       await expect(page.getByRole('heading', { name: /not found/i })).toHaveCount(0);
-      await expect(page.getByRole('status')).toHaveCount(0);
+      await expect(page.getByText(/session has ended|account created/i)).toHaveCount(0);
       await uiLogIn(page, account);
       await expect(page).toHaveURL(/\/todos$/);
       await expect(page.getByRole('heading', { name: /not found/i })).toHaveCount(0);

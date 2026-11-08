@@ -64,7 +64,7 @@ test.describe('sign up, log in, log out', () => {
     await page.goto('/todos');
     await expect(page).toHaveURL(/\/login\?returnTo=/);
     await expect(page.getByRole('heading', { level: 1, name: 'Log in' })).toBeVisible();
-    await expect(page.getByRole('status')).toHaveCount(0);
+    await expect(page.getByText(/session has ended|account created/i)).toHaveCount(0);
     await expect(page.getByRole('alert')).toHaveCount(0);
     await uiLogIn(page, account);
     await expect(page).toHaveURL(/\/todos$/);
@@ -76,7 +76,7 @@ test.describe('sign up, log in, log out', () => {
     await page.goto('/todos');
     await page.getByRole('button', { name: 'Log out' }).click();
     await expect(page).toHaveURL(/\/login$/);
-    await expect(page.getByRole('status')).toHaveCount(0);
+    await expect(page.getByText(/session has ended|account created/i)).toHaveCount(0);
     const afterLogout = await page.request.get('/api/v1/todos');
     expect(afterLogout.status()).toBe(401);
     await page.goBack();

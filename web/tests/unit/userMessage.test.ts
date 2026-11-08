@@ -31,23 +31,47 @@ const forbidden = (text: string) => {
 
 describe('userMessageFor (sdd §6.1, NFR-006)', () => {
   it('NFR-006 AC-2 the Problem type of identity.ts equals the Problem type of todos.ts', async () => {
-    // generated from the contracts (ADR-0001); the module must exist and the two types must be equal
+    // generated from the contracts (ADR-0001); the module must exist at run time. The type-level equality below is
+    // enforced by the TypeScript compiler, i.e. by `pnpm -C web typecheck` (tsconfig includes tests/); Vitest's
+    // `run` does not check types, so that command is a gate for this criterion, not only this test.
     await load('/src/api/identity');
     await load('/src/api/todos');
     expectTypeOf<IdentityProblem>().toEqualTypeOf<Problem>();
   });
 
-  it.each(ALL_ACTIONS.flatMap((a) => CODES.map((c) => [a, c] as const)))(
+  // every ProblemCode with the status the contracts give it (common-problem-v1.yaml; 413 is one of REQUEST_REJECTED's)
+  const CODE_STATUS: Record<string, number> = {
+    VALIDATION_FAILED: 400,
+    MALFORMED_REQUEST: 400,
+    IDENTIFIER_TAKEN: 409,
+    INVALID_CREDENTIALS: 401,
+    UNAUTHENTICATED: 401,
+    CLIENT_HEADER_MISSING: 403,
+    NOT_FOUND: 404,
+    METHOD_NOT_ALLOWED: 405,
+    UNSUPPORTED_MEDIA_TYPE: 415,
+    REQUEST_REJECTED: 413,
+    INTERNAL_ERROR: 500,
+  };
+
+  // sdd §14 excludes three rows from "non-empty text and a next step": a 400 VALIDATION_FAILED form row with a shown
+  // field (not built here, the errors are empty), the 409 IDENTIFIER_TAKEN row on sign-up (its text is errors[].message)
+  // and the session-probe 401 row (shows nothing).
+  const excluded = (action: UserAction, code: Problem['code']) =>
+    (action === 'sign-up' && code === 'IDENTIFIER_TAKEN') || (action === 'session-probe' && CODE_STATUS[code] === 401);
+
+  it.each(ALL_ACTIONS.flatMap((a) => CODES.filter((c) => !excluded(a, c)).map((c) => [a, c] as const)))(
     'NFR-006 AC-1 AC-2 %s with %s gives a non-empty text, a next step and no internals',
     async (action, code) => {
-      const { text, nextStep } = await msg(http(code === 'NOT_FOUND' ? 404 : 500, prob(500, code)), action);
+      const status = CODE_STATUS[code] ?? 500;
+      const { text, nextStep } = await msg(http(status, prob(status, code)), action);
       expect(text.length).toBeGreaterThan(0);
       expect(nextStep).toBeTruthy();
       forbidden(text);
     },
   );
 
-  it.each(ALL_ACTIONS.filter((a) => a !== 'session-probe').flatMap((a) => [403, 405, 413, 415, 500, 502].map((s) => [a, s] as const)))(
+  it.each(ALL_ACTIONS.flatMap((a) => [403, 405, 413, 415, 500, 502].map((s) => [a, s] as const)))(
     'NFR-006 AC-1 %s with status %i gives try-again with no internals',
     async (action, status) => {
       const m = await msg(http(status), action);
@@ -57,7 +81,7 @@ describe('userMessageFor (sdd §6.1, NFR-006)', () => {
     },
   );
 
-  it.each(ALL_ACTIONS.filter((a) => a !== 'session-probe'))(
+  it.each(ALL_ACTIONS)(
     'NFR-006 AC-1 network failure on %s gives try-again naming no browser error text',
     async (action) => {
       const m = await msg({ kind: 'network' }, action);

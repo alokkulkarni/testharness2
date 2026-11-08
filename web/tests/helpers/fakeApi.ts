@@ -54,6 +54,21 @@ export function json(status: number, body: unknown): Response {
   return new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
 }
 
+/**
+ * A response that arrived (so it is not a network failure) but whose body cannot be read: reading it rejects with a
+ * plain Error carrying SENTINEL. It stands in for "a stubbed dependency throwing a plain Error" (sdd §14 NFR-006, N-2):
+ * an error inside the SPA that is neither a Problem nor a network failure, i.e. `{ kind: 'unexpected' }`.
+ */
+export function throwingResponse(status = 200): Response {
+  const response = new Response(null, { status });
+  const boom = () => Promise.reject(new Error(SENTINEL));
+  for (const reader of ['json', 'text', 'arrayBuffer', 'blob', 'formData', 'bytes'] as const) {
+    Object.defineProperty(response, reader, { value: boom });
+  }
+  Object.defineProperty(response, 'clone', { value: () => response });
+  return response;
+}
+
 const UUID = (n: number) => `00000000-0000-4000-8000-${n.toString(16).padStart(12, '0')}`;
 
 export function makeTodo(n: number, patch: Partial<TodoRecord> = {}): TodoRecord {

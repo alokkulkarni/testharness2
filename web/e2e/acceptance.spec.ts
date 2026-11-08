@@ -1,5 +1,5 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
-import { apiCreateTodo, apiSeedMany, listHeading, newAccount, apiLogIn, apiSignUp, rowFor, rows, signedInUser } from './support/app';
+import { apiCreateTodo, apiMarkDone, apiSeedMany, listHeading, newAccount, apiLogIn, apiSignUp, rowFor, rows, signedInUser } from './support/app';
 
 /** True when the Previous/Next control is not an enabled link or button (disabled, aria-disabled or absent as a control). */
 async function pagerControlDisabled(label: Locator): Promise<boolean> {
@@ -72,6 +72,10 @@ test.describe('REQ-ACC-001 overall success scenario', () => {
     await expect(page.getByRole('heading', { level: 2, name: 'No matching to-dos' })).toBeVisible();
     await page.getByRole('radio', { name: 'All' }).check();
     await expect(rows(page)).toHaveCount(1);
+    // REQ-TODO-006 AC-3: the deleted to-do is gone after a reload too
+    await page.reload();
+    await expect(rows(page)).toHaveCount(1);
+    await expect(page.getByText('Buy oat milk')).toHaveCount(0);
   });
 
   test('REQ-ACC-001 AC-2 REQ-ISO-001 AC-1 AC-2 AC-4 a second user cannot see or change the first user\'s to-dos by list, search or direct URL', async ({ page, browser, baseURL }) => {
@@ -137,7 +141,7 @@ test.describe('persistence and list flows', () => {
     await expect(page).toHaveURL(/page=2/);
     await expect(rows(page)).toHaveCount(20);
     seen.push(...(await titlesOnPage()));
-    await pagination.getByRole('link', { name: '3' }).click();
+    await pagination.getByRole('link', { name: /^page 3$/i }).click();
     await expect(rows(page)).toHaveCount(5);
     seen.push(...(await titlesOnPage()));
     expect(seen).toEqual(Array.from({ length: 45 }, (_, i) => `Item ${String(45 - i).padStart(2, '0')}`));
@@ -175,21 +179,25 @@ test.describe('persistence and list flows', () => {
 
   test('REQ-TODO-007 AC-1 AC-2 clear all completed states the count, deletes completed across pages, keeps active', async ({ page }) => {
     await signedInUser(page);
-    await apiSeedMany(page.request, 3, (n) => `Job ${n}`);
+    // 25 to-dos, newest first: Job 25..Job 6 on page 1 and Job 5..Job 1 on page 2; Job 1..Job 22 are completed, so
+    // five completed to-dos are on page 2 while the user is looking at page 1
+    const created: string[] = [];
+    for (let n = 1; n <= 25; n++) created.push((await apiCreateTodo(page.request, { title: `Job ${n}` })).id);
+    for (const id of created.slice(0, 22)) await apiMarkDone(page.request, id);
     await page.goto('/todos');
-    await rowFor(page, 'Job 1').getByRole('checkbox').check();
-    await rowFor(page, 'Job 2').getByRole('checkbox').check();
+    await expect(rows(page)).toHaveCount(20);
     await page.getByRole('button', { name: /clear all completed/i }).click();
     const dialog = page.getByRole('dialog');
     await expect(dialog).toContainText(
-      'Delete all 2 completed to-dos? This deletes all your completed to-dos, including any not shown because of the current page, filter or search. This cannot be undone.',
+      'Delete all 22 completed to-dos? This deletes all your completed to-dos, including any not shown because of the current page, filter or search. This cannot be undone.',
     );
     await dialog.getByRole('button', { name: 'Cancel' }).click();
-    await expect(rows(page)).toHaveCount(3);
+    await expect(rows(page)).toHaveCount(20);
     await page.getByRole('button', { name: /clear all completed/i }).click();
-    await page.getByRole('dialog').getByRole('button', { name: /delete 2 completed/i }).click();
-    await expect(rows(page)).toHaveCount(1);
-    await expect(rows(page).first()).toContainText('Job 3');
+    await page.getByRole('dialog').getByRole('button', { name: /delete 22 completed/i }).click();
+    await expect(rows(page)).toHaveCount(3);
+    await expect(rows(page).first()).toContainText('Job 25');
+    await expect(rowFor(page, 'Job 1')).toHaveCount(0);
     await expect(page.getByRole('button', { name: /clear all completed/i })).toBeDisabled();
   });
 

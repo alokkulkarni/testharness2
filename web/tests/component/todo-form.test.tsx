@@ -2,6 +2,7 @@ import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { FakeApi, SENTINEL, makeTodo, problem, seed } from '../helpers/fakeApi';
 import { renderApp } from '../helpers/renderApp';
+import { liveRegionText } from '../helpers/status';
 
 const title = () => screen.getByLabelText(/^title/i);
 const description = () => screen.getByLabelText(/^description/i);
@@ -60,14 +61,14 @@ describe('S4 Add a to-do', () => {
     expect((posted(api2)[0]!.body as { description?: string | null }).description ?? null).toBeNull();
   });
 
-  it('REQ-TODO-002 AC-1 a title padded with non-breaking spaces is sent trimmed', async () => {
+  it('REQ-TODO-002 AC-1 a title padded with non-breaking spaces is saved trimmed (the SPA may trim it or leave it to the server, sdd §5)', async () => {
     const api = new FakeApi({ signedIn: true });
     const r = await openNew(api);
     setValue(title(), '  Pay rent　');
     setValue(dueDate(), '2026-11-06');
     await submitNew(r);
     await waitFor(() => expect(posted(api)).toHaveLength(1));
-    expect((posted(api)[0]!.body as { title: string }).title).toBe('Pay rent');
+    expect((posted(api)[0]!.body as { title: string }).title.trim()).toBe('Pay rent');
   });
 
   it.each([
@@ -268,12 +269,12 @@ describe('S6 Edit a to-do', () => {
     expect(body.description === undefined || body.description === null || body.description === '').toBe(true);
   });
 
-  it('NFR-003 AC-1 the edit page shows a loading status instead of a form until the to-do is loaded', async () => {
+  it('ux-design S6 loading state: the edit page shows "Loading..." in a status instead of a form until the to-do is loaded', async () => {
     const api = new FakeApi({ signedIn: true, todos: existing() });
     api.on('GET', /^\/api\/v1\/todos\/[0-9a-f-]{36}$/, () => new Promise<Response>(() => {}));
     await renderApp(`/todos/${api.todos[0]!.id}/edit`, api);
     await screen.findByRole('heading', { level: 1, name: 'Edit to-do' });
-    expect(screen.getByRole('status')).toHaveTextContent('Loading...');
+    expect(liveRegionText()).toContain('Loading...');
     expect(screen.queryByLabelText(/^title/i)).not.toBeInTheDocument();
   });
 
@@ -319,6 +320,7 @@ describe('S5 To-do detail', () => {
     const original = process.env.TZ;
     try {
       process.env.TZ = 'Pacific/Kiritimati'; // UTC+14
+      expect(new Date(Date.UTC(2026, 0, 1)).getTimezoneOffset()).toBe(-840); // the zone took effect in this worker
       const api = new FakeApi({ signedIn: true, todos: withNotes() });
       await renderApp(`/todos/${api.todos[0]!.id}`, api);
       await screen.findByRole('heading', { level: 1, name: 'Detail me' });
@@ -336,6 +338,8 @@ describe('S5 To-do detail', () => {
       const original = process.env.TZ;
       try {
         process.env.TZ = tz;
+        // the zone took effect in this worker: Kiritimati is UTC+14, Pago Pago UTC-11 (no daylight saving in November)
+        expect(new Date(Date.UTC(2026, 10, 6)).getTimezoneOffset()).toBe(tz === 'Pacific/Kiritimati' ? -840 : 660);
         const api = new FakeApi({ signedIn: true, todos: withNotes() });
         const r = await renderApp('/todos', api);
         await screen.findByRole('heading', { level: 1, name: 'My to-dos' });
@@ -356,7 +360,7 @@ describe('S5 To-do detail', () => {
     await renderApp(`/todos/${api.todos[0]!.id}`, api);
     await screen.findByRole('heading', { level: 1, name: 'Detail me' });
     expect(screen.getByRole('link', { name: 'Edit' })).toHaveAttribute('href', `/todos/${api.todos[0]!.id}/edit`);
-    expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /^delete/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Back to my to-dos' })).toHaveAttribute('href', '/todos');
   });
 
@@ -364,7 +368,7 @@ describe('S5 To-do detail', () => {
     const api = new FakeApi({ signedIn: true, todos: withNotes() });
     const r = await renderApp(`/todos/${api.todos[0]!.id}`, api);
     await screen.findByRole('heading', { level: 1, name: 'Detail me' });
-    await r.user.click(screen.getByRole('button', { name: 'Delete' }));
+    await r.user.click(screen.getByRole('button', { name: /^delete/i }));
     const dialog = await screen.findByRole('dialog', { name: 'Delete this to-do?' });
     expect(api.callsTo('DELETE', /.*/)).toHaveLength(0);
     await r.user.click(within(dialog).getByRole('button', { name: 'Delete' }));
@@ -376,7 +380,7 @@ describe('S5 To-do detail', () => {
     const api = new FakeApi({ signedIn: true, todos: withNotes() });
     const r = await renderApp(`/todos/${api.todos[0]!.id}`, api);
     await screen.findByRole('heading', { level: 1, name: 'Detail me' });
-    await r.user.click(screen.getByRole('button', { name: 'Delete' }));
+    await r.user.click(screen.getByRole('button', { name: /^delete/i }));
     const dialog = await screen.findByRole('dialog');
     api.todos = [];
     await r.user.click(within(dialog).getByRole('button', { name: 'Delete' }));

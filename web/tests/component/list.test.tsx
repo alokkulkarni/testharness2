@@ -53,7 +53,7 @@ describe('S3 list: view and order (REQ-TODO-003)', () => {
     expect(await screen.findByText('Showing 1-20 of 45')).toBeInTheDocument();
   });
 
-  it('NFR-003 AC-1 the list shows a loading status while the first load is in flight', async () => {
+  it('ux-design S3 loading state: the list shows "Loading your to-dos..." while the first load is in flight', async () => {
     const api = new FakeApi({ signedIn: true, todos: seed(1) });
     let release!: () => void;
     const gate = new Promise<void>((r) => (release = r));
@@ -190,9 +190,12 @@ describe('S3 list: pagination (REQ-LIST-003)', () => {
     expect(titles()).toHaveLength(20);
     expect(titles()[0]).toBe('Todo 45');
     const nav = screen.getByRole('navigation', { name: 'Pagination' });
-    expect(within(nav).getByText('1').closest('[aria-current="page"]')).not.toBeNull();
-    expect(within(nav).getByText('2')).toBeInTheDocument();
-    expect(within(nav).getByText('3')).toBeInTheDocument();
+    // ux-design §9.3: links are named "Page {n}"; the current page is marked aria-current="page"
+    const current = nav.querySelector('[aria-current="page"]');
+    expect(current).not.toBeNull();
+    expect(current).toHaveTextContent(/page 1|^1$/i);
+    expect(within(nav).getByRole('link', { name: /^page 2$/i })).toBeInTheDocument();
+    expect(within(nav).getByRole('link', { name: /^page 3$/i })).toBeInTheDocument();
     expect(disabledControl(/previous/i)).toBe(true);
     expect(disabledControl(/next/i)).toBe(false);
   });
@@ -206,7 +209,7 @@ describe('S3 list: pagination (REQ-LIST-003)', () => {
     expect(location.search).toContain('page=2');
     expect(lastList(api).query.get('page')).toBe('2');
     seen.push(...titles());
-    await user.click(within(screen.getByRole('navigation', { name: 'Pagination' })).getByText('3'));
+    await user.click(within(screen.getByRole('navigation', { name: 'Pagination' })).getByRole('link', { name: /^page 3$/i }));
     await waitFor(() => expect(titles()).toHaveLength(5));
     seen.push(...titles());
     expect(seen).toEqual(Array.from({ length: 45 }, (_, i) => `Todo ${45 - i}`));

@@ -5,6 +5,6 @@ import { mainLaunch } from './support/launch';
 // server are already running (for example while the SPA or API does not exist yet).
 export default async function globalSetup(): Promise<() => Promise<void>> {
   if (process.env.E2E_EXTERNAL_SERVERS === '1') return async () => {};
-  await startApi(mainLaunch);
+  await startApi(mainLaunch());
   return stopApi;
 }

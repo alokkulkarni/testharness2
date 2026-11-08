@@ -23,14 +23,20 @@ test('NFR-003 AC-1 with 500 to-dos, list, filter, search, page, create, edit, co
     (samples[name] ??= []).push(performance.now() - start);
   };
 
+  // list: the user action is going to the list from another screen (a client-side navigation, not a Vite dev-server
+  // reload): open the first to-do, then follow "Back to my to-dos" and time it until the first page of rows shows
+  await page.goto('/todos');
+  await expect(rows(page)).toHaveCount(20);
   for (let i = 0; i < RUNS; i++) {
+    const first = await rows(page).first().getByRole('link').first().innerText();
+    await rows(page).first().getByRole('link', { name: first, exact: true }).click();
+    await expect(page.getByRole('heading', { level: 1, name: first })).toBeVisible();
     await timed('list', async () => {
-      await page.goto('/todos');
+      await page.getByRole('link', { name: 'Back to my to-dos' }).click();
       await expect(rows(page)).toHaveCount(20);
     });
   }
 
-  await page.goto('/todos');
   await expect(rows(page)).toHaveCount(20);
   for (let i = 0; i < RUNS; i++) {
     const status = i % 2 === 0 ? 'Completed' : 'All';
@@ -51,13 +57,16 @@ test('NFR-003 AC-1 with 500 to-dos, list, filter, search, page, create, edit, co
       await expect(rows(page).first()).toContainText(term);
     });
   }
-  await page.goto('/todos');
+  await page.getByRole('searchbox', { name: /search to-dos/i }).fill('');
+  await page.getByRole('button', { name: 'Search' }).click();
+  await expect(rows(page)).toHaveCount(20);
 
+  // page: activate the Next and Previous pagination links, alternating between pages 2 and 1
   for (let i = 0; i < RUNS; i++) {
-    const target = (i % 25) + 1;
+    const forward = i % 2 === 0;
     await timed('page', async () => {
-      await page.goto(`/todos?page=${target}`);
-      await expect(page.getByText(new RegExp(`Showing ${(target - 1) * 20 + 1}-`))).toBeVisible();
+      await page.getByRole('navigation', { name: 'Pagination' }).getByRole('link', { name: forward ? 'Next' : 'Previous' }).click();
+      await expect(page.getByText(forward ? /Showing 21-40/ : /Showing 1-20/)).toBeVisible();
     });
   }
 
@@ -85,10 +94,12 @@ test('NFR-003 AC-1 with 500 to-dos, list, filter, search, page, create, edit, co
 
   await page.goto('/todos');
   for (let i = 0; i < RUNS; i++) {
-    const box = rows(page).nth(i).getByRole('checkbox');
+    const row = rows(page).nth(i);
+    const title = await row.getByRole('link').first().innerText();
     await timed('complete', async () => {
-      await box.check();
-      await expect(box).toBeChecked();
+      await row.getByRole('checkbox').check();
+      // an optimistic checkbox is checked at once, so stop the clock at the confirmation (the live region), after the server answered
+      await expect(page.getByText(`Marked done: ${title}.`)).toBeVisible();
     });
   }
 

@@ -1,3 +1,4 @@
+import { mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
@@ -13,24 +14,43 @@ export interface ApiLaunch {
   env: Record<string, string>;
 }
 
+/**
+ * A fresh temporary directory per run (sdd §11, §14: "temporary DB"), so that no data of an earlier run (for example
+ * the 500 to-dos of the performance spec) is ever present. The first caller, the global setup, creates it and
+ * publishes it in the environment, which the Playwright workers inherit; restart.spec reuses it to restart the API
+ * on the same database file.
+ */
+function runDir(): string {
+  let dir = process.env.TODO_E2E_RUN_DIR;
+  if (!dir) {
+    dir = mkdtempSync(join(tmpdir(), 'todo-e2e-'));
+    process.env.TODO_E2E_RUN_DIR = dir;
+  }
+  return dir;
+}
+
 /** Main configuration: exactly the documented run (sdd §11); no test clock. */
-export const mainLaunch: ApiLaunch = {
-  args: ['-f', 'api/pom.xml', 'spring-boot:run'],
-  env: {
-    TODO_DB_PATH: join(tmpdir(), 'todo-e2e-main', 'todo.db'),
-    TODO_COOKIE_SECURE: 'false',
-    SERVER_PORT: String(API_PORT),
-  },
-};
+export function mainLaunch(): ApiLaunch {
+  return {
+    args: ['-f', 'api/pom.xml', 'spring-boot:run'],
+    env: {
+      TODO_DB_PATH: join(runDir(), 'main', 'todo.db'),
+      TODO_COOKIE_SECURE: 'false',
+      SERVER_PORT: String(API_PORT),
+    },
+  };
+}
 
 /** Session-expiry configuration only: the test-source-set application with the offset-file clock (ADR-0013). */
-export const expiryLaunch: ApiLaunch = {
-  args: ['-f', 'api/pom.xml', 'spring-boot:test-run'],
-  env: {
-    TODO_DB_PATH: join(tmpdir(), 'todo-e2e-expiry', 'todo.db'),
-    TODO_COOKIE_SECURE: 'false',
-    SERVER_PORT: String(API_PORT),
-    SPRING_PROFILES_ACTIVE: 'e2e',
-    TODO_E2E_CLOCK_OFFSET_FILE: CLOCK_OFFSET_FILE,
-  },
-};
+export function expiryLaunch(): ApiLaunch {
+  return {
+    args: ['-f', 'api/pom.xml', 'spring-boot:test-run'],
+    env: {
+      TODO_DB_PATH: join(runDir(), 'expiry', 'todo.db'),
+      TODO_COOKIE_SECURE: 'false',
+      SERVER_PORT: String(API_PORT),
+      SPRING_PROFILES_ACTIVE: 'e2e',
+      TODO_E2E_CLOCK_OFFSET_FILE: CLOCK_OFFSET_FILE,
+    },
+  };
+}
