@@ -1,0 +1,2237 @@
+<testsuites id="" name="" tests="50" failures="0" skipped="0" errors="50" time="4.49469">
+<testsuite name="a11y.spec.ts" timestamp="2026-11-08T10:44:41.955Z" hostname="chromium" tests="12" failures="0" skipped="0" time="2.254" errors="12">
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 sign-up has no violations, with and without errors" classname="a11y.spec.ts" time="0.194">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-920a9-ons-with-and-without-errors-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-920a9-ons-with-and-without-errors-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-920a9-ons-with-and-without-errors-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/signup" type="Error">
+<![CDATA[  [chromium] › a11y.spec.ts:14:3 › NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 sign-up has no violations, with and without errors 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/signup
+    Call log:
+      - navigating to "http://localhost:5173/signup", waiting until "load"
+
+
+      13 | test.describe('NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA)', () => {
+      14 |   test('NFR-001 AC-1 sign-up has no violations, with and without errors', async ({ page }) => {
+    > 15 |     await page.goto('/signup');
+         |                ^
+      16 |     await expect(page.getByRole('heading', { level: 1, name: 'Sign up' })).toBeVisible();
+      17 |     await expectNoViolations(page);
+      18 |     await page.getByRole('button', { name: 'Sign up' }).click();
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/a11y.spec.ts:15:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-920a9-ons-with-and-without-errors-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-920a9-ons-with-and-without-errors-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-920a9-ons-with-and-without-errors-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-920a9-ons-with-and-without-errors-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 log in has no violations, with the account-created message and after a refused attempt" classname="a11y.spec.ts" time="0.193">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-630dc-and-after-a-refused-attempt-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-630dc-and-after-a-refused-attempt-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-630dc-and-after-a-refused-attempt-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/signup" type="Error">
+<![CDATA[  [chromium] › a11y.spec.ts:23:3 › NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 log in has no violations, with the account-created message and after a refused attempt 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/signup
+    Call log:
+      - navigating to "http://localhost:5173/signup", waiting until "load"
+
+
+      23 |   test('NFR-001 AC-1 log in has no violations, with the account-created message and after a refused attempt', async ({ page }) => {
+      24 |     const account = newAccount();
+    > 25 |     await page.goto('/signup');
+         |                ^
+      26 |     await page.getByLabel(/email address or username/i).fill(account.identifier);
+      27 |     await page.getByLabel(/^password/i).fill(account.password);
+      28 |     await page.getByRole('button', { name: 'Sign up' }).click();
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/a11y.spec.ts:25:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-630dc-and-after-a-refused-attempt-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-630dc-and-after-a-refused-attempt-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-630dc-and-after-a-refused-attempt-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-630dc-and-after-a-refused-attempt-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the list has no violations: empty, populated with pagination, and no matches" classname="a11y.spec.ts" time="0.169">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-7cedc-h-pagination-and-no-matches-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-7cedc-h-pagination-and-no-matches-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-7cedc-h-pagination-and-no-matches-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › a11y.spec.ts:38:3 › NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the list has no violations: empty, populated with pagination, and no matches 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/a11y.spec.ts:39:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-7cedc-h-pagination-and-no-matches-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-7cedc-h-pagination-and-no-matches-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-7cedc-h-pagination-and-no-matches-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-7cedc-h-pagination-and-no-matches-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the create and edit form has no violations, with and without errors" classname="a11y.spec.ts" time="0.195">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-c9a0f-ons-with-and-without-errors-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-c9a0f-ons-with-and-without-errors-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-c9a0f-ons-with-and-without-errors-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › a11y.spec.ts:55:3 › NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the create and edit form has no violations, with and without errors 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/a11y.spec.ts:56:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-c9a0f-ons-with-and-without-errors-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-c9a0f-ons-with-and-without-errors-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-c9a0f-ons-with-and-without-errors-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-c9a0f-ons-with-and-without-errors-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the to-do detail page and its not-found state have no violations" classname="a11y.spec.ts" time="0.21">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-380d2-nd-state-have-no-violations-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-380d2-nd-state-have-no-violations-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-380d2-nd-state-have-no-violations-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › a11y.spec.ts:69:3 › NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the to-do detail page and its not-found state have no violations 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/a11y.spec.ts:70:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-380d2-nd-state-have-no-violations-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-380d2-nd-state-have-no-violations-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-380d2-nd-state-have-no-violations-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-380d2-nd-state-have-no-violations-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the delete confirmation dialog has no violations" classname="a11y.spec.ts" time="0.162">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-e4272-on-dialog-has-no-violations-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-e4272-on-dialog-has-no-violations-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-e4272-on-dialog-has-no-violations-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › a11y.spec.ts:80:3 › NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the delete confirmation dialog has no violations 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/a11y.spec.ts:81:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-e4272-on-dialog-has-no-violations-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-e4272-on-dialog-has-no-violations-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-e4272-on-dialog-has-no-violations-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-e4272-on-dialog-has-no-violations-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the clear-completed confirmation dialog has no violations" classname="a11y.spec.ts" time="0.164">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-a4c64-on-dialog-has-no-violations-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-a4c64-on-dialog-has-no-violations-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-a4c64-on-dialog-has-no-violations-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › a11y.spec.ts:89:3 › NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the clear-completed confirmation dialog has no violations 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/a11y.spec.ts:90:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-a4c64-on-dialog-has-no-violations-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-a4c64-on-dialog-has-no-violations-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-a4c64-on-dialog-has-no-violations-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-a4c64-on-dialog-has-no-violations-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › REQ-NAV-001 AC-7 NFR-001 AC-1 the page-not-found page has no violations, while signed in" classname="a11y.spec.ts" time="0.202">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-96638--violations-while-signed-in-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-96638--violations-while-signed-in-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-96638--violations-while-signed-in-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › a11y.spec.ts:99:3 › NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › REQ-NAV-001 AC-7 NFR-001 AC-1 the page-not-found page has no violations, while signed in 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/a11y.spec.ts:100:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-96638--violations-while-signed-in-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-96638--violations-while-signed-in-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-96638--violations-while-signed-in-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-96638--violations-while-signed-in-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 structure checks in a real browser › NFR-001 AC-1 the page language is set and every route has a distinct title" classname="a11y.spec.ts" time="0.201">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-structure-che-22fd6--route-has-a-distinct-title-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-structure-che-22fd6--route-has-a-distinct-title-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-structure-che-22fd6--route-has-a-distinct-title-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/signup" type="Error">
+<![CDATA[  [chromium] › a11y.spec.ts:108:3 › NFR-001 structure checks in a real browser › NFR-001 AC-1 the page language is set and every route has a distinct title 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/signup
+    Call log:
+      - navigating to "http://localhost:5173/signup", waiting until "load"
+
+
+      107 | test.describe('NFR-001 structure checks in a real browser', () => {
+      108 |   test('NFR-001 AC-1 the page language is set and every route has a distinct title', async ({ page }) => {
+    > 109 |     await page.goto('/signup');
+          |                ^
+      110 |     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+      111 |     await expect(page).toHaveTitle('Sign up - To-do list');
+      112 |     await page.goto('/login');
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/a11y.spec.ts:109:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-structure-che-22fd6--route-has-a-distinct-title-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/a11y-NFR-001-structure-che-22fd6--route-has-a-distinct-title-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-structure-che-22fd6--route-has-a-distinct-title-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/a11y-NFR-001-structure-che-22fd6--route-has-a-distinct-title-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 structure checks in a real browser › NFR-001 AC-1 no horizontal scrolling at 320 CSS pixels wide on the list, form and not-found page (reflow, 1.4.10)" classname="a11y.spec.ts" time="0.207">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-structure-che-de642-t-found-page-reflow-1-4-10--chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-structure-che-de642-t-found-page-reflow-1-4-10--chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-structure-che-de642-t-found-page-reflow-1-4-10--chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › a11y.spec.ts:116:3 › NFR-001 structure checks in a real browser › NFR-001 AC-1 no horizontal scrolling at 320 CSS pixels wide on the list, form and not-found page (reflow, 1.4.10) 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/a11y.spec.ts:118:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-structure-che-de642-t-found-page-reflow-1-4-10--chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/a11y-NFR-001-structure-che-de642-t-found-page-reflow-1-4-10--chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-structure-che-de642-t-found-page-reflow-1-4-10--chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/a11y-NFR-001-structure-che-de642-t-found-page-reflow-1-4-10--chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 structure checks in a real browser › NFR-001 AC-3 a refused submit moves focus to the error summary and its link moves focus to the field" classname="a11y.spec.ts" time="0.161">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-structure-che-a22e1-nk-moves-focus-to-the-field-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-structure-che-a22e1-nk-moves-focus-to-the-field-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-structure-che-a22e1-nk-moves-focus-to-the-field-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › a11y.spec.ts:136:3 › NFR-001 structure checks in a real browser › NFR-001 AC-3 a refused submit moves focus to the error summary and its link moves focus to the field 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/a11y.spec.ts:137:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-structure-che-a22e1-nk-moves-focus-to-the-field-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/a11y-NFR-001-structure-che-a22e1-nk-moves-focus-to-the-field-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-structure-che-a22e1-nk-moves-focus-to-the-field-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/a11y-NFR-001-structure-che-a22e1-nk-moves-focus-to-the-field-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 structure checks in a real browser › REQ-NAV-001 AC-6 under prefers-reduced-motion the not-found page runs no animation" classname="a11y.spec.ts" time="0.196">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-structure-che-99750-ound-page-runs-no-animation-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-structure-che-99750-ound-page-runs-no-animation-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-structure-che-99750-ound-page-runs-no-animation-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › a11y.spec.ts:148:3 › NFR-001 structure checks in a real browser › REQ-NAV-001 AC-6 under prefers-reduced-motion the not-found page runs no animation 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/a11y.spec.ts:150:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-structure-che-99750-ound-page-runs-no-animation-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/a11y-NFR-001-structure-che-99750-ound-page-runs-no-animation-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-structure-che-99750-ound-page-runs-no-animation-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/a11y-NFR-001-structure-che-99750-ound-page-runs-no-animation-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+<testsuite name="acceptance.spec.ts" timestamp="2026-11-08T10:44:41.955Z" hostname="chromium" tests="8" failures="0" skipped="0" time="1.237" errors="8">
+<testcase name="REQ-ACC-001 overall success scenario › REQ-ACC-001 AC-1 a signed-in user adds, sees, searches, filters, edits, completes and deletes their own to-dos" classname="acceptance.spec.ts" time="0.165">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/acceptance-REQ-ACC-001-ove-f64f2-nd-deletes-their-own-to-dos-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/acceptance-REQ-ACC-001-ove-f64f2-nd-deletes-their-own-to-dos-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/acceptance-REQ-ACC-001-ove-f64f2-nd-deletes-their-own-to-dos-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › acceptance.spec.ts:23:3 › REQ-ACC-001 overall success scenario › REQ-ACC-001 AC-1 a signed-in user adds, sees, searches, filters, edits, completes and deletes their own to-dos 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/acceptance.spec.ts:24:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/acceptance-REQ-ACC-001-ove-f64f2-nd-deletes-their-own-to-dos-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/acceptance-REQ-ACC-001-ove-f64f2-nd-deletes-their-own-to-dos-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/acceptance-REQ-ACC-001-ove-f64f2-nd-deletes-their-own-to-dos-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/acceptance-REQ-ACC-001-ove-f64f2-nd-deletes-their-own-to-dos-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="REQ-ACC-001 overall success scenario › REQ-ACC-001 AC-2 REQ-ISO-001 AC-1 AC-2 AC-4 a second user cannot see or change the first user&apos;s to-dos by list, search or direct URL" classname="acceptance.spec.ts" time="0.168">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/acceptance-REQ-ACC-001-ove-98647-y-list-search-or-direct-URL-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/acceptance-REQ-ACC-001-ove-98647-y-list-search-or-direct-URL-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/acceptance-REQ-ACC-001-ove-98647-y-list-search-or-direct-URL-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › acceptance.spec.ts:77:3 › REQ-ACC-001 overall success scenario › REQ-ACC-001 AC-2 REQ-ISO-001 AC-1 AC-2 AC-4 a second user cannot see or change the first user's to-dos by list, search or direct URL 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/acceptance.spec.ts:78:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/acceptance-REQ-ACC-001-ove-98647-y-list-search-or-direct-URL-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/acceptance-REQ-ACC-001-ove-98647-y-list-search-or-direct-URL-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/acceptance-REQ-ACC-001-ove-98647-y-list-search-or-direct-URL-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/acceptance-REQ-ACC-001-ove-98647-y-list-search-or-direct-URL-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-001 AC-4 a created to-do is still there after the page is reloaded" classname="acceptance.spec.ts" time="0.168">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-4f6e2--after-the-page-is-reloaded-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-4f6e2--after-the-page-is-reloaded-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-4f6e2--after-the-page-is-reloaded-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › acceptance.spec.ts:116:3 › persistence and list flows › REQ-TODO-001 AC-4 a created to-do is still there after the page is reloaded 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/acceptance.spec.ts:117:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/acceptance-persistence-and-4f6e2--after-the-page-is-reloaded-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/acceptance-persistence-and-4f6e2--after-the-page-is-reloaded-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/acceptance-persistence-and-4f6e2--after-the-page-is-reloaded-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/acceptance-persistence-and-4f6e2--after-the-page-is-reloaded-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="persistence and list flows › REQ-LIST-003 AC-1 AC-2 AC-3 AC-5 paging 45 to-dos: 20, 20, 5 with no repeat or gap, Previous and Next disabled at the ends" classname="acceptance.spec.ts" time="0.159">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-99fea-d-Next-disabled-at-the-ends-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-99fea-d-Next-disabled-at-the-ends-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-99fea-d-Next-disabled-at-the-ends-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › acceptance.spec.ts:123:3 › persistence and list flows › REQ-LIST-003 AC-1 AC-2 AC-3 AC-5 paging 45 to-dos: 20, 20, 5 with no repeat or gap, Previous and Next disabled at the ends 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/acceptance.spec.ts:124:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/acceptance-persistence-and-99fea-d-Next-disabled-at-the-ends-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/acceptance-persistence-and-99fea-d-Next-disabled-at-the-ends-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/acceptance-persistence-and-99fea-d-Next-disabled-at-the-ends-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/acceptance-persistence-and-99fea-d-Next-disabled-at-the-ends-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-005 AC-3 marking a to-do done under the Active filter removes the row without a reload" classname="acceptance.spec.ts" time="0.141">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-dd662-es-the-row-without-a-reload-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-dd662-es-the-row-without-a-reload-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-dd662-es-the-row-without-a-reload-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › acceptance.spec.ts:151:3 › persistence and list flows › REQ-TODO-005 AC-3 marking a to-do done under the Active filter removes the row without a reload 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/acceptance.spec.ts:152:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/acceptance-persistence-and-dd662-es-the-row-without-a-reload-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/acceptance-persistence-and-dd662-es-the-row-without-a-reload-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/acceptance-persistence-and-dd662-es-the-row-without-a-reload-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/acceptance-persistence-and-dd662-es-the-row-without-a-reload-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-006 AC-5 deleting the only to-do on the last page shows the previous page, not an error" classname="acceptance.spec.ts" time="0.14">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-45c73--previous-page-not-an-error-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-45c73--previous-page-not-an-error-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-45c73--previous-page-not-an-error-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › acceptance.spec.ts:165:3 › persistence and list flows › REQ-TODO-006 AC-5 deleting the only to-do on the last page shows the previous page, not an error 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/acceptance.spec.ts:166:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/acceptance-persistence-and-45c73--previous-page-not-an-error-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/acceptance-persistence-and-45c73--previous-page-not-an-error-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/acceptance-persistence-and-45c73--previous-page-not-an-error-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/acceptance-persistence-and-45c73--previous-page-not-an-error-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-007 AC-1 AC-2 clear all completed states the count, deletes completed across pages, keeps active" classname="acceptance.spec.ts" time="0.15">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-cbd22-d-across-pages-keeps-active-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-cbd22-d-across-pages-keeps-active-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-cbd22-d-across-pages-keeps-active-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › acceptance.spec.ts:176:3 › persistence and list flows › REQ-TODO-007 AC-1 AC-2 clear all completed states the count, deletes completed across pages, keeps active 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/acceptance.spec.ts:177:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/acceptance-persistence-and-cbd22-d-across-pages-keeps-active-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/acceptance-persistence-and-cbd22-d-across-pages-keeps-active-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/acceptance-persistence-and-cbd22-d-across-pages-keeps-active-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/acceptance-persistence-and-cbd22-d-across-pages-keeps-active-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-002 AC-7 a due date shows as the same calendar date in any time zone" classname="acceptance.spec.ts" time="0.146">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-2b5ce-endar-date-in-any-time-zone-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-2b5ce-endar-date-in-any-time-zone-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-2b5ce-endar-date-in-any-time-zone-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › acceptance.spec.ts:196:3 › persistence and list flows › REQ-TODO-002 AC-7 a due date shows as the same calendar date in any time zone 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/acceptance.spec.ts:200:13
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/acceptance-persistence-and-2b5ce-endar-date-in-any-time-zone-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/acceptance-persistence-and-2b5ce-endar-date-in-any-time-zone-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/acceptance-persistence-and-2b5ce-endar-date-in-any-time-zone-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/acceptance-persistence-and-2b5ce-endar-date-in-any-time-zone-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+<testsuite name="auth.spec.ts" timestamp="2026-11-08T10:44:41.955Z" hostname="chromium" tests="8" failures="0" skipped="0" time="1.111" errors="8">
+<testcase name="sign up, log in, log out › REQ-AUTH-001 AC-1 AC-4 a fresh browser opens /signup directly, signs up with no verification step, then logs in" classname="auth.spec.ts" time="0.173">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-5449a-ification-step-then-logs-in-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-5449a-ification-step-then-logs-in-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-5449a-ification-step-then-logs-in-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/signup" type="Error">
+<![CDATA[  [chromium] › auth.spec.ts:5:3 › sign up, log in, log out › REQ-AUTH-001 AC-1 AC-4 a fresh browser opens /signup directly, signs up with no verification step, then logs in 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/signup
+    Call log:
+      - navigating to "http://localhost:5173/signup", waiting until "load"
+
+
+       5 |   test('REQ-AUTH-001 AC-1 AC-4 a fresh browser opens /signup directly, signs up with no verification step, then logs in', async ({ page }) => {
+       6 |     const account = newAccount();
+    >  7 |     await page.goto('/signup');
+         |                ^
+       8 |     await expect(page.getByRole('heading', { level: 1, name: 'Sign up' })).toBeVisible();
+       9 |     await expect(page.getByRole('alert')).toHaveCount(0);
+      10 |     await expect(page).toHaveURL(/\/signup$/);
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/auth.spec.ts:7:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-5449a-ification-step-then-logs-in-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-5449a-ification-step-then-logs-in-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-5449a-ification-step-then-logs-in-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-5449a-ification-step-then-logs-in-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-001 AC-2 AC-6 signing up again with another letter case of a taken identifier is refused" classname="auth.spec.ts" time="0.162">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-38bc4-taken-identifier-is-refused-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-38bc4-taken-identifier-is-refused-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-38bc4-taken-identifier-is-refused-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › auth.spec.ts:21:3 › sign up, log in, log out › REQ-AUTH-001 AC-2 AC-6 signing up again with another letter case of a taken identifier is refused 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 68
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/auth.spec.ts:23:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-38bc4-taken-identifier-is-refused-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-38bc4-taken-identifier-is-refused-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-38bc4-taken-identifier-is-refused-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-38bc4-taken-identifier-is-refused-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-002 AC-5 logging in with a different letter case of the identifier works" classname="auth.spec.ts" time="0.161">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-5b857-ase-of-the-identifier-works-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-5b857-ase-of-the-identifier-works-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-5b857-ase-of-the-identifier-works-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › auth.spec.ts:32:3 › sign up, log in, log out › REQ-AUTH-002 AC-5 logging in with a different letter case of the identifier works 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/auth.spec.ts:34:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-5b857-ase-of-the-identifier-works-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-5b857-ase-of-the-identifier-works-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-5b857-ase-of-the-identifier-works-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-5b857-ase-of-the-identifier-works-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-002 AC-2 AC-3 NFR-006 AC-4 a wrong password and an unknown identifier show the same message" classname="auth.spec.ts" time="0.163">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-fc5dc-ifier-show-the-same-message-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-fc5dc-ifier-show-the-same-message-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-fc5dc-ifier-show-the-same-message-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › auth.spec.ts:40:3 › sign up, log in, log out › REQ-AUTH-002 AC-2 AC-3 NFR-006 AC-4 a wrong password and an unknown identifier show the same message 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/auth.spec.ts:42:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-fc5dc-ifier-show-the-same-message-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-fc5dc-ifier-show-the-same-message-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-fc5dc-ifier-show-the-same-message-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-fc5dc-ifier-show-the-same-message-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-002 AC-4 reloading the page keeps the user signed in" classname="auth.spec.ts" time="0.151">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-0b574-ge-keeps-the-user-signed-in-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-0b574-ge-keeps-the-user-signed-in-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-0b574-ge-keeps-the-user-signed-in-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › auth.spec.ts:52:3 › sign up, log in, log out › REQ-AUTH-002 AC-4 reloading the page keeps the user signed in 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/auth.spec.ts:53:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-0b574-ge-keeps-the-user-signed-in-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-0b574-ge-keeps-the-user-signed-in-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-0b574-ge-keeps-the-user-signed-in-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-0b574-ge-keeps-the-user-signed-in-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-004 AC-2 a fresh browser opening /todos lands on log in with no message, logs in and returns to /todos" classname="auth.spec.ts" time="0.129">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-e5a51-ogs-in-and-returns-to-todos-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-e5a51-ogs-in-and-returns-to-todos-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-e5a51-ogs-in-and-returns-to-todos-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › auth.spec.ts:61:3 › sign up, log in, log out › REQ-AUTH-004 AC-2 a fresh browser opening /todos lands on log in with no message, logs in and returns to /todos 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/auth.spec.ts:63:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-e5a51-ogs-in-and-returns-to-todos-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-e5a51-ogs-in-and-returns-to-todos-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-e5a51-ogs-in-and-returns-to-todos-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-e5a51-ogs-in-and-returns-to-todos-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-004 AC-3 logging out ends the session; going back to a to-do page asks to log in again" classname="auth.spec.ts" time="0.153">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-71531-o-page-asks-to-log-in-again-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-71531-o-page-asks-to-log-in-again-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-71531-o-page-asks-to-log-in-again-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › auth.spec.ts:74:3 › sign up, log in, log out › REQ-AUTH-004 AC-3 logging out ends the session; going back to a to-do page asks to log in again 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/auth.spec.ts:75:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-71531-o-page-asks-to-log-in-again-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-71531-o-page-asks-to-log-in-again-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-71531-o-page-asks-to-log-in-again-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-71531-o-page-asks-to-log-in-again-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-004 AC-1 to-do API calls without a session are refused as unauthenticated" classname="auth.spec.ts" time="0.019">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-98a13--refused-as-unauthenticated-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-98a13--refused-as-unauthenticated-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.get: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › auth.spec.ts:87:3 › sign up, log in, log out › REQ-AUTH-004 AC-1 to-do API calls without a session are refused as unauthenticated 
+
+    AggregateError: apiRequestContext.get: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → GET http://localhost:5173/api/v1/todos
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+
+        at apiRequestContext.get: connect ECONNREFUSED ::1:5173
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/auth.spec.ts:93:40
+
+    Error Context: ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-98a13--refused-as-unauthenticated-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-98a13--refused-as-unauthenticated-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-98a13--refused-as-unauthenticated-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+<testsuite name="keyboard.spec.ts" timestamp="2026-11-08T10:44:41.955Z" hostname="chromium" tests="7" failures="0" skipped="0" time="1.036" errors="7">
+<testcase name="NFR-001 AC-2 sign up and log in with the keyboard only" classname="keyboard.spec.ts" time="0.164">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-sign-1341f-g-in-with-the-keyboard-only-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-sign-1341f-g-in-with-the-keyboard-only-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-sign-1341f-g-in-with-the-keyboard-only-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/signup" type="Error">
+<![CDATA[  [chromium] › keyboard.spec.ts:15:1 › NFR-001 AC-2 sign up and log in with the keyboard only ──────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/signup
+    Call log:
+      - navigating to "http://localhost:5173/signup", waiting until "load"
+
+
+      15 | test('NFR-001 AC-2 sign up and log in with the keyboard only', async ({ page }) => {
+      16 |   const account = newAccount();
+    > 17 |   await page.goto('/signup');
+         |              ^
+      18 |   await expect(page.getByRole('heading', { level: 1, name: 'Sign up' })).toBeFocused();
+      19 |   await tabTo(page, page.getByLabel(/email address or username/i));
+      20 |   await page.keyboard.type(account.identifier);
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/keyboard.spec.ts:17:14
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-sign-1341f-g-in-with-the-keyboard-only-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-sign-1341f-g-in-with-the-keyboard-only-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-sign-1341f-g-in-with-the-keyboard-only-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-sign-1341f-g-in-with-the-keyboard-only-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 AC-2 create, search, filter, complete and page with the keyboard only" classname="keyboard.spec.ts" time="0.15">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-crea-155ea-page-with-the-keyboard-only-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-crea-155ea-page-with-the-keyboard-only-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-crea-155ea-page-with-the-keyboard-only-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › keyboard.spec.ts:34:1 › NFR-001 AC-2 create, search, filter, complete and page with the keyboard only 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/keyboard.spec.ts:35:9
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-crea-155ea-page-with-the-keyboard-only-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-crea-155ea-page-with-the-keyboard-only-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-crea-155ea-page-with-the-keyboard-only-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-crea-155ea-page-with-the-keyboard-only-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 AC-2 the delete dialog takes focus on Cancel, keeps it inside, and Escape returns focus to the Delete button" classname="keyboard.spec.ts" time="0.156">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-the--8dd1a--focus-to-the-Delete-button-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-the--8dd1a--focus-to-the-Delete-button-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-the--8dd1a--focus-to-the-Delete-button-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › keyboard.spec.ts:70:1 › NFR-001 AC-2 the delete dialog takes focus on Cancel, keeps it inside, and Escape returns focus to the Delete button 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/keyboard.spec.ts:71:9
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-the--8dd1a--focus-to-the-Delete-button-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-the--8dd1a--focus-to-the-Delete-button-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-the--8dd1a--focus-to-the-Delete-button-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-the--8dd1a--focus-to-the-Delete-button-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 AC-2 confirming deletion by keyboard moves focus to the list heading" classname="keyboard.spec.ts" time="0.14">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-conf-c51e9-s-focus-to-the-list-heading-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-conf-c51e9-s-focus-to-the-list-heading-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-conf-c51e9-s-focus-to-the-list-heading-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › keyboard.spec.ts:90:1 › NFR-001 AC-2 confirming deletion by keyboard moves focus to the list heading 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/keyboard.spec.ts:91:9
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-conf-c51e9-s-focus-to-the-list-heading-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-conf-c51e9-s-focus-to-the-list-heading-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-conf-c51e9-s-focus-to-the-list-heading-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-conf-c51e9-s-focus-to-the-list-heading-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 AC-2 the clear-completed dialog is operated and left by keyboard; focus returns to the control on cancel" classname="keyboard.spec.ts" time="0.121">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-the--13972-ns-to-the-control-on-cancel-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-the--13972-ns-to-the-control-on-cancel-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-the--13972-ns-to-the-control-on-cancel-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › keyboard.spec.ts:102:1 › NFR-001 AC-2 the clear-completed dialog is operated and left by keyboard; focus returns to the control on cancel 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/keyboard.spec.ts:103:9
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-the--13972-ns-to-the-control-on-cancel-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-the--13972-ns-to-the-control-on-cancel-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-the--13972-ns-to-the-control-on-cancel-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-the--13972-ns-to-the-control-on-cancel-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 AC-2 the detail page is reached, read and left by keyboard (to edit and back to the list)" classname="keyboard.spec.ts" time="0.156">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-the--68ecb--edit-and-back-to-the-list--chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-the--68ecb--edit-and-back-to-the-list--chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-the--68ecb--edit-and-back-to-the-list--chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › keyboard.spec.ts:116:1 › NFR-001 AC-2 the detail page is reached, read and left by keyboard (to edit and back to the list) 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/keyboard.spec.ts:117:9
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-the--68ecb--edit-and-back-to-the-list--chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-the--68ecb--edit-and-back-to-the-list--chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-the--68ecb--edit-and-back-to-the-list--chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-the--68ecb--edit-and-back-to-the-list--chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 AC-2 keyboard focus is always visible on the list controls" classname="keyboard.spec.ts" time="0.149">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-keyb-a26f0-isible-on-the-list-controls-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-keyb-a26f0-isible-on-the-list-controls-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-keyb-a26f0-isible-on-the-list-controls-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › keyboard.spec.ts:135:1 › NFR-001 AC-2 keyboard focus is always visible on the list controls 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/keyboard.spec.ts:136:9
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-keyb-a26f0-isible-on-the-list-controls-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-keyb-a26f0-isible-on-the-list-controls-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-keyb-a26f0-isible-on-the-list-controls-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-keyb-a26f0-isible-on-the-list-controls-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+<testsuite name="navigation.spec.ts" timestamp="2026-11-08T10:44:41.955Z" hostname="chromium" tests="9" failures="0" skipped="0" time="1.433" errors="9">
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-2 a fresh browser opening / lands on log in and, after logging in, on /todos" classname="navigation.spec.ts" time="0.164">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-4e17d-d-after-logging-in-on-todos-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-4e17d-d-after-logging-in-on-todos-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-4e17d-d-after-logging-in-on-todos-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › navigation.spec.ts:31:3 › REQ-NAV-001 against the real stack › REQ-NAV-001 AC-2 a fresh browser opening / lands on log in and, after logging in, on /todos 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/navigation.spec.ts:33:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-4e17d-d-after-logging-in-on-todos-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-4e17d-d-after-logging-in-on-todos-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-4e17d-d-after-logging-in-on-todos-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-4e17d-d-after-logging-in-on-todos-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-1 a signed-in browser opening / with a query string lands on /todos with no query" classname="navigation.spec.ts" time="0.183">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-f8b3b-ands-on-todos-with-no-query-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-f8b3b-ands-on-todos-with-no-query-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-f8b3b-ands-on-todos-with-no-query-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › navigation.spec.ts:42:3 › REQ-NAV-001 against the real stack › REQ-NAV-001 AC-1 a signed-in browser opening / with a query string lands on /todos with no query 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/navigation.spec.ts:43:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-f8b3b-ands-on-todos-with-no-query-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-f8b3b-ands-on-todos-with-no-query-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-f8b3b-ands-on-todos-with-no-query-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-f8b3b-ands-on-todos-with-no-query-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /nope lands on log in with no message and never sees the not-found page; after login it lands on /todos" classname="navigation.spec.ts" time="0.142">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-b3c23-ter-login-it-lands-on-todos-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-b3c23-ter-login-it-lands-on-todos-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-b3c23-ter-login-it-lands-on-todos-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › navigation.spec.ts:51:5 › REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /nope lands on log in with no message and never sees the not-found page; after login it lands on /todos 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/navigation.spec.ts:53:13
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-b3c23-ter-login-it-lands-on-todos-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-b3c23-ter-login-it-lands-on-todos-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-b3c23-ter-login-it-lands-on-todos-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-b3c23-ter-login-it-lands-on-todos-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /todos/abc/def lands on log in with no message and never sees the not-found page; after login it lands on /todos" classname="navigation.spec.ts" time="0.158">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-81b45-ter-login-it-lands-on-todos-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-81b45-ter-login-it-lands-on-todos-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-81b45-ter-login-it-lands-on-todos-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › navigation.spec.ts:51:5 › REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /todos/abc/def lands on log in with no message and never sees the not-found page; after login it lands on /todos 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/navigation.spec.ts:53:13
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-81b45-ter-login-it-lands-on-todos-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-81b45-ter-login-it-lands-on-todos-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-81b45-ter-login-it-lands-on-todos-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-81b45-ter-login-it-lands-on-todos-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /login/extra lands on log in with no message and never sees the not-found page; after login it lands on /todos" classname="navigation.spec.ts" time="0.163">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-3cd5e-ter-login-it-lands-on-todos-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-3cd5e-ter-login-it-lands-on-todos-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-3cd5e-ter-login-it-lands-on-todos-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › navigation.spec.ts:51:5 › REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /login/extra lands on log in with no message and never sees the not-found page; after login it lands on /todos 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/navigation.spec.ts:53:13
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-3cd5e-ter-login-it-lands-on-todos-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-3cd5e-ter-login-it-lands-on-todos-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-3cd5e-ter-login-it-lands-on-todos-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-3cd5e-ter-login-it-lands-on-todos-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /todos/not-a-uuid lands on log in and, after login, on /todos" classname="navigation.spec.ts" time="0.108">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-83fa6-in-and-after-login-on-todos-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-83fa6-in-and-after-login-on-todos-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-83fa6-in-and-after-login-on-todos-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › navigation.spec.ts:65:3 › REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /todos/not-a-uuid lands on log in and, after login, on /todos 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/navigation.spec.ts:67:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-83fa6-in-and-after-login-on-todos-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-83fa6-in-and-after-login-on-todos-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-83fa6-in-and-after-login-on-todos-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-83fa6-in-and-after-login-on-todos-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-3 AC-5 AC-6 signed in, /nope shows the not-found page whose animation plays once within 5 seconds, and the home link leads to /todos" classname="navigation.spec.ts" time="0.176">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-a366e-he-home-link-leads-to-todos-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-a366e-he-home-link-leads-to-todos-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-a366e-he-home-link-leads-to-todos-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › navigation.spec.ts:74:3 › REQ-NAV-001 against the real stack › REQ-NAV-001 AC-3 AC-5 AC-6 signed in, /nope shows the not-found page whose animation plays once within 5 seconds, and the home link leads to /todos 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/navigation.spec.ts:75:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-a366e-he-home-link-leads-to-todos-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-a366e-he-home-link-leads-to-todos-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-a366e-he-home-link-leads-to-todos-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-a366e-he-home-link-leads-to-todos-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-4 signed in, /todos/not-a-uuid and its /edit show the to-do not-found state, not the page-not-found page" classname="navigation.spec.ts" time="0.17">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-03944-not-the-page-not-found-page-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-03944-not-the-page-not-found-page-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-03944-not-the-page-not-found-page-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › navigation.spec.ts:95:3 › REQ-NAV-001 against the real stack › REQ-NAV-001 AC-4 signed in, /todos/not-a-uuid and its /edit show the to-do not-found state, not the page-not-found page 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/navigation.spec.ts:96:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-03944-not-the-page-not-found-page-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-03944-not-the-page-not-found-page-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-03944-not-the-page-not-found-page-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-03944-not-the-page-not-found-page-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-7 the home link on the not-found page is reachable and operable by keyboard with visible focus" classname="navigation.spec.ts" time="0.169">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-4f759-keyboard-with-visible-focus-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-4f759-keyboard-with-visible-focus-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-4f759-keyboard-with-visible-focus-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › navigation.spec.ts:104:3 › REQ-NAV-001 against the real stack › REQ-NAV-001 AC-7 the home link on the not-found page is reachable and operable by keyboard with visible focus 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/navigation.spec.ts:105:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-4f759-keyboard-with-visible-focus-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-4f759-keyboard-with-visible-focus-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-4f759-keyboard-with-visible-focus-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-4f759-keyboard-with-visible-focus-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+<testsuite name="performance.spec.ts" timestamp="2026-11-08T10:44:41.955Z" hostname="chromium" tests="1" failures="0" skipped="0" time="0.167" errors="1">
+<testcase name="NFR-003 AC-1 with 500 to-dos, list, filter, search, page, create, edit, complete and delete each show their result within 1 second at the 95th percentile" classname="performance.spec.ts" time="0.167">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/performance-NFR-003-AC-1-w-79795-cond-at-the-95th-percentile-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/performance-NFR-003-AC-1-w-79795-cond-at-the-95th-percentile-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/performance-NFR-003-AC-1-w-79795-cond-at-the-95th-percentile-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › performance.spec.ts:14:1 › NFR-003 AC-1 with 500 to-dos, list, filter, search, page, create, edit, complete and delete each show their result within 1 second at the 95th percentile 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/performance.spec.ts:16:9
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/performance-NFR-003-AC-1-w-79795-cond-at-the-95th-percentile-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/performance-NFR-003-AC-1-w-79795-cond-at-the-95th-percentile-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/performance-NFR-003-AC-1-w-79795-cond-at-the-95th-percentile-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/performance-NFR-003-AC-1-w-79795-cond-at-the-95th-percentile-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+<testsuite name="states.spec.ts" timestamp="2026-11-08T10:44:41.955Z" hostname="chromium" tests="5" failures="0" skipped="0" time="0.69" errors="5">
+<testcase name="NFR-006 AC-1 with the list request aborted, the list screen shows a friendly message with its next step; after the interception is removed, trying again loads the list" classname="states.spec.ts" time="0.163">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/states-NFR-006-AC-1-with-t-3a003-trying-again-loads-the-list-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/states-NFR-006-AC-1-with-t-3a003-trying-again-loads-the-list-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/states-NFR-006-AC-1-with-t-3a003-trying-again-loads-the-list-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › states.spec.ts:6:1 › NFR-006 AC-1 with the list request aborted, the list screen shows a friendly message with its next step; after the interception is removed, trying again loads the list 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/states.spec.ts:7:9
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/states-NFR-006-AC-1-with-t-3a003-trying-again-loads-the-list-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/states-NFR-006-AC-1-with-t-3a003-trying-again-loads-the-list-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/states-NFR-006-AC-1-with-t-3a003-trying-again-loads-the-list-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/states-NFR-006-AC-1-with-t-3a003-trying-again-loads-the-list-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-006 AC-2 a 500 problem response with internals in its body shows none of them to the user" classname="states.spec.ts" time="0.168">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/states-NFR-006-AC-2-a-500--e90a2-ws-none-of-them-to-the-user-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/states-NFR-006-AC-2-a-500--e90a2-ws-none-of-them-to-the-user-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/states-NFR-006-AC-2-a-500--e90a2-ws-none-of-them-to-the-user-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › states.spec.ts:28:1 › NFR-006 AC-2 a 500 problem response with internals in its body shows none of them to the user 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/states.spec.ts:29:9
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/states-NFR-006-AC-2-a-500--e90a2-ws-none-of-them-to-the-user-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/states-NFR-006-AC-2-a-500--e90a2-ws-none-of-them-to-the-user-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/states-NFR-006-AC-2-a-500--e90a2-ws-none-of-them-to-the-user-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/states-NFR-006-AC-2-a-500--e90a2-ws-none-of-them-to-the-user-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="REQ-LIST-003 AC-6 a page number past the last in the URL shows the last valid page without an error" classname="states.spec.ts" time="0.164">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/states-REQ-LIST-003-AC-6-a-66c68-valid-page-without-an-error-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/states-REQ-LIST-003-AC-6-a-66c68-valid-page-without-an-error-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/states-REQ-LIST-003-AC-6-a-66c68-valid-page-without-an-error-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › states.spec.ts:54:1 › REQ-LIST-003 AC-6 a page number past the last in the URL shows the last valid page without an error 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/states.spec.ts:55:9
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/states-REQ-LIST-003-AC-6-a-66c68-valid-page-without-an-error-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/states-REQ-LIST-003-AC-6-a-66c68-valid-page-without-an-error-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/states-REQ-LIST-003-AC-6-a-66c68-valid-page-without-an-error-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/states-REQ-LIST-003-AC-6-a-66c68-valid-page-without-an-error-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="REQ-LIST-001 AC-5 an unknown status in the URL is removed and the list shows All" classname="states.spec.ts" time="0.108">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/states-REQ-LIST-001-AC-5-a-bf2ef-oved-and-the-list-shows-All-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/states-REQ-LIST-001-AC-5-a-bf2ef-oved-and-the-list-shows-All-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/states-REQ-LIST-001-AC-5-a-bf2ef-oved-and-the-list-shows-All-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › states.spec.ts:63:1 › REQ-LIST-001 AC-5 an unknown status in the URL is removed and the list shows All 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/states.spec.ts:64:9
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/states-REQ-LIST-001-AC-5-a-bf2ef-oved-and-the-list-shows-All-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/states-REQ-LIST-001-AC-5-a-bf2ef-oved-and-the-list-shows-All-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/states-REQ-LIST-001-AC-5-a-bf2ef-oved-and-the-list-shows-All-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/states-REQ-LIST-001-AC-5-a-bf2ef-oved-and-the-list-shows-All-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="REQ-TODO-003 AC-2 a user with no to-dos sees the first-use empty state" classname="states.spec.ts" time="0.087">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/states-REQ-TODO-003-AC-2-a-003e0-s-the-first-use-empty-state-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/states-REQ-TODO-003-AC-2-a-003e0-s-the-first-use-empty-state-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/states-REQ-TODO-003-AC-2-a-003e0-s-the-first-use-empty-state-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › states.spec.ts:73:1 › REQ-TODO-003 AC-2 a user with no to-dos sees the first-use empty state 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/states.spec.ts:74:9
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/states-REQ-TODO-003-AC-2-a-003e0-s-the-first-use-empty-state-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/states-REQ-TODO-003-AC-2-a-003e0-s-the-first-use-empty-state-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/states-REQ-TODO-003-AC-2-a-003e0-s-the-first-use-empty-state-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/states-REQ-TODO-003-AC-2-a-003e0-s-the-first-use-empty-state-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+</testsuites>

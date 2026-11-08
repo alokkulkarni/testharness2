@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N08-tests-web",
+  "gate": "tests-red-first",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "tool",
+    "id": "web-qa",
+    "session": {
+      "squadSessionId": "SQS-default-01M6XB646QJT90D8NBJE5WZ549",
+      "changeId": "CHG-0001",
+      "agent": "web-qa",
+      "agentRunId": "attest-01m6xc80jrxad51dgd6psvff83"
+    },
+    "modelAlias": "harness/tester"
+  },
+  "createdAt": "2026-11-08T10:46:10.264Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "reviewedCommit": "d7249a2984397d5b58c5387fe399b96d00bf4964",
+  "summary": "Component/unit run: 470 tests, 470 failed (module under test missing). E2E chromium: 50 tests, 50 failed (no SPA/API reachable). Failures are per named test.",
+  "findings": []
+}
