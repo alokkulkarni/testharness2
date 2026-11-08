@@ -10,7 +10,7 @@ Each diagram is an editable draw.io source with a PNG (2x) and a cropped PDF exp
 `harness docs diagram export` (manifest `diagram-exports.json`; `--check` passes). Do not edit the PNG, PDF or manifest
 by hand, re-export instead. Nothing is drawn that the frozen spec does not state. Layout rules applied to every
 diagram: orthogonal edges with explicit waypoints, labels on clear stretches of their own edge (never over a shape),
-12 pt text, containers sized to hold their children, a legend sized to its text; the one unavoidable edge crossing
+12 pt text (set explicitly on every box, edge label, title and legend), 8 px text padding, containers sized to hold their children, a legend sized to its text; the one unavoidable edge crossing
 (`routes /auth/**` over `resolves session via` in the component view) uses the arc line-hop style.
 
 Each trace cell equals the trace line in the diagram's title block.
@@ -33,7 +33,8 @@ Each trace cell equals the trace line in the diagram's title block.
 C4 colours and shapes follow the `drawio-c4` skill. Sequence diagrams use draw.io lifelines: solid arrows are calls
 (numbered), dashed arrows are responses; each label ends with the protocol or mechanism. Brackets after a participant
 name its module package. Where one lifeline lists several components (filters plus controller), the order inside the API
-is in the component views.
+is in the component views. In the error-path view the dashed arrow from `SessionCookieAuthenticationFilter` to
+`ProblemAuthenticationEntryPoint` is not a call by the filter: Spring Security invokes the entry point (sdd §4).
 
 ## Known simplifications and omissions
 
