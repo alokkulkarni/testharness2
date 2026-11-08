@@ -130,7 +130,7 @@
       ],
       "executor": "claude-code",
       "isolation": "none",
-      "attempts": 1,
+      "attempts": 2,
       "maxAttempts": 3,
       "claim": {
         "runId": "run-mw7m1k6i",

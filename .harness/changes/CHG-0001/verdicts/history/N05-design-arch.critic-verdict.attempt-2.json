@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N05-design-arch",
+  "gate": "critic-verdict",
+  "verdict": "changes-required",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "critic",
+      "agentRunId": "a594e358caf5c9c66"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "drawio-architect",
+      "agentRunId": "a1b4e275022c93b3b"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "drawio-architect",
+      "agentRunId": "a5397e348ff16ee94"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "drawio-architect",
+      "agentRunId": "aa377598e2b225ad9"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "drawio-architect",
+      "agentRunId": "ae118b53d3d401a8e"
+    }
+  ],
+  "createdAt": "2026-11-08T09:56:03.650Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "reviewedCommit": "32d4ef651ab25aa89725d26c18c2fe762b87a52f",
+  "diffHash": "c03d3bdecb518721d306b8b8a9ab6328849b8d4bd2507de8743c62c73fae7a5f",
+  "summary": "round 2, delta since fd05fda7d5a2e3daca0be95934d78c87ec0234d3: F-10, F-12, F-13, F-14 fixed (d3e5e91: README L3-L8 names supersede-2 and three contracts; component view L10-L21, L28, L104-L105 adds module boundaries and the CurrentUser seam; data model adds owners, flyway_schema_history and labelled e2; screen flow adds / and * S7). F-1..F-8, F-11, F-15..F-23 also fixed. export --check passes; all 10 PNGs and PDFs viewed: no shape overlaps, unhopped crossings, clipping or cut-off content; legends present; content faithful to the frozen spec. New major F-24: the HTTP/JSON label of e1 in the component view sits on the shared-kernel boundary. Follow-ups: 5 minor (F-25..F-29), 2 info (F-30, F-31). Totals: 0 blocker, 1 major, 5 minor, 2 info.",
+  "findings": [
+    {
+      "id": "F-24",
+      "severity": "major",
+      "message": "Rendered png/c4-component-api.png has an edge label on top of a shape: the HTTP/JSON label of edge e1 (SPA to RequestIdFilter) sits on the dashed left border of the shared-kernel boundary (cell common, x=500). The edge runs from x=440 (SPA right side) to x=540 (RequestIdFilter left side), the label is centred at x=490 and about 60 px wide, so its white background covers the boundary line; visible left of RequestIdFilter at about x 820-1010, y 1535 of the 5189x3263 PNG (same in the PDF). The requester checklist treats a label over a shape as changes-required, and README L11-L12 states labels are never over a shape.",
+      "requirement": "NFR-007",
+      "location": "docs/specs/CHG-0001/design/architecture/c4-component-api.drawio:L82-L82",
+      "suggestion": "Move the SPA box left (for example x=120) so the segment outside the boundary is long enough, and anchor the label on that stretch (mxGeometry x=-0.5 on e1), or place it above the edge with verticalAlign=bottom outside the boundary; re-export and recheck the PNG."
+    },
+    {
+      "id": "F-25",
+      "severity": "minor",
+      "message": "The label of edge e16d (Creates the only DataSource, runs Flyway [JDBC]) is centred at x=2070 between DatabaseConfig (right side x=1740) and the SQLite cylinder (x=2400) and is about 300 px wide, so its right end reaches the right border of the composition-root boundary (cell config, x=2200). In png/c4-component-api.png (lower right, about x 3880-4340, y 2783) the label ends at or within a few pixels of the dashed border; marginal, but not a clear stretch.",
+      "requirement": "NFR-007",
+      "location": "docs/specs/CHG-0001/design/architecture/c4-component-api.drawio:L101-L101",
+      "suggestion": "Shorten the label (for example: only DataSource, Flyway [JDBC]) or offset it toward the cylinder (mxGeometry x=0.4), then re-export."
+    },
+    {
+      "id": "F-26",
+      "severity": "minor",
+      "message": "Component boxes have no horizontal text padding, so several labels run edge to edge and ADR ids break across lines: UserRepository (ADR- / 0009, 0018), ClientHeaderFilter (ADR- / 0007) and SecurityConfig (ADR- / 0018) in png/c4-component-api.png; ClientHeaderFilter (ADR- / 0007) in png/c4-component-errors.png; Storage rules (ADR- / 0016) in png/data-model.png; D2 N / = 0 in png/screen-flow.png; TodoService + TodoRepository [todo] fills its participant in png/seq-clear-completed.png. Nothing is clipped, but legibility suffers.",
+      "requirement": "NFR-007",
+      "location": "docs/specs/CHG-0001/design/architecture/c4-component-api.drawio:L31-L32",
+      "suggestion": "Add spacingLeft=8;spacingRight=8 to component, dialog and participant styles and widen the affected boxes (for example 260-280 px) so no ADR id or N = 0 breaks; re-export."
+    },
+    {
+      "id": "F-27",
+      "severity": "minor",
+      "message": "Requested export settings are not met: PNGs have no border on the right and bottom (content ends within a few pixels of the image edge in c4-component-api.png at the SQLite cylinder, c4-component-errors.png at Controllers and services, data-model.png at the to-dos boundary, seq-todo-crud-list.png at the SQLite participant, c4-context.png at the To-do app box, c4-container.png at the system boundary, screen-flow.png at the dashed delete edge, and the legend boxes at the bottom), and PDFs are cropped to content rather than fit-to-page (README L9-L10). Nothing is cut off. harness docs diagram export takes only paths and --check, so the author cannot set a border or fit-to-page; this is a platform gap.",
+      "requirement": "NFR-007",
+      "location": "docs/specs/CHG-0001/design/architecture/README.md:L9-L10",
+      "suggestion": "Ask the platform team to add border and fit-to-page options to harness docs diagram export; until then, optionally keep at least 40 px of empty canvas right of and below the last shape (for example a transparent frame cell) so the crop leaves a margin."
+    },
+    {
+      "id": "F-28",
+      "severity": "minor",
+      "message": "In the error-path view, edge e1 is a solid arrow from SessionCookieAuthenticationFilter to ProblemAuthenticationEntryPoint, and the legend reads a solid arrow as a call. Per sdd 4 L166-L170 the filter only leaves the request unauthenticated and Spring Security invokes the entry point on a protected path; the filter box itself says it never writes a response, so the arrow contradicts its own source box.",
+      "requirement": "REQ-AUTH-004",
+      "location": "docs/specs/CHG-0001/design/architecture/c4-component-errors.drawio:L40-L40",
+      "suggestion": "Draw e1 dashed and label it Spring Security: unauthenticated on a protected path, and add that arrow style to the legend, or start the edge at a small Spring Security chain node."
+    },
+    {
+      "id": "F-29",
+      "severity": "minor",
+      "message": "Step 8 of the sign-up and login sequence (store SHA-256 of new token) is session creation, which sdd 2 L46 and the component view assign to SessionService (AuthService creates sessions through it). The calling participant is labelled ClientHeaderFilter + AuthController + AuthService and omits SessionService, so the sequence names no owner for that step.",
+      "requirement": "REQ-AUTH-002",
+      "location": "docs/specs/CHG-0001/design/architecture/seq-signup-login.drawio:L16-L18",
+      "suggestion": "Add SessionService to the L2 participant label (ClientHeaderFilter + AuthController + AuthService + SessionService [auth, common]) and re-export."
+    },
+    {
+      "id": "F-30",
+      "severity": "info",
+      "message": "No cell sets fontSize, so text renders at the draw.io defaults; README L13 states 12 pt text, but edge labels may default to 11 pt in draw.io and look slightly smaller than box text in the PNGs (for example the message labels in seq-todo-crud-list.png). I could not measure the rendered size with my read-only grants; text is legible at the exported 2x size.",
+      "requirement": "NFR-007",
+      "location": "docs/specs/CHG-0001/design/architecture/README.md:L11-L14",
+      "suggestion": "Set fontSize=12 explicitly on edge styles (or in the README say edge labels use the draw.io default)."
+    },
+    {
+      "id": "F-31",
+      "severity": "info",
+      "message": "SecurityConfig is described as registering RequestIdFilter. sdd 10 L579-L581 says a FilterRegistrationBean in config registers it ahead of the security chain, without naming the class; the label is a reasonable reading but more specific than the spec.",
+      "requirement": "NFR-007",
+      "location": "docs/specs/CHG-0001/design/architecture/c4-component-api.drawio:L76-L76",
+      "suggestion": "Optionally reword to: config registers RequestIdFilter (FilterRegistrationBean, sdd 10)."
+    }
+  ]
+}
