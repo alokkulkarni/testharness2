@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N05-design-arch",
+  "gate": "critic-verdict",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "critic",
+      "agentRunId": "a99ca6875a697c967"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "drawio-architect",
+      "agentRunId": "a1b4e275022c93b3b"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "drawio-architect",
+      "agentRunId": "a3e721a9ff77bad03"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "drawio-architect",
+      "agentRunId": "a5397e348ff16ee94"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "drawio-architect",
+      "agentRunId": "aa377598e2b225ad9"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "drawio-architect",
+      "agentRunId": "ae118b53d3d401a8e"
+    }
+  ],
+  "createdAt": "2026-11-08T10:08:45.481Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "reviewedCommit": "57b8ba551f829e0fd82a1229a309f1f683031131",
+  "diffHash": "9f43c6f60bd25fac3b3071be8d339693e46ea8151efd31ecfb3d9f607210d08b",
+  "summary": "round 3, delta since 32d4ef6: F-24, F-25, F-26, F-28, F-29, F-30 fixed (a73739e: component view SPA x 240 to 140 and e1 label x=-0.2, e16d x=-0.35; boxes widened with 8 px padding, no ADR id or N = 0 breaks; error view e1 dashed, relabelled, legend and README L36-L37; signup L2 names SessionService; fontSize=12 on every cell). export --check passes; all 10 PNGs viewed: no overlaps, labels over shapes, unhopped crossings, clipping or cut-off content; legends present. PDFs not viewed this round (no renderer, F-32). Follow-ups: 2 minor (F-27 carried, F-33 new), 2 info (F-31 carried, F-32 new). Totals: 0 blocker, 0 major, 2 minor, 2 info.",
+  "findings": [
+    {
+      "id": "F-27",
+      "severity": "minor",
+      "message": "Requested export settings are not met: PNGs have no border on the right and bottom (content ends within a few pixels of the image edge, for example the SQLite cylinder in c4-component-api.png, Controllers and services in c4-component-errors.png, the cross-origin note in seq-signup-login.png, the SQLite participant in seq-clear-completed.png and seq-todo-crud-list.png, the system boundary in c4-container.png), and PDFs are cropped to content rather than fit-to-page (README L9-L10). Nothing is cut off. harness docs diagram export takes only paths and --check, so the author cannot set a border or fit-to-page; this is a platform gap.",
+      "requirement": "NFR-007",
+      "location": "docs/specs/CHG-0001/design/architecture/README.md:L9-L10",
+      "suggestion": "Ask the platform team to add border and fit-to-page options to harness docs diagram export; until then, optionally keep at least 40 px of empty canvas right of and below the last shape so the crop leaves a margin."
+    },
+    {
+      "id": "F-31",
+      "severity": "info",
+      "message": "SecurityConfig is described as registering RequestIdFilter. sdd 10 L579-L581 says a FilterRegistrationBean in config registers it ahead of the security chain, without naming the class; the label is a reasonable reading but more specific than the spec.",
+      "requirement": "NFR-007",
+      "location": "docs/specs/CHG-0001/design/architecture/c4-component-api.drawio:L76-L76",
+      "suggestion": "Optionally reword to: config registers RequestIdFilter (FilterRegistrationBean, sdd 10)."
+    },
+    {
+      "id": "F-32",
+      "severity": "info",
+      "message": "The ten re-exported PDFs in pdf/ were not visually checked in round 3: the PDF renderer (pdftoppm) is not installed in the review environment. harness docs diagram export --check confirms they were regenerated from the current sources, and the matching PNGs render cleanly, but PDF rendering itself is unverified this round.",
+      "requirement": "NFR-007",
+      "location": "docs/specs/CHG-0001/design/architecture/pdf/c4-component-api.pdf:L1-L1",
+      "suggestion": "Open the PDFs once (or install poppler for the reviewer) before the PR to confirm they match the PNGs."
+    },
+    {
+      "id": "F-33",
+      "severity": "minor",
+      "message": "README L13 now says 8 px text padding is a layout rule applied to every diagram, but the padding was added only to component, screen and lifeline boxes. c4-context.drawio (user: no spacing; todo, none: 10), c4-container.drawio (user: none; spa, proxy, api: 10), deployment-local.drawio (browser, vite, jvm, file, env: none), data-model.drawio tables (10) and the sequence notes (6) use other values, so the stated rule is inaccurate.",
+      "requirement": "NFR-007",
+      "location": "docs/specs/CHG-0001/design/architecture/README.md:L13-L13",
+      "suggestion": "Reword to what was applied (for example: at least 6-10 px text padding on boxes that hold wrapped text), or add spacingLeft=8;spacingRight=8 to the remaining boxes and re-export."
+    }
+  ]
+}
