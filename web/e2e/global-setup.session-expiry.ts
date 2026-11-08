@@ -7,6 +7,6 @@ import { CLOCK_OFFSET_FILE, expiryLaunch } from './support/launch';
 export default async function globalSetup(): Promise<() => Promise<void>> {
   rmSync(CLOCK_OFFSET_FILE, { force: true });
   if (process.env.E2E_EXTERNAL_SERVERS === '1') return async () => {};
-  await startApi(expiryLaunch);
+  await startApi(expiryLaunch());
   return stopApi;
 }

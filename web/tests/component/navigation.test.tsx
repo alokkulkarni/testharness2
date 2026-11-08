@@ -27,7 +27,7 @@ describe('REQ-NAV-001 home route', () => {
     const { user, location } = await renderApp('/', api);
     await waitFor(() => expect(location.pathname).toBe('/login'));
     expect(new URLSearchParams(location.search).get('returnTo')).toBe('/todos');
-    expect(screen.queryByRole('status')).not.toBeInTheDocument();
+    expect(document.body).not.toHaveTextContent(/session has ended|account created/i);
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
     await user.type(screen.getByLabelText(/email address or username/i), OWNER_IDENTIFIER);
     await user.type(screen.getByLabelText(/^password/i), OWNER_PASSWORD);
@@ -80,7 +80,7 @@ describe('REQ-NAV-001 not-found page', () => {
     await waitFor(() => expect(location.pathname).toBe('/login'));
     expect(new URLSearchParams(location.search).get('returnTo')).toBe(address);
     expect(screen.queryByRole('heading', { name: /not found/i })).not.toBeInTheDocument();
-    expect(screen.queryByRole('status')).not.toBeInTheDocument();
+    expect(document.body).not.toHaveTextContent(/session has ended|account created/i);
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
     await user.type(screen.getByLabelText(/email address or username/i), OWNER_IDENTIFIER);
     await user.type(screen.getByLabelText(/^password/i), OWNER_PASSWORD);
@@ -107,13 +107,16 @@ describe('REQ-NAV-001 not-found page', () => {
   });
 
   it('REQ-NAV-001 AC-6 the animation is decorative: hidden from assistive technology, with the heading, sentence and link present at first render', async () => {
-    const { container } = await renderApp('/nope', new FakeApi({ signedIn: true }));
+    await renderApp('/nope', new FakeApi({ signedIn: true }));
     const heading = await screen.findByRole('heading', { level: 1, name: /not found/i });
     const main = screen.getByRole('main');
     expect(within(main).getByRole('link', { name: /home/i })).toBeVisible();
     expect(heading).toBeVisible();
-    expect(main.querySelectorAll('p').length).toBeGreaterThan(0);
-    const decorative = container.querySelectorAll('[aria-hidden="true"]');
+    expect(within(main).getByText(/we could not find that page/i)).toBeVisible();
+    // ux-design §7.2: the illustration sits inside main, above the heading, in an aria-hidden element
+    const decorative = Array.from(main.querySelectorAll('[aria-hidden="true"]')).filter(
+      (el) => el.compareDocumentPosition(heading) & Node.DOCUMENT_POSITION_FOLLOWING,
+    );
     expect(decorative.length).toBeGreaterThan(0);
     // nothing the user needs sits inside the hidden element
     decorative.forEach((el) => {

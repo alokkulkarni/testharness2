@@ -8,16 +8,16 @@
     "kind": "tool",
     "id": "web-qa",
     "session": {
-      "squadSessionId": "SQS-default-01M6XB646QJT90D8NBJE5WZ549",
+      "squadSessionId": "SQS-default-01M6XDJ4NR268822XCDBFGJXB5",
       "changeId": "CHG-0001",
       "agent": "web-qa",
-      "agentRunId": "attest-01m6xc80jrxad51dgd6psvff83"
+      "agentRunId": "attest-01m6xe4vnrqmv98j8xkr8q76f7"
     },
     "modelAlias": "harness/tester"
   },
-  "createdAt": "2026-11-08T10:46:10.264Z",
+  "createdAt": "2026-11-08T11:19:24.088Z",
   "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
-  "reviewedCommit": "d7249a2984397d5b58c5387fe399b96d00bf4964",
-  "summary": "Component/unit run: 470 tests, 470 failed (module under test missing). E2E chromium: 50 tests, 50 failed (no SPA/API reachable). Failures are per named test.",
+  "reviewedCommit": "1264c92",
+  "summary": "Round 2 red run. Component/unit (vitest): 484 tests, 484 failed, all ERR_MODULE_NOT_FOUND for src modules (including the TZ-offset guards, which pass before the module load). E2E main chromium: 52 tests, 52 errored (ECONNREFUSED / ERR_CONNECTION_REFUSED, no SPA or API); restart config: 1 of 1 errored; session-expiry config: 2 of 2 errored, same cause. Firefox not installed, not run. pnpm typecheck: only TS2307 missing-module errors for src modules; pnpm lint: clean.",
   "findings": []
 }

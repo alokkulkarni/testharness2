@@ -10,7 +10,9 @@
     "lint": "eslint .",
     "test": "vitest run",
     "test:junit": "vitest run --reporter=junit --outputFile.junit=test-results/component-junit.xml",
-    "e2e": "playwright test",
+    "e2e": "pnpm e2e:main; a=$?; pnpm e2e:restart; b=$?; pnpm e2e:session-expiry; c=$?; test $a -eq 0 -a $b -eq 0 -a $c -eq 0",
+    "e2e:main": "playwright test",
+    "e2e:restart": "playwright test -c e2e/playwright.restart.config.ts",
     "e2e:session-expiry": "playwright test -c e2e/playwright.session-expiry.config.ts"
   },
   "dependencies": {

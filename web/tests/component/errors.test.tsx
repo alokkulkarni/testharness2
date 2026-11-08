@@ -1,8 +1,8 @@
-import { screen, waitFor, within } from '@testing-library/react';
+import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { useLocation } from 'react-router';
 import { describe, expect, it, vi } from 'vitest';
-import { FakeApi, SENTINEL, json, problem, seed } from '../helpers/fakeApi';
+import { FakeApi, SENTINEL, json, problem, seed, throwingResponse } from '../helpers/fakeApi';
 import { renderApp } from '../helpers/renderApp';
 
 const REFRESHED = 'That to-do no longer exists, and the list has been refreshed.';
@@ -83,6 +83,9 @@ describe('NFR-006 list screen failures', () => {
     await user.click(within(dialog).getByRole('button', { name: 'Delete' }));
     expect(await screen.findByRole('alert')).toHaveTextContent(/could not be loaded/i);
     expect(document.body).not.toHaveTextContent(/list has been refreshed/i);
+    await user.click(screen.getByRole('button', { name: /^retry$/i }));
+    await waitFor(() => expect(titles()).toEqual(['Todo 1']));
+    expect(document.body).not.toHaveTextContent(/list has been refreshed/i);
   });
 
   it('NFR-006 AC-1 a toggle that fails with a 500 shows an update message, reverts the checkbox and keeps focus on it', async () => {
@@ -107,6 +110,29 @@ describe('NFR-006 list screen failures', () => {
     await user.click(within(dialog).getByRole('button', { name: 'Delete' }));
     expect(await within(dialog).findByRole('alert')).toHaveTextContent(/could not be deleted.*try again/i);
     expect(screen.getByRole('dialog')).toBeInTheDocument();
+    noInternals();
+  });
+
+  it('NFR-006 AC-1 a delete that fails with a network error keeps the dialog open with an inline try-again alert and no browser error text', async () => {
+    const api = new FakeApi({ signedIn: true, todos: seed(2) });
+    const { user } = await listPage(api);
+    await user.click(within(rowOf('Todo 2')).getByRole('button', { name: /delete/i }));
+    const dialog = await screen.findByRole('dialog');
+    api.on('DELETE', /.*/, () => 'network', true);
+    await user.click(within(dialog).getByRole('button', { name: 'Delete' }));
+    expect(await within(dialog).findByRole('alert')).toHaveTextContent(/could not be deleted.*try again/i);
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    noInternals();
+  });
+
+  it('NFR-006 AC-1 a clear-completed that fails with a network error keeps the dialog open with an inline try-again alert', async () => {
+    const api = new FakeApi({ signedIn: true, todos: seed(2, () => ({ done: true })) });
+    const { user } = await listPage(api);
+    await user.click(screen.getByRole('button', { name: /clear all completed/i }));
+    const dialog = await screen.findByRole('dialog');
+    api.on('DELETE', '/api/v1/todos/completed', () => 'network', true);
+    await user.click(within(dialog).getByRole('button', { name: /^delete 2 completed$/i }));
+    expect(await within(dialog).findByRole('alert')).toHaveTextContent(/try again/i);
     noInternals();
   });
 
@@ -144,8 +170,47 @@ describe('NFR-006 other screens', () => {
     noInternals();
   });
 
+  it('NFR-006 AC-1 AC-2 a network error on the detail page shows a friendly message with Retry and no browser error text', async () => {
+    const api = new FakeApi({ signedIn: true, todos: seed(1) });
+    api.on('GET', /^\/api\/v1\/todos\/[0-9a-f-]{36}$/, () => 'network', true);
+    await renderApp(`/todos/${api.todos[0]!.id}`, api);
+    expect(await screen.findByRole('alert')).toHaveTextContent(/could not be loaded/i);
+    expect(screen.getByRole('button', { name: /^retry$/i })).toBeInTheDocument();
+    noInternals();
+  });
+
   it.each([
-    ['500 with internals in title and detail', () => problem(500, 'INTERNAL_ERROR')],
+    ['a 500', () => problem(500, 'INTERNAL_ERROR')],
+    ['a network error', () => 'network' as const],
+  ])('NFR-006 AC-1 AC-2 a delete from the detail page failing with %s keeps the dialog open with an inline try-again alert', async (_label, respond) => {
+    const api = new FakeApi({ signedIn: true, todos: seed(1) });
+    api.on('DELETE', /.*/, respond, true);
+    const { user } = await renderApp(`/todos/${api.todos[0]!.id}`, api);
+    await user.click(await screen.findByRole('button', { name: /^delete/i }));
+    const dialog = await screen.findByRole('dialog');
+    await user.click(within(dialog).getByRole('button', { name: 'Delete' }));
+    expect(await within(dialog).findByRole('alert')).toHaveTextContent(/could not be deleted.*try again/i);
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    noInternals();
+  });
+
+  it.each([
+    ['a 500', () => problem(500, 'INTERNAL_ERROR')],
+    ['a network error', () => 'network' as const],
+  ])('NFR-006 AC-1 AC-2 saving an edit failing with %s keeps the input and shows a form-level try-again message with no internals', async (_label, respond) => {
+    const api = new FakeApi({ signedIn: true, todos: seed(1, () => ({ title: 'Original' })) });
+    api.on('PUT', /^\/api\/v1\/todos\/[0-9a-f-]{36}$/, respond, true);
+    const { user } = await renderApp(`/todos/${api.todos[0]!.id}/edit`, api);
+    await screen.findByDisplayValue('Original');
+    fireEvent.change(screen.getByLabelText(/^title/i), { target: { value: 'Changed' } });
+    await user.click(screen.getByRole('button', { name: /^save changes$/i }));
+    expect(await screen.findByRole('alert')).toHaveTextContent(/could not be saved.*try again/i);
+    expect(screen.getByLabelText(/^title/i)).toHaveValue('Changed');
+    noInternals();
+  });
+
+  it.each([
+    ['a 500', () => problem(500, 'INTERNAL_ERROR')],
     ['a network error', () => 'network' as const],
     ['a non-Problem body', () => json(502, { stack: SENTINEL })],
   ])('NFR-006 AC-1 AC-2 sign-up failing with %s shows a try-again message and keeps the input', async (_label, respond) => {
@@ -162,7 +227,7 @@ describe('NFR-006 other screens', () => {
   });
 
   it.each([
-    ['500 with internals in title and detail', () => problem(500, 'INTERNAL_ERROR')],
+    ['a 500', () => problem(500, 'INTERNAL_ERROR')],
     ['a network error', () => 'network' as const],
   ])('NFR-006 AC-1 AC-2 log-in failing with %s shows a try-again message and not the invalid-credentials text', async (_label, respond) => {
     const api = new FakeApi();
@@ -215,6 +280,54 @@ describe('NFR-006 AC-3 AppErrorBoundary', () => {
     // the session state was kept: the session probe ran once only
     expect(api.callsTo('GET', '/api/v1/auth/session')).toHaveLength(1);
   });
+});
+
+// sdd §6.1 / §14 NFR-006 (clarifications Q49, critic note N-2): an error thrown in an event handler or promise callback
+// is mapped with userMessageFor({ kind: 'unexpected' }, action) and shown where the screen shows that action's other
+// failures; the screen is not replaced by the AppErrorBoundary page and the sentinel message is never shown. The
+// "stubbed dependency throwing a plain Error" is a response whose body cannot be read (throwingResponse).
+describe('NFR-006 AC-1 AC-2 N-2 unexpected errors in event handlers keep the screen', () => {
+  it('NFR-006 AC-1 AC-2 N-2 a done toggle whose handler throws shows the unexpected message in the page-level alert above the list and keeps the list', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    const api = new FakeApi({ signedIn: true, todos: seed(3) });
+    const { user } = await listPage(api);
+    api.on('PUT', /\/done$/, () => throwingResponse(200), true);
+    await user.click(within(rowOf('Todo 2')).getByRole('checkbox'));
+    const alert = await screen.findByRole('alert');
+    expect(alert).toHaveTextContent(/could not be updated/i);
+    expect(alert).toHaveTextContent(/reload the page/i);
+    expect(within(alert).getByRole('link', { name: /home/i })).toHaveAttribute('href', '/');
+    expect(alert.compareDocumentPosition(rowOf('Todo 2')) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    // the list screen stays rendered; it is not the AppErrorBoundary page
+    expect(screen.getByRole('heading', { level: 1, name: 'My to-dos' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: /something went wrong/i })).not.toBeInTheDocument();
+    expect(titles()).toEqual(['Todo 3', 'Todo 2', 'Todo 1']);
+    noInternals();
+  });
+
+  it.each([
+    ['create', '/todos/new', 'POST', '/api/v1/todos', 201, /^add to-do$/i, /could not be added/i],
+    ['save', null, 'PUT', /^\/api\/v1\/todos\/[0-9a-f-]{36}$/, 200, /^save changes$/i, /could not be saved/i],
+  ] as const)(
+    'NFR-006 AC-1 AC-2 N-2 a %s form submit whose handler throws shows the unexpected message in the form-level alert and keeps the form and its input',
+    async (_action, entry, method, path, status, submitName, actionText) => {
+      vi.spyOn(console, 'error').mockImplementation(() => {});
+      const api = new FakeApi({ signedIn: true, todos: seed(1, () => ({ title: 'Original' })) });
+      api.on(method, path, () => throwingResponse(status), true);
+      const { user } = await renderApp(entry ?? `/todos/${api.todos[0]!.id}/edit`, api);
+      const field = await screen.findByLabelText(/^title/i);
+      await screen.findByRole('heading', { level: 1, name: entry ? 'Add a to-do' : 'Edit to-do' });
+      fireEvent.change(field, { target: { value: 'Keep me' } });
+      fireEvent.change(screen.getByLabelText(/^due date/i), { target: { value: '2026-11-06' } });
+      await user.click(screen.getByRole('button', { name: submitName }));
+      const alert = await screen.findByRole('alert');
+      expect(alert).toHaveTextContent(actionText);
+      expect(alert).toHaveTextContent(/reload the page/i);
+      expect(screen.queryByRole('heading', { name: /something went wrong/i })).not.toBeInTheDocument();
+      expect(screen.getByLabelText(/^title/i)).toHaveValue('Keep me');
+      noInternals();
+    },
+  );
 });
 
 describe('List re-queries keep the screen in place (sdd §6.1, UX design §6)', () => {

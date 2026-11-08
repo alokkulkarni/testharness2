@@ -6,11 +6,13 @@ const isListRequest = (url: URL, method: string) => url.pathname === '/api/v1/to
 test('NFR-006 AC-1 with the list request aborted, the list screen shows a friendly message with its next step; after the interception is removed, trying again loads the list', async ({ page }) => {
   await signedInUser(page);
   await apiSeedMany(page.request, 2, (n) => `State ${n}`);
-  const abort = (route: Route) => route.abort('connectionrefused');
-  await page.route((url) => url.pathname === '/api/v1/todos', async (route) => {
-    if (isListRequest(new URL(route.request().url()), route.request().method())) await abort(route);
+  // Playwright matches a function URL matcher by reference, so route and unroute must get the same function objects.
+  const listUrl = (url: URL) => url.pathname === '/api/v1/todos';
+  const abortList = async (route: Route) => {
+    if (isListRequest(new URL(route.request().url()), route.request().method())) await route.abort('connectionrefused');
     else await route.continue();
-  });
+  };
+  await page.route(listUrl, abortList);
 
   await page.goto('/todos');
   const alert = page.getByRole('alert');
@@ -19,7 +21,7 @@ test('NFR-006 AC-1 with the list request aborted, the list screen shows a friend
   await expect(alert).toContainText(/try again/i);
   await expect(alert).not.toContainText(/failed to fetch|networkerror|TypeError/i);
 
-  await page.unroute((url) => url.pathname === '/api/v1/todos');
+  await page.unroute(listUrl, abortList);
   await page.getByRole('button', { name: 'Retry' }).click();
   await expect(rows(page)).toHaveCount(2);
   await expect(page.getByRole('alert')).toHaveCount(0);

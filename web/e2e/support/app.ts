@@ -57,6 +57,11 @@ export async function apiCreateTodo(request: APIRequestContext, seed: TodoSeed):
   return (await res.json()) as TodoJson;
 }
 
+export async function apiMarkDone(request: APIRequestContext, id: string): Promise<void> {
+  const res = await request.put(`/api/v1/todos/${id}/done`, { headers: CLIENT, data: { done: true } });
+  expect(res.status()).toBe(200);
+}
+
 export async function apiSeedMany(request: APIRequestContext, count: number, titleOf: (n: number) => string): Promise<void> {
   for (let n = 1; n <= count; n++) await apiCreateTodo(request, { title: titleOf(n) });
 }

@@ -27,15 +27,9 @@ export default defineConfig({
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
     { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
-    // Restarts the API process, so it runs alone after every other spec has finished (REQ-ACC-001 AC-3).
-    {
-      name: 'restart',
-      testIgnore: [],
-      testMatch: '**/restart.spec.ts',
-      fullyParallel: false,
-      dependencies: ['chromium', 'firefox'],
-      use: { ...devices['Desktop Chrome'] },
-    },
+    // restart.spec.ts restarts the API process, so it has its own configuration (e2e/playwright.restart.config.ts),
+    // run by `pnpm e2e` after this one; it is not a dependent project here because Playwright skips a dependent
+    // project when any test of its dependencies fails.
   ],
   webServer: external
     ? undefined

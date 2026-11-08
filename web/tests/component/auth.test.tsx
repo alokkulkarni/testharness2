@@ -2,6 +2,7 @@ import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { FakeApi, OWNER_IDENTIFIER, OWNER_PASSWORD, SENTINEL, problem, seed } from '../helpers/fakeApi';
 import { renderApp } from '../helpers/renderApp';
+import { expectLiveRegionToSay } from '../helpers/status';
 
 const identifierField = () => screen.getByLabelText(/email address or username/i);
 const passwordField = () => screen.getByLabelText(/^password/i);
@@ -12,7 +13,7 @@ describe('Sign up screen S1', () => {
     await renderApp('/signup', new FakeApi());
     expect(await screen.findByRole('heading', { level: 1, name: 'Sign up' })).toBeInTheDocument();
     expect(screen.getAllByRole('textbox')).toHaveLength(1);
-    expect(identifierField()).toBeRequired();
+    expect((identifierField() as HTMLInputElement).labels?.[0]).toHaveTextContent(/\(required\)/i);
     expect(passwordField()).toHaveAttribute('type', 'password');
     expect(screen.queryByLabelText(/confirm/i)).not.toBeInTheDocument();
   });
@@ -23,7 +24,7 @@ describe('Sign up screen S1', () => {
     await screen.findByRole('heading', { level: 1, name: 'Sign up' });
     expect(location.pathname).toBe('/signup');
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
-    expect(screen.queryByRole('status')).not.toBeInTheDocument();
+    expect(document.body).not.toHaveTextContent(/session has ended|account created/i);
     expect(api.calls.map((c) => `${c.method} ${c.path}`)).toEqual(['GET /api/v1/auth/session']);
   });
 
@@ -76,7 +77,7 @@ describe('Sign up screen S1', () => {
 
   it.each([
     ['REQ-AUTH-001 AC-8', 'ab', 'The email address or username must be 3 to 254 characters.'],
-    ['REQ-AUTH-001 AC-8', `${'a'.repeat(250)}@b.co`, 'The email address or username must be 3 to 254 characters.'],
+    ['REQ-AUTH-001 AC-8', 'a'.repeat(255), 'The email address or username must be 3 to 254 characters.'],
     ['REQ-AUTH-001 AC-9', 'not@valid', 'Enter a valid email address, for example name@example.com.'],
     ['REQ-AUTH-001 AC-10', 'bad name!', 'A username can contain only letters A to Z, digits 0 to 9, and the characters . _ -'],
   ])('%s identifier %j is refused with its message', async (_ac, identifier, message) => {
@@ -101,8 +102,11 @@ describe('Sign up screen S1', () => {
     await waitFor(() => expect(location.pathname).toBe('/login'));
     const call = api.callsTo('POST', '/api/v1/auth/signup')[0]!;
     expect(call.headers.get('X-Todo-Client')).toBe('web');
-    expect(call.body).toEqual({ identifier: 'bob_1', password: 'long-enough-password' });
-    expect(await screen.findByRole('status')).toHaveTextContent(/account created/i);
+    // sdd §5: the server trims the identifier, so the SPA may send it trimmed or not; the password is never changed.
+    const sent = call.body as { identifier: string; password: string };
+    expect(sent.identifier.trim()).toBe('bob_1');
+    expect(sent.password).toBe('long-enough-password');
+    await expectLiveRegionToSay(/account created/i);
     expect(api.callsTo('GET', '/api/v1/todos')).toHaveLength(0);
     expect(location.search).not.toMatch(/account/i); // the message travels in router state, never in the URL
   });
@@ -180,7 +184,7 @@ describe('Log in screen S2', () => {
   it('REQ-AUTH-002 AC-1 a typed /login shows no session message', async () => {
     await renderApp('/login', new FakeApi());
     await screen.findByRole('heading', { level: 1, name: 'Log in' });
-    expect(screen.queryByRole('status')).not.toBeInTheDocument();
+    expect(document.body).not.toHaveTextContent(/session has ended|account created/i);
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 });
@@ -227,7 +231,7 @@ describe('Session state (sdd §4.1)', () => {
     const { user, location } = await renderApp('/todos/new', api);
     await waitFor(() => expect(location.pathname).toBe('/login'));
     expect(new URLSearchParams(location.search).get('returnTo')).toBe('/todos/new');
-    expect(screen.queryByRole('status')).not.toBeInTheDocument();
+    expect(document.body).not.toHaveTextContent(/session has ended|account created/i);
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
     await user.type(identifierField(), OWNER_IDENTIFIER);
     await user.type(passwordField(), OWNER_PASSWORD);
@@ -252,7 +256,7 @@ describe('Session state (sdd §4.1)', () => {
     await user.click(screen.getByRole('radio', { name: 'Active' }));
     await waitFor(() => expect(location.pathname).toBe('/login'));
     expect(new URLSearchParams(location.search).get('returnTo')).toContain('/todos');
-    expect(await screen.findByRole('status')).toHaveTextContent('Your session has ended. Please log in again.');
+    await expectLiveRegionToSay('Your session has ended. Please log in again.');
   });
 
   it('REQ-AUTH-004 AC-4 a 401 from log in is invalid credentials and never the session-ended message', async () => {
@@ -268,7 +272,6 @@ describe('Session state (sdd §4.1)', () => {
   it('REQ-AUTH-004 AC-4 a reload after expiry (no cookie) on a to-do route goes to log in with no message', async () => {
     const { location } = await renderApp('/todos', new FakeApi({ signedIn: false }));
     await waitFor(() => expect(location.pathname).toBe('/login'));
-    expect(screen.queryByRole('status')).not.toBeInTheDocument();
     expect(document.body).not.toHaveTextContent(/session has ended/i);
   });
 
@@ -279,7 +282,7 @@ describe('Session state (sdd §4.1)', () => {
     await user.click(screen.getByRole('button', { name: /^log out$/i }));
     await waitFor(() => expect(location.pathname).toBe('/login'));
     expect(api.callsTo('POST', '/api/v1/auth/logout')[0]!.headers.get('X-Todo-Client')).toBe('web');
-    expect(screen.queryByRole('status')).not.toBeInTheDocument();
+    expect(document.body).not.toHaveTextContent(/session has ended|account created/i);
     expect(screen.queryByRole('button', { name: /^log out$/i })).not.toBeInTheDocument();
     expect(api.signedIn).toBe(false);
   });
