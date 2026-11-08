@@ -13,12 +13,13 @@
         "repo": "testharness2",
         "paths": [
           "api/src/test",
-          "intent/a-new-todo-list-app-where-user-can-creat.md"
+          "intent/a-new-todo-list-app-where-user-can-creat.md",
+          "web"
         ]
       }
     ],
     "source": "diff",
-    "updatedAt": "2026-11-08T10:26:59.391Z"
+    "updatedAt": "2026-11-08T10:27:08.833Z"
   },
   "links": {
     "branch": "feature/CHG-0001-create-a-to-do-list"
