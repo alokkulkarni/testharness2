@@ -1,0 +1,48 @@
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="1" time="0.44895100000000004">
+<testsuite name="restart.spec.ts" timestamp="2026-11-08T10:45:02.330Z" hostname="restart" tests="1" failures="0" skipped="0" time="0.087" errors="1">
+<testcase name="REQ-ACC-001 AC-3 REQ-DATA-001 AC-1 after the API is restarted the first user logs in again and their to-dos, with all fields, are still there" classname="restart.spec.ts" time="0.087">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/restart-REQ-ACC-001-AC-3-R-f90c3--all-fields-are-still-there-restart/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-artifacts/restart-REQ-ACC-001-AC-3-R-f90c3--all-fields-are-still-there-restart/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/restart-REQ-ACC-001-AC-3-R-f90c3--all-fields-are-still-there-restart/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [restart] › restart.spec.ts:8:1 › REQ-ACC-001 AC-3 REQ-DATA-001 AC-1 after the API is restarted the first user logs in again and their to-dos, with all fields, are still there 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/support/app.ts:34:29)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a7b10fcb55cddef9a/web/e2e/restart.spec.ts:11:9
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/restart-REQ-ACC-001-AC-3-R-f90c3--all-fields-are-still-there-restart/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-artifacts/restart-REQ-ACC-001-AC-3-R-f90c3--all-fields-are-still-there-restart/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/restart-REQ-ACC-001-AC-3-R-f90c3--all-fields-are-still-there-restart/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/restart-REQ-ACC-001-AC-3-R-f90c3--all-fields-are-still-there-restart/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+</testsuites>
