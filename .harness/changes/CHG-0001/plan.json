@@ -165,7 +165,20 @@
         "docs/specs/CHG-0001/design/ux/"
       ],
       "outputs": [
-        "api/src/test/"
+        "api/src/test/",
+        "api/src/main/",
+        "api/pom.xml",
+        "api/mvnw",
+        "api/mvnw.cmd",
+        "api/.mvn/",
+        "api/build.gradle",
+        "api/build.gradle.kts",
+        "api/settings.gradle",
+        "api/settings.gradle.kts",
+        "api/gradlew",
+        "api/gradlew.bat",
+        "api/gradle/",
+        "api/gradle.properties"
       ],
       "dependsOn": [
         "N05-design-arch",
@@ -216,6 +229,19 @@
       "phase": "5",
       "inputs": [
         "api/src/test/",
+        "api/src/main/",
+        "api/pom.xml",
+        "api/mvnw",
+        "api/mvnw.cmd",
+        "api/.mvn/",
+        "api/build.gradle",
+        "api/build.gradle.kts",
+        "api/settings.gradle",
+        "api/settings.gradle.kts",
+        "api/gradlew",
+        "api/gradlew.bat",
+        "api/gradle/",
+        "api/gradle.properties",
         "web/"
       ],
       "outputs": [
@@ -242,6 +268,19 @@
       "phase": "5",
       "inputs": [
         "api/src/test/",
+        "api/src/main/",
+        "api/pom.xml",
+        "api/mvnw",
+        "api/mvnw.cmd",
+        "api/.mvn/",
+        "api/build.gradle",
+        "api/build.gradle.kts",
+        "api/settings.gradle",
+        "api/settings.gradle.kts",
+        "api/gradlew",
+        "api/gradlew.bat",
+        "api/gradle/",
+        "api/gradle.properties",
         "web/"
       ],
       "outputs": [
