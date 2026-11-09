@@ -204,7 +204,7 @@
         "N05-design-arch",
         "N06-design-ux"
       ],
-      "status": "running",
+      "status": "pending",
       "kind": "agent",
       "agent": "web-qa",
       "description": "Failing web tests for the acceptance criteria, committed first.",
@@ -215,13 +215,7 @@
       "executor": "any",
       "isolation": "worktree",
       "attempts": 1,
-      "maxAttempts": 3,
-      "claim": {
-        "runId": "run-mw7ou657",
-        "executor": "claude-code",
-        "leaseUntil": "2026-11-08T20:24:07.760Z",
-        "claimedAt": "2026-11-08T19:55:45.954Z"
-      }
+      "maxAttempts": 3
     },
     {
       "id": "N09-build-java",
