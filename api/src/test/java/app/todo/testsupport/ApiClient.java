@@ -1,12 +1,15 @@
 package app.todo.testsupport;
 
+import static com.atlassian.oai.validator.mockmvc.OpenApiValidationMatchers.openApi;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.atlassian.oai.validator.OpenApiInteractionValidator;
+import com.atlassian.oai.validator.mockmvc.MockMvcResponse;
 import com.atlassian.oai.validator.model.Request;
 import com.atlassian.oai.validator.model.SimpleRequest;
 import com.atlassian.oai.validator.model.SimpleResponse;
 import com.atlassian.oai.validator.report.ValidationReport;
+import jakarta.servlet.http.Cookie;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URLDecoder;
@@ -15,15 +18,31 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.springframework.http.HttpMethod;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 /**
- * Black-box HTTP client for the running API. Every exchange is checked against the frozen contract
- * (ADR-0012) unless the caller picks a lighter {@link Check}.
+ * Client for the API under test. Two transports (sdd.md section 14):
+ * <ul>
+ *   <li>{@link #forMockMvc(MockMvc)}: Spring Boot + MockMvc, the integration level of every test. Each exchange is
+ *       validated against the module contract file with the openapi-request-validator v3 MockMvc adapter
+ *       ({@code OpenApiValidationMatchers.openApi().isValid(validator)}) unless the caller picks a lighter
+ *       {@link Check}.</li>
+ *   <li>{@link #forPort(int)}: the embedded container at a random port, used only by the NFR-004 filter-exception
+ *       test (MockMvc performs no ERROR dispatch). Its exchange is validated with the core validator's
+ *       {@code OpenApiInteractionValidator} instead of the MockMvc adapter.</li>
+ * </ul>
  */
 public final class ApiClient {
 
@@ -45,34 +64,43 @@ public final class ApiClient {
             .connectTimeout(Duration.ofSeconds(10))
             .build();
 
+    private final MockMvc mockMvc;
     private final String base;
     private final String sessionToken;
-    private final boolean clientHeader;
+    /** Value of the X-Todo-Client header sent on unsafe methods, or null to send none. */
+    private final String clientHeader;
 
-    private ApiClient(String base, String sessionToken, boolean clientHeader) {
+    private ApiClient(MockMvc mockMvc, String base, String sessionToken, String clientHeader) {
+        this.mockMvc = mockMvc;
         this.base = base;
         this.sessionToken = sessionToken;
         this.clientHeader = clientHeader;
     }
 
+    public static ApiClient forMockMvc(MockMvc mockMvc) {
+        return new ApiClient(mockMvc, null, null, "web");
+    }
+
+    /** The embedded container at {@code port}: only for the filter-exception test. */
     public static ApiClient forPort(int port) {
-        return new ApiClient("http://localhost:" + port, null, true);
+        return new ApiClient(null, "http://localhost:" + port, null, "web");
     }
 
     public ApiClient withSession(String token) {
-        return new ApiClient(base, token, clientHeader);
+        return new ApiClient(mockMvc, base, token, clientHeader);
     }
 
     public ApiClient withoutClientHeader() {
-        return new ApiClient(base, sessionToken, false);
+        return new ApiClient(mockMvc, base, sessionToken, null);
+    }
+
+    /** Sends {@code value} as the X-Todo-Client header on unsafe methods (for a wrong value). */
+    public ApiClient withClientHeader(String value) {
+        return new ApiClient(mockMvc, base, sessionToken, value);
     }
 
     public String sessionToken() {
         return sessionToken;
-    }
-
-    public String baseUrl() {
-        return base;
     }
 
     // ---- convenience: valid requests, request and response checked ----
@@ -117,13 +145,75 @@ public final class ApiClient {
     }
 
     public Reply send(String method, String pathAndQuery, String body, String contentType, Check check) {
+        return mockMvc != null
+                ? sendMockMvc(method, pathAndQuery, body, contentType, check)
+                : sendHttp(method, pathAndQuery, body, contentType, check);
+    }
+
+    // ---- MockMvc transport ----
+
+    private Reply sendMockMvc(String method, String pathAndQuery, String body, String contentType, Check check) {
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.request(HttpMethod.valueOf(method), URI.create(pathAndQuery));
+        if (contentType != null) {
+            builder.header("Content-Type", contentType);
+        }
+        if (clientHeader != null && UNSAFE.contains(method)) {
+            builder.header("X-Todo-Client", clientHeader);
+        }
+        if (sessionToken != null) {
+            builder.cookie(new Cookie("todo_session", sessionToken));
+        }
+        if (body != null) {
+            builder.content(body.getBytes(StandardCharsets.UTF_8));
+        }
+        MvcResult result;
+        try {
+            result = mockMvc.perform(builder).andReturn();
+        } catch (Exception e) {
+            throw new IllegalStateException("request failed: " + method + " " + pathAndQuery, e);
+        }
+        MockHttpServletResponse response = result.getResponse();
+        Map<String, List<String>> headers = new LinkedHashMap<>();
+        for (String name : response.getHeaderNames()) {
+            headers.put(name.toLowerCase(Locale.ROOT), new ArrayList<>(response.getHeaders(name)));
+        }
+        if (response.getContentType() != null) {
+            headers.put("content-type", List.of(response.getContentType()));
+        }
+        Reply reply;
+        try {
+            reply = new Reply(response.getStatus(), response.getContentAsString(StandardCharsets.UTF_8), headers);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+        if (check == Check.FULL) {
+            String path = pathOf(pathAndQuery);
+            try {
+                openApi().isValid(Contracts.validatorFor(path)).match(result);
+            } catch (Exception | AssertionError e) {
+                throw new AssertionError("contract violations for " + method + " " + pathAndQuery + " (status "
+                        + reply.status() + ", body " + reply.body() + "): " + e.getMessage(), e);
+            }
+        } else if (check == Check.RESPONSE_ONLY) {
+            String path = pathOf(pathAndQuery);
+            ValidationReport report = Contracts.validatorFor(path)
+                    .validateResponse(path, Request.Method.valueOf(method), MockMvcResponse.of(response));
+            assertNoErrors(report, method, pathAndQuery, reply);
+        }
+        return reply;
+    }
+
+    // ---- embedded-container transport (filter-exception test only) ----
+
+    private Reply sendHttp(String method, String pathAndQuery, String body, String contentType, Check check) {
         HttpRequest.Builder builder = HttpRequest.newBuilder(URI.create(base + pathAndQuery))
                 .timeout(Duration.ofSeconds(30));
         if (contentType != null) {
             builder.header("Content-Type", contentType);
         }
-        if (clientHeader && UNSAFE.contains(method)) {
-            builder.header("X-Todo-Client", "web");
+        if (clientHeader != null && UNSAFE.contains(method)) {
+            builder.header("X-Todo-Client", clientHeader);
         }
         if (sessionToken != null) {
             builder.header("Cookie", "todo_session=" + sessionToken);
@@ -143,17 +233,21 @@ public final class ApiClient {
         }
         Reply reply = new Reply(response.statusCode(), response.body(), response.headers().map());
         if (check != Check.NONE) {
-            validate(method, pathAndQuery, body, contentType, reply, check);
+            validateWithCoreValidator(method, pathAndQuery, body, contentType, reply, check);
         }
         return reply;
     }
 
-    private void validate(String method, String pathAndQuery, String body, String contentType, Reply reply, Check check) {
-        String path = pathAndQuery;
+    private static String pathOf(String pathAndQuery) {
+        int q = pathAndQuery.indexOf('?');
+        return q >= 0 ? pathAndQuery.substring(0, q) : pathAndQuery;
+    }
+
+    private void validateWithCoreValidator(String method, String pathAndQuery, String body, String contentType, Reply reply, Check check) {
+        String path = pathOf(pathAndQuery);
         Map<String, String> query = new LinkedHashMap<>();
         int q = pathAndQuery.indexOf('?');
         if (q >= 0) {
-            path = pathAndQuery.substring(0, q);
             for (String pair : pathAndQuery.substring(q + 1).split("&")) {
                 if (pair.isEmpty()) {
                     continue;
@@ -189,14 +283,18 @@ public final class ApiClient {
             if (contentType != null && body != null) {
                 qb.withContentType(contentType);
             }
-            if (clientHeader && UNSAFE.contains(method)) {
-                qb.withHeader("X-Todo-Client", "web");
+            if (clientHeader != null && UNSAFE.contains(method)) {
+                qb.withHeader("X-Todo-Client", clientHeader);
             }
             query.forEach(qb::withQueryParam);
             report = validator.validate(qb.build(), rb.build());
         } else {
             report = validator.validateResponse(path, verb, rb.build());
         }
+        assertNoErrors(report, method, pathAndQuery, reply);
+    }
+
+    private static void assertNoErrors(ValidationReport report, String method, String pathAndQuery, Reply reply) {
         List<String> problems = report.getMessages().stream()
                 .map(m -> m.getKey() + ": " + m.getMessage())
                 .collect(Collectors.toList());

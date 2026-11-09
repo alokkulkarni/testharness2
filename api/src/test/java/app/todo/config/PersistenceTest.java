@@ -18,13 +18,19 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.context.servlet.AnnotationConfigServletWebApplicationContext;
+import org.springframework.boot.webmvc.test.autoconfigure.SpringBootMockMvcBuilderCustomizer;
+import org.springframework.mock.web.MockServletContext;
+import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 
 /**
  * REQ-DATA-001 Persistence, REQ-ACC-001 AC-3. Starts the real application twice on one database file, in two
- * separate application contexts, to show that a restart keeps accounts and to-dos (sdd.md section 14).
+ * separate application contexts (MockMvc level, sdd.md section 14), to show that a restart keeps accounts and to-dos (sdd.md section 14).
  */
 class PersistenceTest {
 
@@ -56,9 +62,14 @@ class PersistenceTest {
         assertThat(found).as("exactly one @SpringBootApplication class under app.todo").hasSize(1);
         Class<?> application = Class.forName(found.get(0).getBeanClassName());
         SpringApplication app = new SpringApplication(application);
+        // MockMvc level (sdd.md section 14): a web application context on a mock servlet context, no embedded container
+        app.setApplicationContextFactory(type -> {
+            AnnotationConfigServletWebApplicationContext context = new AnnotationConfigServletWebApplicationContext();
+            context.setServletContext(new MockServletContext());
+            return context;
+        });
         // command-line arguments have the highest precedence, so no application.properties can override the test file
         return app.run(
-                "--server.port=0",
                 "--spring.main.banner-mode=off",
                 "--TODO_DB_PATH=" + dbFile,
                 "--todo.db.path=" + dbFile,
@@ -67,7 +78,11 @@ class PersistenceTest {
     }
 
     private static ApiClient clientOf(ConfigurableApplicationContext ctx) {
-        return ApiClient.forPort(Integer.parseInt(ctx.getEnvironment().getRequiredProperty("local.server.port")));
+        WebApplicationContext web = (WebApplicationContext) ctx;
+        DefaultMockMvcBuilder builder = MockMvcBuilders.webAppContextSetup(web);
+        // adds the application's filters, as @AutoConfigureMockMvc does
+        new SpringBootMockMvcBuilderCustomizer(web).customize(builder);
+        return ApiClient.forMockMvc(builder.build());
     }
 
     @Test

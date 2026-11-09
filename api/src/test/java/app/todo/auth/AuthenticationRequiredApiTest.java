@@ -23,7 +23,10 @@ class AuthenticationRequiredApiTest extends IntegrationTestBase {
     private record Call(String name, String method, String path, String body) {}
 
     private static List<Call> allTodoOperations() {
-        String id = UUID.randomUUID().toString();
+        return allTodoOperations(UUID.randomUUID().toString());
+    }
+
+    private static List<Call> allTodoOperations(String id) {
         String content = todoBody("changed", "2026-12-31", "HIGH", null);
         return List.of(
                 new Call("listTodos", "GET", TODOS, null),
@@ -57,30 +60,42 @@ class AuthenticationRequiredApiTest extends IntegrationTestBase {
     @DisplayName("REQ-AUTH-004 AC-1 with an expired session every to-do operation is refused as unauthenticated")
     void REQ_AUTH_004_AC1_expired_session_is_unauthenticated_on_every_operation() {
         var me = signedIn();
-        createTodo(me, "keep me");
+        String own = createTodoId(me, "keep me");
+        String done = createTodoId(me, "keep me done");
+        setDone(me, done, true);
         long todosBefore = db().count("SELECT count(*) FROM todos");
+        String ownBefore = storedState(own);
+        String doneBefore = storedState(done);
         clock.advance(Duration.ofHours(8).plusSeconds(1));
 
-        for (Call call : allTodoOperations()) {
+        for (Call call : allTodoOperations(own)) {
             perform(me, call).assertProblem(401, "UNAUTHENTICATED");
         }
 
         assertThat(db().count("SELECT count(*) FROM todos")).isEqualTo(todosBefore);
+        assertThat(storedState(own)).as("the caller's own to-do is unchanged").isEqualTo(ownBefore);
+        assertThat(storedState(done)).as("the caller's completed to-do survives clearCompletedTodos").isEqualTo(doneBefore);
     }
 
     @Test
     @DisplayName("REQ-AUTH-004 AC-1 with a logged-out session every to-do operation is refused as unauthenticated")
     void REQ_AUTH_004_AC1_logged_out_session_is_unauthenticated_on_every_operation() {
         var me = signedIn();
-        createTodo(me, "keep me too");
+        String own = createTodoId(me, "keep me too");
+        String done = createTodoId(me, "keep me too, done");
+        setDone(me, done, true);
         long todosBefore = db().count("SELECT count(*) FROM todos");
+        String ownBefore = storedState(own);
+        String doneBefore = storedState(done);
         me.post(LOGOUT, null);
 
-        for (Call call : allTodoOperations()) {
+        for (Call call : allTodoOperations(own)) {
             perform(me, call).assertProblem(401, "UNAUTHENTICATED");
         }
 
         assertThat(db().count("SELECT count(*) FROM todos")).isEqualTo(todosBefore);
+        assertThat(storedState(own)).as("the caller's own to-do is unchanged").isEqualTo(ownBefore);
+        assertThat(storedState(done)).as("the caller's completed to-do survives clearCompletedTodos").isEqualTo(doneBefore);
     }
 
     @Test
@@ -146,21 +161,11 @@ class AuthenticationRequiredApiTest extends IntegrationTestBase {
     }
 
     private Reply rawWithHeader(ApiClient me, String headerValue) {
-        try {
-            var request = java.net.http.HttpRequest.newBuilder(java.net.URI.create(me.baseUrl() + TODOS))
-                    .header("Content-Type", "application/json")
-                    .header("X-Todo-Client", headerValue)
-                    .header("Cookie", "todo_session=" + me.sessionToken())
-                    .POST(java.net.http.HttpRequest.BodyPublishers.ofString(todoBody("x")))
-                    .build();
-            var response = java.net.http.HttpClient.newHttpClient()
-                    .send(request, java.net.http.HttpResponse.BodyHandlers.ofString());
-            return new Reply(response.statusCode(), response.body(), response.headers().map());
-        } catch (java.io.IOException e) {
-            throw new IllegalStateException(e);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new IllegalStateException(e);
-        }
+        return me.withClientHeader(headerValue).raw("POST", TODOS, todoBody("x"), "application/json");
+    }
+
+    /** The stored state of one to-do, read from the database (the caller's session is no longer valid). */
+    private String storedState(String id) {
+        return db().text("SELECT title || '|' || done || '|' || updated_at FROM todos WHERE public_id = ?", id);
     }
 }
