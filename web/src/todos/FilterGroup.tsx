@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { StatusFilter } from '../api/todos';
+import type { StatusFilter } from '../api/client';
 
 const OPTIONS: { value: StatusFilter; label: string }[] = [
   { value: 'all', label: 'All' },
