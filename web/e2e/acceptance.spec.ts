@@ -139,6 +139,7 @@ test.describe('persistence and list flows', () => {
     expect(await pagerControlDisabled(pagination.getByText(/next/i))).toBe(false);
     await pagination.getByText(/next/i).click();
     await expect(page).toHaveURL(/page=2/);
+    await expect(page.getByText('Showing 21-40 of 45')).toBeVisible(); // the re-query finished; page 1 rows are gone
     await expect(rows(page)).toHaveCount(20);
     seen.push(...(await titlesOnPage()));
     await pagination.getByRole('link', { name: /^page 3$/i }).click();

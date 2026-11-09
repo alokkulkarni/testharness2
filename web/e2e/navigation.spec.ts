@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { apiSignUp, listHeading, newAccount, signedInUser, uiLogIn } from './support/app';
+import { apiSignUp, listHeading, newAccount, pressTab, signedInUser, uiLogIn } from './support/app';
 
 interface RecordedAnimation {
   iterations: number;
@@ -106,7 +106,7 @@ test.describe('REQ-NAV-001 against the real stack', () => {
     await page.goto('/nope');
     const home = page.getByRole('link', { name: /home/i });
     await expect(page.getByRole('heading', { level: 1, name: /not found/i })).toBeFocused();
-    await page.keyboard.press('Tab');
+    await pressTab(page);
     await expect(home).toBeFocused();
     const outline = await home.evaluate((el) => {
       const s = getComputedStyle(el);

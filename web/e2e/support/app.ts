@@ -26,6 +26,15 @@ export interface TodoJson {
 
 const CLIENT = { 'X-Todo-Client': 'web' };
 
+/**
+ * Moves focus to the next control. WebKit on macOS skips links with a plain Tab (Safari's "Press Tab to highlight
+ * each item" is off by default), so Alt+Tab is pressed there; other engines use Tab.
+ */
+export async function pressTab(page: Page): Promise<void> {
+  const engine = page.context().browser()?.browserType().name();
+  await page.keyboard.press(engine === 'webkit' ? 'Alt+Tab' : 'Tab');
+}
+
 export function newAccount(): Account {
   return { identifier: `e2e${randomUUID().replace(/-/g, '').slice(0, 14)}`, password: 'e2e-Password-123' };
 }
