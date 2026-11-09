@@ -1,0 +1,134 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="3" time="10.880672">
+<testsuite name="restart.spec.ts" timestamp="2026-11-09T12:21:25.514Z" hostname="chromium" tests="1" failures="0" skipped="0" time="3.294" errors="1">
+<testcase name="REQ-ACC-001 AC-3 REQ-DATA-001 AC-1 after the API is restarted the first user logs in again and their to-dos, with all fields, are still there" classname="restart.spec.ts" time="3.294">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-restart-artifacts/restart-REQ-ACC-001-AC-3-R-f90c3--all-fields-are-still-there-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-restart-artifacts/restart-REQ-ACC-001-AC-3-R-f90c3--all-fields-are-still-there-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="locator.click: Error: strict mode violation: getByRole(&apos;listitem&apos;).filter({ has: getByRole(&apos;checkbox&apos;) }).filter({ has: getByRole(&apos;link&apos;, { name: &apos;Outlives the restart&apos;, exact: true }) }).getByRole(&apos;link&apos;, { name: &apos;Outlives the restart&apos; }) resolved to 2 elements:" type="Error">
+<![CDATA[  [chromium] › restart.spec.ts:10:1 › REQ-ACC-001 AC-3 REQ-DATA-001 AC-1 after the API is restarted the first user logs in again and their to-dos, with all fields, are still there 
+
+    Error: locator.click: Error: strict mode violation: getByRole('listitem').filter({ has: getByRole('checkbox') }).filter({ has: getByRole('link', { name: 'Outlives the restart', exact: true }) }).getByRole('link', { name: 'Outlives the restart' }) resolved to 2 elements:
+        1) <a id="_r_0_" class="todo-title" data-discover="true" href="/todos/b6cbd040-6780-4213-9b50-0f128531e3cd">Outlives the restart</a> aka getByRole('link', { name: 'Outlives the restart', exact: true })
+        2) <a data-discover="true" class="btn secondary" href="/todos/b6cbd040-6780-4213-9b50-0f128531e3cd/edit">…</a> aka getByRole('link', { name: 'Edit Outlives the restart' })
+
+    Call log:
+      - waiting for getByRole('listitem').filter({ has: getByRole('checkbox') }).filter({ has: getByRole('link', { name: 'Outlives the restart', exact: true }) }).getByRole('link', { name: 'Outlives the restart' })
+
+
+      32 |   await expect(row).toContainText(/due 3 feb 2027/i);
+      33 |   await expect(row).toContainText(/priority: high/i);
+    > 34 |   await row.getByRole('link', { name: 'Outlives the restart' }).click();
+         |                                                                 ^
+      35 |   await expect(page.getByText('kept in SQLite')).toBeVisible();
+      36 | });
+      37 |
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a2d605e7a68e7bc95/web/e2e/restart.spec.ts:34:65
+
+    Error Context: ../test-results/e2e-restart-artifacts/restart-REQ-ACC-001-AC-3-R-f90c3--all-fields-are-still-there-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-restart-artifacts/restart-REQ-ACC-001-AC-3-R-f90c3--all-fields-are-still-there-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-restart-artifacts/restart-REQ-ACC-001-AC-3-R-f90c3--all-fields-are-still-there-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+<testsuite name="restart.spec.ts" timestamp="2026-11-09T12:21:25.514Z" hostname="firefox" tests="1" failures="0" skipped="0" time="0" errors="1">
+<testcase name="REQ-ACC-001 AC-3 REQ-DATA-001 AC-1 after the API is restarted the first user logs in again and their to-dos, with all fields, are still there" classname="restart.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-restart-artifacts/restart-REQ-ACC-001-AC-3-R-f90c3--all-fields-are-still-there-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-restart-artifacts/restart-REQ-ACC-001-AC-3-R-f90c3--all-fields-are-still-there-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › restart.spec.ts:10:1 › REQ-ACC-001 AC-3 REQ-DATA-001 AC-1 after the API is restarted the first user logs in again and their to-dos, with all fields, are still there 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-DClID4 -juggler-pipe -silent
+    <launched> pid=35634
+    [pid=35634][err] *** You are running in headless mode.
+    [pid=35634][err] Could not find profile folder.
+    [pid=35634] <process did exit: exitCode=1, signal=null>
+    [pid=35634] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-DClID4 -juggler-pipe -silent
+      - <launched> pid=35634
+      - [pid=35634][err] *** You are running in headless mode.
+      - [pid=35634][err] Could not find profile folder.
+      - [pid=35634] <process did exit: exitCode=1, signal=null>
+      - [pid=35634] starting temporary directories cleanup
+      - [pid=35634] <gracefully close start>
+      - [pid=35634] <kill>
+      - [pid=35634] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=35634] finished temporary directories cleanup
+      - [pid=35634] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-restart-artifacts/restart-REQ-ACC-001-AC-3-R-f90c3--all-fields-are-still-there-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-restart-artifacts/restart-REQ-ACC-001-AC-3-R-f90c3--all-fields-are-still-there-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-restart-artifacts/restart-REQ-ACC-001-AC-3-R-f90c3--all-fields-are-still-there-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+<testsuite name="restart.spec.ts" timestamp="2026-11-09T12:21:25.514Z" hostname="webkit" tests="1" failures="0" skipped="0" time="2.987" errors="1">
+<testcase name="REQ-ACC-001 AC-3 REQ-DATA-001 AC-1 after the API is restarted the first user logs in again and their to-dos, with all fields, are still there" classname="restart.spec.ts" time="2.987">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-restart-artifacts/restart-REQ-ACC-001-AC-3-R-f90c3--all-fields-are-still-there-webkit/error-context.md]]
+
+[[ATTACHMENT|e2e-restart-artifacts/restart-REQ-ACC-001-AC-3-R-f90c3--all-fields-are-still-there-webkit/trace.zip]]
+]]>
+</system-out>
+<error message="locator.click: Error: strict mode violation: getByRole(&apos;listitem&apos;).filter({ has: getByRole(&apos;checkbox&apos;) }).filter({ has: getByRole(&apos;link&apos;, { name: &apos;Outlives the restart&apos;, exact: true }) }).getByRole(&apos;link&apos;, { name: &apos;Outlives the restart&apos; }) resolved to 2 elements:" type="Error">
+<![CDATA[  [webkit] › restart.spec.ts:10:1 › REQ-ACC-001 AC-3 REQ-DATA-001 AC-1 after the API is restarted the first user logs in again and their to-dos, with all fields, are still there 
+
+    Error: locator.click: Error: strict mode violation: getByRole('listitem').filter({ has: getByRole('checkbox') }).filter({ has: getByRole('link', { name: 'Outlives the restart', exact: true }) }).getByRole('link', { name: 'Outlives the restart' }) resolved to 2 elements:
+        1) <a id="_r_0_" class="todo-title" data-discover="true" href="/todos/f82ceebb-1b43-48c3-8c24-8bd79dc9c4ea">Outlives the restart</a> aka getByRole('link', { name: 'Outlives the restart', exact: true })
+        2) <a data-discover="true" class="btn secondary" href="/todos/f82ceebb-1b43-48c3-8c24-8bd79dc9c4ea/edit">…</a> aka getByRole('link', { name: 'Edit Outlives the restart' })
+
+    Call log:
+      - waiting for getByRole('listitem').filter({ has: getByRole('checkbox') }).filter({ has: getByRole('link', { name: 'Outlives the restart', exact: true }) }).getByRole('link', { name: 'Outlives the restart' })
+
+
+      32 |   await expect(row).toContainText(/due 3 feb 2027/i);
+      33 |   await expect(row).toContainText(/priority: high/i);
+    > 34 |   await row.getByRole('link', { name: 'Outlives the restart' }).click();
+         |                                                                 ^
+      35 |   await expect(page.getByText('kept in SQLite')).toBeVisible();
+      36 | });
+      37 |
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a2d605e7a68e7bc95/web/e2e/restart.spec.ts:34:65
+
+    Error Context: ../test-results/e2e-restart-artifacts/restart-REQ-ACC-001-AC-3-R-f90c3--all-fields-are-still-there-webkit/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-restart-artifacts/restart-REQ-ACC-001-AC-3-R-f90c3--all-fields-are-still-there-webkit/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-restart-artifacts/restart-REQ-ACC-001-AC-3-R-f90c3--all-fields-are-still-there-webkit/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+</testsuites>
