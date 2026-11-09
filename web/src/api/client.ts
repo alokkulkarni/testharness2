@@ -2,7 +2,7 @@ import type { Failure } from '../errors/userMessage';
 import type { LoginRequest, Session, SignupRequest, SignupResult } from './identity';
 import type { ClearCompletedResult, Problem, StatusFilter, Todo, TodoCreate, TodoPage, TodoUpdate } from './todos';
 
-// The one fetch wrapper (sdd §2, §6.1, ADR-0001). It turns every failed call into a `Failure` and never hands a
+// The one fetch wrapper (sdd §2, §6.1, ADR-0001; NFR-006). It turns every failed call into a `Failure` and never hands a
 // raw Response, TypeError or exception text to a screen. Relative /api paths only; the dev server proxies them.
 
 /** Thrown by every operation below; carries the Failure a screen maps with userMessageFor. */

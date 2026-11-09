@@ -1,7 +1,8 @@
 import { createContext, useContext, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router';
 
-// The app shell (AppShell) provides these to the screens it renders.
+// The app shell (AppShell) provides these to the screens it renders. REQ-NAV-001 and NFR-001 AC-2 (title and focus on
+// a screen change), REQ-TODO-005 (the live-region announcements).
 export interface ShellContextValue {
   /** Put a message in the shell's polite live region (role="status"), which outlives the element that caused it. */
   announce: (text: string) => void;

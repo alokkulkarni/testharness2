@@ -4,6 +4,8 @@ import { useEffect, useId, useRef, type KeyboardEvent, type ReactNode } from 're
  * D1 / D2 (ux-design): a native modal <dialog> opened with showModal() (ADR-0001). It is mounted only while it is
  * open. Initial focus is on Cancel; Escape and Cancel close it without any action and return focus to the control
  * that opened it. A confirmed action leaves focus to the caller (the opener may be gone).
+ * REQ-TODO-006 and REQ-TODO-007 (confirmation before a delete); NFR-001 AC-2 (focus stays inside the dialog:
+ * `keepFocusInside` wraps Tab and Shift+Tab).
  */
 export function ConfirmDialog({
   heading,
@@ -49,7 +51,7 @@ export function ConfirmDialog({
     onCancel();
   }
 
-  /** Tab from the last control goes to the first, Shift+Tab from the first to the last (some engines would leave the page). */
+  /** NFR-001 AC-2: Tab from the last control goes to the first, Shift+Tab from the first to the last (some engines would leave the page). */
   function keepFocusInside(event: KeyboardEvent<HTMLDialogElement>) {
     if (event.key !== 'Tab') return;
     const controls = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])'));
