@@ -7,11 +7,14 @@ import { formatDate, PRIORITY_LABEL } from './format';
 export function TodoRow({
   todo,
   toggling,
+  requestedDone,
   onToggle,
   onDelete,
 }: {
   todo: Todo;
   toggling: boolean;
+  /** The state asked for by a toggle whose result the list has not shown yet; null when none. */
+  requestedDone: boolean | null;
   onToggle: (todo: Todo) => void;
   onDelete: (todo: Todo) => void;
 }) {
@@ -19,11 +22,12 @@ export function TodoRow({
   return (
     <li className={`todo-row${todo.done ? ' done' : ''}`}>
       <div className="todo-main">
-        {/* aria-disabled, not disabled, so the checkbox keeps focus while the request is in flight */}
+        {/* aria-disabled, not disabled, so the checkbox keeps focus while the request is in flight; it shows the
+            requested state at once, until the list has it (reverted if the request fails), so a click takes effect */}
         <input
           type="checkbox"
           className="todo-check"
-          checked={todo.done}
+          checked={requestedDone ?? todo.done}
           aria-labelledby={titleId}
           aria-disabled={toggling}
           onChange={() => {

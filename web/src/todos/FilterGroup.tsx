@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import type { StatusFilter } from '../api/todos';
 
 const OPTIONS: { value: StatusFilter; label: string }[] = [
@@ -8,6 +9,10 @@ const OPTIONS: { value: StatusFilter; label: string }[] = [
 
 /** REQ-LIST-001: a fieldset of three radios; a change applies at once (no apply button). */
 export function FilterGroup({ status, onChange }: { status: StatusFilter; onChange: (status: StatusFilter) => void }) {
+  // the chosen radio shows at once; the address (and so `status`) follows when the router has navigated
+  const [chosen, setChosen] = useState<StatusFilter | null>(null);
+  useEffect(() => setChosen(null), [status]);
+  const shown = chosen ?? status;
   return (
     <fieldset className="filter">
       <legend>Show</legend>
@@ -17,8 +22,11 @@ export function FilterGroup({ status, onChange }: { status: StatusFilter; onChan
             type="radio"
             name="status"
             value={option.value}
-            checked={status === option.value}
-            onChange={() => onChange(option.value)}
+            checked={shown === option.value}
+            onChange={() => {
+              setChosen(option.value);
+              onChange(option.value);
+            }}
           />
           <span>{option.label}</span>
         </label>

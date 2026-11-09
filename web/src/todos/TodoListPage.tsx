@@ -63,6 +63,8 @@ export function TodoListPage() {
   const [reloadToken, setReloadToken] = useState(0);
   const [pageAlert, setPageAlert] = useState<PageAlert | null>(null);
   const [toggling, setToggling] = useState<string | null>(null);
+  // the state a toggle asked for, shown on its row until the re-queried list carries it (or the row has left)
+  const [requested, setRequested] = useState<{ id: string; done: boolean } | null>(null);
   const [clearing, setClearing] = useState(false);
   const [dialog, setDialog] = useState<DialogState | null>(null);
   const [dialogBusy, setDialogBusy] = useState(false);
@@ -165,6 +167,7 @@ export function TodoListPage() {
   async function toggle(todo: Todo) {
     if (toggling) return;
     setToggling(todo.id);
+    setRequested({ id: todo.id, done: !todo.done });
     setPageAlert(null);
     try {
       await setTodoDone(todo.id, !todo.done);
@@ -175,6 +178,7 @@ export function TodoListPage() {
         },
       });
     } catch (error) {
+      setRequested(null);
       if (isUnauthorized(error)) return;
       const message = userMessageFor(toFailure(error), 'toggle-done');
       if (message.nextStep === 'list-refreshed') reload({ notice: true, after: focusHeading });
@@ -254,6 +258,12 @@ export function TodoListPage() {
   }
 
   const data = view.kind === 'loaded' ? view.data : null;
+  useEffect(() => {
+    if (requested === null || toggling !== null) return;
+    if (view.kind !== 'loaded') return setRequested(null);
+    const row = view.data.items.find((t) => t.id === requested.id);
+    if (!row || row.done === requested.done) setRequested(null);
+  }, [view, requested, toggling]);
   const canClear = data !== null && data.totals.completed > 0;
 
   let body;
@@ -296,6 +306,7 @@ export function TodoListPage() {
               key={todo.id}
               todo={todo}
               toggling={toggling === todo.id}
+              requestedDone={requested?.id === todo.id ? requested.done : null}
               onToggle={toggle}
               onDelete={(t) => {
                 setDialogError(null);
