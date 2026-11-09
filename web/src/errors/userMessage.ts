@@ -55,6 +55,9 @@ const FAILED: Record<UserAction, string> = {
   'clear-completed': 'Completed to-dos could not be deleted.',
 };
 
+/** The closing sentence of an `unexpected` message; screens replace it by a Reload button and a home link. */
+export const RELOAD_OR_HOME_SUFFIX = ' Reload the page, or go to home.';
+
 export const SESSION_ENDED_TEXT = 'Your session has ended. Please log in again.';
 export const REFRESHED_TEXT = 'That to-do no longer exists, and the list has been refreshed.';
 export const INVALID_LOGIN_TEXT = 'Invalid identifier or password. Check them and try again.';
@@ -80,7 +83,7 @@ export function shownFieldErrors(failure: Failure, action: UserAction): FieldErr
 
 export function userMessageFor(failure: Failure, action: UserAction): UserMessage {
   if (failure.kind === 'unexpected') {
-    return { text: `${FAILED[action]} Reload the page, or go to home.`, nextStep: 'reload-or-home' };
+    return { text: `${FAILED[action]}${RELOAD_OR_HOME_SUFFIX}`, nextStep: 'reload-or-home' };
   }
   const tryAgain: UserMessage = { text: `${FAILED[action]} Please try again.`, nextStep: 'try-again' };
   if (failure.kind === 'network') return tryAgain;
