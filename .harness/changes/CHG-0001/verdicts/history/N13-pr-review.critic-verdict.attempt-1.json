@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N13-pr-review",
+  "gate": "critic-verdict",
+  "verdict": "changes-required",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "critic",
+      "agentRunId": "a8b00e17441b64e9c"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "java-engineer",
+      "agentRunId": "a58b7d8aa3237ea97"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "java-engineer",
+      "agentRunId": "a8479dc53c8e6b18c"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "java-engineer",
+      "agentRunId": "a8a74c75b2a7a067a"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "a2d605e7a68e7bc95"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "a56446fc9d361e33a"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "a60fb623702586e08"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "a6809e24795576252"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "a767bd3f583698bab"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "a8a05244ebd80fb0a"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "a8d695bc2b72c5f94"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "ac775b8ae56e1e833"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "acfc9f0fb7584ab38"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "af4da2dcb663a79e9"
+    }
+  ],
+  "createdAt": "2026-11-09T14:56:06.448Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "reviewedCommit": "4fce67df627e2f493e7ade2d7822f3e707e36cf9",
+  "diffHash": "5fb0b9148cf203066e356926d7c8a310842fcd2b1dbecf809d9a1081017f0cf4",
+  "summary": "Round 1 PR review of the whole delta 9dfd675...HEAD: changes-required on one major. F-1: the five body-taking endpoints use @RequestBody Map with no consumes, so the Jackson converter also reads application/*+json bodies and answers 201/200 where common-problem-v1.yaml requires 415 for any Content-Type other than application/json; untested (inferred from Spring defaults, not run). This re-rates N09 F-2 from minor to major. N09 F-3 and N10 F-17 stay minor. Cross-module checks (SPA client vs contracts, error model, sessions, tests-first order, evidence vs HEAD) found nothing else. 0 blocker, 1 major, 6 minor, 5 info follow-ups; the requester-accepted divergences and the NFR-002 AC-1 deferral are listed as PR items (F-8, F-9). Apart from F-1 and the human approval the PR is ready to merge.",
+  "findings": [
+    {
+      "id": "F-1",
+      "severity": "major",
+      "message": "The contract convention (common-problem-v1.yaml L18-L20, sdd.md 6 table) refuses a request body sent with any Content-Type other than application/json (charset allowed), or none, with 415 UNSUPPORTED_MEDIA_TYPE. createTodo, updateTodo and setTodoDone (TodoController.java L42-L74) and signUp and logIn (AuthController.java L34-L47) take @RequestBody Map with no consumes, and nothing in WebConfig, SecurityConfig or application.properties restricts the message converters. The Jackson JSON converter reads application/json and application/*+json by default, so a valid body sent as application/vnd.x+json or application/merge-patch+json is very likely accepted (201 or 200) instead of 415. ErrorSourcesTest L81-L96 covers only text/plain, a missing Content-Type and form-urlencoded, so the +json family is untested. Inferred from Spring defaults, not run by the critic. Re-rates N09 F-2 (recorded minor) to major: an untested contract error case that is probably not met. No security impact (the X-Todo-Client header still guards cross-site requests).",
+      "requirement": "NFR-004",
+      "location": "api/src/main/java/app/todo/todo/TodoController.java:L42-L74",
+      "suggestion": "Tests node first: a red case sending a valid body as application/vnd.x+json on createTodo and signUp, expecting 415 UNSUPPORTED_MEDIA_TYPE and the database unchanged. Then add consumes = MediaType.APPLICATION_JSON_VALUE to the five body-taking method mappings only (signUp, logIn, createTodo, updateTodo, setTodoDone), never at class level (that would 415 the GET and DELETE routes). The charset test stays green (consumes ignores parameters) and ProblemDetailsAdvice already maps HttpMediaTypeNotSupportedException to 415."
+    },
+    {
+      "id": "F-2",
+      "severity": "minor",
+      "message": "Carried N09 F-3, severity confirmed minor. sdd.md 10 asks for structured (JSON) per-request logs with request id, method, route template, status, duration and user id. Under the logstash format the line is JSON and requestId and userId are fields, but method, route, status and durationMs are text inside the message string. Operability only, no client-visible behaviour; a partial departure from sdd.md 10 to list in the PR.",
+      "requirement": "NFR-004",
+      "location": "api/src/main/java/app/todo/common/RequestIdFilter.java:L74-L86",
+      "suggestion": "Emit them as key-value pairs (SLF4J addKeyValue) or MDC entries in a follow-up; this also lets FilterExceptionTest select the line by status and retire the newRequestId loop (N09 F-1)."
+    },
+    {
+      "id": "F-3",
+      "severity": "minor",
+      "message": "Carried N10 F-17, severity confirmed minor. Traced: toggling is cleared in finally once the PUT resolves, before the re-query shows, so a second toggle B can start, and the re-query of A then clears the requested state of B while PUT B is in flight (visible revert). A third click then reverses what the screen shows, and the last re-query always follows the last PUT, so the stored and shown end state match what the user last saw and asked for. A transient flicker, not a REQ-TODO-005 or REQ-DATA-002 failure.",
+      "requirement": "REQ-TODO-005",
+      "location": "web/src/todos/TodoListPage.tsx:L181-L206",
+      "suggestion": "Reset dropRequestedOnShow at the start of toggle or tag requested with a toggle sequence number checked in show, with a tests-node case: a second click before the re-query keeps its requested state until its own re-query."
+    },
+    {
+      "id": "F-4",
+      "severity": "minor",
+      "message": "Carried N10 F-18. No attached run of pnpm -C web typecheck, lint or lint:contracts exists. The sdd.md 14 NFR-006 type-level check (Problem of identity.ts equals Problem of todos.ts, expectTypeOf) is proven only by tsc, because Vitest erases types and the Vite dev server used by the e2e runs does not type-check. The generated types are very likely equal (one source file), but the Proof claim at plan L82-L83 has no evidence.",
+      "requirement": "NFR-006",
+      "location": "docs/specs/CHG-0001/plan/N10-build-react.md:L82-L83",
+      "suggestion": "Run typecheck, lint, lint:contracts and both test suites in CI on the PR before merge and attach the output."
+    },
+    {
+      "id": "F-5",
+      "severity": "minor",
+      "message": "Commit messages break the semantic rule (type(scope): summary): 7c949e3, 78ab0c4, b28c58d and 97247fe are titled specs updated (human-authored; they edit frozen requirements.md and sdd.md between the freeze 8a2f087 and the re-freeze 2a0d38e, and 97247fe deletes todo-api-v1.yaml, restored by 07404ac); ac7b03e merge N09 implementation has no type; c435410 mixes docs and test in one message. The frozen files at HEAD are the ones the last freeze hashed (N12 spec integrity ok), so this is process hygiene, not a spec breach.",
+      "requirement": "REQ-ACC-001",
+      "location": "docs/specs/CHG-0001/sdd.md:L1-L14",
+      "suggestion": "Do not rewrite shared history; note it in the PR. Future spec edits go through a draft supersede with a semantic commit, one type per commit."
+    },
+    {
+      "id": "F-6",
+      "severity": "minor",
+      "message": "Many build-node commits carry no Harness-Node trailer, for example bf0c889, 9a8751f, 864156b, 10eb534, 0d04f79, 9a85cdc, f9f0e07, 33289ea, 10435e4, a16eb4f (N10) and 24c145c, b57fb3f, 008da32, c7adbc5 (N09). An untagged commit counts for every build node, so per-node attribution of the delta is weaker than the implementation-plan rule intends; the plan Departures do record each changed path.",
+      "requirement": "REQ-ACC-001",
+      "location": "docs/specs/CHG-0001/plan/N10-build-react.md:L86-L106",
+      "suggestion": "End every build-node commit, coder and QA alike, with a Harness-Node trailer naming the node in future changes."
+    },
+    {
+      "id": "F-7",
+      "severity": "minor",
+      "message": "A macOS Finder file is committed at docs/specs/CHG-0001/design/architecture/.DS_Store (in 806e33d, complete N05-design-arch), and the root .gitignore has no .DS_Store entry. It is not a design artefact and can leak local file names.",
+      "requirement": "NFR-004",
+      "location": "docs/specs/CHG-0001/design/architecture/.DS_Store:L1-L1",
+      "suggestion": "Remove the file and add .DS_Store to the root .gitignore, in this PR or in the NFR-002 follow-up change."
+    },
+    {
+      "id": "F-8",
+      "severity": "info",
+      "message": "PR items accepted by the requester (not blocking): (1) JDK 23.0.2 compiling with --release 21 instead of JDK 21 (sdd.md 11); (2) Spring Boot pinned at 4.1.2; (3) request-id logging key requestId (sdd.md 10 names no key); (4) Firefox e2e cannot launch on this macOS host, firefox projects kept in all three Playwright configs, follow-up run in CI on Linux; Chromium and WebKit pass main 104, restart 2, session-expiry 4 (r3); (5) test and test-support changes made under the build nodes by requester decision (Contracts.java q whitelist; todo-form.test.tsx fixture and F-3 assertion; list.test.tsx F-2 tests; renderApp.tsx onRecoverableError; e2e spec and config fixes; support/app.ts pressTab), each recorded in the plan Departures, routed through the tests node in future changes; (6) BouncyCastle bcprov-jdk18on 1.84 to 1.85, a security fix for SEC-1 and SEC-2, proven by backend r3 342/342 and the N11 round 2 scan.",
+      "requirement": "NFR-005",
+      "location": "docs/specs/CHG-0001/plan/N09-build-java.md:L94-L101",
+      "suggestion": "Copy this list into the PR body; run JDK 21 and Firefox in CI."
+    },
+    {
+      "id": "F-9",
+      "severity": "info",
+      "message": "NFR-002 AC-1 is deferred, not met: HEAD has no .env.example and README.md is the one-line stub, while sdd.md 11 and the sdd.md 14 NFR-002 review row require both. Deferred in writing by the requester to a separate change because no node in this plan can own repository-root files (a harness gap; N12 F-14, F-11). The frozen spec is unchanged, so the human PR approver (product owner) must accept this divergence explicitly.",
+      "requirement": "NFR-002",
+      "location": "docs/specs/CHG-0001/sdd.md:L603-L611",
+      "suggestion": "List it first in the PR body and open the follow-up change with the 3f66ef3 content plus N12 F-11 (export the variables, or add .env to .gitignore)."
+    },
+    {
+      "id": "F-10",
+      "severity": "info",
+      "message": "Other follow-ups carried at their recorded severity, none found more severe: N09 F-1, F-4 to F-9; N10 F-13 to F-16, F-19, F-20; N11 SEC-3 (verified: ProblemErrorController only writes a Problem and mutates nothing, a false positive), SEC-4 to SEC-6; N12 F-2 to F-14 (F-7: todo-api-v1.yaml q makes the validator reject an empty q, settle at the next re-freeze; F-3 and F-13 are harness tooling).",
+      "requirement": "NFR-004",
+      "location": "api/src/main/java/app/todo/common/ProblemErrorController.java:L26-L43",
+      "suggestion": "Track them in the PR follow-up list."
+    },
+    {
+      "id": "F-11",
+      "severity": "info",
+      "message": "The e2e r3 reports ran at a70f2c8, before 24c145c bumped bcprov-jdk18on to 1.85; git diff a70f2c8 HEAD -- web api shows only that pom line, and backend r3 (342/342) runs on 1.85. Risk is negligible, but no e2e run exists on the exact PR head.",
+      "requirement": "REQ-ACC-001",
+      "location": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.e2e-main-r3.xml:L1-L1",
+      "suggestion": "Re-run all three e2e configurations on the PR head in CI."
+    },
+    {
+      "id": "F-12",
+      "severity": "info",
+      "message": "Cross-module checks that passed, by reading: client.ts sends X-Todo-Client on every non-GET and Content-Type only with a body (L66-L77), matching ClientHeaderFilter and the contract; asProblem (L39-L56) needs a numeric status and an errors array, which ProblemWriter L19-L50 always writes; 401 routing (own401 for getSession and logIn) matches sdd.md 4.1; same-origin cookie (HttpOnly, SameSite Strict, Max-Age 8 h) through the Vite proxy; q trimmed on both sides with the shared White_Space set; page clamp reflected by URL replace (TodoListPage L111-L122); order of checks session, header, route, 415, body, validation, ownership (SecurityConfig L54-L60, TodoService L51-L71). Tests preceded code: N07 and N08 red commits before every feat commit; N10 round 2 9a85cdc before f9f0e07 and 33289ea. Evidence matches HEAD: web unchanged since a70f2c8, api since b57fb3f.",
+      "requirement": "REQ-AUTH-004",
+      "location": "web/src/api/client.ts:L39-L100",
+      "suggestion": "None."
+    }
+  ]
+}
