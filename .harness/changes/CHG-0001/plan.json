@@ -348,7 +348,7 @@
         "N09-build-java",
         "N10-build-react"
       ],
-      "status": "pending",
+      "status": "running",
       "kind": "agent",
       "agent": "validator",
       "description": "Map the PR delta to the frozen requirements (traceability).",
@@ -358,7 +358,13 @@
       "executor": "any",
       "isolation": "none",
       "attempts": 0,
-      "maxAttempts": 3
+      "maxAttempts": 3,
+      "claim": {
+        "runId": "run-mw9c978c",
+        "executor": "claude-code",
+        "leaseUntil": "2026-11-09T14:25:25.116Z",
+        "claimedAt": "2026-11-09T14:10:25.116Z"
+      }
     },
     {
       "id": "N13-pr-review",
