@@ -90,6 +90,13 @@ Make the java tests pass in an isolated worktree.
   AC-7), because the openapi-request-validator v3 reports an optional empty `q` as missing. This resolves the three
   failures listed above (342/342 green). In future changes this kind of test fix is expected to go through the tests
   node (the N07 equivalent), not the build node.
+- `api/src/main/java/app/todo/todo/TodoController.java` and `api/src/main/java/app/todo/auth/AuthController.java` (both
+  under the listed `api/src/main/java/app/todo/`): the five `@RequestBody` mappings get
+  `consumes = "application/json"` for N13 F-1 / N09 F-2 (415 for `application/*+json`, common-problem-v1.yaml
+  L18-L20), tests first by backend-qa in JsonSuffixMediaTypeTest (2f9fc45), by requester decision. Suite: 345 run,
+  0 failures.
+- `api/src/test/java/app/todo/common/JsonSuffixMediaTypeTest.java`: new test file, not under Files, written by
+  backend-qa under N09 (commit 2f9fc45) for the same finding, by requester decision.
 
 ## Accepted divergences (requester decisions)
 
