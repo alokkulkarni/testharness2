@@ -251,7 +251,7 @@
         "N07-tests-backend",
         "N08-tests-web"
       ],
-      "status": "pending",
+      "status": "running",
       "kind": "agent",
       "agent": "java-engineer",
       "description": "Make the java tests pass in an isolated worktree.",
@@ -261,7 +261,13 @@
       "executor": "any",
       "isolation": "worktree",
       "attempts": 0,
-      "maxAttempts": 3
+      "maxAttempts": 3,
+      "claim": {
+        "runId": "run-mw95u7hb",
+        "executor": "claude-code",
+        "leaseUntil": "2026-11-09T11:25:47.903Z",
+        "claimedAt": "2026-11-09T11:10:47.903Z"
+      }
     },
     {
       "id": "N10-build-react",
