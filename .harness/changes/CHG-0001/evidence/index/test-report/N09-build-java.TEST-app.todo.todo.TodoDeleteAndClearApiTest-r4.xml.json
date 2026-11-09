@@ -1,0 +1,5 @@
+{
+  "kind": "test-report",
+  "path": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoDeleteAndClearApiTest-r4.xml",
+  "replaces": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoDeleteAndClearApiTest-r3.xml"
+}

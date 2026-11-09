@@ -39,7 +39,7 @@ class TodoController {
         return todos.list(user.userId(), status, q, page);
     }
 
-    @PostMapping
+    @PostMapping(consumes = "application/json")
     ResponseEntity<Todo> create(@AuthenticationPrincipal CurrentUser user, @RequestBody Map<String, Object> request) {
         Todo created = todos.create(user.userId(), request);
         return ResponseEntity.status(HttpStatus.CREATED).location(URI.create("/api/v1/todos/" + created.id())).body(created);
@@ -55,7 +55,7 @@ class TodoController {
         return todos.get(user.userId(), todoId);
     }
 
-    @PutMapping("/{todoId}")
+    @PutMapping(value = "/{todoId}", consumes = "application/json")
     Todo update(@AuthenticationPrincipal CurrentUser user, @PathVariable String todoId,
             @RequestBody Map<String, Object> request) {
         return todos.update(user.userId(), todoId, request);
@@ -67,7 +67,7 @@ class TodoController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{todoId}/done")
+    @PutMapping(value = "/{todoId}/done", consumes = "application/json")
     Todo setDone(@AuthenticationPrincipal CurrentUser user, @PathVariable String todoId,
             @RequestBody Map<String, Object> request) {
         return todos.setDone(user.userId(), todoId, request);
