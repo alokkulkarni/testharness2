@@ -12,6 +12,7 @@ export function TodoRow({
   onDelete,
 }: {
   todo: Todo;
+  /** True while any row's toggle is in flight: every checkbox is aria-disabled, so a click that is ignored has a cue. */
   toggling: boolean;
   /** The state asked for by a toggle whose result the list has not shown yet; null when none. */
   requestedDone: boolean | null;
