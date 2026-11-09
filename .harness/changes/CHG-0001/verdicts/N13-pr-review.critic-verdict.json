@@ -1,0 +1,197 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N13-pr-review",
+  "gate": "critic-verdict",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "critic",
+      "agentRunId": "ab6076f24eba8aa2f"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "java-engineer",
+      "agentRunId": "a58b7d8aa3237ea97"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "java-engineer",
+      "agentRunId": "a816b3e8c71ca0774"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "java-engineer",
+      "agentRunId": "a8479dc53c8e6b18c"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "java-engineer",
+      "agentRunId": "a8a74c75b2a7a067a"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "a2d605e7a68e7bc95"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "a56446fc9d361e33a"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "a60fb623702586e08"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "a6809e24795576252"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "a767bd3f583698bab"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "a8a05244ebd80fb0a"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "a8d695bc2b72c5f94"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "ac775b8ae56e1e833"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "acfc9f0fb7584ab38"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "ad7ffb6c7e3e04e83"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "af4da2dcb663a79e9"
+    }
+  ],
+  "createdAt": "2026-11-09T15:42:42.750Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "reviewedCommit": "88ab4371daa4d57816979e97c81ef655e510db78",
+  "diffHash": "e4dad4b15ac95dfc98514ffda3ddac62e632fc05969d30805e4fcb48d02fb76c",
+  "summary": "round 2, delta since 4fce67df627e2f493e7ade2d7822f3e707e36cf9: F-1, F-4, F-11 fixed. F-1: d68c4de adds consumes application/json to the five body mappings only (signUp, logIn, createTodo, updateTodo, setDone); red JsonSuffixMediaTypeTest 2f9fc45 (15:11) precedes green d68c4de (15:15); its r4 report reads 3 run, 0 failures; full backend r4 suite 345/345 per the N09 critic r3 verdict (not summed by me). F-4: typecheck, eslint and redocly lint r4 outputs exit 0. F-11: e2e r4 main 104, restart 2, session-expiry 4 (chromium and webkit) all pass on 0615ba7, which includes the 839f408 fix merge. No frozen spec file changed in the delta; N09 plan Departures record both new paths. One new minor (F-13). Carried: 6 minor, 3 info. Pass with follow-ups.",
+  "findings": [
+    {
+      "id": "F-2",
+      "severity": "minor",
+      "message": "Carried N09 F-3, severity confirmed minor. sdd.md 10 asks for structured (JSON) per-request logs with request id, method, route template, status, duration and user id. Under the logstash format the line is JSON and requestId and userId are fields, but method, route, status and durationMs are text inside the message string. Operability only, no client-visible behaviour; a partial departure from sdd.md 10 to list in the PR.",
+      "requirement": "NFR-004",
+      "location": "api/src/main/java/app/todo/common/RequestIdFilter.java:L74-L86",
+      "suggestion": "Emit them as key-value pairs (SLF4J addKeyValue) or MDC entries in a follow-up; this also lets FilterExceptionTest select the line by status and retire the newRequestId loop (N09 F-1)."
+    },
+    {
+      "id": "F-3",
+      "severity": "minor",
+      "message": "Carried N10 F-17, severity confirmed minor. Traced: toggling is cleared in finally once the PUT resolves, before the re-query shows, so a second toggle B can start, and the re-query of A then clears the requested state of B while PUT B is in flight (visible revert). A third click then reverses what the screen shows, and the last re-query always follows the last PUT, so the stored and shown end state match what the user last saw and asked for. A transient flicker, not a REQ-TODO-005 or REQ-DATA-002 failure.",
+      "requirement": "REQ-TODO-005",
+      "location": "web/src/todos/TodoListPage.tsx:L181-L206",
+      "suggestion": "Reset dropRequestedOnShow at the start of toggle or tag requested with a toggle sequence number checked in show, with a tests-node case: a second click before the re-query keeps its requested state until its own re-query."
+    },
+    {
+      "id": "F-5",
+      "severity": "minor",
+      "message": "Commit messages break the semantic rule (type(scope): summary): 7c949e3, 78ab0c4, b28c58d and 97247fe are titled specs updated (human-authored; they edit frozen requirements.md and sdd.md between the freeze 8a2f087 and the re-freeze 2a0d38e, and 97247fe deletes todo-api-v1.yaml, restored by 07404ac); ac7b03e merge N09 implementation has no type; c435410 mixes docs and test in one message. The frozen files at HEAD are the ones the last freeze hashed (N12 spec integrity ok), so this is process hygiene, not a spec breach.",
+      "requirement": "REQ-ACC-001",
+      "location": "docs/specs/CHG-0001/sdd.md:L1-L14",
+      "suggestion": "Do not rewrite shared history; note it in the PR. Future spec edits go through a draft supersede with a semantic commit, one type per commit."
+    },
+    {
+      "id": "F-6",
+      "severity": "minor",
+      "message": "Many build-node commits carry no Harness-Node trailer, for example bf0c889, 9a8751f, 864156b, 10eb534, 0d04f79, 9a85cdc, f9f0e07, 33289ea, 10435e4, a16eb4f (N10) and 24c145c, b57fb3f, 008da32, c7adbc5 (N09). An untagged commit counts for every build node, so per-node attribution of the delta is weaker than the implementation-plan rule intends; the plan Departures do record each changed path.",
+      "requirement": "REQ-ACC-001",
+      "location": "docs/specs/CHG-0001/plan/N10-build-react.md:L86-L106",
+      "suggestion": "End every build-node commit, coder and QA alike, with a Harness-Node trailer naming the node in future changes."
+    },
+    {
+      "id": "F-7",
+      "severity": "minor",
+      "message": "A macOS Finder file is committed at docs/specs/CHG-0001/design/architecture/.DS_Store (in 806e33d, complete N05-design-arch), and the root .gitignore has no .DS_Store entry. It is not a design artefact and can leak local file names.",
+      "requirement": "NFR-004",
+      "location": "docs/specs/CHG-0001/design/architecture/.DS_Store:L1-L1",
+      "suggestion": "Remove the file and add .DS_Store to the root .gitignore, in this PR or in the NFR-002 follow-up change."
+    },
+    {
+      "id": "F-8",
+      "severity": "info",
+      "message": "PR items accepted by the requester (not blocking): (1) JDK 23.0.2 compiling with --release 21 instead of JDK 21 (sdd.md 11); (2) Spring Boot pinned at 4.1.2; (3) request-id logging key requestId (sdd.md 10 names no key); (4) Firefox e2e cannot launch on this macOS host, firefox projects kept in all three Playwright configs, follow-up run in CI on Linux; Chromium and WebKit pass main 104, restart 2, session-expiry 4 (r3); (5) test and test-support changes made under the build nodes by requester decision (Contracts.java q whitelist; todo-form.test.tsx fixture and F-3 assertion; list.test.tsx F-2 tests; renderApp.tsx onRecoverableError; e2e spec and config fixes; support/app.ts pressTab), each recorded in the plan Departures, routed through the tests node in future changes; (6) BouncyCastle bcprov-jdk18on 1.84 to 1.85, a security fix for SEC-1 and SEC-2, proven by backend r3 342/342 and the N11 round 2 scan.",
+      "requirement": "NFR-005",
+      "location": "docs/specs/CHG-0001/plan/N09-build-java.md:L94-L101",
+      "suggestion": "Copy this list into the PR body; run JDK 21 and Firefox in CI."
+    },
+    {
+      "id": "F-9",
+      "severity": "info",
+      "message": "NFR-002 AC-1 is deferred, not met: HEAD has no .env.example and README.md is the one-line stub, while sdd.md 11 and the sdd.md 14 NFR-002 review row require both. Deferred in writing by the requester to a separate change because no node in this plan can own repository-root files (a harness gap; N12 F-14, F-11). The frozen spec is unchanged, so the human PR approver (product owner) must accept this divergence explicitly.",
+      "requirement": "NFR-002",
+      "location": "docs/specs/CHG-0001/sdd.md:L603-L611",
+      "suggestion": "List it first in the PR body and open the follow-up change with the 3f66ef3 content plus N12 F-11 (export the variables, or add .env to .gitignore)."
+    },
+    {
+      "id": "F-10",
+      "severity": "info",
+      "message": "Other follow-ups carried at their recorded severity, none found more severe: N09 F-1, F-4 to F-9; N10 F-13 to F-16, F-19, F-20; N11 SEC-3 (verified: ProblemErrorController only writes a Problem and mutates nothing, a false positive), SEC-4 to SEC-6; N12 F-2 to F-14 (F-7: todo-api-v1.yaml q makes the validator reject an empty q, settle at the next re-freeze; F-3 and F-13 are harness tooling).",
+      "requirement": "NFR-004",
+      "location": "api/src/main/java/app/todo/common/ProblemErrorController.java:L26-L43",
+      "suggestion": "Track them in the PR follow-up list."
+    },
+    {
+      "id": "F-12",
+      "severity": "info",
+      "message": "Cross-module checks that passed, by reading: client.ts sends X-Todo-Client on every non-GET and Content-Type only with a body (L66-L77), matching ClientHeaderFilter and the contract; asProblem (L39-L56) needs a numeric status and an errors array, which ProblemWriter L19-L50 always writes; 401 routing (own401 for getSession and logIn) matches sdd.md 4.1; same-origin cookie (HttpOnly, SameSite Strict, Max-Age 8 h) through the Vite proxy; q trimmed on both sides with the shared White_Space set; page clamp reflected by URL replace (TodoListPage L111-L122); order of checks session, header, route, 415, body, validation, ownership (SecurityConfig L54-L60, TodoService L51-L71). Tests preceded code: N07 and N08 red commits before every feat commit; N10 round 2 9a85cdc before f9f0e07 and 33289ea. Evidence matches HEAD: web unchanged since a70f2c8, api since b57fb3f.",
+      "requirement": "REQ-AUTH-004",
+      "location": "web/src/api/client.ts:L39-L100",
+      "suggestion": "None."
+    },
+    {
+      "id": "F-13",
+      "severity": "minor",
+      "message": "JsonSuffixMediaTypeTest pins 415 for application/merge-patch+json and application/vnd.x+json only on createTodo and signUp; logIn, updateTodo and setDone received the same consumes change in d68c4de but no +json case, so a later revert of one of those three annotations would go unnoticed. Minor because the fix is one identical annotation per mapping, read on all five, and the round-1 suggestion asked for exactly these two operations.",
+      "requirement": "NFR-004",
+      "location": "api/src/test/java/app/todo/common/JsonSuffixMediaTypeTest.java:L18-L48",
+      "suggestion": "Through the tests node in a follow-up, extend the SUFFIX_JSON_TYPES loop to logIn, updateTodo and setDone, asserting 415 UNSUPPORTED_MEDIA_TYPE and no stored change."
+    }
+  ]
+}
