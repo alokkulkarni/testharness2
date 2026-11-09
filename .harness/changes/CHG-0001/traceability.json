@@ -1,0 +1,2509 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "base": "9dfd67568122aa003e08ac25297fd066a08e78e2",
+  "head": "1f53eb8297bc6ab06acd4d4fe9c48c3cf5250824",
+  "requirements": [
+    {
+      "id": "REQ-AUTH-001",
+      "inScope": true,
+      "acceptanceCriteria": [
+        {
+          "id": "REQ-AUTH-001/AC-1",
+          "tests": [
+            "api/src/test/java/app/todo/auth/SignUpApiTest.java::REQ-AUTH-001 AC-1 a valid identifier and password create an account and do not start a session",
+            "api/src/test/java/app/todo/auth/SignUpApiTest.java::REQ-AUTH-001 AC-1 the new account can log in with the same identifier and password",
+            "web/e2e/auth.spec.ts::REQ-AUTH-001 AC-1 AC-4 a fresh browser opens /signup directly, signs up with no verification step, then logs in",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-001 AC-1 a signed-out visitor opening /signup sees the form with no message and no redirect",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-001 AC-1 AC-4 a valid sign-up sends the trimmed identifier with X-Todo-Client, then shows the log-in page with an account-created message and no automatic login"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/auth/AuthService.java:L1-L114",
+            "web/src/api/identity.ts:L1-L392",
+            "web/src/auth/SignupPage.tsx:L1-L112"
+          ],
+          "results": {
+            "web/tests/component/auth.test.tsx::REQ-AUTH-001 AC-1 a signed-out visitor opening /signup sees the form with no message and no redirect": "pass",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-001 AC-1 AC-4 a valid sign-up sends the trimmed identifier with X-Todo-Client, then shows the log-in page with an account-created message and no automatic login": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-AUTH-001/AC-2",
+          "tests": [
+            "api/src/test/java/app/todo/auth/SignUpApiTest.java::REQ-AUTH-001 AC-2 a taken identifier is refused as taken and no second account is created",
+            "web/e2e/auth.spec.ts::REQ-AUTH-001 AC-2 AC-6 signing up again with another letter case of a taken identifier is refused",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-001 AC-2 AC-6 a taken identifier shows the server message beside the field and keeps the password"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/auth/IdentifierTakenException.java:L1-L16",
+            "web/src/api/identity.ts:L1-L392",
+            "web/src/auth/SignupPage.tsx:L1-L112"
+          ],
+          "results": {
+            "web/tests/component/auth.test.tsx::REQ-AUTH-001 AC-2 AC-6 a taken identifier shows the server message beside the field and keeps the password": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-AUTH-001/AC-3",
+          "tests": [
+            "api/src/test/java/app/todo/auth/SignUpApiTest.java::REQ-AUTH-001 AC-3 an empty identifier is refused with a field-level message and no account is created",
+            "api/src/test/java/app/todo/auth/SignUpApiTest.java::REQ-AUTH-001 AC-3 an empty password is refused with a field-level message and no account is created",
+            "api/src/test/java/app/todo/auth/SignUpApiTest.java::REQ-AUTH-001 AC-3 an empty identifier and an empty password are both reported together",
+            "api/src/test/java/app/todo/auth/SignUpApiTest.java::REQ-AUTH-001 AC-3 an absent identifier or password is refused naming the field",
+            "api/src/test/java/app/todo/auth/SignUpApiTest.java::REQ-AUTH-001 AC-3 an identifier of only whitespace is refused",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-001 AC-3 empty identifier and password are refused with field messages and nothing is sent"
+          ],
+          "code": [
+            "web/src/api/identity.ts:L1-L392",
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/auth/SignupPage.tsx:L1-L112"
+          ],
+          "results": {
+            "web/tests/component/auth.test.tsx::REQ-AUTH-001 AC-3 empty identifier and password are refused with field messages and nothing is sent": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-AUTH-001/AC-4",
+          "tests": [
+            "api/src/test/java/app/todo/auth/SignUpApiTest.java::REQ-AUTH-001 AC-4 no verification step: the account is usable straight after sign-up",
+            "web/e2e/auth.spec.ts::REQ-AUTH-001 AC-1 AC-4 a fresh browser opens /signup directly, signs up with no verification step, then logs in",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-001 AC-1 AC-4 a valid sign-up sends the trimmed identifier with X-Todo-Client, then shows the log-in page with an account-created message and no automatic login"
+          ],
+          "code": [
+            "web/src/api/identity.ts:L1-L392",
+            "web/src/auth/SignupPage.tsx:L1-L112"
+          ],
+          "results": {
+            "web/tests/component/auth.test.tsx::REQ-AUTH-001 AC-1 AC-4 a valid sign-up sends the trimmed identifier with X-Todo-Client, then shows the log-in page with an account-created message and no automatic login": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-AUTH-001/AC-5",
+          "tests": [
+            "api/src/test/java/app/todo/auth/SignUpApiTest.java::REQ-AUTH-001 AC-5 a password of fewer than 8 characters is refused"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/auth/PasswordRules.java:L1-L32",
+            "web/src/api/identity.ts:L1-L392",
+            "web/src/auth/SignupPage.tsx:L1-L112"
+          ],
+          "status": "covered"
+        },
+        {
+          "id": "REQ-AUTH-001/AC-6",
+          "tests": [
+            "api/src/test/java/app/todo/auth/SignUpApiTest.java::REQ-AUTH-001 AC-6 an identifier that differs only in letter case is a duplicate",
+            "api/src/test/java/app/todo/auth/SignUpApiTest.java::REQ-AUTH-001 AC-6 a username that differs only in letter case is a duplicate",
+            "api/src/test/java/app/todo/auth/SignUpApiTest.java::REQ-AUTH-001 AC-6 two concurrent sign-ups with one identifier create exactly one account",
+            "web/e2e/auth.spec.ts::REQ-AUTH-001 AC-2 AC-6 signing up again with another letter case of a taken identifier is refused",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-001 AC-2 AC-6 a taken identifier shows the server message beside the field and keeps the password"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/auth/IdentifierTakenException.java:L1-L16",
+            "web/src/api/identity.ts:L1-L392",
+            "web/src/auth/SignupPage.tsx:L1-L112"
+          ],
+          "results": {
+            "web/tests/component/auth.test.tsx::REQ-AUTH-001 AC-2 AC-6 a taken identifier shows the server message beside the field and keeps the password": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-AUTH-001/AC-7",
+          "tests": [
+            "api/src/test/java/app/todo/auth/SignUpApiTest.java::REQ-AUTH-001 AC-7 the one identifier field accepts an email address and a username",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-001 AC-7 the form has one identifier field for an email address or a username"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/auth/IdentifierRules.java:L1-L87",
+            "web/src/api/identity.ts:L1-L392",
+            "web/src/auth/SignupPage.tsx:L1-L112"
+          ],
+          "results": {
+            "web/tests/component/auth.test.tsx::REQ-AUTH-001 AC-7 the form has one identifier field for an email address or a username": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-AUTH-001/AC-8",
+          "tests": [
+            "api/src/test/java/app/todo/auth/SignUpApiTest.java::REQ-AUTH-001 AC-8 an identifier shorter than 3 characters after trimming is refused",
+            "api/src/test/java/app/todo/auth/SignUpApiTest.java::REQ-AUTH-001 AC-8 an identifier of exactly 3 characters is accepted",
+            "api/src/test/java/app/todo/auth/SignUpApiTest.java::REQ-AUTH-001 AC-8 an identifier of 254 characters is accepted and 255 is refused",
+            "api/src/test/java/app/todo/auth/SignUpApiTest.java::REQ-AUTH-001 AC-8 leading and trailing whitespace (including U+00A0 and U+3000) is removed before saving",
+            "api/src/test/java/app/todo/auth/SignUpApiTest.java::REQ-AUTH-001 AC-8 the 3 character minimum applies to the trimmed identifier",
+            "web/tests/unit/whitespace.test.ts::REQ-AUTH-001 AC-8 an identifier padded with U+00A0 and U+3000 is trimmed"
+          ],
+          "code": [
+            "web/src/api/identity.ts:L1-L392",
+            "web/src/auth/SignupPage.tsx:L1-L112"
+          ],
+          "results": {
+            "web/tests/unit/whitespace.test.ts::REQ-AUTH-001 AC-8 an identifier padded with U+00A0 and U+3000 is trimmed": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-AUTH-001/AC-9",
+          "tests": [
+            "api/src/test/java/app/todo/auth/SignUpApiTest.java::REQ-AUTH-001 AC-9 an identifier with @ that is not a valid email address is refused",
+            "api/src/test/java/app/todo/auth/SignUpApiTest.java::REQ-AUTH-001 AC-9 valid email addresses are accepted: special local-part characters, 64-character local part, hyphenated labels"
+          ],
+          "code": [
+            "web/src/api/identity.ts:L1-L392",
+            "web/src/auth/SignupPage.tsx:L1-L112"
+          ],
+          "status": "covered"
+        },
+        {
+          "id": "REQ-AUTH-001/AC-10",
+          "tests": [
+            "api/src/test/java/app/todo/auth/SignUpApiTest.java::REQ-AUTH-001 AC-10 an identifier without @ with a character outside A-Z a-z 0-9 . _ - is refused",
+            "api/src/test/java/app/todo/auth/SignUpApiTest.java::REQ-AUTH-001 AC-10 a username of letters, digits, dot, underscore and hyphen is accepted"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/auth/IdentifierRules.java:L1-L87",
+            "web/src/api/identity.ts:L1-L392",
+            "web/src/auth/SignupPage.tsx:L1-L112"
+          ],
+          "status": "covered"
+        },
+        {
+          "id": "REQ-AUTH-001/AC-11",
+          "tests": [
+            "api/src/test/java/app/todo/auth/SignUpApiTest.java::REQ-AUTH-001 AC-11 a password of 8 up to and including 128 characters is accepted",
+            "api/src/test/java/app/todo/auth/SignUpApiTest.java::REQ-AUTH-001 AC-11 a password of 129 characters is refused",
+            "api/src/test/java/app/todo/auth/SignUpApiTest.java::REQ-AUTH-001 AC-11 password length counts code points: 128 emoji accepted, 129 refused, 7 refused",
+            "api/src/test/java/app/todo/auth/SignUpApiTest.java::REQ-AUTH-001 AC-11 the password is not trimmed: 7 characters and a space count as 8"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/auth/PasswordRules.java:L1-L32",
+            "web/src/api/identity.ts:L1-L392",
+            "web/src/auth/SignupPage.tsx:L1-L112"
+          ],
+          "status": "covered"
+        }
+      ]
+    },
+    {
+      "id": "REQ-AUTH-002",
+      "inScope": true,
+      "acceptanceCriteria": [
+        {
+          "id": "REQ-AUTH-002/AC-1",
+          "tests": [
+            "api/src/test/java/app/todo/auth/LoginSessionApiTest.java::REQ-AUTH-002 AC-1 correct identifier and password sign the user in and return the session",
+            "api/src/test/java/app/todo/auth/LoginSessionApiTest.java::REQ-AUTH-002 AC-1 after login the user sees their own (empty) to-do list",
+            "api/src/test/java/app/todo/auth/LoginSessionApiTest.java::REQ-AUTH-002 AC-1 each login creates its own session; two sessions of one user are independent",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-002 AC-1 correct identifier and password sign the user in and show their own list",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-002 AC-1 a typed /login shows no session message"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/auth/AuthService.java:L1-L114",
+            "web/src/api/identity.ts:L1-L392",
+            "web/src/auth/LoginPage.tsx:L1-L127"
+          ],
+          "results": {
+            "web/tests/component/auth.test.tsx::REQ-AUTH-002 AC-1 correct identifier and password sign the user in and show their own list": "pass",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-002 AC-1 a typed /login shows no session message": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-AUTH-002/AC-2",
+          "tests": [
+            "api/src/test/java/app/todo/auth/LoginSessionApiTest.java::REQ-AUTH-002 AC-2 a wrong password is refused with INVALID_CREDENTIALS and no session is created",
+            "api/src/test/java/app/todo/auth/LoginSessionApiTest.java::REQ-AUTH-002 AC-2 an empty identifier or an empty password is refused with a field error",
+            "web/e2e/auth.spec.ts::REQ-AUTH-002 AC-2 AC-3 NFR-006 AC-4 a wrong password and an unknown identifier show the same message",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-002 AC-2 AC-3 NFR-006 AC-4 a wrong password and an unknown identifier show the same generic alert, never the response text",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-002 AC-2 an empty identifier and password are refused with their messages and nothing is sent"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/auth/AuthService.java:L1-L114",
+            "api/src/main/java/app/todo/auth/InvalidCredentialsException.java:L1-L13",
+            "web/src/api/identity.ts:L1-L392",
+            "web/src/auth/LoginPage.tsx:L1-L127"
+          ],
+          "results": {
+            "web/tests/component/auth.test.tsx::REQ-AUTH-002 AC-2 AC-3 NFR-006 AC-4 a wrong password and an unknown identifier show the same generic alert, never the response text": "pass",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-002 AC-2 an empty identifier and password are refused with their messages and nothing is sent": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-AUTH-002/AC-3",
+          "tests": [
+            "api/src/test/java/app/todo/auth/LoginSessionApiTest.java::REQ-AUTH-002 AC-3 an unknown identifier, a wrong password and a password over 128 characters give byte-identical 401 responses",
+            "api/src/test/java/app/todo/auth/LoginSessionApiTest.java::REQ-AUTH-002 AC-3 no format rule applies at login: a malformed identifier is just an unknown identifier (401)",
+            "web/e2e/auth.spec.ts::REQ-AUTH-002 AC-2 AC-3 NFR-006 AC-4 a wrong password and an unknown identifier show the same message",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-002 AC-2 AC-3 NFR-006 AC-4 a wrong password and an unknown identifier show the same generic alert, never the response text"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/auth/AuthService.java:L1-L114",
+            "api/src/main/java/app/todo/auth/InvalidCredentialsException.java:L1-L13",
+            "web/src/api/identity.ts:L1-L392",
+            "web/src/auth/LoginPage.tsx:L1-L127"
+          ],
+          "results": {
+            "web/tests/component/auth.test.tsx::REQ-AUTH-002 AC-2 AC-3 NFR-006 AC-4 a wrong password and an unknown identifier show the same generic alert, never the response text": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-AUTH-002/AC-4",
+          "tests": [
+            "api/src/test/java/app/todo/auth/LoginSessionApiTest.java::REQ-AUTH-002 AC-4 the session cookie is HttpOnly, SameSite=Strict, Path=/, Max-Age=28800 and not Secure locally",
+            "api/src/test/java/app/todo/auth/LoginSessionApiTest.java::REQ-AUTH-002 AC-4 the session lasts 8 hours from login: expiresAt = login time + 8 h",
+            "api/src/test/java/app/todo/auth/LoginSessionApiTest.java::REQ-AUTH-002 AC-4 getSession returns the identifier as stored at sign-up and the expiresAt set at login",
+            "api/src/test/java/app/todo/auth/LoginSessionApiTest.java::REQ-AUTH-002 AC-4 reloading keeps the user signed in: the cookie keeps working for 8 hours, activity does not extend it",
+            "web/e2e/auth.spec.ts::REQ-AUTH-002 AC-4 reloading the page keeps the user signed in",
+            "web/e2e/session-expiry.spec.ts::REQ-AUTH-004 AC-4 REQ-AUTH-002 AC-4 after the 8-hour session ends, the next request sends the user to log in with the session-ended message",
+            "web/e2e/session-expiry.spec.ts::REQ-AUTH-002 AC-4 a session that has not reached 8 hours is still valid",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-002 AC-4 a signed-in visitor opening /signup is sent to /todos",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-002 AC-4 a reload on /todos renders nothing until the probe resolves and does not redirect"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/auth/AuthService.java:L1-L114",
+            "web/src/api/identity.ts:L1-L392",
+            "web/src/auth/LoginPage.tsx:L1-L127"
+          ],
+          "results": {
+            "web/tests/component/auth.test.tsx::REQ-AUTH-002 AC-4 a signed-in visitor opening /signup is sent to /todos": "pass",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-002 AC-4 a reload on /todos renders nothing until the probe resolves and does not redirect": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-AUTH-002/AC-5",
+          "tests": [
+            "api/src/test/java/app/todo/auth/LoginSessionApiTest.java::REQ-AUTH-002 AC-5 login works with a different letter case of the identifier",
+            "api/src/test/java/app/todo/auth/LoginSessionApiTest.java::REQ-AUTH-002 AC-5 the login identifier is trimmed like at sign-up, including U+00A0 padding",
+            "web/e2e/auth.spec.ts::REQ-AUTH-002 AC-5 logging in with a different letter case of the identifier works",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-002 AC-5 a different letter case and padding of the identifier still logs in"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/auth/AuthService.java:L1-L114",
+            "web/src/api/identity.ts:L1-L392",
+            "web/src/auth/LoginPage.tsx:L1-L127"
+          ],
+          "results": {
+            "web/tests/component/auth.test.tsx::REQ-AUTH-002 AC-5 a different letter case and padding of the identifier still logs in": "pass"
+          },
+          "status": "covered"
+        }
+      ]
+    },
+    {
+      "id": "REQ-AUTH-003",
+      "inScope": true,
+      "acceptanceCriteria": [
+        {
+          "id": "REQ-AUTH-003/AC-1",
+          "tests": [
+            "api/src/test/java/app/todo/auth/PasswordStorageTest.java::REQ-AUTH-003 AC-1 the database holds a salted Argon2id hash and no plaintext password",
+            "api/src/test/java/app/todo/auth/PasswordStorageTest.java::REQ-AUTH-003 AC-1 the whole password counts: 100-character passwords differing only after byte 72 do not cross-verify",
+            "api/src/test/java/app/todo/auth/PasswordStorageTest.java::REQ-AUTH-003 AC-1 the session table holds a SHA-256 of the token, never the token itself"
+          ],
+          "code": [
+            "api/src/test/java/app/todo/testsupport/Db.java:L1-L71",
+            "web/src/api/identity.ts:L1-L392",
+            "web/tests/README.md:L1-L46"
+          ],
+          "status": "covered"
+        },
+        {
+          "id": "REQ-AUTH-003/AC-2",
+          "tests": [
+            "api/src/test/java/app/todo/auth/PasswordStorageTest.java::REQ-AUTH-003 AC-2 two accounts with the same password have different hashes (unique salt)"
+          ],
+          "code": [
+            "api/src/test/java/app/todo/testsupport/Db.java:L1-L71",
+            "web/src/api/identity.ts:L1-L392",
+            "web/tests/README.md:L1-L46"
+          ],
+          "status": "covered"
+        },
+        {
+          "id": "REQ-AUTH-003/AC-3",
+          "tests": [
+            "api/src/test/java/app/todo/auth/PasswordStorageTest.java::REQ-AUTH-003 AC-3 no API response or log line contains a password, a password hash or the session token"
+          ],
+          "code": [
+            "api/src/test/java/app/todo/testsupport/Db.java:L1-L71",
+            "web/src/api/identity.ts:L1-L392",
+            "web/src/api/todos.ts:L1-L586",
+            "web/tests/README.md:L1-L46"
+          ],
+          "status": "covered"
+        }
+      ]
+    },
+    {
+      "id": "REQ-AUTH-004",
+      "inScope": true,
+      "acceptanceCriteria": [
+        {
+          "id": "REQ-AUTH-004/AC-1",
+          "tests": [
+            "api/src/test/java/app/todo/auth/AuthenticationRequiredApiTest.java::REQ-AUTH-004 AC-1 without a session every to-do operation is refused as unauthenticated",
+            "api/src/test/java/app/todo/auth/AuthenticationRequiredApiTest.java::REQ-AUTH-004 AC-1 with an expired session every to-do operation is refused as unauthenticated",
+            "api/src/test/java/app/todo/auth/AuthenticationRequiredApiTest.java::REQ-AUTH-004 AC-1 with a logged-out session every to-do operation is refused as unauthenticated",
+            "api/src/test/java/app/todo/auth/AuthenticationRequiredApiTest.java::REQ-AUTH-004 AC-1 an unknown or garbage session cookie is unauthenticated",
+            "api/src/test/java/app/todo/auth/AuthenticationRequiredApiTest.java::REQ-AUTH-004 AC-1 the unauthenticated body is the same in every case (none, expired, logged out)",
+            "api/src/test/java/app/todo/auth/AuthenticationRequiredApiTest.java::REQ-AUTH-004 AC-1 the session is checked first: no session gives 401 before the client header (403) and before the body (400)",
+            "api/src/test/java/app/todo/auth/LoginSessionApiTest.java::REQ-AUTH-004 AC-1 getSession without a session is unauthenticated",
+            "web/e2e/auth.spec.ts::REQ-AUTH-004 AC-1 to-do API calls without a session are refused as unauthenticated"
+          ],
+          "code": [
+            "web/src/api/identity.ts:L1-L392",
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/app/AppShell.tsx:L1-L74",
+            "web/tests/README.md:L1-L46"
+          ],
+          "status": "covered"
+        },
+        {
+          "id": "REQ-AUTH-004/AC-2",
+          "tests": [
+            "web/e2e/auth.spec.ts::REQ-AUTH-004 AC-2 a fresh browser opening /todos lands on log in with no message, logs in and returns to /todos",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-004 AC-2 a signed-out visitor on a to-do route is sent to log in with no message and returns there after logging in",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-004 AC-2 a returnTo that is not an app route is not followed after login"
+          ],
+          "code": [
+            "web/src/api/identity.ts:L1-L392",
+            "web/src/app/AppShell.tsx:L1-L74",
+            "web/tests/README.md:L1-L46"
+          ],
+          "results": {
+            "web/tests/component/auth.test.tsx::REQ-AUTH-004 AC-2 a signed-out visitor on a to-do route is sent to log in with no message and returns there after logging in": "pass",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-004 AC-2 a returnTo that is not an app route is not followed after login": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-AUTH-004/AC-3",
+          "tests": [
+            "api/src/test/java/app/todo/auth/LoginSessionApiTest.java::REQ-AUTH-004 AC-3 logout ends the session: 204, cookie cleared, later calls with that session are unauthenticated",
+            "api/src/test/java/app/todo/auth/LoginSessionApiTest.java::REQ-AUTH-004 AC-3 logout is 204 also when there is no session or it already ended",
+            "web/e2e/auth.spec.ts::REQ-AUTH-004 AC-3 logging out ends the session; going back to a to-do page asks to log in again",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-004 AC-3 Log out ends the session, goes to /login with no message and a to-do page then asks to log in"
+          ],
+          "code": [
+            "web/src/api/identity.ts:L1-L392",
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/app/AppShell.tsx:L1-L74",
+            "web/tests/README.md:L1-L46"
+          ],
+          "results": {
+            "web/tests/component/auth.test.tsx::REQ-AUTH-004 AC-3 Log out ends the session, goes to /login with no message and a to-do page then asks to log in": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-AUTH-004/AC-4",
+          "tests": [
+            "api/src/test/java/app/todo/auth/LoginSessionApiTest.java::REQ-AUTH-004 AC-4 an expired session is refused on a to-do call as unauthenticated and its row is removed",
+            "api/src/test/java/app/todo/config/ModuleWiringTest.java::REQ-AUTH-004 AC-4 in the default profile the Clock bean is the system UTC clock and no test clock bean exists (ADR-0013)",
+            "api/src/test/java/app/todo/config/ModuleWiringTest.java::REQ-AUTH-004 AC-4 the normal run has no way to move the clock: no clock-offset property is read by default",
+            "web/e2e/session-expiry.spec.ts::REQ-AUTH-004 AC-4 REQ-AUTH-002 AC-4 after the 8-hour session ends, the next request sends the user to log in with the session-ended message",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-004 AC-4 a 401 on a request while signed in goes to log in with the session-ended message",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-004 AC-4 a 401 from log in is invalid credentials and never the session-ended message",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-004 AC-4 a reload after expiry (no cookie) on a to-do route goes to log in with no message"
+          ],
+          "code": [
+            "web/src/api/identity.ts:L1-L392",
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/app/AppShell.tsx:L1-L74",
+            "web/tests/README.md:L1-L46"
+          ],
+          "results": {
+            "web/tests/component/auth.test.tsx::REQ-AUTH-004 AC-4 a 401 on a request while signed in goes to log in with the session-ended message": "pass",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-004 AC-4 a 401 from log in is invalid credentials and never the session-ended message": "pass",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-004 AC-4 a reload after expiry (no cookie) on a to-do route goes to log in with no message": "pass"
+          },
+          "status": "covered"
+        }
+      ]
+    },
+    {
+      "id": "REQ-AUTH-005",
+      "inScope": true,
+      "acceptanceCriteria": [
+        {
+          "id": "REQ-AUTH-005/AC-1",
+          "tests": [
+            "api/src/test/java/app/todo/config/EndpointInventoryTest.java::REQ-AUTH-005 AC-1 the contract has no user-listing or cross-user operation",
+            "api/src/test/java/app/todo/todo/TodoIsolationApiTest.java::REQ-AUTH-005 AC-1 there is no operation that lists users or reads across users"
+          ],
+          "code": [
+            "web/tests/README.md:L1-L46"
+          ],
+          "status": "covered"
+        },
+        {
+          "id": "REQ-AUTH-005/AC-2",
+          "tests": [
+            "api/src/test/java/app/todo/auth/PasswordStorageTest.java::REQ-AUTH-005 AC-2 every account has the same single role: the users table has no role or permission column",
+            "api/src/test/java/app/todo/auth/PasswordStorageTest.java::REQ-AUTH-005 AC-2 two new accounts get identical responses on every operation"
+          ],
+          "code": [
+            "web/tests/README.md:L1-L46"
+          ],
+          "status": "covered"
+        }
+      ]
+    },
+    {
+      "id": "REQ-ISO-001",
+      "inScope": true,
+      "acceptanceCriteria": [
+        {
+          "id": "REQ-ISO-001/AC-1",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoIsolationApiTest.java::REQ-ISO-001 AC-1 listing with any filter, search or page returns only my to-dos, never another user's",
+            "api/src/test/java/app/todo/todo/TodoIsolationApiTest.java::REQ-ISO-001 AC-1 the owner comes only from the session: a body naming another owner is refused and creates nothing",
+            "web/e2e/acceptance.spec.ts::REQ-ACC-001 AC-2 REQ-ISO-001 AC-1 AC-2 AC-4 a second user cannot see or change the first user's to-dos by list, search or direct URL"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/todo/TodoController.java:L1-L77",
+            "web/src/api/todos.ts:L1-L586",
+            "web/tests/README.md:L1-L46"
+          ],
+          "status": "covered"
+        },
+        {
+          "id": "REQ-ISO-001/AC-2",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoIsolationApiTest.java::REQ-ISO-001 AC-2 reading, editing, toggling or deleting another user's to-do is not found, identical to a missing and a malformed id",
+            "web/e2e/acceptance.spec.ts::REQ-ACC-001 AC-2 REQ-ISO-001 AC-1 AC-2 AC-4 a second user cannot see or change the first user's to-dos by list, search or direct URL"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/common/NotFoundException.java:L1-L11",
+            "api/src/main/java/app/todo/todo/TodoController.java:L1-L77",
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/TodoDetailPage.tsx:L1-L168",
+            "web/tests/README.md:L1-L46"
+          ],
+          "status": "covered"
+        },
+        {
+          "id": "REQ-ISO-001/AC-3",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoIsolationApiTest.java::REQ-ISO-001 AC-3 clear all completed deletes only the caller's completed to-dos"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/todo/TodoController.java:L1-L77",
+            "web/src/api/todos.ts:L1-L586",
+            "web/tests/README.md:L1-L46"
+          ],
+          "status": "covered"
+        },
+        {
+          "id": "REQ-ISO-001/AC-4",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoIsolationApiTest.java::REQ-ISO-001 AC-4 a search for a term that only appears in another user's to-dos finds nothing and reveals nothing",
+            "web/e2e/acceptance.spec.ts::REQ-ACC-001 AC-2 REQ-ISO-001 AC-1 AC-2 AC-4 a second user cannot see or change the first user's to-dos by list, search or direct URL"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/todo/TodoController.java:L1-L77",
+            "web/src/api/todos.ts:L1-L586",
+            "web/tests/README.md:L1-L46"
+          ],
+          "status": "covered"
+        }
+      ]
+    },
+    {
+      "id": "REQ-TODO-001",
+      "inScope": true,
+      "acceptanceCriteria": [
+        {
+          "id": "REQ-TODO-001/AC-1",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoCreateApiTest.java::REQ-TODO-001 AC-1 a valid title, due date and priority create a not-done to-do with equal created and updated timestamps",
+            "api/src/test/java/app/todo/todo/TodoCreateApiTest.java::REQ-TODO-001 AC-1 the new to-do appears at the top of my list, newest first",
+            "api/src/test/java/app/todo/todo/TodoCreateApiTest.java::REQ-TODO-001 AC-1 the totals count the caller's active and completed to-dos",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-001 AC-1 AC-2 a valid to-do is created with the client header and the default priority Medium, then the list shows it first"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/TodoFormPage.tsx:L1-L225"
+          ],
+          "results": {
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-001 AC-1 AC-2 a valid to-do is created with the client header and the default priority Medium, then the list shows it first": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-TODO-001/AC-2",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoCreateApiTest.java::REQ-TODO-001 AC-2 a create request that omits the priority stores Medium",
+            "api/src/test/java/app/todo/todo/TodoCreateApiTest.java::REQ-TODO-001 AC-2 a create request with a null priority stores Medium",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-001 AC-1 AC-2 a valid to-do is created with the client header and the default priority Medium, then the list shows it first"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/todo/TodoValidator.java:L1-L168",
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/TodoFormPage.tsx:L1-L225",
+            "web/tests/README.md:L1-L46"
+          ],
+          "results": {
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-001 AC-1 AC-2 a valid to-do is created with the client header and the default priority Medium, then the list shows it first": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-TODO-001/AC-3",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoCreateApiTest.java::REQ-TODO-001 AC-3 a description is stored exactly as sent and shown",
+            "api/src/test/java/app/todo/todo/TodoCreateApiTest.java::REQ-TODO-001 AC-3 an omitted, null, empty or whitespace-only description means no description",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-001 AC-3 a description is sent; an omitted description is not sent"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/TodoFormPage.tsx:L1-L225"
+          ],
+          "results": {
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-001 AC-3 a description is sent; an omitted description is not sent": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-TODO-001/AC-4",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoCreateApiTest.java::REQ-TODO-001 AC-4 the new to-do is still there on the next request (persisted)",
+            "web/e2e/acceptance.spec.ts::REQ-TODO-001 AC-4 a created to-do is still there after the page is reloaded"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/TodoFormPage.tsx:L1-L225"
+          ],
+          "status": "covered"
+        }
+      ]
+    },
+    {
+      "id": "REQ-TODO-002",
+      "inScope": true,
+      "acceptanceCriteria": [
+        {
+          "id": "REQ-TODO-002/AC-1",
+          "tests": [
+            "api/src/test/java/app/todo/common/WhitespaceTest.java::REQ-TODO-002 AC-1 the whitespace set has exactly 25 code points",
+            "api/src/test/java/app/todo/common/WhitespaceTest.java::REQ-TODO-002 AC-1 every White_Space code point is whitespace and is trimmed",
+            "api/src/test/java/app/todo/common/WhitespaceTest.java::REQ-TODO-002 AC-1 other code points (U+001C..U+001F, zero-width, U+FEFF) are kept",
+            "api/src/test/java/app/todo/common/WhitespaceTest.java::REQ-TODO-002 AC-1 trim removes only leading and trailing whitespace",
+            "api/src/test/java/app/todo/todo/TodoCreateApiTest.java::REQ-TODO-002 AC-1 the title is stored with leading and trailing whitespace removed",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-002 AC-1 a title padded with non-breaking spaces is saved trimmed (the SPA may trim it or leave it to the server, sdd §5)",
+            "web/tests/unit/whitespace.test.ts::REQ-TODO-002 AC-1 interior whitespace is kept"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/common/Whitespace.java:L1-L46",
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/TodoFormPage.tsx:L1-L225"
+          ],
+          "results": {
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-002 AC-1 a title padded with non-breaking spaces is saved trimmed (the SPA may trim it or leave it to the server, sdd §5)": "pass",
+            "web/tests/unit/whitespace.test.ts::REQ-TODO-002 AC-1 interior whitespace is kept": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-TODO-002/AC-2",
+          "tests": [
+            "api/src/test/java/app/todo/common/WhitespaceTest.java::REQ-TODO-002 AC-2 a value of only non-breaking and other Unicode spaces is blank",
+            "api/src/test/java/app/todo/todo/TodoValidationApiTest.java::REQ-TODO-002 AC-2 an empty or whitespace-only title is refused on create and update, naming the title field",
+            "api/src/test/java/app/todo/todo/TodoValidationApiTest.java::REQ-TODO-002 AC-2 a title of only Unicode spaces is refused as BLANK",
+            "web/tests/unit/whitespace.test.ts::REQ-TODO-002 AC-2 the set has exactly 25 whitespace code points",
+            "web/tests/unit/whitespace.test.ts::REQ-TODO-002 AC-2 a title made only of non-breaking and other Unicode spaces is blank"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/TodoFormPage.tsx:L1-L225"
+          ],
+          "results": {
+            "web/tests/unit/whitespace.test.ts::REQ-TODO-002 AC-2 the set has exactly 25 whitespace code points": "pass",
+            "web/tests/unit/whitespace.test.ts::REQ-TODO-002 AC-2 a title made only of non-breaking and other Unicode spaces is blank": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-TODO-002/AC-3",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoValidationApiTest.java::REQ-TODO-002 AC-3 a title absent from the request is refused naming the title field",
+            "api/src/test/java/app/todo/todo/TodoValidationApiTest.java::REQ-TODO-002 AC-3 a title of exactly 200 characters is accepted; 201 is refused",
+            "api/src/test/java/app/todo/todo/TodoValidationApiTest.java::REQ-TODO-002 AC-3 the 200 limit applies after trimming: 200 characters padded with spaces and U+00A0 is accepted",
+            "api/src/test/java/app/todo/todo/TodoValidationApiTest.java::REQ-TODO-002 AC-3 title length counts code points: 200 emoji accepted, 201 refused",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-002 AC-3 a title of 201 characters is refused, 200 is accepted",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-002 AC-3 characters are counted as code points, not UTF-16 units"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/TodoFormPage.tsx:L1-L225"
+          ],
+          "results": {
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-002 AC-3 a title of 201 characters is refused, 200 is accepted": "pass",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-002 AC-3 characters are counted as code points, not UTF-16 units": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-TODO-002/AC-4",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoValidationApiTest.java::REQ-TODO-002 AC-4 a description of exactly 2000 characters, or none, is accepted; 2001 is refused",
+            "api/src/test/java/app/todo/todo/TodoValidationApiTest.java::REQ-TODO-002 AC-4 the description limit is measured as sent: 1999 characters and two spaces is 2001",
+            "api/src/test/java/app/todo/todo/TodoValidationApiTest.java::REQ-TODO-002 AC-4 description length counts code points: 2000 emoji accepted, 2001 refused",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-002 AC-4 a description of 2001 characters is refused, 2000 is accepted"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/TodoFormPage.tsx:L1-L225"
+          ],
+          "results": {
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-002 AC-4 a description of 2001 characters is refused, 2000 is accepted": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-TODO-002/AC-5",
+          "tests": [
+            "api/src/test/java/app/todo/testsupport/ContractFilesTest.java::REQ-TODO-002 AC-5 the contract request check rejects a create without a due date and a missing client header",
+            "api/src/test/java/app/todo/todo/TodoValidationApiTest.java::REQ-TODO-002 AC-5 a to-do saved without a due date, or with a null due date, is refused",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-002 AC-5 a to-do without a due date is refused with \"Enter a due date.\""
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/TodoFormPage.tsx:L1-L225"
+          ],
+          "results": {
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-002 AC-5 a to-do without a due date is refused with \"Enter a due date.\"": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-TODO-002/AC-6",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoValidationApiTest.java::REQ-TODO-002 AC-6 a due date that is not a valid calendar date is refused on create and update",
+            "api/src/test/java/app/todo/todo/TodoValidationApiTest.java::REQ-TODO-002 AC-6 an impossible calendar date has the field error code INVALID_DATE",
+            "api/src/test/java/app/todo/todo/TodoValidationApiTest.java::REQ-TODO-002 AC-6 leap days, year 0001 and year 9999 are valid dates",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-002 AC-6 AC-10 NFR-001 AC-3 a 400 from the server shows its message beside the named field only, with the field tied to the message"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/todo/TodoValidator.java:L1-L168",
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/TodoFormPage.tsx:L1-L225"
+          ],
+          "results": {
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-002 AC-6 AC-10 NFR-001 AC-3 a 400 from the server shows its message beside the named field only, with the field tied to the message": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-TODO-002/AC-7",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoCreateApiTest.java::REQ-TODO-002 AC-7 the due date is a date only and comes back as the same calendar date",
+            "web/e2e/acceptance.spec.ts::REQ-TODO-002 AC-7 a due date shows as the same calendar date in any time zone",
+            "web/tests/component/list.test.tsx::REQ-TODO-003 AC-1 REQ-TODO-002 AC-7 to-dos are listed newest first with title, done status, due date and priority"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/TodoFormPage.tsx:L1-L225",
+            "web/src/todos/format.ts:L1-L23"
+          ],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-TODO-003 AC-1 REQ-TODO-002 AC-7 to-dos are listed newest first with title, done status, due date and priority": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-TODO-002/AC-8",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoValidationApiTest.java::REQ-TODO-002 AC-8 a priority other than LOW, MEDIUM or HIGH (case-sensitive) is refused through the API",
+            "api/src/test/java/app/todo/todo/TodoValidationApiTest.java::REQ-TODO-002 AC-8 LOW, MEDIUM and HIGH are accepted",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-002 AC-8 the priority control offers only Low, Medium and High"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/todo/Priority.java:L1-L8",
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/TodoFormPage.tsx:L1-L225",
+            "web/tests/README.md:L1-L46"
+          ],
+          "results": {
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-002 AC-8 the priority control offers only Low, Medium and High": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-TODO-002/AC-9",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoValidationApiTest.java::REQ-TODO-002 AC-9 a due date in the past is accepted",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-002 AC-9 a due date in the past is accepted without a warning"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/TodoFormPage.tsx:L1-L225"
+          ],
+          "results": {
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-002 AC-9 a due date in the past is accepted without a warning": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-TODO-002/AC-10",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoValidationApiTest.java::REQ-TODO-002 AC-10 several invalid fields are reported together, each naming its field",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-002 AC-6 AC-10 NFR-001 AC-3 a 400 from the server shows its message beside the named field only, with the field tied to the message"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/common/ValidationException.java:L1-L11",
+            "web/src/api/identity.ts:L1-L392",
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/TodoFormPage.tsx:L1-L225"
+          ],
+          "results": {
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-002 AC-6 AC-10 NFR-001 AC-3 a 400 from the server shows its message beside the named field only, with the field tied to the message": "pass"
+          },
+          "status": "covered"
+        }
+      ]
+    },
+    {
+      "id": "REQ-TODO-003",
+      "inScope": true,
+      "acceptanceCriteria": [
+        {
+          "id": "REQ-TODO-003/AC-1",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoCreateApiTest.java::REQ-TODO-003 AC-1 the list is ordered newest first by creation time and each item shows title, done, due date and priority",
+            "api/src/test/java/app/todo/todo/TodoCreateApiTest.java::REQ-TODO-003 AC-1 to-dos created in the same millisecond are ordered newest first by insertion (no tie)",
+            "web/tests/component/list.test.tsx::REQ-TODO-003 AC-1 REQ-TODO-002 AC-7 to-dos are listed newest first with title, done status, due date and priority",
+            "web/tests/component/list.test.tsx::REQ-TODO-003 AC-1 the list shows the result summary in a polite live region"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/TodoRow.tsx:L1-L57"
+          ],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-TODO-003 AC-1 REQ-TODO-002 AC-7 to-dos are listed newest first with title, done status, due date and priority": "pass",
+            "web/tests/component/list.test.tsx::REQ-TODO-003 AC-1 the list shows the result summary in a polite live region": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-TODO-003/AC-2",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoCreateApiTest.java::REQ-TODO-003 AC-2 a user with no to-dos gets an empty first page and totals of zero (first-use state)",
+            "web/e2e/states.spec.ts::REQ-TODO-003 AC-2 a user with no to-dos sees the first-use empty state",
+            "web/tests/component/list.test.tsx::REQ-TODO-003 AC-2 a user with no to-dos sees the first-use empty state with an Add a to-do link instead of a list"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586"
+          ],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-TODO-003 AC-2 a user with no to-dos sees the first-use empty state with an Add a to-do link instead of a list": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-TODO-003/AC-3",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoCreateApiTest.java::REQ-TODO-003 AC-3 a to-do shows its description, created timestamp and updated timestamp",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-003 AC-3 the detail page shows description, created and updated timestamps, status, due date and priority",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-003 AC-3 a to-do without a description shows \"No description\"",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-003 AC-3 created and updated times are shown in the viewer's local time"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/TodoDetailPage.tsx:L1-L168"
+          ],
+          "results": {
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-003 AC-3 the detail page shows description, created and updated timestamps, status, due date and priority": "pass",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-003 AC-3 a to-do without a description shows \"No description\"": "pass",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-003 AC-3 created and updated times are shown in the viewer's local time": "pass"
+          },
+          "status": "covered"
+        }
+      ]
+    },
+    {
+      "id": "REQ-TODO-004",
+      "inScope": true,
+      "acceptanceCriteria": [
+        {
+          "id": "REQ-TODO-004/AC-1",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoUpdateApiTest.java::REQ-TODO-004 AC-1 changing title, description, due date and priority persists the new values, advances updatedAt, keeps createdAt",
+            "api/src/test/java/app/todo/todo/TodoUpdateApiTest.java::REQ-TODO-004 AC-1 updatedAt strictly advances even within the same millisecond (previous + 1 ms)",
+            "api/src/test/java/app/todo/todo/TodoUpdateApiTest.java::REQ-TODO-004 AC-1 an edit does not change done",
+            "api/src/test/java/app/todo/todo/TodoValidationApiTest.java::REQ-TODO-004 AC-1 priority is required on update: absent or null is refused",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-004 AC-1 the form is prefilled and saving sends all four content fields, then shows the detail page with the new values",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-004 AC-1 the detail page offers Edit, Delete and a link back to the list"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/TodoFormPage.tsx:L1-L225"
+          ],
+          "results": {
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-004 AC-1 the form is prefilled and saving sends all four content fields, then shows the detail page with the new values": "pass",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-004 AC-1 the detail page offers Edit, Delete and a link back to the list": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-TODO-004/AC-2",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoUpdateApiTest.java::REQ-TODO-004 AC-2 an edit with invalid values is refused and the stored to-do is unchanged",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-004 AC-2 an invalid edit is refused and nothing is sent"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/TodoFormPage.tsx:L1-L225"
+          ],
+          "results": {
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-004 AC-2 an invalid edit is refused and nothing is sent": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-TODO-004/AC-3",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoUpdateApiTest.java::REQ-TODO-004 AC-3 editing a to-do that does not exist gives not found and creates nothing",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-004 AC-3 saving an edit of a to-do that no longer exists shows a not-found message with a way back and creates nothing"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/TodoFormPage.tsx:L1-L225"
+          ],
+          "results": {
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-004 AC-3 saving an edit of a to-do that no longer exists shows a not-found message with a way back and creates nothing": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-TODO-004/AC-4",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoUpdateApiTest.java::REQ-TODO-004 AC-4 clearing the description saves the to-do with no description (null, empty, whitespace or absent)",
+            "api/src/test/java/app/todo/todo/TodoUpdateApiTest.java::REQ-TODO-004 AC-4 the due date cannot be cleared: it is required on update",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-004 AC-4 clearing the description saves no description; the due date cannot be cleared"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/TodoFormPage.tsx:L1-L225"
+          ],
+          "results": {
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-004 AC-4 clearing the description saves no description; the due date cannot be cleared": "pass"
+          },
+          "status": "covered"
+        }
+      ]
+    },
+    {
+      "id": "REQ-TODO-005",
+      "inScope": true,
+      "acceptanceCriteria": [
+        {
+          "id": "REQ-TODO-005/AC-1",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoUpdateApiTest.java::REQ-TODO-005 AC-1 marking an active to-do done persists Completed and advances updatedAt",
+            "api/src/test/java/app/todo/todo/TodoUpdateApiTest.java::REQ-TODO-005 AC-1 within one millisecond updatedAt still strictly advances on every accepted done request, also when done does not change",
+            "api/src/test/java/app/todo/todo/TodoUpdateApiTest.java::REQ-TODO-005 AC-1 marking done changes only done and updatedAt",
+            "api/src/test/java/app/todo/todo/TodoUpdateApiTest.java::REQ-TODO-005 AC-1 marking a missing to-do done is not found",
+            "web/tests/component/list.test.tsx::REQ-TODO-005 AC-1 marking a to-do done sends done true with the client header and shows it Completed"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/app/usePageFocus.ts:L1-L47",
+            "web/src/todos/TodoListPage.tsx:L1-L409"
+          ],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-TODO-005 AC-1 marking a to-do done sends done true with the client header and shows it Completed": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-TODO-005/AC-2",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoUpdateApiTest.java::REQ-TODO-005 AC-2 marking a completed to-do not done makes it Active again and advances updatedAt",
+            "web/tests/component/list.test.tsx::REQ-TODO-005 AC-2 marking a Completed to-do not done sends done false"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/app/usePageFocus.ts:L1-L47",
+            "web/src/todos/TodoListPage.tsx:L1-L409"
+          ],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-TODO-005 AC-2 marking a Completed to-do not done sends done false": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-TODO-005/AC-3",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoUpdateApiTest.java::REQ-TODO-005 AC-3 the Active filter no longer lists a to-do right after it is marked done",
+            "web/e2e/acceptance.spec.ts::REQ-TODO-005 AC-3 marking a to-do done under the Active filter removes the row without a reload",
+            "web/tests/component/list.test.tsx::REQ-TODO-005 AC-3 under the Active filter a to-do marked done leaves the list immediately, with the list re-queried and no reload"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/app/usePageFocus.ts:L1-L47",
+            "web/src/todos/TodoListPage.tsx:L1-L409"
+          ],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-TODO-005 AC-3 under the Active filter a to-do marked done leaves the list immediately, with the list re-queried and no reload": "pass"
+          },
+          "status": "covered"
+        }
+      ]
+    },
+    {
+      "id": "REQ-TODO-006",
+      "inScope": true,
+      "acceptanceCriteria": [
+        {
+          "id": "REQ-TODO-006/AC-1",
+          "tests": [
+            "web/tests/component/list.test.tsx::REQ-TODO-006 AC-1 Delete asks for confirmation naming the to-do before anything is deleted"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/ConfirmDialog.tsx:L1-L102",
+            "web/src/todos/TodoListPage.tsx:L1-L409"
+          ],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-TODO-006 AC-1 Delete asks for confirmation naming the to-do before anything is deleted": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-TODO-006/AC-2",
+          "tests": [
+            "web/tests/component/list.test.tsx::REQ-TODO-006 AC-2 Cancel leaves the to-do unchanged and sends no delete"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/ConfirmDialog.tsx:L1-L102",
+            "web/src/todos/TodoListPage.tsx:L1-L409"
+          ],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-TODO-006 AC-2 Cancel leaves the to-do unchanged and sends no delete": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-TODO-006/AC-3",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoDeleteAndClearApiTest.java::REQ-TODO-006 AC-3 a deleted to-do is permanently gone: 204, then not found",
+            "web/tests/component/list.test.tsx::REQ-TODO-006 AC-3 confirming deletes the to-do, re-queries the list and announces it",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-006 AC-3 deleting from the detail page confirms, deletes and goes to the list"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/ConfirmDialog.tsx:L1-L102",
+            "web/src/todos/TodoListPage.tsx:L1-L409",
+            "web/tests/README.md:L1-L46"
+          ],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-TODO-006 AC-3 confirming deletes the to-do, re-queries the list and announces it": "pass",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-006 AC-3 deleting from the detail page confirms, deletes and goes to the list": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-TODO-006/AC-4",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoDeleteAndClearApiTest.java::REQ-TODO-006 AC-4 updating or deleting a deleted to-do is not found",
+            "web/tests/component/list.test.tsx::REQ-TODO-006 AC-4 NFR-006 AC-1 a delete of a to-do that no longer exists re-queries the list and says so, with no Back link",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-006 AC-4 NFR-006 AC-1 a delete from the detail page of a to-do that is gone says so and keeps the Back link"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/ConfirmDialog.tsx:L1-L102",
+            "web/src/todos/TodoListPage.tsx:L1-L409"
+          ],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-TODO-006 AC-4 NFR-006 AC-1 a delete of a to-do that no longer exists re-queries the list and says so, with no Back link": "pass",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-006 AC-4 NFR-006 AC-1 a delete from the detail page of a to-do that is gone says so and keeps the Back link": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-TODO-006/AC-5",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoDeleteAndClearApiTest.java::REQ-TODO-006 AC-5 deleting the only to-do on the last page, the next request for that page gives the last valid page, not an error",
+            "web/e2e/acceptance.spec.ts::REQ-TODO-006 AC-5 deleting the only to-do on the last page shows the previous page, not an error",
+            "web/tests/component/list.test.tsx::REQ-TODO-006 AC-5 deleting the only to-do on the last page shows the last valid page, not an error"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/ConfirmDialog.tsx:L1-L102",
+            "web/src/todos/TodoListPage.tsx:L1-L409"
+          ],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-TODO-006 AC-5 deleting the only to-do on the last page shows the last valid page, not an error": "pass"
+          },
+          "status": "covered"
+        }
+      ]
+    },
+    {
+      "id": "REQ-TODO-007",
+      "inScope": true,
+      "acceptanceCriteria": [
+        {
+          "id": "REQ-TODO-007/AC-1",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoDeleteAndClearApiTest.java::REQ-TODO-007 AC-1 totals.completed gives the number shown in the confirmation, over all pages",
+            "web/e2e/acceptance.spec.ts::REQ-TODO-007 AC-1 AC-2 clear all completed states the count, deletes completed across pages, keeps active"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/ConfirmDialog.tsx:L1-L102",
+            "web/src/todos/TodoListPage.tsx:L1-L409"
+          ],
+          "status": "covered"
+        },
+        {
+          "id": "REQ-TODO-007/AC-2",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoDeleteAndClearApiTest.java::REQ-TODO-007 AC-2 clear completed deletes all completed to-dos across all pages and leaves active ones",
+            "api/src/test/java/app/todo/todo/TodoDeleteAndClearApiTest.java::REQ-TODO-007 AC-2 clear completed ignores any filter, search or page parameter",
+            "api/src/test/java/app/todo/todo/TodoDeleteAndClearApiTest.java::REQ-TODO-007 AC-2 'completed' is not a to-do id: reading it is not found, and nothing was deleted by reading it",
+            "web/e2e/acceptance.spec.ts::REQ-TODO-007 AC-1 AC-2 clear all completed states the count, deletes completed across pages, keeps active",
+            "web/tests/component/list.test.tsx::REQ-TODO-007 AC-2 confirming deletes all completed to-dos regardless of the filter, keeps the active ones and re-queries"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/ConfirmDialog.tsx:L1-L102",
+            "web/src/todos/TodoListPage.tsx:L1-L409"
+          ],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-TODO-007 AC-2 confirming deletes all completed to-dos regardless of the filter, keeps the active ones and re-queries": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-TODO-007/AC-3",
+          "tests": [
+            "web/tests/component/list.test.tsx::REQ-TODO-007 AC-3 Cancel deletes nothing"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/ConfirmDialog.tsx:L1-L102",
+            "web/src/todos/TodoListPage.tsx:L1-L409"
+          ],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-TODO-007 AC-3 Cancel deletes nothing": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-TODO-007/AC-4",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoDeleteAndClearApiTest.java::REQ-TODO-007 AC-4 with no completed to-dos clear completed answers 200 with deletedCount 0 and deletes nothing",
+            "web/tests/component/list.test.tsx::REQ-TODO-007 AC-4 the control is disabled when there are no completed to-dos",
+            "web/tests/component/list.test.tsx::REQ-TODO-007 AC-4 when the re-fetch finds none completed, no dialog opens, no delete is sent, the control is disabled and the live region says so"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/ConfirmDialog.tsx:L1-L102",
+            "web/src/todos/TodoListPage.tsx:L1-L409"
+          ],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-TODO-007 AC-4 the control is disabled when there are no completed to-dos": "pass",
+            "web/tests/component/list.test.tsx::REQ-TODO-007 AC-4 when the re-fetch finds none completed, no dialog opens, no delete is sent, the control is disabled and the live region says so": "pass"
+          },
+          "status": "covered"
+        }
+      ]
+    },
+    {
+      "id": "REQ-LIST-001",
+      "inScope": true,
+      "acceptanceCriteria": [
+        {
+          "id": "REQ-LIST-001/AC-1",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoListApiTest.java::REQ-LIST-001 AC-1 the All filter lists both active and completed to-dos",
+            "api/src/test/java/app/todo/todo/TodoListApiTest.java::REQ-LIST-001 AC-1 an unknown status value is refused with a validation error naming status",
+            "api/src/test/java/app/todo/todo/TodoListApiTest.java::REQ-LIST-001 AC-1 the totals ignore status, q and page",
+            "web/tests/component/list.test.tsx::REQ-LIST-001 AC-5 AC-1 All is selected by default and lists active and completed to-dos"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/todo/TodoQuery.java:L1-L16",
+            "api/src/main/java/app/todo/todo/TodoValidator.java:L1-L168",
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/FilterGroup.tsx:L1-L36"
+          ],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-LIST-001 AC-5 AC-1 All is selected by default and lists active and completed to-dos": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-LIST-001/AC-2",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoListApiTest.java::REQ-LIST-001 AC-2 the Active filter lists only not-done to-dos",
+            "web/tests/component/errors.test.tsx::REQ-LIST-001 AC-2 NFR-001 AC-2 a filter change keeps focus on the radio used and the existing rows until the response arrives, without remounting the list",
+            "web/tests/component/list.test.tsx::REQ-LIST-001 AC-2 selecting Active asks for status=active and lists only not-done to-dos, in the URL"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/todo/TodoQuery.java:L1-L16",
+            "api/src/main/java/app/todo/todo/TodoValidator.java:L1-L168",
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/FilterGroup.tsx:L1-L36"
+          ],
+          "results": {
+            "web/tests/component/errors.test.tsx::REQ-LIST-001 AC-2 NFR-001 AC-2 a filter change keeps focus on the radio used and the existing rows until the response arrives, without remounting the list": "pass",
+            "web/tests/component/list.test.tsx::REQ-LIST-001 AC-2 selecting Active asks for status=active and lists only not-done to-dos, in the URL": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-LIST-001/AC-3",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoListApiTest.java::REQ-LIST-001 AC-3 the Completed filter lists only done to-dos",
+            "web/tests/component/list.test.tsx::REQ-LIST-001 AC-3 selecting Completed lists only done to-dos"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/todo/TodoQuery.java:L1-L16",
+            "api/src/main/java/app/todo/todo/TodoValidator.java:L1-L168",
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/FilterGroup.tsx:L1-L36"
+          ],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-LIST-001 AC-3 selecting Completed lists only done to-dos": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-LIST-001/AC-4",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoListApiTest.java::REQ-LIST-001 AC-4 a filter that matches nothing gives an empty result while the totals still show the to-dos exist",
+            "web/tests/component/list.test.tsx::REQ-LIST-001 AC-4 a filter that matches nothing shows \"No matching to-dos\", even for a user with no to-dos"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/todo/TodoQuery.java:L1-L16",
+            "api/src/main/java/app/todo/todo/TodoValidator.java:L1-L168",
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/FilterGroup.tsx:L1-L36"
+          ],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-LIST-001 AC-4 a filter that matches nothing shows \"No matching to-dos\", even for a user with no to-dos": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-LIST-001/AC-5",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoListApiTest.java::REQ-LIST-001 AC-5 with no filter chosen All applies",
+            "web/e2e/states.spec.ts::REQ-LIST-001 AC-5 an unknown status in the URL is removed and the list shows All",
+            "web/tests/component/list.test.tsx::REQ-LIST-001 AC-5 AC-1 All is selected by default and lists active and completed to-dos",
+            "web/tests/component/list.test.tsx::REQ-LIST-001 AC-5 an unknown status in the URL is removed (filter All) and never sent to the API"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/todo/TodoQuery.java:L1-L16",
+            "api/src/main/java/app/todo/todo/TodoValidator.java:L1-L168",
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/FilterGroup.tsx:L1-L36"
+          ],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-LIST-001 AC-5 AC-1 All is selected by default and lists active and completed to-dos": "pass",
+            "web/tests/component/list.test.tsx::REQ-LIST-001 AC-5 an unknown status in the URL is removed (filter All) and never sent to the API": "pass"
+          },
+          "status": "covered"
+        }
+      ]
+    },
+    {
+      "id": "REQ-LIST-002",
+      "inScope": true,
+      "acceptanceCriteria": [
+        {
+          "id": "REQ-LIST-002/AC-1",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoListApiTest.java::REQ-LIST-002 AC-1 search matches a title case-insensitively (contains)",
+            "api/src/test/java/app/todo/todo/TodoListApiTest.java::REQ-LIST-002 AC-1 accented letters match case-insensitively",
+            "web/tests/component/list.test.tsx::REQ-LIST-002 AC-1 AC-2 searching sends q, lists matches in the title or description and puts q in the URL",
+            "web/tests/component/list.test.tsx::REQ-LIST-002 AC-1 a search is trimmed with the Unicode whitespace set before it is sent"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/SearchForm.tsx:L1-L33"
+          ],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-LIST-002 AC-1 AC-2 searching sends q, lists matches in the title or description and puts q in the URL": "pass",
+            "web/tests/component/list.test.tsx::REQ-LIST-002 AC-1 a search is trimmed with the Unicode whitespace set before it is sent": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-LIST-002/AC-2",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoListApiTest.java::REQ-LIST-002 AC-2 search also matches the description",
+            "web/tests/component/list.test.tsx::REQ-LIST-002 AC-1 AC-2 searching sends q, lists matches in the title or description and puts q in the URL"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/SearchForm.tsx:L1-L33"
+          ],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-LIST-002 AC-1 AC-2 searching sends q, lists matches in the title or description and puts q in the URL": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-LIST-002/AC-3",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoListApiTest.java::REQ-LIST-002 AC-3 a search and a filter together list only to-dos matching both",
+            "web/tests/component/list.test.tsx::REQ-LIST-002 AC-3 a search and a filter are applied together"
+          ],
+          "code": [
+            "web/src/todos/SearchForm.tsx:L1-L33"
+          ],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-LIST-002 AC-3 a search and a filter are applied together": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-LIST-002/AC-4",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoListApiTest.java::REQ-LIST-002 AC-4 a search term that matches nothing gives an empty result",
+            "web/tests/component/list.test.tsx::REQ-LIST-002 AC-4 a search that matches nothing shows \"No matching to-dos\""
+          ],
+          "code": [
+            "web/src/todos/SearchForm.tsx:L1-L33"
+          ],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-LIST-002 AC-4 a search that matches nothing shows \"No matching to-dos\"": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-LIST-002/AC-5",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoListApiTest.java::REQ-LIST-002 AC-5 an empty search applies no restriction"
+          ],
+          "code": [
+            "api/src/test/java/app/todo/testsupport/Contracts.java:L1-L125",
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/SearchForm.tsx:L1-L33"
+          ],
+          "status": "covered"
+        },
+        {
+          "id": "REQ-LIST-002/AC-6",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoListApiTest.java::REQ-LIST-002 AC-6 %, _, backslash and quotes are matched literally and cause no error",
+            "web/tests/component/list.test.tsx::REQ-LIST-002 AC-6 characters such as % _ and quotes are sent as typed and cause no error"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/SearchForm.tsx:L1-L33"
+          ],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-LIST-002 AC-6 characters such as % _ and quotes are sent as typed and cause no error": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-LIST-002/AC-7",
+          "tests": [
+            "api/src/test/java/app/todo/common/WhitespaceTest.java::REQ-LIST-002 AC-7 search text of only whitespace trims to empty",
+            "api/src/test/java/app/todo/todo/TodoListApiTest.java::REQ-LIST-002 AC-7 search text of only whitespace (including U+00A0 and U+3000) behaves as an empty search",
+            "api/src/test/java/app/todo/todo/TodoListApiTest.java::REQ-LIST-002 AC-7 leading and trailing whitespace around a search term is ignored",
+            "web/tests/unit/whitespace.test.ts::REQ-LIST-002 AC-7 search text of only leading or trailing whitespace trims to empty"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/common/Whitespace.java:L1-L46",
+            "api/src/test/java/app/todo/testsupport/Contracts.java:L1-L125",
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/todos/SearchForm.tsx:L1-L33"
+          ],
+          "results": {
+            "web/tests/unit/whitespace.test.ts::REQ-LIST-002 AC-7 search text of only leading or trailing whitespace trims to empty": "pass"
+          },
+          "status": "covered"
+        }
+      ]
+    },
+    {
+      "id": "REQ-LIST-003",
+      "inScope": true,
+      "acceptanceCriteria": [
+        {
+          "id": "REQ-LIST-003/AC-1",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoListApiTest.java::REQ-LIST-003 AC-1 45 matching to-dos give pages of 20, 20 and 5, newest first",
+            "web/e2e/acceptance.spec.ts::REQ-LIST-003 AC-1 AC-2 AC-3 AC-5 paging 45 to-dos: 20, 20, 5 with no repeat or gap, Previous and Next disabled at the ends",
+            "web/tests/component/list.test.tsx::REQ-LIST-003 AC-1 AC-3 more than 20 matches show exactly 20 on page 1 with numbered links, Next enabled and Previous disabled"
+          ],
+          "code": [
+            "web/src/todos/Pagination.tsx:L1-L64"
+          ],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-LIST-003 AC-1 AC-3 more than 20 matches show exactly 20 on page 1 with numbered links, Next enabled and Previous disabled": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-LIST-003/AC-2",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoListApiTest.java::REQ-LIST-003 AC-2 the order is consistent across pages: no to-do repeated or skipped, even with identical timestamps",
+            "api/src/test/java/app/todo/todo/TodoListApiTest.java::REQ-LIST-003 AC-2 pages are stable when to-dos have distinct creation times too",
+            "web/e2e/acceptance.spec.ts::REQ-LIST-003 AC-1 AC-2 AC-3 AC-5 paging 45 to-dos: 20, 20, 5 with no repeat or gap, Previous and Next disabled at the ends",
+            "web/tests/component/errors.test.tsx::REQ-LIST-003 AC-2 NFR-001 AC-2 a pagination link keeps the existing rows until the response arrives and moves focus to the heading without remounting",
+            "web/tests/component/list.test.tsx::REQ-LIST-003 AC-2 AC-3 Next shows page 2 then page 3 with no to-do repeated or skipped, and Next is disabled on the last page",
+            "web/tests/component/list.test.tsx::REQ-LIST-003 AC-2 NFR-001 AC-2 activating a pagination link moves focus to the list heading"
+          ],
+          "code": [],
+          "results": {
+            "web/tests/component/errors.test.tsx::REQ-LIST-003 AC-2 NFR-001 AC-2 a pagination link keeps the existing rows until the response arrives and moves focus to the heading without remounting": "pass",
+            "web/tests/component/list.test.tsx::REQ-LIST-003 AC-2 AC-3 Next shows page 2 then page 3 with no to-do repeated or skipped, and Next is disabled on the last page": "pass",
+            "web/tests/component/list.test.tsx::REQ-LIST-003 AC-2 NFR-001 AC-2 activating a pagination link moves focus to the list heading": "pass"
+          },
+          "status": "missing-code"
+        },
+        {
+          "id": "REQ-LIST-003/AC-3",
+          "tests": [
+            "web/e2e/acceptance.spec.ts::REQ-LIST-003 AC-1 AC-2 AC-3 AC-5 paging 45 to-dos: 20, 20, 5 with no repeat or gap, Previous and Next disabled at the ends",
+            "web/tests/component/list.test.tsx::REQ-LIST-003 AC-1 AC-3 more than 20 matches show exactly 20 on page 1 with numbered links, Next enabled and Previous disabled",
+            "web/tests/component/list.test.tsx::REQ-LIST-003 AC-2 AC-3 Next shows page 2 then page 3 with no to-do repeated or skipped, and Next is disabled on the last page"
+          ],
+          "code": [],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-LIST-003 AC-1 AC-3 more than 20 matches show exactly 20 on page 1 with numbered links, Next enabled and Previous disabled": "pass",
+            "web/tests/component/list.test.tsx::REQ-LIST-003 AC-2 AC-3 Next shows page 2 then page 3 with no to-do repeated or skipped, and Next is disabled on the last page": "pass"
+          },
+          "status": "missing-code"
+        },
+        {
+          "id": "REQ-LIST-003/AC-4",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoListApiTest.java::REQ-LIST-003 AC-4 20 or fewer matching to-dos give a single page",
+            "web/tests/component/list.test.tsx::REQ-LIST-003 AC-4 20 or fewer matches show a single page and no pagination"
+          ],
+          "code": [
+            "web/src/todos/Pagination.tsx:L1-L64"
+          ],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-LIST-003 AC-4 20 or fewer matches show a single page and no pagination": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-LIST-003/AC-5",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoListApiTest.java::REQ-LIST-003 AC-5 the page count reflects the filter and search matches",
+            "web/e2e/acceptance.spec.ts::REQ-LIST-003 AC-1 AC-2 AC-3 AC-5 paging 45 to-dos: 20, 20, 5 with no repeat or gap, Previous and Next disabled at the ends",
+            "web/tests/component/list.test.tsx::REQ-LIST-003 AC-5 changing the filter or the search returns to page 1 and drops page from the URL"
+          ],
+          "code": [
+            "web/src/todos/TodoListPage.tsx:L1-L409"
+          ],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-LIST-003 AC-5 changing the filter or the search returns to page 1 and drops page from the URL": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-LIST-003/AC-6",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoListApiTest.java::REQ-LIST-003 AC-6 a page beyond the last, however large, shows the last valid page and reports it in page",
+            "api/src/test/java/app/todo/todo/TodoListApiTest.java::REQ-LIST-003 AC-6 with no matches at all any page gives page 1 with no items",
+            "api/src/test/java/app/todo/todo/TodoListApiTest.java::REQ-LIST-003 AC-6 leading zeros are a valid page number",
+            "web/e2e/states.spec.ts::REQ-LIST-003 AC-6 a page number past the last in the URL shows the last valid page without an error",
+            "web/tests/component/list.test.tsx::REQ-LIST-003 AC-6 a page past the last shows the last valid page and the URL is replaced with it"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586"
+          ],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-LIST-003 AC-6 a page past the last shows the last valid page and the URL is replaced with it": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-LIST-003/AC-7",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoListApiTest.java::REQ-LIST-003 AC-7 a page number that is zero, negative or not a number is refused with a validation error naming page"
+          ],
+          "code": [
+            "web/src/api/todos.ts:L1-L586",
+            "web/tests/README.md:L1-L46"
+          ],
+          "status": "covered"
+        },
+        {
+          "id": "REQ-LIST-003/AC-8",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoListApiTest.java::REQ-LIST-003 AC-8 the page size is fixed at 20: a pageSize parameter is ignored",
+            "web/tests/component/list.test.tsx::REQ-LIST-003 AC-8 the page size is fixed and the SPA never sends a size parameter"
+          ],
+          "code": [],
+          "results": {
+            "web/tests/component/list.test.tsx::REQ-LIST-003 AC-8 the page size is fixed and the SPA never sends a size parameter": "pass"
+          },
+          "status": "missing-code"
+        }
+      ]
+    },
+    {
+      "id": "REQ-NAV-001",
+      "inScope": true,
+      "acceptanceCriteria": [
+        {
+          "id": "REQ-NAV-001/AC-1",
+          "tests": [
+            "web/e2e/navigation.spec.ts::REQ-NAV-001 AC-1 a signed-in browser opening / with a query string lands on /todos with no query",
+            "web/tests/component/navigation.test.tsx::REQ-NAV-001 AC-1 a signed-in user opening / (with a query string) is sent to /todos, history replaced, filter All, no search, page 1",
+            "web/tests/component/navigation.test.tsx::REQ-NAV-001 AC-1 the / entry is replaced in history, not pushed"
+          ],
+          "code": [
+            "web/src/app/NotFoundPage.tsx:L1-L30",
+            "web/src/app/usePageFocus.ts:L1-L47"
+          ],
+          "results": {
+            "web/tests/component/navigation.test.tsx::REQ-NAV-001 AC-1 a signed-in user opening / (with a query string) is sent to /todos, history replaced, filter All, no search, page 1": "pass",
+            "web/tests/component/navigation.test.tsx::REQ-NAV-001 AC-1 the / entry is replaced in history, not pushed": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-NAV-001/AC-2",
+          "tests": [
+            "web/e2e/navigation.spec.ts::REQ-NAV-001 AC-2 a fresh browser opening / lands on log in and, after logging in, on /todos",
+            "web/tests/component/navigation.test.tsx::REQ-NAV-001 AC-2 a signed-out visitor opening / is sent to log in with no message and sees the list after logging in"
+          ],
+          "code": [
+            "web/src/app/NotFoundPage.tsx:L1-L30",
+            "web/src/app/usePageFocus.ts:L1-L47"
+          ],
+          "results": {
+            "web/tests/component/navigation.test.tsx::REQ-NAV-001 AC-2 a signed-out visitor opening / is sent to log in with no message and sees the list after logging in": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-NAV-001/AC-3",
+          "tests": [
+            "web/e2e/navigation.spec.ts::REQ-NAV-001 AC-3 AC-5 AC-6 signed in, /nope shows the not-found page whose animation plays once within 5 seconds, and the home link leads to /todos",
+            "web/tests/component/navigation.test.tsx::REQ-NAV-001 AC-3 AC-7 the not-found page sets the document title and moves focus to its heading",
+            "web/tests/component/navigation.test.tsx::REQ-NAV-001 AC-3 while the probe is in flight an unknown address renders nothing and does not redirect",
+            "web/tests/component/navigation.test.tsx::REQ-NAV-001 AC-3 after a failed probe an unknown address shows the server alert, not the not-found page"
+          ],
+          "code": [
+            "web/src/app/AppRoutes.tsx:L1-L49",
+            "web/src/app/NotFoundPage.tsx:L1-L30",
+            "web/src/app/usePageFocus.ts:L1-L47"
+          ],
+          "results": {
+            "web/tests/component/navigation.test.tsx::REQ-NAV-001 AC-3 AC-7 the not-found page sets the document title and moves focus to its heading": "pass",
+            "web/tests/component/navigation.test.tsx::REQ-NAV-001 AC-3 while the probe is in flight an unknown address renders nothing and does not redirect": "pass",
+            "web/tests/component/navigation.test.tsx::REQ-NAV-001 AC-3 after a failed probe an unknown address shows the server alert, not the not-found page": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-NAV-001/AC-4",
+          "tests": [
+            "web/e2e/navigation.spec.ts::REQ-NAV-001 AC-4 signed in, /todos/not-a-uuid and its /edit show the to-do not-found state, not the page-not-found page",
+            "web/tests/unit/routing-helpers.test.ts::REQ-NAV-001 AC-4 admits a lower-case UUID"
+          ],
+          "code": [
+            "web/src/app/NotFoundPage.tsx:L1-L30",
+            "web/src/app/usePageFocus.ts:L1-L47",
+            "web/src/todos/TodoDetailPage.tsx:L1-L168"
+          ],
+          "results": {
+            "web/tests/unit/routing-helpers.test.ts::REQ-NAV-001 AC-4 admits a lower-case UUID": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-NAV-001/AC-5",
+          "tests": [
+            "web/e2e/navigation.spec.ts::REQ-NAV-001 AC-3 AC-5 AC-6 signed in, /nope shows the not-found page whose animation plays once within 5 seconds, and the home link leads to /todos",
+            "web/tests/component/navigation.test.tsx::REQ-NAV-001 AC-5 the link back to home goes to / and on to the to-do list"
+          ],
+          "code": [
+            "web/src/app/NotFoundPage.tsx:L1-L30",
+            "web/src/app/usePageFocus.ts:L1-L47"
+          ],
+          "results": {
+            "web/tests/component/navigation.test.tsx::REQ-NAV-001 AC-5 the link back to home goes to / and on to the to-do list": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-NAV-001/AC-6",
+          "tests": [
+            "web/e2e/a11y.spec.ts::REQ-NAV-001 AC-6 under prefers-reduced-motion the not-found page runs no animation",
+            "web/e2e/navigation.spec.ts::REQ-NAV-001 AC-3 AC-5 AC-6 signed in, /nope shows the not-found page whose animation plays once within 5 seconds, and the home link leads to /todos",
+            "web/tests/component/navigation.test.tsx::REQ-NAV-001 AC-6 the animation is decorative: hidden from assistive technology, with the heading, sentence and link present at first render"
+          ],
+          "code": [
+            "web/src/app/NotFoundPage.tsx:L1-L30",
+            "web/src/app/usePageFocus.ts:L1-L47",
+            "web/src/styles/app.css:L1-L542"
+          ],
+          "results": {
+            "web/tests/component/navigation.test.tsx::REQ-NAV-001 AC-6 the animation is decorative: hidden from assistive technology, with the heading, sentence and link present at first render": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-NAV-001/AC-7",
+          "tests": [
+            "web/e2e/a11y.spec.ts::REQ-NAV-001 AC-7 NFR-001 AC-1 the page-not-found page has no violations, while signed in",
+            "web/e2e/navigation.spec.ts::REQ-NAV-001 AC-7 the home link on the not-found page is reachable and operable by keyboard with visible focus",
+            "web/tests/component/a11y.test.tsx::REQ-NAV-001 AC-7 NFR-001 AC-1 the page-not-found page has no violations",
+            "web/tests/component/navigation.test.tsx::REQ-NAV-001 AC-3 AC-7 the not-found page sets the document title and moves focus to its heading"
+          ],
+          "code": [
+            "web/src/app/NotFoundPage.tsx:L1-L30",
+            "web/src/app/usePageFocus.ts:L1-L47",
+            "web/src/styles/app.css:L1-L542"
+          ],
+          "results": {
+            "web/tests/component/a11y.test.tsx::REQ-NAV-001 AC-7 NFR-001 AC-1 the page-not-found page has no violations": "pass",
+            "web/tests/component/navigation.test.tsx::REQ-NAV-001 AC-3 AC-7 the not-found page sets the document title and moves focus to its heading": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "REQ-NAV-001/AC-8",
+          "tests": [
+            "web/e2e/navigation.spec.ts::REQ-NAV-001 AC-8 a fresh browser opening ${address} lands on log in with no message and never sees the not-found page; after login it lands on /todos",
+            "web/e2e/navigation.spec.ts::REQ-NAV-001 AC-8 a fresh browser opening /todos/not-a-uuid lands on log in and, after login, on /todos",
+            "web/tests/component/navigation.test.tsx::REQ-NAV-001 AC-8 a signed-out visitor opening /todos/not-a-uuid is sent to log in and lands on /todos after logging in"
+          ],
+          "code": [
+            "web/src/app/AppRoutes.tsx:L1-L49",
+            "web/src/app/NotFoundPage.tsx:L1-L30",
+            "web/src/app/usePageFocus.ts:L1-L47"
+          ],
+          "results": {
+            "web/tests/component/navigation.test.tsx::REQ-NAV-001 AC-8 a signed-out visitor opening /todos/not-a-uuid is sent to log in and lands on /todos after logging in": "pass"
+          },
+          "status": "covered"
+        }
+      ]
+    },
+    {
+      "id": "REQ-DATA-001",
+      "inScope": true,
+      "acceptanceCriteria": [
+        {
+          "id": "REQ-DATA-001/AC-1",
+          "tests": [
+            "api/src/test/java/app/todo/config/PersistenceTest.java::REQ-DATA-001 AC-1 after a restart all accounts and to-dos are still present and unchanged",
+            "api/src/test/java/app/todo/config/PersistenceTest.java::REQ-DATA-001 AC-1 a session survives an API restart until it expires (sessions are stored in SQLite)",
+            "web/e2e/restart.spec.ts::REQ-ACC-001 AC-3 REQ-DATA-001 AC-1 after the API is restarted the first user logs in again and their to-dos, with all fields, are still there"
+          ],
+          "code": [
+            "api/src/test/java/app/todo/testsupport/Db.java:L1-L71",
+            "web/e2e/playwright.restart.config.ts:L1-L42",
+            "web/tests/README.md:L1-L46"
+          ],
+          "status": "covered"
+        },
+        {
+          "id": "REQ-DATA-001/AC-2",
+          "tests": [
+            "api/src/test/java/app/todo/config/ModuleWiringTest.java::REQ-DATA-001 AC-2 the schema is created by Flyway migration V1 in the SQLite file",
+            "api/src/test/java/app/todo/config/PersistenceTest.java::REQ-DATA-001 AC-2 the data is held in a SQLite file database"
+          ],
+          "code": [
+            "api/src/test/java/app/todo/testsupport/Db.java:L1-L71",
+            "web/tests/README.md:L1-L46"
+          ],
+          "status": "covered"
+        },
+        {
+          "id": "REQ-DATA-001/AC-3",
+          "tests": [
+            "api/src/test/java/app/todo/config/PersistenceTest.java::REQ-DATA-001 AC-3 with no database file and no directory the application creates both and works without manual setup"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/config/DatabaseConfig.java:L1-L40",
+            "api/src/test/java/app/todo/testsupport/Db.java:L1-L71",
+            "web/tests/README.md:L1-L46"
+          ],
+          "status": "covered"
+        }
+      ]
+    },
+    {
+      "id": "REQ-DATA-002",
+      "inScope": true,
+      "acceptanceCriteria": [
+        {
+          "id": "REQ-DATA-002/AC-1",
+          "tests": [
+            "api/src/test/java/app/todo/todo/ConcurrentEditsApiTest.java::REQ-DATA-002 AC-1 two edits one after the other: the later write is stored and no conflict error is shown",
+            "api/src/test/java/app/todo/todo/ConcurrentEditsApiTest.java::REQ-DATA-002 AC-1 a stale edit made after a newer one still wins: there is no version check",
+            "api/src/test/java/app/todo/todo/ConcurrentEditsApiTest.java::REQ-DATA-002 AC-1 a done change and a content edit from two tabs do not undo each other"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/todo/TodoService.java:L1-L86",
+            "web/src/api/todos.ts:L1-L586",
+            "web/tests/README.md:L1-L46"
+          ],
+          "status": "covered"
+        },
+        {
+          "id": "REQ-DATA-002/AC-2",
+          "tests": [
+            "api/src/test/java/app/todo/config/ModuleWiringTest.java::REQ-DATA-002 AC-2 the connection runs with WAL journal, foreign keys on and a 5000 ms busy timeout (ADR-0016)",
+            "api/src/test/java/app/todo/todo/ConcurrentEditsApiTest.java::REQ-DATA-002 AC-2 concurrent edits to different to-dos are each stored with no data lost",
+            "api/src/test/java/app/todo/todo/ConcurrentEditsApiTest.java::REQ-DATA-002 AC-2 concurrent creates by one signed-in user are all stored"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/todo/TodoService.java:L1-L86",
+            "web/src/api/todos.ts:L1-L586",
+            "web/tests/README.md:L1-L46"
+          ],
+          "status": "covered"
+        }
+      ]
+    },
+    {
+      "id": "REQ-ACC-001",
+      "inScope": true,
+      "acceptanceCriteria": [
+        {
+          "id": "REQ-ACC-001/AC-1",
+          "tests": [
+            "api/src/test/java/app/todo/todo/AcceptanceScenarioApiTest.java::REQ-ACC-001 AC-1 a signed-in user can add, see, search, filter, edit, complete and delete their own to-dos",
+            "web/e2e/acceptance.spec.ts::REQ-ACC-001 AC-1 a signed-in user adds, sees, searches, filters, edits, completes and deletes their own to-dos"
+          ],
+          "code": [],
+          "status": "missing-code"
+        },
+        {
+          "id": "REQ-ACC-001/AC-2",
+          "tests": [
+            "api/src/test/java/app/todo/todo/TodoIsolationApiTest.java::REQ-ACC-001 AC-2 a second user who looks for the first user's to-dos by listing, searching or direct id cannot see or change them",
+            "web/e2e/acceptance.spec.ts::REQ-ACC-001 AC-2 REQ-ISO-001 AC-1 AC-2 AC-4 a second user cannot see or change the first user's to-dos by list, search or direct URL"
+          ],
+          "code": [],
+          "status": "missing-code"
+        },
+        {
+          "id": "REQ-ACC-001/AC-3",
+          "tests": [
+            "api/src/test/java/app/todo/config/PersistenceTest.java::REQ-ACC-001 AC-3 after the application is restarted the first user logs in again and their to-dos are still there",
+            "web/e2e/restart.spec.ts::REQ-ACC-001 AC-3 REQ-DATA-001 AC-1 after the API is restarted the first user logs in again and their to-dos, with all fields, are still there"
+          ],
+          "code": [
+            "web/e2e/playwright.restart.config.ts:L1-L42",
+            "web/e2e/support/api-process.ts:L1-L66"
+          ],
+          "status": "covered"
+        }
+      ]
+    },
+    {
+      "id": "NFR-001",
+      "inScope": true,
+      "acceptanceCriteria": [
+        {
+          "id": "NFR-001/AC-1",
+          "tests": [
+            "web/e2e/a11y.spec.ts::NFR-001 AC-1 sign-up has no violations, with and without errors",
+            "web/e2e/a11y.spec.ts::NFR-001 AC-1 log in has no violations, with the account-created message and after a refused attempt",
+            "web/e2e/a11y.spec.ts::NFR-001 AC-1 the list has no violations: empty, populated with pagination, and no matches",
+            "web/e2e/a11y.spec.ts::NFR-001 AC-1 the create and edit form has no violations, with and without errors",
+            "web/e2e/a11y.spec.ts::NFR-001 AC-1 the to-do detail page and its not-found state have no violations",
+            "web/e2e/a11y.spec.ts::NFR-001 AC-1 the delete confirmation dialog has no violations",
+            "web/e2e/a11y.spec.ts::NFR-001 AC-1 the clear-completed confirmation dialog has no violations",
+            "web/e2e/a11y.spec.ts::REQ-NAV-001 AC-7 NFR-001 AC-1 the page-not-found page has no violations, while signed in",
+            "web/e2e/a11y.spec.ts::NFR-001 AC-1 the page language is set and every route has a distinct title",
+            "web/e2e/a11y.spec.ts::NFR-001 AC-1 no horizontal scrolling at 320 CSS pixels wide on the list, form and not-found page (reflow, 1.4.10)",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-1 sign-up has no WCAG 2.1 AA violations",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-1 sign-up with an error summary has no violations",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-1 log in has no violations",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-1 log in after a refused attempt has no violations",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-1 the list (populated, with pagination) has no violations",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-1 the list in both empty states has no violations",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-1 the create form, with and without errors, has no violations",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-1 the edit form has no violations",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-1 the to-do detail page and its not-found state have no violations",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-1 the delete confirmation dialog has no violations",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-1 the clear-completed confirmation dialog has no violations",
+            "web/tests/component/a11y.test.tsx::REQ-NAV-001 AC-7 NFR-001 AC-1 the page-not-found page has no violations",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-1 the application error page has no violations"
+          ],
+          "code": [
+            "web/src/app/AppShell.tsx:L1-L74",
+            "web/tests/README.md:L1-L46"
+          ],
+          "results": {
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-1 sign-up has no WCAG 2.1 AA violations": "pass",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-1 sign-up with an error summary has no violations": "pass",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-1 log in has no violations": "pass",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-1 log in after a refused attempt has no violations": "pass",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-1 the list (populated, with pagination) has no violations": "pass",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-1 the list in both empty states has no violations": "pass",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-1 the create form, with and without errors, has no violations": "pass",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-1 the edit form has no violations": "pass",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-1 the to-do detail page and its not-found state have no violations": "pass",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-1 the delete confirmation dialog has no violations": "pass",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-1 the clear-completed confirmation dialog has no violations": "pass",
+            "web/tests/component/a11y.test.tsx::REQ-NAV-001 AC-7 NFR-001 AC-1 the page-not-found page has no violations": "pass",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-1 the application error page has no violations": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "NFR-001/AC-2",
+          "tests": [
+            "web/e2e/keyboard.spec.ts::NFR-001 AC-2 sign up and log in with the keyboard only",
+            "web/e2e/keyboard.spec.ts::NFR-001 AC-2 create, search, filter, complete and page with the keyboard only",
+            "web/e2e/keyboard.spec.ts::NFR-001 AC-2 the delete dialog takes focus on Cancel, keeps it inside, and Escape returns focus to the Delete button",
+            "web/e2e/keyboard.spec.ts::NFR-001 AC-2 confirming deletion by keyboard moves focus to the list heading",
+            "web/e2e/keyboard.spec.ts::NFR-001 AC-2 the clear-completed dialog is operated and left by keyboard; focus returns to the control on cancel",
+            "web/e2e/keyboard.spec.ts::NFR-001 AC-2 the detail page is reached, read and left by keyboard (to edit and back to the list)",
+            "web/e2e/keyboard.spec.ts::NFR-001 AC-2 a to-do is edited and saved by keyboard; the detail page shows the new title and focus is on its heading",
+            "web/e2e/keyboard.spec.ts::NFR-001 AC-2 keyboard focus is always visible on the list controls",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-2 a skip link is the first focusable element and targets the main landmark",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-2 each route sets its own document title and moves focus to its heading",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-2 the filter is a labelled fieldset of radios and the search form is a labelled search landmark",
+            "web/tests/component/errors.test.tsx::REQ-LIST-001 AC-2 NFR-001 AC-2 a filter change keeps focus on the radio used and the existing rows until the response arrives, without remounting the list",
+            "web/tests/component/errors.test.tsx::REQ-LIST-003 AC-2 NFR-001 AC-2 a pagination link keeps the existing rows until the response arrives and moves focus to the heading without remounting",
+            "web/tests/component/list.test.tsx::REQ-LIST-003 AC-2 NFR-001 AC-2 activating a pagination link moves focus to the list heading"
+          ],
+          "code": [
+            "web/src/app/AppShell.tsx:L1-L74",
+            "web/src/app/usePageFocus.ts:L1-L47",
+            "web/src/todos/ConfirmDialog.tsx:L1-L102",
+            "web/src/todos/TodoDetailPage.tsx:L1-L168"
+          ],
+          "results": {
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-2 a skip link is the first focusable element and targets the main landmark": "pass",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-2 each route sets its own document title and moves focus to its heading": "pass",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-2 the filter is a labelled fieldset of radios and the search form is a labelled search landmark": "pass",
+            "web/tests/component/errors.test.tsx::REQ-LIST-001 AC-2 NFR-001 AC-2 a filter change keeps focus on the radio used and the existing rows until the response arrives, without remounting the list": "pass",
+            "web/tests/component/errors.test.tsx::REQ-LIST-003 AC-2 NFR-001 AC-2 a pagination link keeps the existing rows until the response arrives and moves focus to the heading without remounting": "pass",
+            "web/tests/component/list.test.tsx::REQ-LIST-003 AC-2 NFR-001 AC-2 activating a pagination link moves focus to the list heading": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "NFR-001/AC-3",
+          "tests": [
+            "web/e2e/a11y.spec.ts::NFR-001 AC-3 a refused submit moves focus to the error summary and its link moves focus to the field",
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-3 a field error is tied to its field with aria-invalid and aria-describedby, and the message is prefixed \"Error:\"",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-002 AC-6 AC-10 NFR-001 AC-3 a 400 from the server shows its message beside the named field only, with the field tied to the message",
+            "web/tests/component/todo-form.test.tsx::NFR-001 AC-3 a refused submit shows an error summary that receives focus and links to the field"
+          ],
+          "code": [
+            "web/src/api/identity.ts:L1-L392",
+            "web/src/api/todos.ts:L1-L586",
+            "web/src/app/AppShell.tsx:L1-L74",
+            "web/src/app/ui.tsx:L1-L151"
+          ],
+          "results": {
+            "web/tests/component/a11y.test.tsx::NFR-001 AC-3 a field error is tied to its field with aria-invalid and aria-describedby, and the message is prefixed \"Error:\"": "pass",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-002 AC-6 AC-10 NFR-001 AC-3 a 400 from the server shows its message beside the named field only, with the field tied to the message": "pass",
+            "web/tests/component/todo-form.test.tsx::NFR-001 AC-3 a refused submit shows an error summary that receives focus and links to the field": "pass"
+          },
+          "status": "covered"
+        }
+      ]
+    },
+    {
+      "id": "NFR-002",
+      "inScope": true,
+      "acceptanceCriteria": [
+        {
+          "id": "NFR-002/AC-1",
+          "tests": [
+            "web/e2e/network.spec.ts::NFR-002 AC-1 sign up, log in, add, edit, complete and delete send every browser request to localhost only"
+          ],
+          "code": [],
+          "status": "missing-code"
+        },
+        {
+          "id": "NFR-002/AC-2",
+          "tests": [],
+          "code": [
+            "web/tests/README.md:L1-L46"
+          ],
+          "status": "missing-test"
+        }
+      ]
+    },
+    {
+      "id": "NFR-003",
+      "inScope": true,
+      "acceptanceCriteria": [
+        {
+          "id": "NFR-003/AC-1",
+          "tests": [
+            "web/e2e/performance.spec.ts::NFR-003 AC-1 with 500 to-dos, list, filter, search, page, create, edit, complete and delete each show their result within 1 second at the 95th percentile"
+          ],
+          "code": [],
+          "status": "missing-code"
+        }
+      ]
+    },
+    {
+      "id": "NFR-004",
+      "inScope": true,
+      "acceptanceCriteria": [
+        {
+          "id": "NFR-004/AC-1",
+          "tests": [],
+          "code": [
+            "api/src/test/java/app/todo/testsupport/ApiClient.java:L1-L305",
+            "api/src/test/java/app/todo/testsupport/SpringContextTestBase.java:L1-L82",
+            "web/tests/README.md:L1-L46"
+          ],
+          "status": "missing-test"
+        },
+        {
+          "id": "NFR-004/AC-2",
+          "tests": [
+            "api/src/test/java/app/todo/auth/AuthenticationRequiredApiTest.java::NFR-004 AC-2 with a session but without X-Todo-Client every unsafe to-do operation is 403 CLIENT_HEADER_MISSING",
+            "api/src/test/java/app/todo/auth/AuthenticationRequiredApiTest.java::NFR-004 AC-2 a wrong X-Todo-Client value is refused like a missing one",
+            "api/src/test/java/app/todo/auth/FilterExceptionTest.java::NFR-004 AC-2 an exception inside a filter becomes the generic 500 INTERNAL_ERROR Problem with no exception text or SQL",
+            "api/src/test/java/app/todo/auth/FilterExceptionTest.java::NFR-004 AC-2 the log holds one per-request line with status 500 and one stack trace, both with the request id, and nothing sensitive",
+            "api/src/test/java/app/todo/auth/LoginSessionApiTest.java::NFR-004 AC-2 the X-Todo-Client header is required on sign-up, login and logout (403 CLIENT_HEADER_MISSING)",
+            "api/src/test/java/app/todo/common/ErrorSourcesTest.java::NFR-004 AC-2 401 from the security entry point is a UNAUTHENTICATED Problem",
+            "api/src/test/java/app/todo/common/ErrorSourcesTest.java::NFR-004 AC-2 403 from the client-header filter is a CLIENT_HEADER_MISSING Problem",
+            "api/src/test/java/app/todo/common/ErrorSourcesTest.java::NFR-004 AC-2 405 for a method not defined for the path has an Allow header and an empty errors list",
+            "api/src/test/java/app/todo/common/ErrorSourcesTest.java::NFR-004 AC-2 415 for a body with another Content-Type or none is an UNSUPPORTED_MEDIA_TYPE Problem",
+            "api/src/test/java/app/todo/common/ErrorSourcesTest.java::NFR-004 AC-2 a charset parameter on application/json is allowed",
+            "api/src/test/java/app/todo/common/ErrorSourcesTest.java::NFR-004 AC-2 404 for an unknown route under /api is a NOT_FOUND Problem, with or without a session",
+            "api/src/test/java/app/todo/common/ErrorSourcesTest.java::NFR-004 AC-2 400 for unparseable or missing JSON is a MALFORMED_REQUEST Problem with an empty errors list",
+            "api/src/test/java/app/todo/common/ErrorSourcesTest.java::NFR-004 AC-2 400 from the request firewall (a ';' or an encoded '/' in the path) is a REQUEST_REJECTED Problem",
+            "api/src/test/java/app/todo/common/ErrorSourcesTest.java::NFR-004 AC-2 the container's /error forward of a 413 is a REQUEST_REJECTED Problem and of a 500 an INTERNAL_ERROR Problem without the exception text",
+            "api/src/test/java/app/todo/common/ErrorSourcesTest.java::NFR-004 AC-2 a forwarded 404 and a forwarded 405 are NOT_FOUND and METHOD_NOT_ALLOWED Problems",
+            "api/src/test/java/app/todo/common/ErrorSourcesTest.java::NFR-004 AC-2 invalid input sent directly to the API is refused by the server, not only the UI (sign-up, create, list)",
+            "api/src/test/java/app/todo/common/ErrorSourcesTest.java::NFR-004 AC-2 a malformed to-do id is the same NOT_FOUND Problem as a missing one",
+            "api/src/test/java/app/todo/common/ProblemCodeTest.java::NFR-004 AC-2 the values of ProblemCode equal the Problem.code enum of common-problem-v1.yaml (ADR-0011)",
+            "api/src/test/java/app/todo/testsupport/ContractFilesTest.java::NFR-004 AC-2 the Problem schema accepts a conforming error body and rejects an unknown code",
+            "api/src/test/java/app/todo/testsupport/ContractFilesTest.java::NFR-004 AC-2 the to-dos module contract accepts a conforming listTodos response and rejects an unknown member",
+            "api/src/test/java/app/todo/testsupport/ContractFilesTest.java::NFR-004 AC-2 the identity module contract resolves the shared Problem response through its $ref",
+            "api/src/test/java/app/todo/todo/HandlerExceptionTest.java::NFR-004 AC-2 an unexpected exception in a handler gives the generic 500 INTERNAL_ERROR Problem with no stack trace, exception text or SQL",
+            "api/src/test/java/app/todo/todo/HandlerExceptionTest.java::NFR-004 AC-2 the handler exception's stack trace is logged once with the request id and is not in the response",
+            "api/src/test/java/app/todo/todo/TodoValidationApiTest.java::NFR-004 AC-2 an unknown property is refused as UNKNOWN_FIELD naming it (the owner can never come from the request)",
+            "api/src/test/java/app/todo/todo/TodoValidationApiTest.java::NFR-004 AC-2 a JSON value of the wrong type is refused as INVALID_TYPE naming the field",
+            "api/src/test/java/app/todo/todo/TodoValidationApiTest.java::NFR-004 AC-2 a done update with a non-boolean or missing done is refused"
+          ],
+          "code": [
+            "api/src/test/java/app/todo/testsupport/ApiClient.java:L1-L305",
+            "api/src/test/java/app/todo/testsupport/SpringContextTestBase.java:L1-L82",
+            "web/src/api/identity.ts:L1-L392",
+            "web/src/api/todos.ts:L1-L586",
+            "web/tests/README.md:L1-L46"
+          ],
+          "status": "covered"
+        },
+        {
+          "id": "NFR-004/AC-3",
+          "tests": [],
+          "code": [
+            "api/src/test/java/app/todo/testsupport/ApiClient.java:L1-L305",
+            "api/src/test/java/app/todo/testsupport/SpringContextTestBase.java:L1-L82",
+            "web/tests/README.md:L1-L46"
+          ],
+          "status": "missing-test"
+        }
+      ]
+    },
+    {
+      "id": "NFR-005",
+      "inScope": true,
+      "acceptanceCriteria": [
+        {
+          "id": "NFR-005/AC-1",
+          "tests": [],
+          "code": [
+            "web/tests/README.md:L1-L46"
+          ],
+          "status": "missing-test"
+        }
+      ]
+    },
+    {
+      "id": "NFR-006",
+      "inScope": true,
+      "acceptanceCriteria": [
+        {
+          "id": "NFR-006/AC-1",
+          "tests": [
+            "web/e2e/states.spec.ts::NFR-006 AC-1 with the list request aborted, the list screen shows a friendly message with its next step; after the interception is removed, trying again loads the list",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 AC-2 a 500 on the list shows a friendly message with Retry and no internals; retrying loads the list",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 AC-2 a network error on the list shows the same friendly message without browser error text",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 a 404 on a done toggle re-queries the list, then says the to-do is gone and the list is refreshed, with no Back link (Q48)",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 a 404 on a done toggle whose re-query fails shows the load message, never \"refreshed\", and a later retry shows the list without it (Q48)",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 a 404 on a row Delete whose re-query fails shows the load message, never \"refreshed\" (Q48)",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 a toggle that fails with a 500 shows an update message, reverts the checkbox and keeps focus on it",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 a delete that fails with a 500 keeps the dialog open with an inline alert and a try-again message",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 a delete that fails with a network error keeps the dialog open with an inline try-again alert and no browser error text",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 a clear-completed that fails with a network error keeps the dialog open with an inline try-again alert",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 a clear-completed that fails with a 500 keeps the dialog open with an inline alert and a try-again message",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 when the re-fetch before the clear-completed dialog fails, no dialog opens and a load message shows (D2)",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 AC-2 a 500 on the detail page shows a friendly message with Retry and no internals",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 AC-2 a network error on the detail page shows a friendly message with Retry and no browser error text",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 AC-2 N-2 a done toggle whose handler throws shows the unexpected message in the page-level alert above the list and keeps the list",
+            "web/tests/component/list.test.tsx::REQ-TODO-006 AC-4 NFR-006 AC-1 a delete of a to-do that no longer exists re-queries the list and says so, with no Back link",
+            "web/tests/component/todo-form.test.tsx::NFR-006 AC-1 NFR-006 AC-2 a failed create (500) keeps the input and shows a form-level message with a next step and no internals",
+            "web/tests/component/todo-form.test.tsx::NFR-006 AC-1 a network failure on create keeps the input and shows a try-again message without browser error text",
+            "web/tests/component/todo-form.test.tsx::NFR-006 AC-1 a failed load of the to-do shows a message with Retry",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-006 AC-4 NFR-006 AC-1 a delete from the detail page of a to-do that is gone says so and keeps the Back link",
+            "web/tests/unit/userMessage.test.ts::NFR-006 AC-1 a body that is not a Problem gives try-again",
+            "web/tests/unit/userMessage.test.ts::NFR-006 AC-1 a 409 IDENTIFIER_TAKEN on sign-up names choosing another identifier or logging in"
+          ],
+          "code": [
+            "web/src/api/client.ts:L1-L130",
+            "web/src/app/AppErrorBoundary.tsx:L1-L96",
+            "web/src/app/AppShell.tsx:L1-L74",
+            "web/tests/helpers/fakeApi.ts:L1-L284"
+          ],
+          "results": {
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 AC-2 a 500 on the list shows a friendly message with Retry and no internals; retrying loads the list": "pass",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 AC-2 a network error on the list shows the same friendly message without browser error text": "pass",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 a 404 on a done toggle re-queries the list, then says the to-do is gone and the list is refreshed, with no Back link (Q48)": "pass",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 a 404 on a done toggle whose re-query fails shows the load message, never \"refreshed\", and a later retry shows the list without it (Q48)": "pass",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 a 404 on a row Delete whose re-query fails shows the load message, never \"refreshed\" (Q48)": "pass",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 a toggle that fails with a 500 shows an update message, reverts the checkbox and keeps focus on it": "pass",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 a delete that fails with a 500 keeps the dialog open with an inline alert and a try-again message": "pass",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 a delete that fails with a network error keeps the dialog open with an inline try-again alert and no browser error text": "pass",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 a clear-completed that fails with a network error keeps the dialog open with an inline try-again alert": "pass",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 a clear-completed that fails with a 500 keeps the dialog open with an inline alert and a try-again message": "pass",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 when the re-fetch before the clear-completed dialog fails, no dialog opens and a load message shows (D2)": "pass",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 AC-2 a 500 on the detail page shows a friendly message with Retry and no internals": "pass",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 AC-2 a network error on the detail page shows a friendly message with Retry and no browser error text": "pass",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 AC-2 N-2 a done toggle whose handler throws shows the unexpected message in the page-level alert above the list and keeps the list": "pass",
+            "web/tests/component/list.test.tsx::REQ-TODO-006 AC-4 NFR-006 AC-1 a delete of a to-do that no longer exists re-queries the list and says so, with no Back link": "pass",
+            "web/tests/component/todo-form.test.tsx::NFR-006 AC-1 NFR-006 AC-2 a failed create (500) keeps the input and shows a form-level message with a next step and no internals": "pass",
+            "web/tests/component/todo-form.test.tsx::NFR-006 AC-1 a network failure on create keeps the input and shows a try-again message without browser error text": "pass",
+            "web/tests/component/todo-form.test.tsx::NFR-006 AC-1 a failed load of the to-do shows a message with Retry": "pass",
+            "web/tests/component/todo-form.test.tsx::REQ-TODO-006 AC-4 NFR-006 AC-1 a delete from the detail page of a to-do that is gone says so and keeps the Back link": "pass",
+            "web/tests/unit/userMessage.test.ts::NFR-006 AC-1 a body that is not a Problem gives try-again": "pass",
+            "web/tests/unit/userMessage.test.ts::NFR-006 AC-1 a 409 IDENTIFIER_TAKEN on sign-up names choosing another identifier or logging in": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "NFR-006/AC-2",
+          "tests": [
+            "web/e2e/states.spec.ts::NFR-006 AC-2 a 500 problem response with internals in its body shows none of them to the user",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 AC-2 a 500 on the list shows a friendly message with Retry and no internals; retrying loads the list",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 AC-2 a network error on the list shows the same friendly message without browser error text",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 AC-2 a 500 on the detail page shows a friendly message with Retry and no internals",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 AC-2 a network error on the detail page shows a friendly message with Retry and no browser error text",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 AC-2 N-2 a done toggle whose handler throws shows the unexpected message in the page-level alert above the list and keeps the list",
+            "web/tests/component/todo-form.test.tsx::NFR-006 AC-1 NFR-006 AC-2 a failed create (500) keeps the input and shows a form-level message with a next step and no internals",
+            "web/tests/unit/userMessage.test.ts::NFR-006 AC-2 the Problem type of identity.ts equals the Problem type of todos.ts"
+          ],
+          "code": [
+            "web/src/api/client.ts:L1-L130",
+            "web/src/app/AppErrorBoundary.tsx:L1-L96",
+            "web/src/app/AppShell.tsx:L1-L74",
+            "web/tests/README.md:L1-L46",
+            "web/tests/helpers/fakeApi.ts:L1-L284"
+          ],
+          "results": {
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 AC-2 a 500 on the list shows a friendly message with Retry and no internals; retrying loads the list": "pass",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 AC-2 a network error on the list shows the same friendly message without browser error text": "pass",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 AC-2 a 500 on the detail page shows a friendly message with Retry and no internals": "pass",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 AC-2 a network error on the detail page shows a friendly message with Retry and no browser error text": "pass",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-1 AC-2 N-2 a done toggle whose handler throws shows the unexpected message in the page-level alert above the list and keeps the list": "pass",
+            "web/tests/component/todo-form.test.tsx::NFR-006 AC-1 NFR-006 AC-2 a failed create (500) keeps the input and shows a form-level message with a next step and no internals": "pass",
+            "web/tests/unit/userMessage.test.ts::NFR-006 AC-2 the Problem type of identity.ts equals the Problem type of todos.ts": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "NFR-006/AC-3",
+          "tests": [
+            "web/tests/component/errors.test.tsx::NFR-006 AC-3 a component that throws while rendering shows a friendly page with a reload control and a link to home, not a blank screen",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-3 following the error page's link to home clears the error and renders the normal /todos list without a reload"
+          ],
+          "code": [
+            "web/src/api/client.ts:L1-L130",
+            "web/src/app/AppErrorBoundary.tsx:L1-L96",
+            "web/src/app/AppShell.tsx:L1-L74",
+            "web/tests/helpers/fakeApi.ts:L1-L284"
+          ],
+          "results": {
+            "web/tests/component/errors.test.tsx::NFR-006 AC-3 a component that throws while rendering shows a friendly page with a reload control and a link to home, not a blank screen": "pass",
+            "web/tests/component/errors.test.tsx::NFR-006 AC-3 following the error page's link to home clears the error and renders the normal /todos list without a reload": "pass"
+          },
+          "status": "covered"
+        },
+        {
+          "id": "NFR-006/AC-4",
+          "tests": [
+            "web/e2e/auth.spec.ts::REQ-AUTH-002 AC-2 AC-3 NFR-006 AC-4 a wrong password and an unknown identifier show the same message",
+            "web/tests/component/auth.test.tsx::REQ-AUTH-002 AC-2 AC-3 NFR-006 AC-4 a wrong password and an unknown identifier show the same generic alert, never the response text",
+            "web/tests/unit/userMessage.test.ts::NFR-006 AC-4 a wrong password and an unknown identifier map to identical text and next step"
+          ],
+          "code": [
+            "web/src/api/client.ts:L1-L130",
+            "web/src/app/AppErrorBoundary.tsx:L1-L96",
+            "web/src/app/AppShell.tsx:L1-L74",
+            "web/tests/helpers/fakeApi.ts:L1-L284"
+          ],
+          "results": {
+            "web/tests/component/auth.test.tsx::REQ-AUTH-002 AC-2 AC-3 NFR-006 AC-4 a wrong password and an unknown identifier show the same generic alert, never the response text": "pass",
+            "web/tests/unit/userMessage.test.ts::NFR-006 AC-4 a wrong password and an unknown identifier map to identical text and next step": "pass"
+          },
+          "status": "covered"
+        }
+      ]
+    },
+    {
+      "id": "NFR-007",
+      "inScope": true,
+      "acceptanceCriteria": [
+        {
+          "id": "NFR-007/AC-1",
+          "tests": [
+            "api/src/test/java/app/todo/config/ModuleWiringTest.java::NFR-007 AC-1 the application context holds exactly one DataSource: a HikariCP pool of at most one connection",
+            "api/src/test/java/app/todo/config/ModuleWiringTest.java::NFR-007 AC-1 the pool's JDBC URL names the TODO_DB_PATH file",
+            "api/src/test/java/app/todo/config/ModuleWiringTest.java::NFR-007 AC-1 todos.user_id is a foreign key to users that cascades on delete (accepted shared-schema coupling, ADR-0018)"
+          ],
+          "code": [
+            "api/pom.xml:L1-L108",
+            "api/src/main/java/app/todo/TodoApplication.java:L1-L13",
+            "api/src/main/java/app/todo/config/DatabaseConfig.java:L1-L40",
+            "web/tests/README.md:L1-L46"
+          ],
+          "status": "covered"
+        },
+        {
+          "id": "NFR-007/AC-2",
+          "tests": [
+            "api/src/test/java/app/todo/architecture/ArchitectureNonVacuityTest.java::NFR-007 AC-2 the fixture has a class in every package the rules talk about",
+            "api/src/test/java/app/todo/architecture/ArchitectureNonVacuityTest.java::NFR-007 AC-2 every rule of the set has a named deliberate violation in the fixture",
+            "api/src/test/java/app/todo/architecture/ArchitectureNonVacuityTest.java::NFR-007 AC-2 each rule fails on the fixture, naming its deliberate violation",
+            "api/src/test/java/app/todo/architecture/ArchitectureNonVacuityTest.java::NFR-007 AC-2 creating a DataSource implementation or opening a DriverManager connection outside config fails the rule; only using one does not",
+            "api/src/test/java/app/todo/architecture/ArchitectureNonVacuityTest.java::NFR-007 AC-2 the published seam is allowed: a to-do class that uses only auth.api is not reported",
+            "api/src/test/java/app/todo/architecture/ArchitectureTest.java::NFR-007 AC-2 the main classes of the application are found (the rules are not checked against nothing)",
+            "api/src/test/java/app/todo/architecture/ArchitectureTest.java::NFR-007 AC-2 the module boundary rule holds for the application's main classes",
+            "api/src/test/java/app/todo/architecture/ArchitectureTest.java::NFR-007 AC-2 the one type the identity module publishes is CurrentUser(long userId)"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/TodoApplication.java:L1-L13",
+            "api/src/test/java/archfixture/FixtureRoot.java:L1-L4",
+            "web/tests/README.md:L1-L46"
+          ],
+          "status": "covered"
+        },
+        {
+          "id": "NFR-007/AC-3",
+          "tests": [
+            "api/src/test/java/app/todo/config/EndpointInventoryTest.java::NFR-007 AC-3 the union of the two module contracts equals the routes Spring has mapped, excluding only /error",
+            "api/src/test/java/app/todo/config/EndpointInventoryTest.java::NFR-007 AC-3 every path-and-method pair is in exactly one of the two contract files",
+            "api/src/test/java/app/todo/config/EndpointInventoryTest.java::NFR-007 AC-3 each operation's handler is declared by a controller in its module package (identity: app.todo.auth, to-dos: app.todo.todo)"
+          ],
+          "code": [
+            "api/src/main/java/app/todo/TodoApplication.java:L1-L13",
+            "web/tests/README.md:L1-L46"
+          ],
+          "status": "covered"
+        }
+      ]
+    }
+  ],
+  "unmappedHunks": [
+    {
+      "location": "api/.gitignore:L1-L2",
+      "classification": "creep"
+    },
+    {
+      "location": "api/.mvn/wrapper/maven-wrapper.properties:L1-L19",
+      "classification": "creep"
+    },
+    {
+      "location": "api/mvnw:L1-L259",
+      "classification": "creep"
+    },
+    {
+      "location": "api/mvnw.cmd:L1-L149",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/auth/AuthController.java:L1-L76",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/auth/JdbcSessionRepository.java:L1-L41",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/auth/JdbcUserRepository.java:L1-L51",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/auth/PasswordHasher.java:L1-L29",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/auth/SessionCookieAuthenticationFilter.java:L1-L69",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/auth/SessionDetails.java:L1-L6",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/auth/SessionRepository.java:L1-L20",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/auth/SessionService.java:L1-L75",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/auth/UserRepository.java:L1-L18",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/auth/api/CurrentUser.java:L1-L8",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/common/ApiException.java:L1-L40",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/common/BodyReader.java:L1-L72",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/common/ClientHeaderFilter.java:L1-L44",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/common/ClockConfig.java:L1-L19",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/common/FieldError.java:L1-L19",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/common/ProblemAuthenticationEntryPoint.java:L1-L25",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/common/ProblemCode.java:L1-L43",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/common/ProblemDetailsAdvice.java:L1-L83",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/common/ProblemErrorController.java:L1-L44",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/common/ProblemRequestRejectedHandler.java:L1-L25",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/common/ProblemWriter.java:L1-L78",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/common/RequestIdFilter.java:L1-L96",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/common/UtcTimestamps.java:L1-L26",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/config/SecurityConfig.java:L1-L63",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/config/WebConfig.java:L1-L28",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/todo/JdbcTodoRepository.java:L1-L170",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/todo/NewTodo.java:L1-L6",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/todo/Todo.java:L1-L15",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/todo/TodoContent.java:L1-L7",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/todo/TodoPage.java:L1-L6",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/todo/TodoPageResult.java:L1-L6",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/todo/TodoRepository.java:L1-L32",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/java/app/todo/todo/TodoTotals.java:L1-L4",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/resources/application.properties:L1-L14",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/main/resources/db/migration/V1__init.sql:L1-L39",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/test/java/app/todo/TestTodoApplication.java:L1-L17",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/test/java/app/todo/architecture/ArchitectureRules.java:L1-L81",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/test/java/app/todo/testsupport/E2eClockConfiguration.java:L1-L32",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/test/java/app/todo/testsupport/IntegrationTestBase.java:L1-L99",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/test/java/app/todo/testsupport/Json.java:L1-L70",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/test/java/app/todo/testsupport/LogCapture.java:L1-L54",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/test/java/app/todo/testsupport/MutableClock.java:L1-L38",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/test/java/app/todo/testsupport/OffsetFileClock.java:L1-L53",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/test/java/app/todo/testsupport/Reply.java:L1-L79",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/test/java/app/todo/testsupport/TestClockConfiguration.java:L1-L16",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/test/java/archfixture/auth/AuthInternals.java:L1-L4",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/test/java/archfixture/auth/AuthOpensItsOwnConnection.java:L1-L14",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/test/java/archfixture/auth/AuthReachesIntoTodo.java:L1-L8",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/test/java/archfixture/auth/LeakyUserRepository.java:L1-L4",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/test/java/archfixture/auth/api/NotTheSeam.java:L1-L4",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/test/java/archfixture/common/CommonReachesIntoAuth.java:L1-L8",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/test/java/archfixture/config/FixtureWiring.java:L1-L10",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/test/java/archfixture/stray/StrayClass.java:L1-L4",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/test/java/archfixture/todo/TodoBuildsItsOwnPool.java:L1-L10",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/test/java/archfixture/todo/TodoCore.java:L1-L4",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/test/java/archfixture/todo/TodoOnlyUsesADataSource.java:L1-L12",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/test/java/archfixture/todo/TodoPeeksIntoAuthInternals.java:L1-L8",
+      "classification": "creep"
+    },
+    {
+      "location": "api/src/test/java/archfixture/todo/TodoUsesPublishedSeam.java:L1-L8",
+      "classification": "creep"
+    },
+    {
+      "location": "intent/a-new-todo-list-app-where-user-can-creat.md:deleted",
+      "classification": "creep",
+      "note": "deleted"
+    },
+    {
+      "location": "web/.gitignore:L1-L7",
+      "classification": "creep"
+    },
+    {
+      "location": "web/.nvmrc:L1-L1",
+      "classification": "creep"
+    },
+    {
+      "location": "web/e2e/global-setup.session-expiry.ts:L1-L12",
+      "classification": "creep"
+    },
+    {
+      "location": "web/e2e/global-setup.ts:L1-L10",
+      "classification": "creep"
+    },
+    {
+      "location": "web/e2e/playwright.session-expiry.config.ts:L1-L41",
+      "classification": "creep"
+    },
+    {
+      "location": "web/e2e/support/app.ts:L1-L87",
+      "classification": "creep"
+    },
+    {
+      "location": "web/e2e/support/launch.ts:L1-L56",
+      "classification": "creep"
+    },
+    {
+      "location": "web/eslint.config.js:L1-L8",
+      "classification": "creep"
+    },
+    {
+      "location": "web/index.html:L1-L12",
+      "classification": "creep"
+    },
+    {
+      "location": "web/package.json:L1-L48",
+      "classification": "creep"
+    },
+    {
+      "location": "web/playwright.config.ts:L1-L43",
+      "classification": "creep"
+    },
+    {
+      "location": "web/pnpm-lock.yaml:L1-L2301",
+      "classification": "creep"
+    },
+    {
+      "location": "web/redocly.yaml:L1-L16",
+      "classification": "creep"
+    },
+    {
+      "location": "web/scripts/generate-tokens.mjs:L1-L58",
+      "classification": "creep"
+    },
+    {
+      "location": "web/src/auth/RequireAuth.tsx:L1-L48",
+      "classification": "creep"
+    },
+    {
+      "location": "web/src/auth/SessionProvider.tsx:L1-L98",
+      "classification": "creep"
+    },
+    {
+      "location": "web/src/auth/returnTo.ts:L1-L8",
+      "classification": "creep"
+    },
+    {
+      "location": "web/src/errors/userMessage.ts:L1-L113",
+      "classification": "creep"
+    },
+    {
+      "location": "web/src/main.tsx:L1-L18",
+      "classification": "creep"
+    },
+    {
+      "location": "web/src/styles/tokens.css:L1-L79",
+      "classification": "generated"
+    },
+    {
+      "location": "web/src/todos/todoId.ts:L1-L6",
+      "classification": "creep"
+    },
+    {
+      "location": "web/src/validation/rules.ts:L1-L73",
+      "classification": "creep"
+    },
+    {
+      "location": "web/src/validation/whitespace.ts:L1-L29",
+      "classification": "creep"
+    },
+    {
+      "location": "web/src/vite-env.d.ts:L1-L1",
+      "classification": "creep"
+    },
+    {
+      "location": "web/tests/component/list.test.tsx:L56-L56",
+      "classification": "test-support",
+      "note": "test names no requirement"
+    },
+    {
+      "location": "web/tests/component/todo-form.test.tsx:L272-L272",
+      "classification": "test-support",
+      "note": "test names no requirement"
+    },
+    {
+      "location": "web/tests/helpers/lazy.ts:L1-L14",
+      "classification": "test-support"
+    },
+    {
+      "location": "web/tests/helpers/renderApp.tsx:L1-L63",
+      "classification": "test-support"
+    },
+    {
+      "location": "web/tests/helpers/status.ts:L1-L20",
+      "classification": "test-support"
+    },
+    {
+      "location": "web/tests/setup.ts:L1-L20",
+      "classification": "test-support"
+    },
+    {
+      "location": "web/tsconfig.json:L1-L17",
+      "classification": "creep"
+    },
+    {
+      "location": "web/vite.config.ts:L1-L11",
+      "classification": "creep"
+    },
+    {
+      "location": "web/vitest.config.ts:L1-L16",
+      "classification": "creep"
+    }
+  ]
+}
