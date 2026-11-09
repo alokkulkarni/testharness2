@@ -232,7 +232,7 @@
       "claim": {
         "runId": "run-mw955vgo",
         "executor": "claude-code",
-        "leaseUntil": "2026-11-09T11:07:11.915Z",
+        "leaseUntil": "2026-11-09T11:14:16.222Z",
         "claimedAt": "2026-11-09T10:51:52.584Z"
       }
     },
