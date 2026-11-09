@@ -368,7 +368,7 @@
         "N09-build-java",
         "N10-build-react"
       ],
-      "status": "pending",
+      "status": "running",
       "kind": "agent",
       "agent": "critic",
       "description": "Review the PR delta against the frozen spec (critic-verdict).",
@@ -378,7 +378,13 @@
       "executor": "any",
       "isolation": "none",
       "attempts": 0,
-      "maxAttempts": 3
+      "maxAttempts": 3,
+      "claim": {
+        "runId": "run-mw9dkv3x",
+        "executor": "claude-code",
+        "leaseUntil": "2026-11-09T15:02:28.893Z",
+        "claimedAt": "2026-11-09T14:47:28.893Z"
+      }
     },
     {
       "id": "N14-docs",
