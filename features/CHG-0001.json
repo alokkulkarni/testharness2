@@ -221,14 +221,7 @@
       "role": "developer",
       "runId": "run-mw95u7hb",
       "holder": "claude-code",
-      "leaseUntil": "2026-11-09T12:52:24.092Z"
-    },
-    {
-      "node": "N10-build-react",
-      "role": "developer",
-      "runId": "run-mw95uf3f",
-      "holder": "claude-code",
-      "leaseUntil": "2026-11-09T12:52:28.907Z"
+      "leaseUntil": "2026-11-09T13:20:47.327Z"
     }
   ],
   "overlaps": []
