@@ -23,7 +23,13 @@ export default defineConfig({
     baseURL: `http://localhost:${SPA_PORT}`,
     trace: 'retain-on-failure',
   },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  // chromium, firefox and webkit run one after the other (workers 1, fullyParallel false) against the one API: the
+  // restart of the API process must never overlap another browser's test.
+  projects: [
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
+    { name: 'webkit', use: { ...devices['Desktop Safari'] } },
+  ],
   webServer: external
     ? undefined
     : {
