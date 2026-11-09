@@ -156,6 +156,7 @@
           "web/package.json",
           "web/playwright.config.ts",
           "web/pnpm-lock.yaml",
+          "web/redocly.yaml",
           "web/scripts/generate-tokens.mjs",
           "web/src/api/client.ts",
           "web/src/api/identity.ts",
@@ -210,7 +211,7 @@
       }
     ],
     "source": "diff",
-    "updatedAt": "2026-11-09T13:37:21.650Z"
+    "updatedAt": "2026-11-09T14:04:25.635Z"
   },
   "links": {
     "branch": "feature/CHG-0001-create-a-to-do-list"
