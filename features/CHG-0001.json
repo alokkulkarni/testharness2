@@ -218,13 +218,6 @@
   },
   "running": [
     {
-      "node": "N11-security",
-      "role": "reviewer",
-      "runId": "run-mw9c92qs",
-      "holder": "claude-code",
-      "leaseUntil": "2026-11-09T14:49:04.603Z"
-    },
-    {
       "node": "N12-validate",
       "role": "reviewer",
       "runId": "run-mw9c978c",
