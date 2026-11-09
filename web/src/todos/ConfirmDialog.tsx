@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, type ReactNode } from 'react';
+import { useEffect, useId, useRef, type KeyboardEvent, type ReactNode } from 'react';
 
 /**
  * D1 / D2 (ux-design): a native modal <dialog> opened with showModal() (ADR-0001). It is mounted only while it is
@@ -49,12 +49,29 @@ export function ConfirmDialog({
     onCancel();
   }
 
+  /** Tab from the last control goes to the first, Shift+Tab from the first to the last (some engines would leave the page). */
+  function keepFocusInside(event: KeyboardEvent<HTMLDialogElement>) {
+    if (event.key !== 'Tab') return;
+    const controls = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])'));
+    const first = controls[0];
+    const last = controls[controls.length - 1];
+    if (!first || !last) return;
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+
   return (
     <dialog
       ref={dialog}
       className="dialog"
       aria-labelledby={headingId}
       aria-describedby={bodyId}
+      onKeyDown={keepFocusInside}
       onCancel={(event) => {
         event.preventDefault();
         cancel();

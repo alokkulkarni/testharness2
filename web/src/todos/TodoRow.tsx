@@ -19,11 +19,12 @@ export function TodoRow({
   return (
     <li className={`todo-row${todo.done ? ' done' : ''}`}>
       <div className="todo-main">
-        {/* aria-disabled, not disabled, so the checkbox keeps focus while the request is in flight */}
+        {/* aria-disabled, not disabled, so the checkbox keeps focus while the request is in flight; it shows the
+            requested state at once (reverted if the request fails) so a click is seen to take effect */}
         <input
           type="checkbox"
           className="todo-check"
-          checked={todo.done}
+          checked={toggling ? !todo.done : todo.done}
           aria-labelledby={titleId}
           aria-disabled={toggling}
           onChange={() => {
