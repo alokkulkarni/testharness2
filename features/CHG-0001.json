@@ -217,13 +217,6 @@
   },
   "running": [
     {
-      "node": "N09-build-java",
-      "role": "developer",
-      "runId": "run-mw95u7hb",
-      "holder": "claude-code",
-      "leaseUntil": "2026-11-09T13:38:24.201Z"
-    },
-    {
       "node": "N10-build-react",
       "role": "developer",
       "runId": "run-mw95uf3f",
