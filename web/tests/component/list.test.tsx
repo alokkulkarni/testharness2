@@ -302,6 +302,53 @@ describe('S3 list: mark done and not done (REQ-TODO-005)', () => {
     expect(titles()).toEqual(['Todo 3', 'Todo 1']);
     expect(screen.getByRole('heading', { level: 1, name: 'My to-dos' })).toHaveFocus();
   });
+
+  it.each([
+    { from: false, serverShows: false, next: true },
+    { from: true, serverShows: true, next: false },
+  ])(
+    'REQ-TODO-005 AC-1 REQ-DATA-002 AC-1 when the re-query after a successful toggle returns the other state (from done=$from), the checkbox shows the server state and the next click sends the reverse of it',
+    async ({ from, serverShows, next }) => {
+      const api = new FakeApi({ signedIn: true, todos: seed(2, (n) => ({ done: n === 2 ? from : false })) });
+      const { user } = await listPage(api);
+      // another tab flipped the row back: the list GET after the PUT carries the row with its old value, no conflict message
+      api.on(
+        'GET',
+        '/api/v1/todos',
+        () => {
+          const items = [...api.todos]
+            .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
+            .map((t) => (t.title === 'Todo 2' ? { ...t, done: serverShows } : t));
+          return json(200, {
+            items,
+            page: 1,
+            pageSize: 20,
+            totalItems: items.length,
+            totalPages: 1,
+            totals: {
+              all: items.length,
+              active: items.filter((t) => !t.done).length,
+              completed: items.filter((t) => t.done).length,
+            },
+          });
+        },
+        true,
+      );
+      const before = api.listCalls().length;
+      await user.click(within(rowOf('Todo 2')).getByRole('checkbox'));
+      await waitFor(() => expect(api.listCalls().length).toBeGreaterThan(before)); // the re-query has been made
+      expect(api.callsTo('PUT', /\/done$/)[0]!.body).toEqual({ done: !from });
+      await waitFor(() => {
+        const box = within(rowOf('Todo 2')).getByRole('checkbox');
+        if (serverShows) expect(box).toBeChecked();
+        else expect(box).not.toBeChecked();
+      });
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+      await user.click(within(rowOf('Todo 2')).getByRole('checkbox'));
+      await waitFor(() => expect(api.callsTo('PUT', /\/done$/)).toHaveLength(2));
+      expect(api.callsTo('PUT', /\/done$/)[1]!.body).toEqual({ done: next });
+    },
+  );
 });
 
 describe('S3 list: delete (REQ-TODO-006) and D1', () => {
