@@ -64,14 +64,6 @@
   "links": {
     "branch": "feature/CHG-0001-create-a-to-do-list"
   },
-  "running": [
-    {
-      "node": "N07-tests-backend",
-      "role": "tester",
-      "runId": "run-mw90lnz6",
-      "holder": "claude-code",
-      "leaseUntil": "2026-11-09T08:59:51.124Z"
-    }
-  ],
+  "running": [],
   "overlaps": []
 }
