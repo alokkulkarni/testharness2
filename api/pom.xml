@@ -27,7 +27,7 @@
   </properties>
 
   <dependencies>
-    <!-- Embedded container: the integration tests start the application at a random port. -->
+    <!-- Web MVC; the embedded container is used only by the NFR-004 filter-exception test (sdd.md section 14). -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-webmvc</artifactId>
@@ -39,10 +39,22 @@
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
-    <!-- Contract validator (ADR-0012), core v3 line -->
+    <!-- MockMvc for the integration level (sdd.md section 14): auto-configured MockMvc in Spring Boot 4 -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webmvc-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!-- Contract validator (ADR-0012), core v3 line and its v3 MockMvc adapter -->
     <dependency>
       <groupId>com.atlassian.oai</groupId>
       <artifactId>openapi-request-validator-core</artifactId>
+      <version>${openapi-request-validator.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.atlassian.oai</groupId>
+      <artifactId>openapi-request-validator-mockmvc</artifactId>
       <version>${openapi-request-validator.version}</version>
       <scope>test</scope>
     </dependency>
