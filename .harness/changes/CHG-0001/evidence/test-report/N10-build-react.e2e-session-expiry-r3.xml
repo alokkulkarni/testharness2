@@ -1,0 +1,14 @@
+<testsuites id="" name="" tests="4" failures="0" skipped="0" errors="0" time="6.004123000000001">
+<testsuite name="session-expiry.spec.ts" timestamp="2026-11-09T13:55:37.370Z" hostname="chromium" tests="2" failures="0" skipped="0" time="0.962" errors="0">
+<testcase name="REQ-AUTH-004 AC-4 REQ-AUTH-002 AC-4 after the 8-hour session ends, the next request sends the user to log in with the session-ended message" classname="session-expiry.spec.ts" time="0.633">
+</testcase>
+<testcase name="REQ-AUTH-002 AC-4 a session that has not reached 8 hours is still valid" classname="session-expiry.spec.ts" time="0.329">
+</testcase>
+</testsuite>
+<testsuite name="session-expiry.spec.ts" timestamp="2026-11-09T13:55:37.370Z" hostname="webkit" tests="2" failures="0" skipped="0" time="0.886" errors="0">
+<testcase name="REQ-AUTH-004 AC-4 REQ-AUTH-002 AC-4 after the 8-hour session ends, the next request sends the user to log in with the session-ended message" classname="session-expiry.spec.ts" time="0.519">
+</testcase>
+<testcase name="REQ-AUTH-002 AC-4 a session that has not reached 8 hours is still valid" classname="session-expiry.spec.ts" time="0.367">
+</testcase>
+</testsuite>
+</testsuites>

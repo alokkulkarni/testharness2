@@ -1,0 +1,6 @@
+{
+  "kind": "test-report",
+  "path": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.component-junit-r3.xml",
+  "description": "Vitest 486/486 on a70f2c8, r3, inside the sandbox",
+  "replaces": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.component-junit-r2.xml"
+}

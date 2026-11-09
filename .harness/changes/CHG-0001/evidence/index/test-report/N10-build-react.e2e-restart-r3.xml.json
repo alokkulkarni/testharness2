@@ -1,0 +1,6 @@
+{
+  "kind": "test-report",
+  "path": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.e2e-restart-r3.xml",
+  "description": "Playwright restart config, chromium and webkit only, inside the sandbox, on a70f2c8: 2 passed. Firefox is the accepted divergence; its full-run copy stays as the three-browser record",
+  "replaces": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.e2e-restart-full.xml"
+}
