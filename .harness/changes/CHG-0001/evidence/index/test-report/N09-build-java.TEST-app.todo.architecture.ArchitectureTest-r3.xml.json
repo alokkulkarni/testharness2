@@ -1,0 +1,5 @@
+{
+  "kind": "test-report",
+  "path": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.architecture.ArchitectureTest-r3.xml",
+  "replaces": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.architecture.ArchitectureTest-r2.xml"
+}
