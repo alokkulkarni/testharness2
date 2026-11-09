@@ -216,14 +216,6 @@
   "links": {
     "branch": "feature/CHG-0001-create-a-to-do-list"
   },
-  "running": [
-    {
-      "node": "N10-build-react",
-      "role": "developer",
-      "runId": "run-mw95uf3f",
-      "holder": "claude-code",
-      "leaseUntil": "2026-11-09T14:19:12.471Z"
-    }
-  ],
+  "running": [],
   "overlaps": []
 }
