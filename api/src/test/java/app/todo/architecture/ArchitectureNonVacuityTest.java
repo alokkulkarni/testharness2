@@ -69,6 +69,20 @@ class ArchitectureNonVacuityTest {
     }
 
     @Test
+    @DisplayName("NFR-007 AC-2 creating a DataSource implementation or opening a DriverManager connection outside config fails the rule; only using one does not")
+    void NFR_007_AC2_creating_any_data_source_outside_config_is_a_violation_using_one_is_not() {
+        NamedRule poolRule = rules.stream().filter(r -> r.name().startsWith("only config creates")).findFirst().orElseThrow();
+
+        assertThatThrownBy(() -> poolRule.rule().check(fixture))
+                .isInstanceOf(AssertionError.class)
+                .hasMessageContaining("archfixture.todo.TodoBuildsItsOwnPool")
+                .hasMessageContaining("archfixture.auth.AuthOpensItsOwnConnection")
+                .hasMessageContaining("SQLiteDataSource")
+                .hasMessageContaining("DriverManager")
+                .hasMessageNotContaining("archfixture.todo.TodoOnlyUsesADataSource");
+    }
+
+    @Test
     @DisplayName("NFR-007 AC-2 the published seam is allowed: a to-do class that uses only auth.api is not reported")
     void NFR_007_AC2_use_of_the_published_interface_is_not_a_violation() {
         NamedRule todoRule = rules.stream().filter(r -> r.name().startsWith("todo uses only")).findFirst().orElseThrow();

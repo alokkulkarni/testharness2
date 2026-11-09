@@ -112,7 +112,7 @@ class ConcurrentEditsApiTest extends IntegrationTestBase {
     }
 
     @Test
-    @DisplayName("REQ-DATA-002 AC-2 concurrent creates by several users are all stored")
+    @DisplayName("REQ-DATA-002 AC-2 concurrent creates by one signed-in user are all stored")
     void REQ_DATA_002_AC2_concurrent_creates_are_all_stored() throws Exception {
         var me = signedIn();
         int n = 15;

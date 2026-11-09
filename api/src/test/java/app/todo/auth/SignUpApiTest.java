@@ -238,7 +238,7 @@ class SignUpApiTest extends IntegrationTestBase {
     @Test
     @DisplayName("REQ-AUTH-001 AC-8 an identifier of exactly 3 characters is accepted")
     void REQ_AUTH_001_AC8_three_character_identifier_is_accepted() {
-        // the database file is new for each test JVM and no other test signs up "x-y"
+        // the database file is new for each test class (SpringContextTestBase) and no other test in this class signs up "x-y"
         Reply r = anonymous().post(SIGNUP, credentials("x-y", PASSWORD));
 
         assertThat(r.status()).as(r.body()).isEqualTo(201);

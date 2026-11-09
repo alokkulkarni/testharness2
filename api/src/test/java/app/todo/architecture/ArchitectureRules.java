@@ -8,7 +8,9 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.slices;
 
 import com.tngtech.archunit.base.DescribedPredicate;
+import com.tngtech.archunit.core.domain.JavaCall;
 import com.tngtech.archunit.core.domain.JavaClass;
+import com.tngtech.archunit.core.domain.properties.HasOwner;
 import com.tngtech.archunit.lang.ArchRule;
 import java.util.List;
 
@@ -44,9 +46,15 @@ final class ArchitectureRules {
         // common uses no module and not config
         DescribedPredicate<JavaClass> forbiddenForCommon = resideInAnyPackage(auth + "..", todo + "..", config + "..")
                 .or(resideInAPackage(root));
-        // creating a DataSource or a HikariConfig
-        DescribedPredicate<JavaClass> dataSourceCreation = resideInAnyPackage("com.zaxxer.hikari..", "org.springframework.jdbc.datasource..")
-                .or(JavaClass.Predicates.simpleName("DataSourceBuilder"));
+        // creating a DataSource or a HikariConfig: a constructor call on any DataSource implementation or on
+        // HikariConfig, DataSourceBuilder's static factory, or opening a connection through DriverManager.
+        // Merely using the type (a field, a parameter, JdbcClient) is not creating one.
+        DescribedPredicate<JavaCall<?>> constructsDataSource = JavaCall.Predicates.target(HasOwner.Predicates.With.owner(
+                JavaClass.Predicates.assignableTo("javax.sql.DataSource")
+                        .or(JavaClass.Predicates.assignableTo("com.zaxxer.hikari.HikariConfig"))));
+        DescribedPredicate<JavaCall<?>> buildsOrConnects = JavaCall.Predicates.target(HasOwner.Predicates.With.owner(
+                JavaClass.Predicates.simpleName("DataSourceBuilder")
+                        .or(JavaClass.Predicates.assignableTo("java.sql.DriverManager"))));
 
         return List.of(
                 new NamedRule("no cycles between auth, todo, common and config",
@@ -58,7 +66,9 @@ final class ArchitectureRules {
                 new NamedRule("common uses no module and not config",
                         noClasses().that().resideInAPackage(common + "..").should().dependOnClassesThat(forbiddenForCommon)),
                 new NamedRule("only config creates a DataSource or HikariConfig",
-                        noClasses().that().resideOutsideOfPackage(config + "..").should().dependOnClassesThat(dataSourceCreation)),
+                        noClasses().that().resideOutsideOfPackage(config + "..")
+                                .should().callConstructorWhere(constructsDataSource)
+                                .orShould().callMethodWhere(buildsOrConnects)),
                 new NamedRule("every main class lies in auth, auth.api, todo, common, config or the root package",
                         classes().should().resideInAnyPackage(root, auth + "..", todo + "..", common + "..", config + "..")),
                 new NamedRule("auth.api publishes only CurrentUser",

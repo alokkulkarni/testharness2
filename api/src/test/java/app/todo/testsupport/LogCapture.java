@@ -30,7 +30,20 @@ public final class LogCapture implements AutoCloseable {
             sb.append('\n').append(ThrowableProxyUtil.asString(event.getThrowableProxy()));
         }
         sb.append('\n').append(event.getMDCPropertyMap());
+        if (event.getKeyValuePairs() != null) {
+            event.getKeyValuePairs().forEach(kv -> sb.append('\n').append(kv.key).append('=').append(kv.value));
+        }
+        if (event.getArgumentArray() != null) {
+            for (Object argument : event.getArgumentArray()) {
+                sb.append('\n').append(argument);
+            }
+        }
         return sb.toString();
+    }
+
+    /** True for an event written by one of the application's own loggers (package {@code app.todo}). */
+    public static boolean isApplicationEvent(ILoggingEvent event) {
+        return event.getLoggerName() != null && event.getLoggerName().startsWith("app.todo");
     }
 
     @Override
