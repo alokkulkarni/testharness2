@@ -31,6 +31,7 @@
           "api/src/main/java/app/todo/auth/api/CurrentUser.java",
           "api/src/main/java/app/todo/common/ProblemCode.java",
           "api/src/main/java/app/todo/common/Whitespace.java",
+          "api/src/main/java/app/todo/todo/TodoRepository.java",
           "api/src/test",
           "api/src/test/java/app/todo/architecture/ArchitectureNonVacuityTest.java",
           "api/src/test/java/app/todo/architecture/ArchitectureRules.java",
@@ -59,6 +60,7 @@
           "api/src/test/java/app/todo/testsupport/TestClockConfiguration.java",
           "api/src/test/java/app/todo/todo/AcceptanceScenarioApiTest.java",
           "api/src/test/java/app/todo/todo/ConcurrentEditsApiTest.java",
+          "api/src/test/java/app/todo/todo/HandlerExceptionTest.java",
           "api/src/test/java/app/todo/todo/TodoCreateApiTest.java",
           "api/src/test/java/app/todo/todo/TodoDeleteAndClearApiTest.java",
           "api/src/test/java/app/todo/todo/TodoIsolationApiTest.java",
@@ -67,6 +69,7 @@
           "api/src/test/java/app/todo/todo/TodoValidationApiTest.java",
           "api/src/test/java/archfixture/FixtureRoot.java",
           "api/src/test/java/archfixture/auth/AuthInternals.java",
+          "api/src/test/java/archfixture/auth/AuthOpensItsOwnConnection.java",
           "api/src/test/java/archfixture/auth/AuthReachesIntoTodo.java",
           "api/src/test/java/archfixture/auth/LeakyUserRepository.java",
           "api/src/test/java/archfixture/auth/api/NotTheSeam.java",
@@ -75,6 +78,7 @@
           "api/src/test/java/archfixture/stray/StrayClass.java",
           "api/src/test/java/archfixture/todo/TodoBuildsItsOwnPool.java",
           "api/src/test/java/archfixture/todo/TodoCore.java",
+          "api/src/test/java/archfixture/todo/TodoOnlyUsesADataSource.java",
           "api/src/test/java/archfixture/todo/TodoPeeksIntoAuthInternals.java",
           "api/src/test/java/archfixture/todo/TodoUsesPublishedSeam.java",
           "intent/a-new-todo-list-app-where-user-can-creat.md",
@@ -123,7 +127,7 @@
       }
     ],
     "source": "diff",
-    "updatedAt": "2026-11-09T09:23:29.608Z"
+    "updatedAt": "2026-11-09T10:51:44.949Z"
   },
   "links": {
     "branch": "feature/CHG-0001-create-a-to-do-list"
