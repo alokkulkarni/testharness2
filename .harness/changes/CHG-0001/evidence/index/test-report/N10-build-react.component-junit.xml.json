@@ -1,0 +1,5 @@
+{
+  "kind": "test-report",
+  "path": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.component-junit.xml",
+  "replaces": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.unit-junit.xml"
+}
