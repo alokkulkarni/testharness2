@@ -223,6 +223,13 @@
       "runId": "run-mw9c92qs",
       "holder": "claude-code",
       "leaseUntil": "2026-11-09T14:25:19.300Z"
+    },
+    {
+      "node": "N12-validate",
+      "role": "reviewer",
+      "runId": "run-mw9c978c",
+      "holder": "claude-code",
+      "leaseUntil": "2026-11-09T14:25:25.116Z"
     }
   ],
   "overlaps": []
