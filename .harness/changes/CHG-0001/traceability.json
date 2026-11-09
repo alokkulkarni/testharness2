@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "changeId": "CHG-0001",
   "base": "9dfd67568122aa003e08ac25297fd066a08e78e2",
-  "head": "1f53eb8297bc6ab06acd4d4fe9c48c3cf5250824",
+  "head": "3b295b50e95200ce49e5e14b6998ac29866a26fb",
   "requirements": [
     {
       "id": "REQ-AUTH-001",
@@ -2118,6 +2118,14 @@
     }
   ],
   "unmappedHunks": [
+    {
+      "location": ".env.example:L1-L10",
+      "classification": "creep"
+    },
+    {
+      "location": "README.md:L2-L39",
+      "classification": "creep"
+    },
     {
       "location": "api/.gitignore:L1-L2",
       "classification": "creep"
