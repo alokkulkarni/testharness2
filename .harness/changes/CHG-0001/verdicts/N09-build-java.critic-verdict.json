@@ -11,11 +11,17 @@
       "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
       "changeId": "CHG-0001",
       "agent": "critic",
-      "agentRunId": "a29be1a1e48233d03"
+      "agentRunId": "ab666d1d530c7230d"
     },
     "modelAlias": "harness/critic"
   },
   "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "java-engineer",
+      "agentRunId": "a58b7d8aa3237ea97"
+    },
     {
       "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
       "changeId": "CHG-0001",
@@ -29,11 +35,11 @@
       "agentRunId": "a8a74c75b2a7a067a"
     }
   ],
-  "createdAt": "2026-11-09T13:19:28.722Z",
+  "createdAt": "2026-11-09T14:30:40.777Z",
   "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
-  "reviewedCommit": "c7c4ae70ca17e2dfee176ae78f3582b15f726c89",
-  "diffHash": "f1e36b0062e58d03d2db7474ff3159e35e4cf602b454e24cbd5c5c0739a12c52",
-  "summary": "Round 1 (exhaustive). The API conforms to the contracts and sdd.md (security order, sessions, Argon2id, persistence, Problem model, request-id logging, NFR-007 modules); the plan file matches the diff; green evidence is 342/342. The q whitelist in Contracts.java (3807f87) is narrow: request-side key only, GET, text naming q, so it can fire only on listTodos, and the response side and all assertions are intact. b1df3fd conforms to ADR-0013. Carried: F-10 settled by requester decision (F-7); F-12 is worked around in production code, not fixed in the test (F-1); F-13 unchanged (F-8). 0 blocker, 0 major, 3 minor, 5 info follow-ups.",
+  "reviewedCommit": "3b295b50e95200ce49e5e14b6998ac29866a26fb",
+  "diffHash": "5fb0b9148cf203066e356926d7c8a310842fcd2b1dbecf809d9a1081017f0cf4",
+  "summary": "round 2, delta since c7c4ae70ca17e2dfee176ae78f3582b15f726c89: no previous blocker or major to check. The only api change is bouncycastle.version 1.84 to 1.85 in api/pom.xml 24c145c, which resolves SEC-1 and SEC-2 of N11-security attempt 1. ADR-0005 holds: same artifact bcprov-jdk18on, Argon2PasswordEncoder unchanged, no version is fixed by the ADR. r3 evidence b57fb3f: 23 suites, 342 tests, 0 failures, errors or skips, classpath shows bcprov-jdk18on-1.85.jar only, PasswordStorageTest 7 of 7. Plan line 008da32 is consistent and api/pom.xml is under Files. 0 blocker, 0 major, 3 minor, 6 info follow-ups: F-1 to F-8 carried, F-9 new info.",
   "findings": [
     {
       "id": "F-1",
@@ -98,6 +104,14 @@
       "requirement": "NFR-004",
       "location": "api/src/test/java/app/todo/auth/FilterExceptionTest.java:L42-L43",
       "suggestion": "Tests node follow-up: declare the key once in app.todo.testsupport, or reference RequestIdFilter.REQUEST_ID_KEY."
+    },
+    {
+      "id": "F-9",
+      "severity": "info",
+      "message": "The bump line sits under Accepted divergences, but a dependency patch bump is not a divergence from the frozen spec, and the line does not name the r3 run as the new proof. ADR-0005 needs no successor since it fixes no version.",
+      "requirement": "REQ-AUTH-003",
+      "location": "docs/specs/CHG-0001/plan/N09-build-java.md:L100-L101",
+      "suggestion": "List the bump in the PR body as a security fix for SEC-1 and SEC-2, cite the r3 reports as its proof, and let N11-security attempt 2 confirm by a fresh SCA scan."
     }
   ]
 }
