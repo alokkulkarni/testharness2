@@ -316,23 +316,17 @@
         "N09-build-java",
         "N10-build-react"
       ],
-      "status": "running",
+      "status": "complete",
       "kind": "agent",
       "agent": "security-reviewer",
       "description": "Security scans, SBOM and findings on the PR delta.",
       "gates": [
         "security"
       ],
-      "executor": "any",
+      "executor": "claude-code",
       "isolation": "none",
       "attempts": 1,
-      "maxAttempts": 3,
-      "claim": {
-        "runId": "run-mw9c92qs",
-        "executor": "claude-code",
-        "leaseUntil": "2026-11-09T14:49:04.603Z",
-        "claimedAt": "2026-11-09T14:10:19.300Z"
-      }
+      "maxAttempts": 3
     },
     {
       "id": "N12-validate",

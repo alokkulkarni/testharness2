@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N11-security",
+  "gate": "security",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "tool",
+    "id": "security-reviewer",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "security-reviewer",
+      "agentRunId": "a93fd6d3892a194df"
+    },
+    "modelAlias": "harness/security"
+  },
+  "createdAt": "2026-11-09T14:31:32.284Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "summary": "round 2, delta since 1f53eb8: SEC-1 and SEC-2 fixed (bcprov-jdk18on 1.85; trivy offline finds 0 vulnerabilities in api/pom.xml). Assumed blockOn critical and high (config sets none). gitleaks: .env.example, README.md, api/pom.xml clean; 36 hits are content hashes and round-1 SARIF self-matches, false positives. semgrep 4 unchanged. trivy DB dated 2026-11-03; syft/grype not installed.",
+  "findings": [
+    {
+      "id": "SEC-3",
+      "severity": "minor",
+      "location": "api/src/main/java/app/todo/common/ProblemErrorController.java:26",
+      "message": "semgrep unrestricted-request-mapping on /error; standard Spring error endpoint, likely false positive. Confirm it performs no mutation."
+    },
+    {
+      "id": "SEC-4",
+      "severity": "info",
+      "location": "web/e2e/keyboard.spec.ts:128",
+      "message": "semgrep non-literal RegExp (also 135, 149) in e2e test; test-only, false positive."
+    },
+    {
+      "id": "SEC-5",
+      "severity": "info",
+      "location": ".harness/changes/CHG-0001/spec-freeze.json",
+      "message": "gitleaks generic-api-key hits on content hashes in harness and doc JSON; false positives."
+    },
+    {
+      "id": "SEC-6",
+      "severity": "info",
+      "location": ".harness/changes/CHG-0001/evidence/scan-report/gitleaks.sarif",
+      "message": "gitleaks sourcegraph-access-token hits (21) are self-matches inside the round-1 gitleaks SARIF report (redacted tool output); false positive, no credential."
+    }
+  ]
+}
