@@ -1,9 +1,8 @@
 package app.todo.auth.api;
 
-/** Stub (tests node): the one type the identity module publishes; a record of one long userId in the real code. */
-public final class CurrentUser {
-
-    public CurrentUser(long userId) {
-        throw new UnsupportedOperationException("not implemented");
-    }
-}
+/**
+ * The only type the identity module publishes to other modules (sdd.md section 2, ADR-0018): the Spring Security
+ * principal of every request that carries a valid session. {@code userId} is an opaque number to the to-dos module,
+ * which never reads a cookie, a session or a user row.
+ */
+public record CurrentUser(long userId) {}
