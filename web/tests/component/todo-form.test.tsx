@@ -293,7 +293,7 @@ describe('S6 Edit a to-do', () => {
 describe('S5 To-do detail', () => {
   const withNotes = () => [
     makeTodo(1, { title: 'Detail me', description: 'Line one\nLine two', dueDate: '2026-11-06', priority: 'LOW', done: true }),
-    makeTodo(2, { title: 'Plain', description: null }),
+    makeTodo(2, { title: 'Plain', description: null, dueDate: '2026-11-07' }),
   ];
 
   it('REQ-TODO-003 AC-3 the detail page shows description, created and updated timestamps, status, due date and priority', async () => {
