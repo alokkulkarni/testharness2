@@ -27,6 +27,7 @@ export default defineConfig({
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
     { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
+    { name: 'webkit', use: { ...devices['Desktop Safari'] } },
     // restart.spec.ts restarts the API process, so it has its own configuration (e2e/playwright.restart.config.ts),
     // run by `pnpm e2e` after this one; it is not a dependent project here because Playwright skips a dependent
     // project when any test of its dependencies fails.
