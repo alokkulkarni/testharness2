@@ -1,0 +1,5 @@
+{
+  "kind": "other",
+  "path": ".harness/changes/CHG-0001/evidence/other/N10-build-react.typecheck-r4.txt",
+  "description": "pnpm -C web typecheck, exit 0, on 0615ba7"
+}

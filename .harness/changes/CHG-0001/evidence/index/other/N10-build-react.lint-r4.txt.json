@@ -1,0 +1,5 @@
+{
+  "kind": "other",
+  "path": ".harness/changes/CHG-0001/evidence/other/N10-build-react.lint-r4.txt",
+  "description": "pnpm -C web lint, exit 0, on 0615ba7"
+}
