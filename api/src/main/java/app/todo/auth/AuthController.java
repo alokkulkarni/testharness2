@@ -31,13 +31,13 @@ class AuthController {
         this.secureCookie = secureCookie;
     }
 
-    @PostMapping("/signup")
+    @PostMapping(value = "/signup", consumes = "application/json")
     ResponseEntity<SignupResult> signUp(@RequestBody Map<String, Object> request) {
         String identifier = auth.signUp(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(new SignupResult(new UserView(identifier)));
     }
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login", consumes = "application/json")
     ResponseEntity<SessionView> logIn(@RequestBody Map<String, Object> request) {
         AuthService.LoggedIn loggedIn = auth.logIn(request);
         ResponseCookie cookie = cookie(loggedIn.session().token(), SessionService.LIFETIME);
