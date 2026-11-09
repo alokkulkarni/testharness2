@@ -184,7 +184,7 @@
         "N05-design-arch",
         "N06-design-ux"
       ],
-      "status": "running",
+      "status": "pending",
       "kind": "agent",
       "agent": "backend-qa",
       "description": "Failing backend tests for the acceptance criteria, committed first.",
@@ -195,13 +195,7 @@
       "executor": "any",
       "isolation": "worktree",
       "attempts": 1,
-      "maxAttempts": 3,
-      "claim": {
-        "runId": "run-mw918e2g",
-        "executor": "claude-code",
-        "leaseUntil": "2026-11-09T09:53:53.197Z",
-        "claimedAt": "2026-11-09T09:01:51.544Z"
-      }
+      "maxAttempts": 3
     },
     {
       "id": "N08-tests-web",
