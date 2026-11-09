@@ -1,12 +1,13 @@
 package app.todo;
 
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/** Stub (tests node): the application class the integration tests start. The java-engineer replaces it. */
+/** The one Spring Boot application: identity and to-dos modules over a shared kernel (NFR-007, ADR-0018). */
 @SpringBootApplication
 public class TodoApplication {
 
     public static void main(String[] args) {
-        throw new UnsupportedOperationException("not implemented");
+        SpringApplication.run(TodoApplication.class, args);
     }
 }

@@ -6,8 +6,11 @@ import com.atlassian.oai.validator.OpenApiInteractionValidator;
 import com.atlassian.oai.validator.report.MessageResolver;
 import com.atlassian.oai.validator.report.ValidationReport;
 import com.atlassian.oai.validator.schema.SchemaValidator;
+import com.atlassian.oai.validator.whitelist.ValidationErrorsWhitelist;
+import com.atlassian.oai.validator.whitelist.rule.WhitelistRules;
 import io.swagger.parser.OpenAPIParser;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.parser.core.models.ParseOptions;
 import java.io.IOException;
@@ -57,9 +60,32 @@ public final class Contracts {
                 OpenApiInteractionValidator.createForSpecificationUrl(identityFile().toUri().toString()).build();
     }
 
+    /**
+     * The one request-validation override (REQ-LIST-002 AC-5 and AC-7; sdd.md section 7; the contract's own
+     * description of {@code q}). The contract declares {@code q} on {@code GET /api/v1/todos} as
+     * {@code required: false} and says an empty or whitespace-only {@code q} means "no search". The v3 request
+     * validator nevertheless reports an empty or ASCII-space-only value as
+     * {@code validation.request.parameter.missing} ("Parameter 'q' is required but is missing"), and
+     * {@code allowEmptyValue: true} does not change that. This whitelist rule drops exactly that one message:
+     * key {@code validation.request.parameter.missing}, method GET, path {@code /api/v1/todos}, text naming
+     * parameter {@code q}. It cannot hide a missing required parameter of any other operation or parameter,
+     * nor any other request or response violation (the response side is untouched). {@code q} is optional in
+     * the contract, so a "missing" report for it is never a genuine violation.
+     */
+    private static final ValidationErrorsWhitelist EMPTY_SEARCH_IS_NO_SEARCH = ValidationErrorsWhitelist.create()
+            .withRule(
+                    "REQ-LIST-002 AC-5/AC-7: empty or blank q on GET /api/v1/todos is no search",
+                    WhitelistRules.allOf(
+                            WhitelistRules.messageHasKey("validation.request.parameter.missing"),
+                            WhitelistRules.methodIs(PathItem.HttpMethod.GET),
+                            WhitelistRules.pathContains("/api/v1/todos"),
+                            WhitelistRules.messageContains("Parameter 'q' ")));
+
     private static final class TodosHolder {
         static final OpenApiInteractionValidator VALIDATOR =
-                OpenApiInteractionValidator.createForSpecificationUrl(todosFile().toUri().toString()).build();
+                OpenApiInteractionValidator.createForSpecificationUrl(todosFile().toUri().toString())
+                        .withWhitelist(EMPTY_SEARCH_IS_NO_SEARCH)
+                        .build();
     }
 
     private static final class ProblemHolder {
