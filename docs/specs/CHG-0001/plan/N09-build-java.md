@@ -76,4 +76,12 @@ Make the java tests pass in an isolated worktree.
 - `api/src/test/java/app/todo/TestTodoApplication.java`, `api/src/test/java/app/todo/testsupport/E2eClockConfiguration.java`
   and `api/src/test/java/app/todo/testsupport/OffsetFileClock.java` are new test-source-set classes required by
   ADR-0013 and sdd.md 11 for `spring-boot:test-run`; no existing test file is changed.
+- Result: 342 tests, 339 pass, 3 fail, 0 skipped, on JDK 23.0.2 (compiled with `--release 21`; no JDK 21 on the
+  machine), Spring Boot 4.1.2. The three failures are not fixable by the implementation and no test was edited:
+  `TodoListApiTest.REQ_LIST_002_AC5_empty_search_is_no_restriction` (`GET /api/v1/todos?q=`) and
+  `TodoListApiTest.REQ_LIST_002_AC7_whitespace_only_search_is_no_search` (`q=%20`, `q=%20%20%20`; two parameterised
+  cases) fail inside the test client's request-side contract check (`openapi-request-validator` v3 MockMvc adapter:
+  "Parameter 'q' is required but is missing"), because `todo-api-v1.yaml` `listTodos` parameter `q` lacks
+  `allowEmptyValue: true` although sdd.md 7 and REQ-LIST-002 AC-5/AC-7 require an empty or blank `q` to be accepted.
+  The API answers those requests 200 with all items. Fix needs a contract change (re-freeze) or a test change.
 - `.harness/changes/CHG-0001/evidence/` receives the attached test reports (written by `harness evidence attach`).
