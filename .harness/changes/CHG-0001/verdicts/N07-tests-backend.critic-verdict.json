@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N07-tests-backend",
+  "gate": "critic-verdict",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "critic",
+      "agentRunId": "ae9fe7f146ce3c6be"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "backend-qa",
+      "agentRunId": "a0b76dc020ba59495"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "backend-qa",
+      "agentRunId": "a2fd42deb2dda980b"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "backend-qa",
+      "agentRunId": "a9e5120f48f49747f"
+    }
+  ],
+  "createdAt": "2026-11-09T10:58:57.346Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "reviewedCommit": "a6afc9e278576dbda0f84ace071e8754a15f1173",
+  "diffHash": "1816af6fd9af5a63c3a4226e478e16f286533366f303e0f53a906671e687526f",
+  "summary": "round 2, delta since 31d3f013afde7620ba4492c3bb1753ddcd5827fa: F-1, F-2, F-3, F-4, F-5, F-6, F-7, F-8 fixed. Integration level now MockMvc with the v3 MockMvc adapter on a fresh SQLite file per class, the embedded container only for the filter-exception test; the filter log assertions and a forced handler-path 500 test were added; the r2 red run fails for the right reason (endpoints not implemented). No blocker or major. Follow-ups: 1 minor (F-12) and 4 info (F-9, F-10, F-11 carried; F-13 new).",
+  "findings": [
+    {
+      "id": "F-9",
+      "severity": "info",
+      "message": "The session-token-hash test is labelled REQ-AUTH-003 AC-1 (password storage) although it checks sdd.md 3 sessions.token_hash; traceability will count it as password-storage proof.",
+      "requirement": "REQ-AUTH-003",
+      "location": "api/src/test/java/app/todo/auth/PasswordStorageTest.java:L85-L99",
+      "suggestion": "Label it with the requirement it serves (for example NFR-004 AC-2 or REQ-AUTH-004) or keep the label and note the SDD section."
+    },
+    {
+      "id": "F-10",
+      "severity": "info",
+      "message": "Spring Boot 4.1.2 is a provisional pin by the tests node; sdd.md 12.1 item 21 gives the exact latest-4.x pin and the v3 MockMvc adapter check to the java-engineer. The r2 red run again used JDK 23 with java.version 21, while sdd.md 11 names JDK 21.",
+      "requirement": "NFR-005",
+      "location": "api/pom.xml:L11-L16",
+      "suggestion": "N09 confirms or replaces the pin and runs the suite on JDK 21."
+    },
+    {
+      "id": "F-11",
+      "severity": "info",
+      "message": "Some REQ-named tests pass with no production code because they read only the contract files or the environment (this one, EndpointInventoryTest NFR_007_AC3_every_operation_is_in_exactly_one_contract_file, ModuleWiringTest REQ_AUTH_004_AC4_no_clock_offset_property_is_configured_by_default); they guard the spec but do not prove the AC on their own.",
+      "requirement": "REQ-AUTH-005",
+      "location": "api/src/test/java/app/todo/config/EndpointInventoryTest.java:L122-L131",
+      "suggestion": "Keep them, but let traceability rely on the behaviour tests (inventory equality, TodoIsolationApiTest) for these ACs."
+    },
+    {
+      "id": "F-12",
+      "severity": "minor",
+      "message": "The per-request line is selected as any non-throwable app.todo event with the request id whose LogCapture.text contains the substring 500; that text now also holds the MDC map, key-value pairs and arguments, so another app.todo entry for the same request (for example one written by ProblemErrorController on the ERROR dispatch, which sdd.md 10 allows as long as it carries the id and no stack trace) or an id or duration containing 500 also matches, and a correct implementation can fail hasSize(1).",
+      "requirement": "NFR-004",
+      "location": "api/src/test/java/app/todo/auth/FilterExceptionTest.java:L122-L127",
+      "suggestion": "Select the per-request line structurally: pin a status key or argument (as REQUEST_ID_KEY is pinned, documented as an assumption for the java-engineer) and match status == 500 on it, or match the line by its method and path fields, instead of a substring over the whole event text."
+    },
+    {
+      "id": "F-13",
+      "severity": "info",
+      "message": "The logging-context key of the request id (requestId), an assumption handed to the java-engineer because sdd.md 10 does not name it, is declared twice, in FilterExceptionTest and in HandlerExceptionTest.",
+      "requirement": "NFR-004",
+      "location": "api/src/test/java/app/todo/todo/HandlerExceptionTest.java:L26-L31",
+      "suggestion": "Declare it once in app.todo.testsupport (beside the TODO_DB_PATH assumption) and reference it from both tests."
+    }
+  ]
+}
