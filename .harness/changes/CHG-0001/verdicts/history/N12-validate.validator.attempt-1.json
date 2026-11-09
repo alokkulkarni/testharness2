@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N12-validate",
+  "gate": "validator",
+  "verdict": "fail",
+  "reviewer": {
+    "kind": "tool",
+    "id": "validator",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "validator",
+      "agentRunId": "acbdc99db26566100"
+    },
+    "modelAlias": "harness/validator"
+  },
+  "createdAt": "2026-11-09T14:18:38.914Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "summary": "round 1: fail on one major (F-1). 115 acceptance criteria: the tool maps 104 as covered; its 7 missing-code and 4 missing-test rows are annotation or review gaps whose code or review evidence I read and cite (F-4), leaving NFR-002 AC-1 partly unmet (F-1) and NFR-004 AC-3 not verified here (secret scan belongs to N11-security). 428 test-to-criterion links. Per-test results could not be attached by harness trace build (F-3); report headers: backend r2 342/342 in 22 classes, component r3 486/486, e2e r3 main 104/104, restart 2/2, session-expiry 4/4 (chromium, webkit); three-browser full runs fail only on Firefox launch (accepted). 96 unmapped hunks (89 tool-classed creep, 1 generated, 6 test-support): 0 judged creep after reading (F-5). Blocking: F-1, .env.example absent and README has no run steps (sdd.md 11 and 14, NFR-002 AC-1). Follow-ups: F-2 to F-10.",
+  "findings": [
+    {
+      "id": "F-1",
+      "severity": "major",
+      "message": "Missing deliverable named by the frozen SDD. sdd.md 11 requires .env.example with placeholders TODO_DB_PATH, TODO_COOKIE_SECURE=false, SERVER_PORT=8080 and run steps (the sdd.md 14 NFR-002 row reviews README run steps on a fresh checkout). At HEAD .env.example does not exist and README.md is the one-line stub # testharness2. NFR-002 AC-1 speaks of documented prerequisites (JDK 21, Node LTS, pnpm), which are documented nowhere a user would find them. Already raised as N09 critic F-6 (info) and never assigned to a node; it is not on the requester-accepted list.",
+      "requirement": "NFR-002",
+      "location": "README.md:L1-L1",
+      "suggestion": "Add .env.example (placeholders only, none of the e2e profile, variable or test classes, per sdd.md 11) and README run steps (prerequisites, cd api && ./mvnw spring-boot:run, pnpm -C web install, pnpm -C web dev, settings), or have the requester accept the gap in writing."
+    },
+    {
+      "id": "F-2",
+      "severity": "minor",
+      "message": "web/.nvmrc holds lts/*, which floats to whatever LTS is current rather than pinning one; sdd.md 11 says Node.js (current LTS, pinned in web/.nvmrc).",
+      "requirement": "NFR-002",
+      "location": "web/.nvmrc:L1-L1",
+      "suggestion": "Pin a concrete LTS version (for example the major used for the attached runs)."
+    },
+    {
+      "id": "F-3",
+      "severity": "minor",
+      "message": "Harness tooling: harness trace build --results attaches no per-test result. Tried with component-junit-r3.xml, e2e-main-r3.xml and e2e-session-expiry-r3.xml (one flag and repeated flags): traceability.json carries no result for any test, even the exact-name e2e test web/e2e/session-expiry.spec.ts::REQ-AUTH-004 AC-4 REQ-AUTH-002 AC-4 after the 8-hour session ends... Causes seen: Surefire reports method names (REQ_LIST_002_AC7_...) not display names, Vitest prefixes describe titles with  > , Playwright classname lacks the web/e2e/ prefix. Results were checked by hand from the report headers instead (see summary). Consequence: a conformance register with met rows cannot be proven from traceability, so none was built.",
+      "requirement": "NFR-004",
+      "location": ".harness/changes/CHG-0001/traceability.json:L1-L6",
+      "suggestion": "Fix result matching in the sdlc-harness CLI (strip describe prefixes, map Surefire method names to display names, resolve Playwright classnames against the test dir), then rebuild traceability and the conformance register."
+    },
+    {
+      "id": "F-4",
+      "severity": "minor",
+      "message": "Rows the tool marks missing are annotation gaps, verified by reading. missing-code: REQ-LIST-003 AC-2 (total order created_at DESC, id DESC, JdbcTodoRepository.java:L73-L74), AC-3 (Previous/Next disabled, web/src/todos/Pagination.tsx:L41-L60), AC-8 (PAGE_SIZE 20, no size parameter, TodoQuery.java:L9, TodoController.java:L34-L40); REQ-ACC-001 AC-1, AC-2 (scenario over all to-do code; AcceptanceScenarioApiTest and acceptance.spec.ts); NFR-002 AC-1 (localhost proxy web/vite.config.ts:L5-L10, settings application.properties:L3-L6, DatabaseConfig.java:L23-L28); NFR-003 AC-1 (indexes V1__init.sql:L38-L39, one-statement queries). missing-test (review-verified): NFR-004 AC-1 via PasswordStorageTest REQ-AUTH-003 tests and PasswordHasher.java:L14; NFR-005 AC-1 via api/pom.xml:L11-L16, L52-L57 and web/package.json:L21-L25, L42; NFR-002 AC-2: the diff adds no deployment workflow; NFR-004 AC-3: not verified by me (N11-security gate). The tool code column is also noisy (web/tests/README.md, test-support classes and generated web/src/api/*.ts appear as code), and it.each tests are not mapped (for example list.test.tsx REQ-TODO-007 AC-1 singular and plural sentence test, which asserts the exact sdd.md 8 texts).",
+      "requirement": "REQ-LIST-003",
+      "location": "api/src/main/java/app/todo/todo/JdbcTodoRepository.java:L66-L79",
+      "suggestion": "Add REQ comments above the serving declarations (or let the tool read class-level comments) so the matrix maps them mechanically."
+    },
+    {
+      "id": "F-5",
+      "severity": "info",
+      "message": "89 hunks are tool-classed creep; none is creep on reading. Build and run scaffolding for NFR-005 and sdd.md 11 (api/mvnw, mvnw.cmd, wrapper properties, .gitignore files, .nvmrc, package.json, pnpm-lock.yaml, tsconfig, vite, vitest and eslint configs, index.html, main.tsx, vite-env.d.ts, redocly.yaml per sdd.md 12.1 item 17); classes named by sdd.md 2, 4, 6, 7, 10 (AuthController, SessionService, SessionRepository, UserRepository, JDBC repositories, SessionDetails, CurrentUser, PasswordHasher, the common kernel, SecurityConfig, WebConfig as the sdd.md 10 FilterRegistrationBean, BodyReader for sdd.md 5 Bodies, UtcTimestamps for ADR-0017, the todo records, V1__init.sql, application.properties, RequireAuth, SessionProvider, returnTo, userMessage, todoId, rules, whitespace); generate-tokens.mjs serves UX decision DD-1 (tokens.json to tokens.css); Java test support, TestTodoApplication, E2eClockConfiguration, OffsetFileClock (ADR-0013) and archfixture (sdd.md 12.1 item 20); e2e support and configs (sdd.md 11, 14). intent/a-new-todo-list-app-where-user-can-creat.md is a 100 percent rename to docs/specs/CHG-0001/intent.md. The 6 test-support hunks hide no weakened assertion (UX loading-state tests and helpers).",
+      "requirement": "NFR-007",
+      "location": "api/src/main/java/app/todo/config/WebConfig.java:L20-L27",
+      "suggestion": "Annotate with REQ comments so later diffs map mechanically."
+    },
+    {
+      "id": "F-6",
+      "severity": "minor",
+      "message": "Carried N09 critic F-1: newRequestId loops until the id has no 500, shaped by the FilterExceptionTest selector, not by a requirement. Not counted as creep: it stays inside the sdd.md 10 request-id generator and changes no behaviour a client sees.",
+      "requirement": "NFR-004",
+      "location": "api/src/main/java/app/todo/common/RequestIdFilter.java:L88-L95",
+      "suggestion": "Fix the test selector through the tests node, then use a plain random UUID."
+    },
+    {
+      "id": "F-7",
+      "severity": "info",
+      "message": "Frozen-spec inconsistency: todo-api-v1.yaml listTodos q is rejected as missing by the contract validator when empty or blank, while sdd.md 7 and REQ-LIST-002 AC-5, AC-7 require it accepted. The API behaves as specified (TodoValidator.java:L72); the test whitelist in api/src/test/java/app/todo/testsupport/Contracts.java:L63-L82 was added by requester decision.",
+      "requirement": "REQ-LIST-002",
+      "location": "api/src/test/java/app/todo/testsupport/Contracts.java:L63-L82",
+      "suggestion": "Settle at the next re-freeze (contract or validator) and remove the whitelist."
+    },
+    {
+      "id": "F-8",
+      "severity": "info",
+      "message": "Open critic follow-ups carried unverified: N09 F-2 (application/*+json body probably accepted instead of 415, untested), N09 F-3 (method, route, status, duration only inside the log message text), N10 F-17 (dropRequestedOnShow flicker), N10 F-18 (typecheck, lint, lint:contracts results not attached), N10 F-13, F-14, F-16, F-20.",
+      "requirement": "NFR-004",
+      "location": "api/src/main/java/app/todo/todo/TodoController.java:L42-L74",
+      "suggestion": "Track in the PR; F-2 needs a tests-node case before it can be closed."
+    },
+    {
+      "id": "F-9",
+      "severity": "info",
+      "message": "Requester-accepted divergences to list in the PR: JDK 23.0.2 compiling with --release 21 (sdd.md 11); Spring Boot 4.1.2 pin; request-id logging key requestId; Firefox e2e cannot launch on this host (e2e-main-full 156 tests, 51 errors, all Firefox launch); test and test-support changes made under N09 and N10 by requester decision (Contracts.java whitelist, todo-form.test.tsx, list.test.tsx, renderApp.tsx, e2e specs and configs, support/app.ts).",
+      "requirement": "NFR-005",
+      "location": "docs/specs/CHG-0001/plan/N10-build-react.md:L86-L110",
+      "suggestion": "List them in the PR body; run Firefox e2e and JDK 21 in CI."
+    },
+    {
+      "id": "F-10",
+      "severity": "info",
+      "message": "Spot checks against the spec found no missing logic in code: order of checks session, client header, route, media type, body, validation, ownership (SecurityConfig.java:L54-L60, TodoService.java:L51-L60); absolute 8-hour session and cookie (SessionService.java:L35-L57, AuthController.java:L61-L69); dummy-hash login and 128 limit (AuthService.java:L84-L95); page clamp and long overflow (TodoValidator.java:L74-L84, JdbcTodoRepository.java:L69-L71); updated_at strictly advances (JdbcTodoRepository.java:L25-L26); returnTo and isTodoId patterns equal sdd.md 4.2 and 8; clear-completed singular and plural texts equal sdd.md 8 (TodoListPage.tsx L406-L410).",
+      "requirement": "REQ-TODO-007",
+      "location": "web/src/todos/TodoListPage.tsx:L396-L412",
+      "suggestion": "None."
+    }
+  ]
+}
