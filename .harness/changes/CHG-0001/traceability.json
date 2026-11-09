@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "changeId": "CHG-0001",
   "base": "9dfd67568122aa003e08ac25297fd066a08e78e2",
-  "head": "5a368cc97d63b5643495bcb63ba207b5b168dffb",
+  "head": "d70d66f9b22aef4ad52c862bba2ea2aeedfea4b3",
   "requirements": [
     {
       "id": "REQ-AUTH-001",
@@ -1888,6 +1888,9 @@
             "api/src/test/java/app/todo/common/ErrorSourcesTest.java::NFR-004 AC-2 a forwarded 404 and a forwarded 405 are NOT_FOUND and METHOD_NOT_ALLOWED Problems",
             "api/src/test/java/app/todo/common/ErrorSourcesTest.java::NFR-004 AC-2 invalid input sent directly to the API is refused by the server, not only the UI (sign-up, create, list)",
             "api/src/test/java/app/todo/common/ErrorSourcesTest.java::NFR-004 AC-2 a malformed to-do id is the same NOT_FOUND Problem as a missing one",
+            "api/src/test/java/app/todo/common/JsonSuffixMediaTypeTest.java::NFR-004 AC-2 createTodo with an application/*+json body is 415 UNSUPPORTED_MEDIA_TYPE and creates no to-do",
+            "api/src/test/java/app/todo/common/JsonSuffixMediaTypeTest.java::NFR-004 AC-2 signUp with an application/*+json body is 415 UNSUPPORTED_MEDIA_TYPE and creates no user",
+            "api/src/test/java/app/todo/common/JsonSuffixMediaTypeTest.java::NFR-004 AC-2 createTodo and signUp with application/json;charset=UTF-8 are still accepted",
             "api/src/test/java/app/todo/common/ProblemCodeTest.java::NFR-004 AC-2 the values of ProblemCode equal the Problem.code enum of common-problem-v1.yaml (ADR-0011)",
             "api/src/test/java/app/todo/testsupport/ContractFilesTest.java::NFR-004 AC-2 the Problem schema accepts a conforming error body and rejects an unknown code",
             "api/src/test/java/app/todo/testsupport/ContractFilesTest.java::NFR-004 AC-2 the to-dos module contract accepts a conforming listTodos response and rejects an unknown member",
