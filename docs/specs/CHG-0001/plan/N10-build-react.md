@@ -100,6 +100,8 @@ Make the react tests pass in an isolated worktree.
 - `web/e2e/navigation.spec.ts`: test defect, home link Tab through `pressTab`; no assertion changed, none skipped. Reason: requester decision, web-qa under N10.
 - `web/e2e/acceptance.spec.ts`: test defect, paging waits for "Showing 21-40 of 45" before reading page 2; no assertion changed, none skipped. Reason: requester decision, web-qa under N10.
 - `web/e2e/support/app.ts`: new `pressTab` helper (Alt+Tab in WebKit, Tab elsewhere) used by the keyboard and navigation specs. Reason: requester decision, web-qa under N10; future changes route e2e test fixes through the tests node.
+- `web/tests/component/todo-form.test.tsx`: critic attempt-1 F-1 and F-3. `withNotes()` row 2 now has due date 2026-12-20 (no one-day time-zone shift can render `due 6 nov 2026` for the wrong row, so the list assertion catches a UTC-midnight parse bug under Pacific/Pago_Pago; shown by a temporary TZ-naive `formatDate`, reverted and not committed), superseding the 2026-11-07 date above; and the detail-page delete 404 test gains a focus-on-h1 assertion (ux-design section 6, NFR-001 AC-2), red against the current SPA. Reason: requester decision, web-qa under N10; future changes route this through the tests node.
+- `web/tests/component/list.test.tsx`: critic attempt-1 F-2. New test (two cases, done=false and done=true) for REQ-TODO-005 and REQ-DATA-002: the toggle PUT succeeds but the re-query returns the other `done` value; the checkbox shows the server value and the next click sends the reverse of it; red against the current SPA. Reason: requester decision, web-qa under N10; future changes route this through the tests node.
 
 ## Accepted divergences
 
