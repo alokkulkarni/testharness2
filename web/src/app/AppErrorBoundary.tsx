@@ -68,7 +68,13 @@ class InnerBoundary extends Component<InnerProps, InnerState> {
     return { caughtAt: props.pathname };
   }
 
+  componentDidMount() {
+    // a render that committed without the error: nothing is left to remember (NFR-006)
+    if (!this.state.hasError) remembered = null;
+  }
+
   componentDidUpdate() {
+    if (!this.state.hasError) remembered = null;
     if (this.state.hasError && this.state.caughtAt !== null && this.props.pathname !== this.state.caughtAt) {
       remembered = null;
       this.setState({ hasError: false, caughtAt: null });

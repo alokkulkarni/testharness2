@@ -48,6 +48,7 @@ export function Pagination({
             <li key={p}>
               {p === page ? (
                 <span aria-current="page" className="page-current">
+                  <span className="visually-hidden">Page </span>
                   {p}
                 </span>
               ) : (
