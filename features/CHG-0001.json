@@ -129,6 +129,13 @@
       "runId": "run-mw918e2g",
       "holder": "claude-code",
       "leaseUntil": "2026-11-09T09:16:51.544Z"
+    },
+    {
+      "node": "N08-tests-web",
+      "role": "tester",
+      "runId": "run-mw918m9j",
+      "holder": "claude-code",
+      "leaseUntil": "2026-11-09T09:17:02.167Z"
     }
   ],
   "overlaps": []
