@@ -1,0 +1,20 @@
+[
+  {
+    "kind": "test-report",
+    "path": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.e2e-main-full.xml",
+    "description": "Full three-browser run by the requester's session outside the sandbox on 13f00a0; chromium and webkit pass; firefox failures are launch failures (Could not find profile folder), accepted as an environment limitation (main configuration)",
+    "replaces": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.e2e-main-r2.xml"
+  },
+  {
+    "kind": "test-report",
+    "path": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.e2e-restart-full.xml",
+    "description": "Full three-browser run by the requester's session outside the sandbox on 13f00a0; chromium and webkit pass; firefox failures are launch failures (Could not find profile folder), accepted as an environment limitation (restart configuration)",
+    "replaces": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.e2e-restart-r2.xml"
+  },
+  {
+    "kind": "test-report",
+    "path": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.e2e-session-expiry-full.xml",
+    "description": "Full three-browser run by the requester's session outside the sandbox on 13f00a0; chromium and webkit pass; firefox failures are launch failures (Could not find profile folder), accepted as an environment limitation (session-expiry configuration)",
+    "replaces": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.e2e-session-expiry-r2.xml"
+  }
+]

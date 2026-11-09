@@ -1,0 +1,2614 @@
+<testsuites id="" name="" tests="156" failures="0" skipped="0" errors="51" time="42.708281">
+<testsuite name="a11y.spec.ts" timestamp="2026-11-09T13:02:16.415Z" hostname="chromium" tests="12" failures="0" skipped="0" time="15.012" errors="0">
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 sign-up has no violations, with and without errors" classname="a11y.spec.ts" time="1.331">
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 log in has no violations, with the account-created message and after a refused attempt" classname="a11y.spec.ts" time="1.769">
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the list has no violations: empty, populated with pagination, and no matches" classname="a11y.spec.ts" time="2.233">
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the create and edit form has no violations, with and without errors" classname="a11y.spec.ts" time="1.893">
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the to-do detail page and its not-found state have no violations" classname="a11y.spec.ts" time="1.573">
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the delete confirmation dialog has no violations" classname="a11y.spec.ts" time="1.311">
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the clear-completed confirmation dialog has no violations" classname="a11y.spec.ts" time="1.333">
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › REQ-NAV-001 AC-7 NFR-001 AC-1 the page-not-found page has no violations, while signed in" classname="a11y.spec.ts" time="1.173">
+</testcase>
+<testcase name="NFR-001 structure checks in a real browser › NFR-001 AC-1 the page language is set and every route has a distinct title" classname="a11y.spec.ts" time="0.474">
+</testcase>
+<testcase name="NFR-001 structure checks in a real browser › NFR-001 AC-1 no horizontal scrolling at 320 CSS pixels wide on the list, form and not-found page (reflow, 1.4.10)" classname="a11y.spec.ts" time="0.809">
+</testcase>
+<testcase name="NFR-001 structure checks in a real browser › NFR-001 AC-3 a refused submit moves focus to the error summary and its link moves focus to the field" classname="a11y.spec.ts" time="0.603">
+</testcase>
+<testcase name="NFR-001 structure checks in a real browser › REQ-NAV-001 AC-6 under prefers-reduced-motion the not-found page runs no animation" classname="a11y.spec.ts" time="0.51">
+</testcase>
+</testsuite>
+<testsuite name="acceptance.spec.ts" timestamp="2026-11-09T13:02:16.415Z" hostname="chromium" tests="8" failures="0" skipped="0" time="8.365" errors="0">
+<testcase name="REQ-ACC-001 overall success scenario › REQ-ACC-001 AC-1 a signed-in user adds, sees, searches, filters, edits, completes and deletes their own to-dos" classname="acceptance.spec.ts" time="1.844">
+</testcase>
+<testcase name="REQ-ACC-001 overall success scenario › REQ-ACC-001 AC-2 REQ-ISO-001 AC-1 AC-2 AC-4 a second user cannot see or change the first user&apos;s to-dos by list, search or direct URL" classname="acceptance.spec.ts" time="1.184">
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-001 AC-4 a created to-do is still there after the page is reloaded" classname="acceptance.spec.ts" time="0.767">
+</testcase>
+<testcase name="persistence and list flows › REQ-LIST-003 AC-1 AC-2 AC-3 AC-5 paging 45 to-dos: 20, 20, 5 with no repeat or gap, Previous and Next disabled at the ends" classname="acceptance.spec.ts" time="1.084">
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-005 AC-3 marking a to-do done under the Active filter removes the row without a reload" classname="acceptance.spec.ts" time="0.597">
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-006 AC-5 deleting the only to-do on the last page shows the previous page, not an error" classname="acceptance.spec.ts" time="0.739">
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-007 AC-1 AC-2 clear all completed states the count, deletes completed across pages, keeps active" classname="acceptance.spec.ts" time="1.123">
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-002 AC-7 a due date shows as the same calendar date in any time zone" classname="acceptance.spec.ts" time="1.027">
+</testcase>
+</testsuite>
+<testsuite name="auth.spec.ts" timestamp="2026-11-09T13:02:16.415Z" hostname="chromium" tests="8" failures="0" skipped="0" time="4.689" errors="0">
+<testcase name="sign up, log in, log out › REQ-AUTH-001 AC-1 AC-4 a fresh browser opens /signup directly, signs up with no verification step, then logs in" classname="auth.spec.ts" time="0.782">
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-001 AC-2 AC-6 signing up again with another letter case of a taken identifier is refused" classname="auth.spec.ts" time="0.656">
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-002 AC-5 logging in with a different letter case of the identifier works" classname="auth.spec.ts" time="0.66">
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-002 AC-2 AC-3 NFR-006 AC-4 a wrong password and an unknown identifier show the same message" classname="auth.spec.ts" time="0.795">
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-002 AC-4 reloading the page keeps the user signed in" classname="auth.spec.ts" time="0.615">
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-004 AC-2 a fresh browser opening /todos lands on log in with no message, logs in and returns to /todos" classname="auth.spec.ts" time="0.65">
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-004 AC-3 logging out ends the session; going back to a to-do page asks to log in again" classname="auth.spec.ts" time="0.522">
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-004 AC-1 to-do API calls without a session are refused as unauthenticated" classname="auth.spec.ts" time="0.009">
+</testcase>
+</testsuite>
+<testsuite name="keyboard.spec.ts" timestamp="2026-11-09T13:02:16.415Z" hostname="chromium" tests="8" failures="0" skipped="0" time="6.452" errors="0">
+<testcase name="NFR-001 AC-2 sign up and log in with the keyboard only" classname="keyboard.spec.ts" time="0.787">
+</testcase>
+<testcase name="NFR-001 AC-2 create, search, filter, complete and page with the keyboard only" classname="keyboard.spec.ts" time="1.679">
+</testcase>
+<testcase name="NFR-001 AC-2 the delete dialog takes focus on Cancel, keeps it inside, and Escape returns focus to the Delete button" classname="keyboard.spec.ts" time="0.634">
+</testcase>
+<testcase name="NFR-001 AC-2 confirming deletion by keyboard moves focus to the list heading" classname="keyboard.spec.ts" time="0.615">
+</testcase>
+<testcase name="NFR-001 AC-2 the clear-completed dialog is operated and left by keyboard; focus returns to the control on cancel" classname="keyboard.spec.ts" time="0.56">
+</testcase>
+<testcase name="NFR-001 AC-2 the detail page is reached, read and left by keyboard (to edit and back to the list)" classname="keyboard.spec.ts" time="0.855">
+</testcase>
+<testcase name="NFR-001 AC-2 a to-do is edited and saved by keyboard; the detail page shows the new title and focus is on its heading" classname="keyboard.spec.ts" time="0.662">
+</testcase>
+<testcase name="NFR-001 AC-2 keyboard focus is always visible on the list controls" classname="keyboard.spec.ts" time="0.66">
+</testcase>
+</testsuite>
+<testsuite name="navigation.spec.ts" timestamp="2026-11-09T13:02:16.415Z" hostname="chromium" tests="9" failures="0" skipped="0" time="5.576" errors="0">
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-2 a fresh browser opening / lands on log in and, after logging in, on /todos" classname="navigation.spec.ts" time="0.626">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-1 a signed-in browser opening / with a query string lands on /todos with no query" classname="navigation.spec.ts" time="0.545">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /nope lands on log in with no message and never sees the not-found page; after login it lands on /todos" classname="navigation.spec.ts" time="0.629">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /todos/abc/def lands on log in with no message and never sees the not-found page; after login it lands on /todos" classname="navigation.spec.ts" time="0.667">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /login/extra lands on log in with no message and never sees the not-found page; after login it lands on /todos" classname="navigation.spec.ts" time="0.644">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /todos/not-a-uuid lands on log in and, after login, on /todos" classname="navigation.spec.ts" time="0.635">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-3 AC-5 AC-6 signed in, /nope shows the not-found page whose animation plays once within 5 seconds, and the home link leads to /todos" classname="navigation.spec.ts" time="0.538">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-4 signed in, /todos/not-a-uuid and its /edit show the to-do not-found state, not the page-not-found page" classname="navigation.spec.ts" time="0.765">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-7 the home link on the not-found page is reachable and operable by keyboard with visible focus" classname="navigation.spec.ts" time="0.527">
+</testcase>
+</testsuite>
+<testsuite name="network.spec.ts" timestamp="2026-11-09T13:02:16.415Z" hostname="chromium" tests="1" failures="0" skipped="0" time="0.912" errors="0">
+<testcase name="NFR-002 AC-1 sign up, log in, add, edit, complete and delete send every browser request to localhost only" classname="network.spec.ts" time="0.912">
+</testcase>
+</testsuite>
+<testsuite name="performance.spec.ts" timestamp="2026-11-09T13:02:16.415Z" hostname="chromium" tests="1" failures="0" skipped="0" time="32.723" errors="0">
+<testcase name="NFR-003 AC-1 with 500 to-dos, list, filter, search, page, create, edit, complete and delete each show their result within 1 second at the 95th percentile" classname="performance.spec.ts" time="32.723">
+<properties>
+<property name="p95-ms" value="{&quot;list&quot;:74,&quot;filter&quot;:85,&quot;search&quot;:64,&quot;page&quot;:67,&quot;create&quot;:69,&quot;edit&quot;:67,&quot;complete&quot;:67,&quot;delete&quot;:62}">
+</property>
+</properties>
+</testcase>
+</testsuite>
+<testsuite name="states.spec.ts" timestamp="2026-11-09T13:02:16.415Z" hostname="chromium" tests="5" failures="0" skipped="0" time="2.555" errors="0">
+<testcase name="NFR-006 AC-1 with the list request aborted, the list screen shows a friendly message with its next step; after the interception is removed, trying again loads the list" classname="states.spec.ts" time="0.549">
+</testcase>
+<testcase name="NFR-006 AC-2 a 500 problem response with internals in its body shows none of them to the user" classname="states.spec.ts" time="0.49">
+</testcase>
+<testcase name="REQ-LIST-003 AC-6 a page number past the last in the URL shows the last valid page without an error" classname="states.spec.ts" time="0.586">
+</testcase>
+<testcase name="REQ-LIST-001 AC-5 an unknown status in the URL is removed and the list shows All" classname="states.spec.ts" time="0.47">
+</testcase>
+<testcase name="REQ-TODO-003 AC-2 a user with no to-dos sees the first-use empty state" classname="states.spec.ts" time="0.46">
+</testcase>
+</testsuite>
+<testsuite name="a11y.spec.ts" timestamp="2026-11-09T13:02:16.415Z" hostname="firefox" tests="12" failures="0" skipped="0" time="0" errors="12">
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 sign-up has no violations, with and without errors" classname="a11y.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-920a9-ons-with-and-without-errors-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-920a9-ons-with-and-without-errors-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › a11y.spec.ts:14:3 › NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 sign-up has no violations, with and without errors 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-Zyzxfg -juggler-pipe -silent
+    <launched> pid=63757
+    [pid=63757][err] *** You are running in headless mode.
+    [pid=63757][err] Could not find profile folder.
+    [pid=63757] <process did exit: exitCode=1, signal=null>
+    [pid=63757] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-Zyzxfg -juggler-pipe -silent
+      - <launched> pid=63757
+      - [pid=63757][err] *** You are running in headless mode.
+      - [pid=63757][err] Could not find profile folder.
+      - [pid=63757] <process did exit: exitCode=1, signal=null>
+      - [pid=63757] starting temporary directories cleanup
+      - [pid=63757] <gracefully close start>
+      - [pid=63757] <kill>
+      - [pid=63757] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=63757] finished temporary directories cleanup
+      - [pid=63757] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-920a9-ons-with-and-without-errors-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-920a9-ons-with-and-without-errors-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-920a9-ons-with-and-without-errors-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 log in has no violations, with the account-created message and after a refused attempt" classname="a11y.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-630dc-and-after-a-refused-attempt-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-630dc-and-after-a-refused-attempt-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › a11y.spec.ts:23:3 › NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 log in has no violations, with the account-created message and after a refused attempt 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-aBpMtg -juggler-pipe -silent
+    <launched> pid=63758
+    [pid=63758][err] *** You are running in headless mode.
+    [pid=63758][err] Could not find profile folder.
+    [pid=63758] <process did exit: exitCode=1, signal=null>
+    [pid=63758] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-aBpMtg -juggler-pipe -silent
+      - <launched> pid=63758
+      - [pid=63758][err] *** You are running in headless mode.
+      - [pid=63758][err] Could not find profile folder.
+      - [pid=63758] <process did exit: exitCode=1, signal=null>
+      - [pid=63758] starting temporary directories cleanup
+      - [pid=63758] <gracefully close start>
+      - [pid=63758] <kill>
+      - [pid=63758] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=63758] finished temporary directories cleanup
+      - [pid=63758] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-630dc-and-after-a-refused-attempt-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-630dc-and-after-a-refused-attempt-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-630dc-and-after-a-refused-attempt-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the list has no violations: empty, populated with pagination, and no matches" classname="a11y.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-7cedc-h-pagination-and-no-matches-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-7cedc-h-pagination-and-no-matches-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › a11y.spec.ts:38:3 › NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the list has no violations: empty, populated with pagination, and no matches 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-Ce9ICN -juggler-pipe -silent
+    <launched> pid=63759
+    [pid=63759][err] *** You are running in headless mode.
+    [pid=63759][err] Could not find profile folder.
+    [pid=63759] <process did exit: exitCode=1, signal=null>
+    [pid=63759] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-Ce9ICN -juggler-pipe -silent
+      - <launched> pid=63759
+      - [pid=63759][err] *** You are running in headless mode.
+      - [pid=63759][err] Could not find profile folder.
+      - [pid=63759] <process did exit: exitCode=1, signal=null>
+      - [pid=63759] starting temporary directories cleanup
+      - [pid=63759] <gracefully close start>
+      - [pid=63759] <kill>
+      - [pid=63759] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=63759] finished temporary directories cleanup
+      - [pid=63759] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-7cedc-h-pagination-and-no-matches-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-7cedc-h-pagination-and-no-matches-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-7cedc-h-pagination-and-no-matches-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the create and edit form has no violations, with and without errors" classname="a11y.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-c9a0f-ons-with-and-without-errors-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-c9a0f-ons-with-and-without-errors-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › a11y.spec.ts:55:3 › NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the create and edit form has no violations, with and without errors 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-lDu2BZ -juggler-pipe -silent
+    <launched> pid=63766
+    [pid=63766][err] *** You are running in headless mode.
+    [pid=63766][err] Could not find profile folder.
+    [pid=63766] <process did exit: exitCode=1, signal=null>
+    [pid=63766] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-lDu2BZ -juggler-pipe -silent
+      - <launched> pid=63766
+      - [pid=63766][err] *** You are running in headless mode.
+      - [pid=63766][err] Could not find profile folder.
+      - [pid=63766] <process did exit: exitCode=1, signal=null>
+      - [pid=63766] starting temporary directories cleanup
+      - [pid=63766] <gracefully close start>
+      - [pid=63766] <kill>
+      - [pid=63766] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=63766] finished temporary directories cleanup
+      - [pid=63766] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-c9a0f-ons-with-and-without-errors-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-c9a0f-ons-with-and-without-errors-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-c9a0f-ons-with-and-without-errors-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the to-do detail page and its not-found state have no violations" classname="a11y.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-380d2-nd-state-have-no-violations-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-380d2-nd-state-have-no-violations-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › a11y.spec.ts:69:3 › NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the to-do detail page and its not-found state have no violations 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-acDnK5 -juggler-pipe -silent
+    <launched> pid=63763
+    [pid=63763][err] *** You are running in headless mode.
+    [pid=63763][err] Could not find profile folder.
+    [pid=63763] <process did exit: exitCode=1, signal=null>
+    [pid=63763] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-acDnK5 -juggler-pipe -silent
+      - <launched> pid=63763
+      - [pid=63763][err] *** You are running in headless mode.
+      - [pid=63763][err] Could not find profile folder.
+      - [pid=63763] <process did exit: exitCode=1, signal=null>
+      - [pid=63763] starting temporary directories cleanup
+      - [pid=63763] <gracefully close start>
+      - [pid=63763] <kill>
+      - [pid=63763] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=63763] finished temporary directories cleanup
+      - [pid=63763] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-380d2-nd-state-have-no-violations-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-380d2-nd-state-have-no-violations-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-380d2-nd-state-have-no-violations-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the delete confirmation dialog has no violations" classname="a11y.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-e4272-on-dialog-has-no-violations-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-e4272-on-dialog-has-no-violations-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › a11y.spec.ts:80:3 › NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the delete confirmation dialog has no violations 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-dFu9An -juggler-pipe -silent
+    <launched> pid=63762
+    [pid=63762][err] *** You are running in headless mode.
+    [pid=63762][err] Could not find profile folder.
+    [pid=63762] <process did exit: exitCode=1, signal=null>
+    [pid=63762] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-dFu9An -juggler-pipe -silent
+      - <launched> pid=63762
+      - [pid=63762][err] *** You are running in headless mode.
+      - [pid=63762][err] Could not find profile folder.
+      - [pid=63762] <process did exit: exitCode=1, signal=null>
+      - [pid=63762] starting temporary directories cleanup
+      - [pid=63762] <gracefully close start>
+      - [pid=63762] <kill>
+      - [pid=63762] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=63762] finished temporary directories cleanup
+      - [pid=63762] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-e4272-on-dialog-has-no-violations-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-e4272-on-dialog-has-no-violations-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-e4272-on-dialog-has-no-violations-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the clear-completed confirmation dialog has no violations" classname="a11y.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-a4c64-on-dialog-has-no-violations-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-a4c64-on-dialog-has-no-violations-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › a11y.spec.ts:89:3 › NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the clear-completed confirmation dialog has no violations 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-tjAsPf -juggler-pipe -silent
+    <launched> pid=63812
+    [pid=63812][err] *** You are running in headless mode.
+    [pid=63812][err] Could not find profile folder.
+    [pid=63812] <process did exit: exitCode=1, signal=null>
+    [pid=63812] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-tjAsPf -juggler-pipe -silent
+      - <launched> pid=63812
+      - [pid=63812][err] *** You are running in headless mode.
+      - [pid=63812][err] Could not find profile folder.
+      - [pid=63812] <process did exit: exitCode=1, signal=null>
+      - [pid=63812] starting temporary directories cleanup
+      - [pid=63812] <gracefully close start>
+      - [pid=63812] <kill>
+      - [pid=63812] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=63812] finished temporary directories cleanup
+      - [pid=63812] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-a4c64-on-dialog-has-no-violations-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-a4c64-on-dialog-has-no-violations-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-a4c64-on-dialog-has-no-violations-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › REQ-NAV-001 AC-7 NFR-001 AC-1 the page-not-found page has no violations, while signed in" classname="a11y.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-96638--violations-while-signed-in-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-96638--violations-while-signed-in-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › a11y.spec.ts:99:3 › NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › REQ-NAV-001 AC-7 NFR-001 AC-1 the page-not-found page has no violations, while signed in 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-Qhenzy -juggler-pipe -silent
+    <launched> pid=63871
+    [pid=63871][err] *** You are running in headless mode.
+    [pid=63871][err] Could not find profile folder.
+    [pid=63871] <process did exit: exitCode=1, signal=null>
+    [pid=63871] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-Qhenzy -juggler-pipe -silent
+      - <launched> pid=63871
+      - [pid=63871][err] *** You are running in headless mode.
+      - [pid=63871][err] Could not find profile folder.
+      - [pid=63871] <process did exit: exitCode=1, signal=null>
+      - [pid=63871] starting temporary directories cleanup
+      - [pid=63871] <gracefully close start>
+      - [pid=63871] <kill>
+      - [pid=63871] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=63871] finished temporary directories cleanup
+      - [pid=63871] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-96638--violations-while-signed-in-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-96638--violations-while-signed-in-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/a11y-NFR-001-AC-1-axe-on-t-96638--violations-while-signed-in-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 structure checks in a real browser › NFR-001 AC-1 the page language is set and every route has a distinct title" classname="a11y.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-structure-che-22fd6--route-has-a-distinct-title-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-structure-che-22fd6--route-has-a-distinct-title-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › a11y.spec.ts:108:3 › NFR-001 structure checks in a real browser › NFR-001 AC-1 the page language is set and every route has a distinct title 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-8WHFAY -juggler-pipe -silent
+    <launched> pid=63874
+    [pid=63874][err] *** You are running in headless mode.
+    [pid=63874][err] Could not find profile folder.
+    [pid=63874] <process did exit: exitCode=1, signal=null>
+    [pid=63874] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-8WHFAY -juggler-pipe -silent
+      - <launched> pid=63874
+      - [pid=63874][err] *** You are running in headless mode.
+      - [pid=63874][err] Could not find profile folder.
+      - [pid=63874] <process did exit: exitCode=1, signal=null>
+      - [pid=63874] starting temporary directories cleanup
+      - [pid=63874] <gracefully close start>
+      - [pid=63874] <kill>
+      - [pid=63874] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=63874] finished temporary directories cleanup
+      - [pid=63874] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/a11y-NFR-001-structure-che-22fd6--route-has-a-distinct-title-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-structure-che-22fd6--route-has-a-distinct-title-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/a11y-NFR-001-structure-che-22fd6--route-has-a-distinct-title-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 structure checks in a real browser › NFR-001 AC-1 no horizontal scrolling at 320 CSS pixels wide on the list, form and not-found page (reflow, 1.4.10)" classname="a11y.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-structure-che-de642-t-found-page-reflow-1-4-10--firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-structure-che-de642-t-found-page-reflow-1-4-10--firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › a11y.spec.ts:116:3 › NFR-001 structure checks in a real browser › NFR-001 AC-1 no horizontal scrolling at 320 CSS pixels wide on the list, form and not-found page (reflow, 1.4.10) 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-4VRinn -juggler-pipe -silent
+    <launched> pid=63879
+    [pid=63879][err] *** You are running in headless mode.
+    [pid=63879][err] Could not find profile folder.
+    [pid=63879] <process did exit: exitCode=1, signal=null>
+    [pid=63879] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-4VRinn -juggler-pipe -silent
+      - <launched> pid=63879
+      - [pid=63879][err] *** You are running in headless mode.
+      - [pid=63879][err] Could not find profile folder.
+      - [pid=63879] <process did exit: exitCode=1, signal=null>
+      - [pid=63879] starting temporary directories cleanup
+      - [pid=63879] <gracefully close start>
+      - [pid=63879] <kill>
+      - [pid=63879] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=63879] finished temporary directories cleanup
+      - [pid=63879] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/a11y-NFR-001-structure-che-de642-t-found-page-reflow-1-4-10--firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-structure-che-de642-t-found-page-reflow-1-4-10--firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/a11y-NFR-001-structure-che-de642-t-found-page-reflow-1-4-10--firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 structure checks in a real browser › NFR-001 AC-3 a refused submit moves focus to the error summary and its link moves focus to the field" classname="a11y.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-structure-che-a22e1-nk-moves-focus-to-the-field-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-structure-che-a22e1-nk-moves-focus-to-the-field-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › a11y.spec.ts:136:3 › NFR-001 structure checks in a real browser › NFR-001 AC-3 a refused submit moves focus to the error summary and its link moves focus to the field 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-VQ9i1W -juggler-pipe -silent
+    <launched> pid=63878
+    [pid=63878][err] *** You are running in headless mode.
+    [pid=63878][err] Could not find profile folder.
+    [pid=63878] <process did exit: exitCode=1, signal=null>
+    [pid=63878] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-VQ9i1W -juggler-pipe -silent
+      - <launched> pid=63878
+      - [pid=63878][err] *** You are running in headless mode.
+      - [pid=63878][err] Could not find profile folder.
+      - [pid=63878] <process did exit: exitCode=1, signal=null>
+      - [pid=63878] starting temporary directories cleanup
+      - [pid=63878] <gracefully close start>
+      - [pid=63878] <kill>
+      - [pid=63878] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=63878] finished temporary directories cleanup
+      - [pid=63878] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/a11y-NFR-001-structure-che-a22e1-nk-moves-focus-to-the-field-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-structure-che-a22e1-nk-moves-focus-to-the-field-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/a11y-NFR-001-structure-che-a22e1-nk-moves-focus-to-the-field-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 structure checks in a real browser › REQ-NAV-001 AC-6 under prefers-reduced-motion the not-found page runs no animation" classname="a11y.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-structure-che-99750-ound-page-runs-no-animation-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/a11y-NFR-001-structure-che-99750-ound-page-runs-no-animation-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › a11y.spec.ts:148:3 › NFR-001 structure checks in a real browser › REQ-NAV-001 AC-6 under prefers-reduced-motion the not-found page runs no animation 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-2i4C22 -juggler-pipe -silent
+    <launched> pid=63887
+    [pid=63887][err] *** You are running in headless mode.
+    [pid=63887][err] Could not find profile folder.
+    [pid=63887] <process did exit: exitCode=1, signal=null>
+    [pid=63887] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-2i4C22 -juggler-pipe -silent
+      - <launched> pid=63887
+      - [pid=63887][err] *** You are running in headless mode.
+      - [pid=63887][err] Could not find profile folder.
+      - [pid=63887] <process did exit: exitCode=1, signal=null>
+      - [pid=63887] starting temporary directories cleanup
+      - [pid=63887] <gracefully close start>
+      - [pid=63887] <kill>
+      - [pid=63887] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=63887] finished temporary directories cleanup
+      - [pid=63887] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/a11y-NFR-001-structure-che-99750-ound-page-runs-no-animation-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/a11y-NFR-001-structure-che-99750-ound-page-runs-no-animation-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/a11y-NFR-001-structure-che-99750-ound-page-runs-no-animation-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+<testsuite name="acceptance.spec.ts" timestamp="2026-11-09T13:02:16.415Z" hostname="firefox" tests="8" failures="0" skipped="0" time="0.001" errors="8">
+<testcase name="REQ-ACC-001 overall success scenario › REQ-ACC-001 AC-1 a signed-in user adds, sees, searches, filters, edits, completes and deletes their own to-dos" classname="acceptance.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/acceptance-REQ-ACC-001-ove-f64f2-nd-deletes-their-own-to-dos-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/acceptance-REQ-ACC-001-ove-f64f2-nd-deletes-their-own-to-dos-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › acceptance.spec.ts:23:3 › REQ-ACC-001 overall success scenario › REQ-ACC-001 AC-1 a signed-in user adds, sees, searches, filters, edits, completes and deletes their own to-dos 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-EAmaWz -juggler-pipe -silent
+    <launched> pid=63882
+    [pid=63882][err] *** You are running in headless mode.
+    [pid=63882][err] Could not find profile folder.
+    [pid=63882] <process did exit: exitCode=1, signal=null>
+    [pid=63882] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-EAmaWz -juggler-pipe -silent
+      - <launched> pid=63882
+      - [pid=63882][err] *** You are running in headless mode.
+      - [pid=63882][err] Could not find profile folder.
+      - [pid=63882] <process did exit: exitCode=1, signal=null>
+      - [pid=63882] starting temporary directories cleanup
+      - [pid=63882] <gracefully close start>
+      - [pid=63882] <kill>
+      - [pid=63882] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=63882] finished temporary directories cleanup
+      - [pid=63882] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/acceptance-REQ-ACC-001-ove-f64f2-nd-deletes-their-own-to-dos-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/acceptance-REQ-ACC-001-ove-f64f2-nd-deletes-their-own-to-dos-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/acceptance-REQ-ACC-001-ove-f64f2-nd-deletes-their-own-to-dos-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="REQ-ACC-001 overall success scenario › REQ-ACC-001 AC-2 REQ-ISO-001 AC-1 AC-2 AC-4 a second user cannot see or change the first user&apos;s to-dos by list, search or direct URL" classname="acceptance.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/acceptance-REQ-ACC-001-ove-98647-y-list-search-or-direct-URL-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/acceptance-REQ-ACC-001-ove-98647-y-list-search-or-direct-URL-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › acceptance.spec.ts:81:3 › REQ-ACC-001 overall success scenario › REQ-ACC-001 AC-2 REQ-ISO-001 AC-1 AC-2 AC-4 a second user cannot see or change the first user's to-dos by list, search or direct URL 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-LFwNGv -juggler-pipe -silent
+    <launched> pid=63889
+    [pid=63889][err] *** You are running in headless mode.
+    [pid=63889][err] Could not find profile folder.
+    [pid=63889] <process did exit: exitCode=1, signal=null>
+    [pid=63889] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-LFwNGv -juggler-pipe -silent
+      - <launched> pid=63889
+      - [pid=63889][err] *** You are running in headless mode.
+      - [pid=63889][err] Could not find profile folder.
+      - [pid=63889] <process did exit: exitCode=1, signal=null>
+      - [pid=63889] starting temporary directories cleanup
+      - [pid=63889] <gracefully close start>
+      - [pid=63889] <kill>
+      - [pid=63889] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=63889] finished temporary directories cleanup
+      - [pid=63889] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/acceptance-REQ-ACC-001-ove-98647-y-list-search-or-direct-URL-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/acceptance-REQ-ACC-001-ove-98647-y-list-search-or-direct-URL-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/acceptance-REQ-ACC-001-ove-98647-y-list-search-or-direct-URL-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-001 AC-4 a created to-do is still there after the page is reloaded" classname="acceptance.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-4f6e2--after-the-page-is-reloaded-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-4f6e2--after-the-page-is-reloaded-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › acceptance.spec.ts:120:3 › persistence and list flows › REQ-TODO-001 AC-4 a created to-do is still there after the page is reloaded 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-aRcc1P -juggler-pipe -silent
+    <launched> pid=63890
+    [pid=63890][err] *** You are running in headless mode.
+    [pid=63890][err] Could not find profile folder.
+    [pid=63890] <process did exit: exitCode=1, signal=null>
+    [pid=63890] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-aRcc1P -juggler-pipe -silent
+      - <launched> pid=63890
+      - [pid=63890][err] *** You are running in headless mode.
+      - [pid=63890][err] Could not find profile folder.
+      - [pid=63890] <process did exit: exitCode=1, signal=null>
+      - [pid=63890] starting temporary directories cleanup
+      - [pid=63890] <gracefully close start>
+      - [pid=63890] <kill>
+      - [pid=63890] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=63890] finished temporary directories cleanup
+      - [pid=63890] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/acceptance-persistence-and-4f6e2--after-the-page-is-reloaded-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/acceptance-persistence-and-4f6e2--after-the-page-is-reloaded-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/acceptance-persistence-and-4f6e2--after-the-page-is-reloaded-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="persistence and list flows › REQ-LIST-003 AC-1 AC-2 AC-3 AC-5 paging 45 to-dos: 20, 20, 5 with no repeat or gap, Previous and Next disabled at the ends" classname="acceptance.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-99fea-d-Next-disabled-at-the-ends-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-99fea-d-Next-disabled-at-the-ends-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › acceptance.spec.ts:127:3 › persistence and list flows › REQ-LIST-003 AC-1 AC-2 AC-3 AC-5 paging 45 to-dos: 20, 20, 5 with no repeat or gap, Previous and Next disabled at the ends 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-fsdMEn -juggler-pipe -silent
+    <launched> pid=63924
+    [pid=63924][err] *** You are running in headless mode.
+    [pid=63924][err] Could not find profile folder.
+    [pid=63924] <process did exit: exitCode=1, signal=null>
+    [pid=63924] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-fsdMEn -juggler-pipe -silent
+      - <launched> pid=63924
+      - [pid=63924][err] *** You are running in headless mode.
+      - [pid=63924][err] Could not find profile folder.
+      - [pid=63924] <process did exit: exitCode=1, signal=null>
+      - [pid=63924] starting temporary directories cleanup
+      - [pid=63924] <gracefully close start>
+      - [pid=63924] <kill>
+      - [pid=63924] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=63924] finished temporary directories cleanup
+      - [pid=63924] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/acceptance-persistence-and-99fea-d-Next-disabled-at-the-ends-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/acceptance-persistence-and-99fea-d-Next-disabled-at-the-ends-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/acceptance-persistence-and-99fea-d-Next-disabled-at-the-ends-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-005 AC-3 marking a to-do done under the Active filter removes the row without a reload" classname="acceptance.spec.ts" time="0.001">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-dd662-es-the-row-without-a-reload-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-dd662-es-the-row-without-a-reload-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › acceptance.spec.ts:156:3 › persistence and list flows › REQ-TODO-005 AC-3 marking a to-do done under the Active filter removes the row without a reload 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-h0Q08O -juggler-pipe -silent
+    <launched> pid=63931
+    [pid=63931][err] *** You are running in headless mode.
+    [pid=63931][err] Could not find profile folder.
+    [pid=63931] <process did exit: exitCode=1, signal=null>
+    [pid=63931] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-h0Q08O -juggler-pipe -silent
+      - <launched> pid=63931
+      - [pid=63931][err] *** You are running in headless mode.
+      - [pid=63931][err] Could not find profile folder.
+      - [pid=63931] <process did exit: exitCode=1, signal=null>
+      - [pid=63931] starting temporary directories cleanup
+      - [pid=63931] <gracefully close start>
+      - [pid=63931] <kill>
+      - [pid=63931] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=63931] finished temporary directories cleanup
+      - [pid=63931] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/acceptance-persistence-and-dd662-es-the-row-without-a-reload-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/acceptance-persistence-and-dd662-es-the-row-without-a-reload-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/acceptance-persistence-and-dd662-es-the-row-without-a-reload-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-006 AC-5 deleting the only to-do on the last page shows the previous page, not an error" classname="acceptance.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-45c73--previous-page-not-an-error-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-45c73--previous-page-not-an-error-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › acceptance.spec.ts:170:3 › persistence and list flows › REQ-TODO-006 AC-5 deleting the only to-do on the last page shows the previous page, not an error 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-A8SQEW -juggler-pipe -silent
+    <launched> pid=63964
+    [pid=63964][err] *** You are running in headless mode.
+    [pid=63964][err] Could not find profile folder.
+    [pid=63964] <process did exit: exitCode=1, signal=null>
+    [pid=63964] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-A8SQEW -juggler-pipe -silent
+      - <launched> pid=63964
+      - [pid=63964][err] *** You are running in headless mode.
+      - [pid=63964][err] Could not find profile folder.
+      - [pid=63964] <process did exit: exitCode=1, signal=null>
+      - [pid=63964] starting temporary directories cleanup
+      - [pid=63964] <gracefully close start>
+      - [pid=63964] <kill>
+      - [pid=63964] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=63964] finished temporary directories cleanup
+      - [pid=63964] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/acceptance-persistence-and-45c73--previous-page-not-an-error-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/acceptance-persistence-and-45c73--previous-page-not-an-error-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/acceptance-persistence-and-45c73--previous-page-not-an-error-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-007 AC-1 AC-2 clear all completed states the count, deletes completed across pages, keeps active" classname="acceptance.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-cbd22-d-across-pages-keeps-active-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-cbd22-d-across-pages-keeps-active-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › acceptance.spec.ts:181:3 › persistence and list flows › REQ-TODO-007 AC-1 AC-2 clear all completed states the count, deletes completed across pages, keeps active 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-CRQ48X -juggler-pipe -silent
+    <launched> pid=63966
+    [pid=63966][err] *** You are running in headless mode.
+    [pid=63966][err] Could not find profile folder.
+    [pid=63966] <process did exit: exitCode=1, signal=null>
+    [pid=63966] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-CRQ48X -juggler-pipe -silent
+      - <launched> pid=63966
+      - [pid=63966][err] *** You are running in headless mode.
+      - [pid=63966][err] Could not find profile folder.
+      - [pid=63966] <process did exit: exitCode=1, signal=null>
+      - [pid=63966] starting temporary directories cleanup
+      - [pid=63966] <gracefully close start>
+      - [pid=63966] <kill>
+      - [pid=63966] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=63966] finished temporary directories cleanup
+      - [pid=63966] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/acceptance-persistence-and-cbd22-d-across-pages-keeps-active-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/acceptance-persistence-and-cbd22-d-across-pages-keeps-active-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/acceptance-persistence-and-cbd22-d-across-pages-keeps-active-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-002 AC-7 a due date shows as the same calendar date in any time zone" classname="acceptance.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-2b5ce-endar-date-in-any-time-zone-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/acceptance-persistence-and-2b5ce-endar-date-in-any-time-zone-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › acceptance.spec.ts:205:3 › persistence and list flows › REQ-TODO-002 AC-7 a due date shows as the same calendar date in any time zone 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-LfRxWc -juggler-pipe -silent
+    <launched> pid=63981
+    [pid=63981][err] *** You are running in headless mode.
+    [pid=63981][err] Could not find profile folder.
+    [pid=63981] <process did exit: exitCode=1, signal=null>
+    [pid=63981] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-LfRxWc -juggler-pipe -silent
+      - <launched> pid=63981
+      - [pid=63981][err] *** You are running in headless mode.
+      - [pid=63981][err] Could not find profile folder.
+      - [pid=63981] <process did exit: exitCode=1, signal=null>
+      - [pid=63981] starting temporary directories cleanup
+      - [pid=63981] <gracefully close start>
+      - [pid=63981] <kill>
+      - [pid=63981] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=63981] finished temporary directories cleanup
+      - [pid=63981] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/acceptance-persistence-and-2b5ce-endar-date-in-any-time-zone-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/acceptance-persistence-and-2b5ce-endar-date-in-any-time-zone-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/acceptance-persistence-and-2b5ce-endar-date-in-any-time-zone-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+<testsuite name="auth.spec.ts" timestamp="2026-11-09T13:02:16.415Z" hostname="firefox" tests="8" failures="0" skipped="0" time="0.024" errors="7">
+<testcase name="sign up, log in, log out › REQ-AUTH-001 AC-1 AC-4 a fresh browser opens /signup directly, signs up with no verification step, then logs in" classname="auth.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-5449a-ification-step-then-logs-in-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-5449a-ification-step-then-logs-in-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › auth.spec.ts:5:3 › sign up, log in, log out › REQ-AUTH-001 AC-1 AC-4 a fresh browser opens /signup directly, signs up with no verification step, then logs in 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-XeWX4C -juggler-pipe -silent
+    <launched> pid=63982
+    [pid=63982][err] *** You are running in headless mode.
+    [pid=63982][err] Could not find profile folder.
+    [pid=63982] <process did exit: exitCode=1, signal=null>
+    [pid=63982] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-XeWX4C -juggler-pipe -silent
+      - <launched> pid=63982
+      - [pid=63982][err] *** You are running in headless mode.
+      - [pid=63982][err] Could not find profile folder.
+      - [pid=63982] <process did exit: exitCode=1, signal=null>
+      - [pid=63982] starting temporary directories cleanup
+      - [pid=63982] <gracefully close start>
+      - [pid=63982] <kill>
+      - [pid=63982] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=63982] finished temporary directories cleanup
+      - [pid=63982] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-5449a-ification-step-then-logs-in-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-5449a-ification-step-then-logs-in-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-5449a-ification-step-then-logs-in-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-001 AC-2 AC-6 signing up again with another letter case of a taken identifier is refused" classname="auth.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-38bc4-taken-identifier-is-refused-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-38bc4-taken-identifier-is-refused-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › auth.spec.ts:21:3 › sign up, log in, log out › REQ-AUTH-001 AC-2 AC-6 signing up again with another letter case of a taken identifier is refused 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-SjRBkY -juggler-pipe -silent
+    <launched> pid=63983
+    [pid=63983][err] *** You are running in headless mode.
+    [pid=63983][err] Could not find profile folder.
+    [pid=63983] <process did exit: exitCode=1, signal=null>
+    [pid=63983] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-SjRBkY -juggler-pipe -silent
+      - <launched> pid=63983
+      - [pid=63983][err] *** You are running in headless mode.
+      - [pid=63983][err] Could not find profile folder.
+      - [pid=63983] <process did exit: exitCode=1, signal=null>
+      - [pid=63983] starting temporary directories cleanup
+      - [pid=63983] <gracefully close start>
+      - [pid=63983] <kill>
+      - [pid=63983] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=63983] finished temporary directories cleanup
+      - [pid=63983] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-38bc4-taken-identifier-is-refused-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-38bc4-taken-identifier-is-refused-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-38bc4-taken-identifier-is-refused-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-002 AC-5 logging in with a different letter case of the identifier works" classname="auth.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-5b857-ase-of-the-identifier-works-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-5b857-ase-of-the-identifier-works-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › auth.spec.ts:32:3 › sign up, log in, log out › REQ-AUTH-002 AC-5 logging in with a different letter case of the identifier works 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-QagcMr -juggler-pipe -silent
+    <launched> pid=63984
+    [pid=63984][err] *** You are running in headless mode.
+    [pid=63984][err] Could not find profile folder.
+    [pid=63984] <process did exit: exitCode=1, signal=null>
+    [pid=63984] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-QagcMr -juggler-pipe -silent
+      - <launched> pid=63984
+      - [pid=63984][err] *** You are running in headless mode.
+      - [pid=63984][err] Could not find profile folder.
+      - [pid=63984] <process did exit: exitCode=1, signal=null>
+      - [pid=63984] starting temporary directories cleanup
+      - [pid=63984] <gracefully close start>
+      - [pid=63984] <kill>
+      - [pid=63984] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=63984] finished temporary directories cleanup
+      - [pid=63984] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-5b857-ase-of-the-identifier-works-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-5b857-ase-of-the-identifier-works-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-5b857-ase-of-the-identifier-works-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-002 AC-2 AC-3 NFR-006 AC-4 a wrong password and an unknown identifier show the same message" classname="auth.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-fc5dc-ifier-show-the-same-message-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-fc5dc-ifier-show-the-same-message-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › auth.spec.ts:40:3 › sign up, log in, log out › REQ-AUTH-002 AC-2 AC-3 NFR-006 AC-4 a wrong password and an unknown identifier show the same message 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-apM0vu -juggler-pipe -silent
+    <launched> pid=63986
+    [pid=63986][err] *** You are running in headless mode.
+    [pid=63986][err] Could not find profile folder.
+    [pid=63986] <process did exit: exitCode=1, signal=null>
+    [pid=63986] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-apM0vu -juggler-pipe -silent
+      - <launched> pid=63986
+      - [pid=63986][err] *** You are running in headless mode.
+      - [pid=63986][err] Could not find profile folder.
+      - [pid=63986] <process did exit: exitCode=1, signal=null>
+      - [pid=63986] starting temporary directories cleanup
+      - [pid=63986] <gracefully close start>
+      - [pid=63986] <kill>
+      - [pid=63986] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=63986] finished temporary directories cleanup
+      - [pid=63986] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-fc5dc-ifier-show-the-same-message-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-fc5dc-ifier-show-the-same-message-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-fc5dc-ifier-show-the-same-message-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-002 AC-4 reloading the page keeps the user signed in" classname="auth.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-0b574-ge-keeps-the-user-signed-in-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-0b574-ge-keeps-the-user-signed-in-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › auth.spec.ts:52:3 › sign up, log in, log out › REQ-AUTH-002 AC-4 reloading the page keeps the user signed in 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-z8wCZl -juggler-pipe -silent
+    <launched> pid=63988
+    [pid=63988][err] *** You are running in headless mode.
+    [pid=63988][err] Could not find profile folder.
+    [pid=63988] <process did exit: exitCode=1, signal=null>
+    [pid=63988] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-z8wCZl -juggler-pipe -silent
+      - <launched> pid=63988
+      - [pid=63988][err] *** You are running in headless mode.
+      - [pid=63988][err] Could not find profile folder.
+      - [pid=63988] <process did exit: exitCode=1, signal=null>
+      - [pid=63988] starting temporary directories cleanup
+      - [pid=63988] <gracefully close start>
+      - [pid=63988] <kill>
+      - [pid=63988] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=63988] finished temporary directories cleanup
+      - [pid=63988] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-0b574-ge-keeps-the-user-signed-in-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-0b574-ge-keeps-the-user-signed-in-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-0b574-ge-keeps-the-user-signed-in-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-004 AC-2 a fresh browser opening /todos lands on log in with no message, logs in and returns to /todos" classname="auth.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-e5a51-ogs-in-and-returns-to-todos-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-e5a51-ogs-in-and-returns-to-todos-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › auth.spec.ts:61:3 › sign up, log in, log out › REQ-AUTH-004 AC-2 a fresh browser opening /todos lands on log in with no message, logs in and returns to /todos 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-nMza1p -juggler-pipe -silent
+    <launched> pid=63993
+    [pid=63993][err] *** You are running in headless mode.
+    [pid=63993][err] Could not find profile folder.
+    [pid=63993] <process did exit: exitCode=1, signal=null>
+    [pid=63993] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-nMza1p -juggler-pipe -silent
+      - <launched> pid=63993
+      - [pid=63993][err] *** You are running in headless mode.
+      - [pid=63993][err] Could not find profile folder.
+      - [pid=63993] <process did exit: exitCode=1, signal=null>
+      - [pid=63993] starting temporary directories cleanup
+      - [pid=63993] <gracefully close start>
+      - [pid=63993] <kill>
+      - [pid=63993] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=63993] finished temporary directories cleanup
+      - [pid=63993] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-e5a51-ogs-in-and-returns-to-todos-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-e5a51-ogs-in-and-returns-to-todos-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-e5a51-ogs-in-and-returns-to-todos-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-004 AC-3 logging out ends the session; going back to a to-do page asks to log in again" classname="auth.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-71531-o-page-asks-to-log-in-again-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/auth-sign-up-log-in-log-ou-71531-o-page-asks-to-log-in-again-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › auth.spec.ts:74:3 › sign up, log in, log out › REQ-AUTH-004 AC-3 logging out ends the session; going back to a to-do page asks to log in again 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-V7kgw4 -juggler-pipe -silent
+    <launched> pid=63997
+    [pid=63997][err] *** You are running in headless mode.
+    [pid=63997][err] Could not find profile folder.
+    [pid=63997] <process did exit: exitCode=1, signal=null>
+    [pid=63997] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-V7kgw4 -juggler-pipe -silent
+      - <launched> pid=63997
+      - [pid=63997][err] *** You are running in headless mode.
+      - [pid=63997][err] Could not find profile folder.
+      - [pid=63997] <process did exit: exitCode=1, signal=null>
+      - [pid=63997] starting temporary directories cleanup
+      - [pid=63997] <gracefully close start>
+      - [pid=63997] <kill>
+      - [pid=63997] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=63997] finished temporary directories cleanup
+      - [pid=63997] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-71531-o-page-asks-to-log-in-again-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-71531-o-page-asks-to-log-in-again-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/auth-sign-up-log-in-log-ou-71531-o-page-asks-to-log-in-again-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-004 AC-1 to-do API calls without a session are refused as unauthenticated" classname="auth.spec.ts" time="0.024">
+</testcase>
+</testsuite>
+<testsuite name="keyboard.spec.ts" timestamp="2026-11-09T13:02:16.415Z" hostname="firefox" tests="8" failures="0" skipped="0" time="0" errors="8">
+<testcase name="NFR-001 AC-2 sign up and log in with the keyboard only" classname="keyboard.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-sign-1341f-g-in-with-the-keyboard-only-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-sign-1341f-g-in-with-the-keyboard-only-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › keyboard.spec.ts:20:1 › NFR-001 AC-2 sign up and log in with the keyboard only ───────
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-R3Q9Es -juggler-pipe -silent
+    <launched> pid=64003
+    [pid=64003][err] *** You are running in headless mode.
+    [pid=64003][err] Could not find profile folder.
+    [pid=64003] <process did exit: exitCode=1, signal=null>
+    [pid=64003] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-R3Q9Es -juggler-pipe -silent
+      - <launched> pid=64003
+      - [pid=64003][err] *** You are running in headless mode.
+      - [pid=64003][err] Could not find profile folder.
+      - [pid=64003] <process did exit: exitCode=1, signal=null>
+      - [pid=64003] starting temporary directories cleanup
+      - [pid=64003] <gracefully close start>
+      - [pid=64003] <kill>
+      - [pid=64003] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=64003] finished temporary directories cleanup
+      - [pid=64003] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-sign-1341f-g-in-with-the-keyboard-only-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-sign-1341f-g-in-with-the-keyboard-only-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-sign-1341f-g-in-with-the-keyboard-only-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 AC-2 create, search, filter, complete and page with the keyboard only" classname="keyboard.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-crea-155ea-page-with-the-keyboard-only-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-crea-155ea-page-with-the-keyboard-only-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › keyboard.spec.ts:39:1 › NFR-001 AC-2 create, search, filter, complete and page with the keyboard only 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-syDdl3 -juggler-pipe -silent
+    <launched> pid=64005
+    [pid=64005][err] *** You are running in headless mode.
+    [pid=64005][err] Could not find profile folder.
+    [pid=64005] <process did exit: exitCode=1, signal=null>
+    [pid=64005] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-syDdl3 -juggler-pipe -silent
+      - <launched> pid=64005
+      - [pid=64005][err] *** You are running in headless mode.
+      - [pid=64005][err] Could not find profile folder.
+      - [pid=64005] <process did exit: exitCode=1, signal=null>
+      - [pid=64005] starting temporary directories cleanup
+      - [pid=64005] <gracefully close start>
+      - [pid=64005] <kill>
+      - [pid=64005] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=64005] finished temporary directories cleanup
+      - [pid=64005] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-crea-155ea-page-with-the-keyboard-only-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-crea-155ea-page-with-the-keyboard-only-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-crea-155ea-page-with-the-keyboard-only-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 AC-2 the delete dialog takes focus on Cancel, keeps it inside, and Escape returns focus to the Delete button" classname="keyboard.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-the--8dd1a--focus-to-the-Delete-button-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-the--8dd1a--focus-to-the-Delete-button-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › keyboard.spec.ts:76:1 › NFR-001 AC-2 the delete dialog takes focus on Cancel, keeps it inside, and Escape returns focus to the Delete button 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-IFwf60 -juggler-pipe -silent
+    <launched> pid=64008
+    [pid=64008][err] *** You are running in headless mode.
+    [pid=64008][err] Could not find profile folder.
+    [pid=64008] <process did exit: exitCode=1, signal=null>
+    [pid=64008] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-IFwf60 -juggler-pipe -silent
+      - <launched> pid=64008
+      - [pid=64008][err] *** You are running in headless mode.
+      - [pid=64008][err] Could not find profile folder.
+      - [pid=64008] <process did exit: exitCode=1, signal=null>
+      - [pid=64008] starting temporary directories cleanup
+      - [pid=64008] <gracefully close start>
+      - [pid=64008] <kill>
+      - [pid=64008] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=64008] finished temporary directories cleanup
+      - [pid=64008] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-the--8dd1a--focus-to-the-Delete-button-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-the--8dd1a--focus-to-the-Delete-button-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-the--8dd1a--focus-to-the-Delete-button-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 AC-2 confirming deletion by keyboard moves focus to the list heading" classname="keyboard.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-conf-c51e9-s-focus-to-the-list-heading-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-conf-c51e9-s-focus-to-the-list-heading-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › keyboard.spec.ts:96:1 › NFR-001 AC-2 confirming deletion by keyboard moves focus to the list heading 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-9hkpqJ -juggler-pipe -silent
+    <launched> pid=64009
+    [pid=64009][err] *** You are running in headless mode.
+    [pid=64009][err] Could not find profile folder.
+    [pid=64009] <process did exit: exitCode=1, signal=null>
+    [pid=64009] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-9hkpqJ -juggler-pipe -silent
+      - <launched> pid=64009
+      - [pid=64009][err] *** You are running in headless mode.
+      - [pid=64009][err] Could not find profile folder.
+      - [pid=64009] <process did exit: exitCode=1, signal=null>
+      - [pid=64009] starting temporary directories cleanup
+      - [pid=64009] <gracefully close start>
+      - [pid=64009] <kill>
+      - [pid=64009] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=64009] finished temporary directories cleanup
+      - [pid=64009] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-conf-c51e9-s-focus-to-the-list-heading-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-conf-c51e9-s-focus-to-the-list-heading-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-conf-c51e9-s-focus-to-the-list-heading-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 AC-2 the clear-completed dialog is operated and left by keyboard; focus returns to the control on cancel" classname="keyboard.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-the--13972-ns-to-the-control-on-cancel-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-the--13972-ns-to-the-control-on-cancel-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › keyboard.spec.ts:108:1 › NFR-001 AC-2 the clear-completed dialog is operated and left by keyboard; focus returns to the control on cancel 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-VCkuOF -juggler-pipe -silent
+    <launched> pid=64002
+    [pid=64002][err] *** You are running in headless mode.
+    [pid=64002][err] Could not find profile folder.
+    [pid=64002] <process did exit: exitCode=1, signal=null>
+    [pid=64002] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-VCkuOF -juggler-pipe -silent
+      - <launched> pid=64002
+      - [pid=64002][err] *** You are running in headless mode.
+      - [pid=64002][err] Could not find profile folder.
+      - [pid=64002] <process did exit: exitCode=1, signal=null>
+      - [pid=64002] starting temporary directories cleanup
+      - [pid=64002] <gracefully close start>
+      - [pid=64002] <kill>
+      - [pid=64002] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=64002] finished temporary directories cleanup
+      - [pid=64002] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-the--13972-ns-to-the-control-on-cancel-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-the--13972-ns-to-the-control-on-cancel-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-the--13972-ns-to-the-control-on-cancel-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 AC-2 the detail page is reached, read and left by keyboard (to edit and back to the list)" classname="keyboard.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-the--68ecb--edit-and-back-to-the-list--firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-the--68ecb--edit-and-back-to-the-list--firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › keyboard.spec.ts:122:1 › NFR-001 AC-2 the detail page is reached, read and left by keyboard (to edit and back to the list) 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-fPPICc -juggler-pipe -silent
+    <launched> pid=64011
+    [pid=64011][err] *** You are running in headless mode.
+    [pid=64011][err] Could not find profile folder.
+    [pid=64011] <process did exit: exitCode=1, signal=null>
+    [pid=64011] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-fPPICc -juggler-pipe -silent
+      - <launched> pid=64011
+      - [pid=64011][err] *** You are running in headless mode.
+      - [pid=64011][err] Could not find profile folder.
+      - [pid=64011] <process did exit: exitCode=1, signal=null>
+      - [pid=64011] starting temporary directories cleanup
+      - [pid=64011] <gracefully close start>
+      - [pid=64011] <kill>
+      - [pid=64011] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=64011] finished temporary directories cleanup
+      - [pid=64011] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-the--68ecb--edit-and-back-to-the-list--firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-the--68ecb--edit-and-back-to-the-list--firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-the--68ecb--edit-and-back-to-the-list--firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 AC-2 a to-do is edited and saved by keyboard; the detail page shows the new title and focus is on its heading" classname="keyboard.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-a-to-49c76-and-focus-is-on-its-heading-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-a-to-49c76-and-focus-is-on-its-heading-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › keyboard.spec.ts:141:1 › NFR-001 AC-2 a to-do is edited and saved by keyboard; the detail page shows the new title and focus is on its heading 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-nCeFa5 -juggler-pipe -silent
+    <launched> pid=64014
+    [pid=64014][err] *** You are running in headless mode.
+    [pid=64014][err] Could not find profile folder.
+    [pid=64014] <process did exit: exitCode=1, signal=null>
+    [pid=64014] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-nCeFa5 -juggler-pipe -silent
+      - <launched> pid=64014
+      - [pid=64014][err] *** You are running in headless mode.
+      - [pid=64014][err] Could not find profile folder.
+      - [pid=64014] <process did exit: exitCode=1, signal=null>
+      - [pid=64014] starting temporary directories cleanup
+      - [pid=64014] <gracefully close start>
+      - [pid=64014] <kill>
+      - [pid=64014] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=64014] finished temporary directories cleanup
+      - [pid=64014] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-a-to-49c76-and-focus-is-on-its-heading-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-a-to-49c76-and-focus-is-on-its-heading-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-a-to-49c76-and-focus-is-on-its-heading-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-001 AC-2 keyboard focus is always visible on the list controls" classname="keyboard.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-keyb-a26f0-isible-on-the-list-controls-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/keyboard-NFR-001-AC-2-keyb-a26f0-isible-on-the-list-controls-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › keyboard.spec.ts:153:1 › NFR-001 AC-2 keyboard focus is always visible on the list controls 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-RNulyv -juggler-pipe -silent
+    <launched> pid=64016
+    [pid=64016][err] *** You are running in headless mode.
+    [pid=64016][err] Could not find profile folder.
+    [pid=64016] <process did exit: exitCode=1, signal=null>
+    [pid=64016] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-RNulyv -juggler-pipe -silent
+      - <launched> pid=64016
+      - [pid=64016][err] *** You are running in headless mode.
+      - [pid=64016][err] Could not find profile folder.
+      - [pid=64016] <process did exit: exitCode=1, signal=null>
+      - [pid=64016] starting temporary directories cleanup
+      - [pid=64016] <gracefully close start>
+      - [pid=64016] <kill>
+      - [pid=64016] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=64016] finished temporary directories cleanup
+      - [pid=64016] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-keyb-a26f0-isible-on-the-list-controls-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-keyb-a26f0-isible-on-the-list-controls-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/keyboard-NFR-001-AC-2-keyb-a26f0-isible-on-the-list-controls-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+<testsuite name="navigation.spec.ts" timestamp="2026-11-09T13:02:16.415Z" hostname="firefox" tests="9" failures="0" skipped="0" time="0" errors="9">
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-2 a fresh browser opening / lands on log in and, after logging in, on /todos" classname="navigation.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-4e17d-d-after-logging-in-on-todos-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-4e17d-d-after-logging-in-on-todos-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › navigation.spec.ts:31:3 › REQ-NAV-001 against the real stack › REQ-NAV-001 AC-2 a fresh browser opening / lands on log in and, after logging in, on /todos 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-fwWJVK -juggler-pipe -silent
+    <launched> pid=64018
+    [pid=64018][err] *** You are running in headless mode.
+    [pid=64018][err] Could not find profile folder.
+    [pid=64018] <process did exit: exitCode=1, signal=null>
+    [pid=64018] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-fwWJVK -juggler-pipe -silent
+      - <launched> pid=64018
+      - [pid=64018][err] *** You are running in headless mode.
+      - [pid=64018][err] Could not find profile folder.
+      - [pid=64018] <process did exit: exitCode=1, signal=null>
+      - [pid=64018] starting temporary directories cleanup
+      - [pid=64018] <gracefully close start>
+      - [pid=64018] <kill>
+      - [pid=64018] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=64018] finished temporary directories cleanup
+      - [pid=64018] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-4e17d-d-after-logging-in-on-todos-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-4e17d-d-after-logging-in-on-todos-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-4e17d-d-after-logging-in-on-todos-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-1 a signed-in browser opening / with a query string lands on /todos with no query" classname="navigation.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-f8b3b-ands-on-todos-with-no-query-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-f8b3b-ands-on-todos-with-no-query-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › navigation.spec.ts:42:3 › REQ-NAV-001 against the real stack › REQ-NAV-001 AC-1 a signed-in browser opening / with a query string lands on /todos with no query 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-8aiznE -juggler-pipe -silent
+    <launched> pid=64020
+    [pid=64020][err] *** You are running in headless mode.
+    [pid=64020][err] Could not find profile folder.
+    [pid=64020] <process did exit: exitCode=1, signal=null>
+    [pid=64020] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-8aiznE -juggler-pipe -silent
+      - <launched> pid=64020
+      - [pid=64020][err] *** You are running in headless mode.
+      - [pid=64020][err] Could not find profile folder.
+      - [pid=64020] <process did exit: exitCode=1, signal=null>
+      - [pid=64020] starting temporary directories cleanup
+      - [pid=64020] <gracefully close start>
+      - [pid=64020] <kill>
+      - [pid=64020] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=64020] finished temporary directories cleanup
+      - [pid=64020] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-f8b3b-ands-on-todos-with-no-query-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-f8b3b-ands-on-todos-with-no-query-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-f8b3b-ands-on-todos-with-no-query-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /nope lands on log in with no message and never sees the not-found page; after login it lands on /todos" classname="navigation.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-b3c23-ter-login-it-lands-on-todos-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-b3c23-ter-login-it-lands-on-todos-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › navigation.spec.ts:51:5 › REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /nope lands on log in with no message and never sees the not-found page; after login it lands on /todos 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-IlAAmZ -juggler-pipe -silent
+    <launched> pid=64021
+    [pid=64021][err] *** You are running in headless mode.
+    [pid=64021][err] Could not find profile folder.
+    [pid=64021] <process did exit: exitCode=1, signal=null>
+    [pid=64021] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-IlAAmZ -juggler-pipe -silent
+      - <launched> pid=64021
+      - [pid=64021][err] *** You are running in headless mode.
+      - [pid=64021][err] Could not find profile folder.
+      - [pid=64021] <process did exit: exitCode=1, signal=null>
+      - [pid=64021] starting temporary directories cleanup
+      - [pid=64021] <gracefully close start>
+      - [pid=64021] <kill>
+      - [pid=64021] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=64021] finished temporary directories cleanup
+      - [pid=64021] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-b3c23-ter-login-it-lands-on-todos-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-b3c23-ter-login-it-lands-on-todos-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-b3c23-ter-login-it-lands-on-todos-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /todos/abc/def lands on log in with no message and never sees the not-found page; after login it lands on /todos" classname="navigation.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-81b45-ter-login-it-lands-on-todos-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-81b45-ter-login-it-lands-on-todos-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › navigation.spec.ts:51:5 › REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /todos/abc/def lands on log in with no message and never sees the not-found page; after login it lands on /todos 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-HYvDkj -juggler-pipe -silent
+    <launched> pid=64022
+    [pid=64022][err] *** You are running in headless mode.
+    [pid=64022][err] Could not find profile folder.
+    [pid=64022] <process did exit: exitCode=1, signal=null>
+    [pid=64022] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-HYvDkj -juggler-pipe -silent
+      - <launched> pid=64022
+      - [pid=64022][err] *** You are running in headless mode.
+      - [pid=64022][err] Could not find profile folder.
+      - [pid=64022] <process did exit: exitCode=1, signal=null>
+      - [pid=64022] starting temporary directories cleanup
+      - [pid=64022] <gracefully close start>
+      - [pid=64022] <kill>
+      - [pid=64022] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=64022] finished temporary directories cleanup
+      - [pid=64022] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-81b45-ter-login-it-lands-on-todos-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-81b45-ter-login-it-lands-on-todos-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-81b45-ter-login-it-lands-on-todos-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /login/extra lands on log in with no message and never sees the not-found page; after login it lands on /todos" classname="navigation.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-3cd5e-ter-login-it-lands-on-todos-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-3cd5e-ter-login-it-lands-on-todos-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › navigation.spec.ts:51:5 › REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /login/extra lands on log in with no message and never sees the not-found page; after login it lands on /todos 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-mUm5BI -juggler-pipe -silent
+    <launched> pid=64024
+    [pid=64024][err] *** You are running in headless mode.
+    [pid=64024][err] Could not find profile folder.
+    [pid=64024] <process did exit: exitCode=1, signal=null>
+    [pid=64024] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-mUm5BI -juggler-pipe -silent
+      - <launched> pid=64024
+      - [pid=64024][err] *** You are running in headless mode.
+      - [pid=64024][err] Could not find profile folder.
+      - [pid=64024] <process did exit: exitCode=1, signal=null>
+      - [pid=64024] starting temporary directories cleanup
+      - [pid=64024] <gracefully close start>
+      - [pid=64024] <kill>
+      - [pid=64024] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=64024] finished temporary directories cleanup
+      - [pid=64024] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-3cd5e-ter-login-it-lands-on-todos-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-3cd5e-ter-login-it-lands-on-todos-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-3cd5e-ter-login-it-lands-on-todos-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /todos/not-a-uuid lands on log in and, after login, on /todos" classname="navigation.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-83fa6-in-and-after-login-on-todos-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-83fa6-in-and-after-login-on-todos-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › navigation.spec.ts:65:3 › REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /todos/not-a-uuid lands on log in and, after login, on /todos 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-BdvIb1 -juggler-pipe -silent
+    <launched> pid=64027
+    [pid=64027][err] *** You are running in headless mode.
+    [pid=64027][err] Could not find profile folder.
+    [pid=64027] <process did exit: exitCode=1, signal=null>
+    [pid=64027] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-BdvIb1 -juggler-pipe -silent
+      - <launched> pid=64027
+      - [pid=64027][err] *** You are running in headless mode.
+      - [pid=64027][err] Could not find profile folder.
+      - [pid=64027] <process did exit: exitCode=1, signal=null>
+      - [pid=64027] starting temporary directories cleanup
+      - [pid=64027] <gracefully close start>
+      - [pid=64027] <kill>
+      - [pid=64027] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=64027] finished temporary directories cleanup
+      - [pid=64027] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-83fa6-in-and-after-login-on-todos-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-83fa6-in-and-after-login-on-todos-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-83fa6-in-and-after-login-on-todos-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-3 AC-5 AC-6 signed in, /nope shows the not-found page whose animation plays once within 5 seconds, and the home link leads to /todos" classname="navigation.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-a366e-he-home-link-leads-to-todos-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-a366e-he-home-link-leads-to-todos-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › navigation.spec.ts:74:3 › REQ-NAV-001 against the real stack › REQ-NAV-001 AC-3 AC-5 AC-6 signed in, /nope shows the not-found page whose animation plays once within 5 seconds, and the home link leads to /todos 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-sEScUx -juggler-pipe -silent
+    <launched> pid=64030
+    [pid=64030][err] *** You are running in headless mode.
+    [pid=64030][err] Could not find profile folder.
+    [pid=64030] <process did exit: exitCode=1, signal=null>
+    [pid=64030] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-sEScUx -juggler-pipe -silent
+      - <launched> pid=64030
+      - [pid=64030][err] *** You are running in headless mode.
+      - [pid=64030][err] Could not find profile folder.
+      - [pid=64030] <process did exit: exitCode=1, signal=null>
+      - [pid=64030] starting temporary directories cleanup
+      - [pid=64030] <gracefully close start>
+      - [pid=64030] <kill>
+      - [pid=64030] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=64030] finished temporary directories cleanup
+      - [pid=64030] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-a366e-he-home-link-leads-to-todos-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-a366e-he-home-link-leads-to-todos-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-a366e-he-home-link-leads-to-todos-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-4 signed in, /todos/not-a-uuid and its /edit show the to-do not-found state, not the page-not-found page" classname="navigation.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-03944-not-the-page-not-found-page-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-03944-not-the-page-not-found-page-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › navigation.spec.ts:95:3 › REQ-NAV-001 against the real stack › REQ-NAV-001 AC-4 signed in, /todos/not-a-uuid and its /edit show the to-do not-found state, not the page-not-found page 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-ZA2n2u -juggler-pipe -silent
+    <launched> pid=64032
+    [pid=64032][err] *** You are running in headless mode.
+    [pid=64032][err] Could not find profile folder.
+    [pid=64032] <process did exit: exitCode=1, signal=null>
+    [pid=64032] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-ZA2n2u -juggler-pipe -silent
+      - <launched> pid=64032
+      - [pid=64032][err] *** You are running in headless mode.
+      - [pid=64032][err] Could not find profile folder.
+      - [pid=64032] <process did exit: exitCode=1, signal=null>
+      - [pid=64032] starting temporary directories cleanup
+      - [pid=64032] <gracefully close start>
+      - [pid=64032] <kill>
+      - [pid=64032] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=64032] finished temporary directories cleanup
+      - [pid=64032] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-03944-not-the-page-not-found-page-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-03944-not-the-page-not-found-page-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-03944-not-the-page-not-found-page-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-7 the home link on the not-found page is reachable and operable by keyboard with visible focus" classname="navigation.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-4f759-keyboard-with-visible-focus-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/navigation-REQ-NAV-001-aga-4f759-keyboard-with-visible-focus-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › navigation.spec.ts:104:3 › REQ-NAV-001 against the real stack › REQ-NAV-001 AC-7 the home link on the not-found page is reachable and operable by keyboard with visible focus 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-Rrn5g1 -juggler-pipe -silent
+    <launched> pid=64064
+    [pid=64064][err] *** You are running in headless mode.
+    [pid=64064][err] Could not find profile folder.
+    [pid=64064] <process did exit: exitCode=1, signal=null>
+    [pid=64064] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-Rrn5g1 -juggler-pipe -silent
+      - <launched> pid=64064
+      - [pid=64064][err] *** You are running in headless mode.
+      - [pid=64064][err] Could not find profile folder.
+      - [pid=64064] <process did exit: exitCode=1, signal=null>
+      - [pid=64064] starting temporary directories cleanup
+      - [pid=64064] <gracefully close start>
+      - [pid=64064] <kill>
+      - [pid=64064] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=64064] finished temporary directories cleanup
+      - [pid=64064] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-4f759-keyboard-with-visible-focus-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-4f759-keyboard-with-visible-focus-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/navigation-REQ-NAV-001-aga-4f759-keyboard-with-visible-focus-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+<testsuite name="network.spec.ts" timestamp="2026-11-09T13:02:16.415Z" hostname="firefox" tests="1" failures="0" skipped="0" time="0" errors="1">
+<testcase name="NFR-002 AC-1 sign up, log in, add, edit, complete and delete send every browser request to localhost only" classname="network.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/network-NFR-002-AC-1-sign--05f25-r-request-to-localhost-only-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/network-NFR-002-AC-1-sign--05f25-r-request-to-localhost-only-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › network.spec.ts:9:1 › NFR-002 AC-1 sign up, log in, add, edit, complete and delete send every browser request to localhost only 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-p2GuvT -juggler-pipe -silent
+    <launched> pid=64084
+    [pid=64084][err] *** You are running in headless mode.
+    [pid=64084][err] Could not find profile folder.
+    [pid=64084] <process did exit: exitCode=1, signal=null>
+    [pid=64084] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-p2GuvT -juggler-pipe -silent
+      - <launched> pid=64084
+      - [pid=64084][err] *** You are running in headless mode.
+      - [pid=64084][err] Could not find profile folder.
+      - [pid=64084] <process did exit: exitCode=1, signal=null>
+      - [pid=64084] starting temporary directories cleanup
+      - [pid=64084] <gracefully close start>
+      - [pid=64084] <kill>
+      - [pid=64084] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=64084] finished temporary directories cleanup
+      - [pid=64084] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/network-NFR-002-AC-1-sign--05f25-r-request-to-localhost-only-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/network-NFR-002-AC-1-sign--05f25-r-request-to-localhost-only-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/network-NFR-002-AC-1-sign--05f25-r-request-to-localhost-only-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+<testsuite name="performance.spec.ts" timestamp="2026-11-09T13:02:16.415Z" hostname="firefox" tests="1" failures="0" skipped="0" time="0" errors="1">
+<testcase name="NFR-003 AC-1 with 500 to-dos, list, filter, search, page, create, edit, complete and delete each show their result within 1 second at the 95th percentile" classname="performance.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/performance-NFR-003-AC-1-w-79795-cond-at-the-95th-percentile-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/performance-NFR-003-AC-1-w-79795-cond-at-the-95th-percentile-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › performance.spec.ts:14:1 › NFR-003 AC-1 with 500 to-dos, list, filter, search, page, create, edit, complete and delete each show their result within 1 second at the 95th percentile 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-laCC2L -juggler-pipe -silent
+    <launched> pid=64085
+    [pid=64085][err] *** You are running in headless mode.
+    [pid=64085][err] Could not find profile folder.
+    [pid=64085] <process did exit: exitCode=1, signal=null>
+    [pid=64085] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-laCC2L -juggler-pipe -silent
+      - <launched> pid=64085
+      - [pid=64085][err] *** You are running in headless mode.
+      - [pid=64085][err] Could not find profile folder.
+      - [pid=64085] <process did exit: exitCode=1, signal=null>
+      - [pid=64085] starting temporary directories cleanup
+      - [pid=64085] <gracefully close start>
+      - [pid=64085] <kill>
+      - [pid=64085] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=64085] finished temporary directories cleanup
+      - [pid=64085] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/performance-NFR-003-AC-1-w-79795-cond-at-the-95th-percentile-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/performance-NFR-003-AC-1-w-79795-cond-at-the-95th-percentile-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/performance-NFR-003-AC-1-w-79795-cond-at-the-95th-percentile-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+<testsuite name="states.spec.ts" timestamp="2026-11-09T13:02:16.415Z" hostname="firefox" tests="5" failures="0" skipped="0" time="0" errors="5">
+<testcase name="NFR-006 AC-1 with the list request aborted, the list screen shows a friendly message with its next step; after the interception is removed, trying again loads the list" classname="states.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/states-NFR-006-AC-1-with-t-3a003-trying-again-loads-the-list-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/states-NFR-006-AC-1-with-t-3a003-trying-again-loads-the-list-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › states.spec.ts:6:1 › NFR-006 AC-1 with the list request aborted, the list screen shows a friendly message with its next step; after the interception is removed, trying again loads the list 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-eDNK4g -juggler-pipe -silent
+    <launched> pid=64087
+    [pid=64087][err] *** You are running in headless mode.
+    [pid=64087][err] Could not find profile folder.
+    [pid=64087] <process did exit: exitCode=1, signal=null>
+    [pid=64087] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-eDNK4g -juggler-pipe -silent
+      - <launched> pid=64087
+      - [pid=64087][err] *** You are running in headless mode.
+      - [pid=64087][err] Could not find profile folder.
+      - [pid=64087] <process did exit: exitCode=1, signal=null>
+      - [pid=64087] starting temporary directories cleanup
+      - [pid=64087] <gracefully close start>
+      - [pid=64087] <kill>
+      - [pid=64087] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=64087] finished temporary directories cleanup
+      - [pid=64087] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/states-NFR-006-AC-1-with-t-3a003-trying-again-loads-the-list-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/states-NFR-006-AC-1-with-t-3a003-trying-again-loads-the-list-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/states-NFR-006-AC-1-with-t-3a003-trying-again-loads-the-list-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="NFR-006 AC-2 a 500 problem response with internals in its body shows none of them to the user" classname="states.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/states-NFR-006-AC-2-a-500--e90a2-ws-none-of-them-to-the-user-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/states-NFR-006-AC-2-a-500--e90a2-ws-none-of-them-to-the-user-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › states.spec.ts:30:1 › NFR-006 AC-2 a 500 problem response with internals in its body shows none of them to the user 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-ejJH5H -juggler-pipe -silent
+    <launched> pid=64117
+    [pid=64117][err] *** You are running in headless mode.
+    [pid=64117][err] Could not find profile folder.
+    [pid=64117] <process did exit: exitCode=1, signal=null>
+    [pid=64117] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-ejJH5H -juggler-pipe -silent
+      - <launched> pid=64117
+      - [pid=64117][err] *** You are running in headless mode.
+      - [pid=64117][err] Could not find profile folder.
+      - [pid=64117] <process did exit: exitCode=1, signal=null>
+      - [pid=64117] starting temporary directories cleanup
+      - [pid=64117] <gracefully close start>
+      - [pid=64117] <kill>
+      - [pid=64117] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=64117] finished temporary directories cleanup
+      - [pid=64117] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/states-NFR-006-AC-2-a-500--e90a2-ws-none-of-them-to-the-user-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/states-NFR-006-AC-2-a-500--e90a2-ws-none-of-them-to-the-user-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/states-NFR-006-AC-2-a-500--e90a2-ws-none-of-them-to-the-user-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="REQ-LIST-003 AC-6 a page number past the last in the URL shows the last valid page without an error" classname="states.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/states-REQ-LIST-003-AC-6-a-66c68-valid-page-without-an-error-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/states-REQ-LIST-003-AC-6-a-66c68-valid-page-without-an-error-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › states.spec.ts:56:1 › REQ-LIST-003 AC-6 a page number past the last in the URL shows the last valid page without an error 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-LMFSKQ -juggler-pipe -silent
+    <launched> pid=64119
+    [pid=64119][err] *** You are running in headless mode.
+    [pid=64119][err] Could not find profile folder.
+    [pid=64119] <process did exit: exitCode=1, signal=null>
+    [pid=64119] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-LMFSKQ -juggler-pipe -silent
+      - <launched> pid=64119
+      - [pid=64119][err] *** You are running in headless mode.
+      - [pid=64119][err] Could not find profile folder.
+      - [pid=64119] <process did exit: exitCode=1, signal=null>
+      - [pid=64119] starting temporary directories cleanup
+      - [pid=64119] <gracefully close start>
+      - [pid=64119] <kill>
+      - [pid=64119] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=64119] finished temporary directories cleanup
+      - [pid=64119] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/states-REQ-LIST-003-AC-6-a-66c68-valid-page-without-an-error-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/states-REQ-LIST-003-AC-6-a-66c68-valid-page-without-an-error-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/states-REQ-LIST-003-AC-6-a-66c68-valid-page-without-an-error-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="REQ-LIST-001 AC-5 an unknown status in the URL is removed and the list shows All" classname="states.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/states-REQ-LIST-001-AC-5-a-bf2ef-oved-and-the-list-shows-All-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/states-REQ-LIST-001-AC-5-a-bf2ef-oved-and-the-list-shows-All-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › states.spec.ts:65:1 › REQ-LIST-001 AC-5 an unknown status in the URL is removed and the list shows All 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-uv6GX9 -juggler-pipe -silent
+    <launched> pid=64134
+    [pid=64134][err] *** You are running in headless mode.
+    [pid=64134][err] Could not find profile folder.
+    [pid=64134] <process did exit: exitCode=1, signal=null>
+    [pid=64134] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-uv6GX9 -juggler-pipe -silent
+      - <launched> pid=64134
+      - [pid=64134][err] *** You are running in headless mode.
+      - [pid=64134][err] Could not find profile folder.
+      - [pid=64134] <process did exit: exitCode=1, signal=null>
+      - [pid=64134] starting temporary directories cleanup
+      - [pid=64134] <gracefully close start>
+      - [pid=64134] <kill>
+      - [pid=64134] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=64134] finished temporary directories cleanup
+      - [pid=64134] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/states-REQ-LIST-001-AC-5-a-bf2ef-oved-and-the-list-shows-All-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/states-REQ-LIST-001-AC-5-a-bf2ef-oved-and-the-list-shows-All-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/states-REQ-LIST-001-AC-5-a-bf2ef-oved-and-the-list-shows-All-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="REQ-TODO-003 AC-2 a user with no to-dos sees the first-use empty state" classname="states.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-artifacts/states-REQ-TODO-003-AC-2-a-003e0-s-the-first-use-empty-state-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-artifacts/states-REQ-TODO-003-AC-2-a-003e0-s-the-first-use-empty-state-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › states.spec.ts:75:1 › REQ-TODO-003 AC-2 a user with no to-dos sees the first-use empty state 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-ZdW5ks -juggler-pipe -silent
+    <launched> pid=64137
+    [pid=64137][err] *** You are running in headless mode.
+    [pid=64137][err] Could not find profile folder.
+    [pid=64137] <process did exit: exitCode=1, signal=null>
+    [pid=64137] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-ZdW5ks -juggler-pipe -silent
+      - <launched> pid=64137
+      - [pid=64137][err] *** You are running in headless mode.
+      - [pid=64137][err] Could not find profile folder.
+      - [pid=64137] <process did exit: exitCode=1, signal=null>
+      - [pid=64137] starting temporary directories cleanup
+      - [pid=64137] <gracefully close start>
+      - [pid=64137] <kill>
+      - [pid=64137] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=64137] finished temporary directories cleanup
+      - [pid=64137] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-artifacts/states-REQ-TODO-003-AC-2-a-003e0-s-the-first-use-empty-state-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-artifacts/states-REQ-TODO-003-AC-2-a-003e0-s-the-first-use-empty-state-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-artifacts/states-REQ-TODO-003-AC-2-a-003e0-s-the-first-use-empty-state-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+<testsuite name="a11y.spec.ts" timestamp="2026-11-09T13:02:16.415Z" hostname="webkit" tests="12" failures="0" skipped="0" time="23.677" errors="0">
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 sign-up has no violations, with and without errors" classname="a11y.spec.ts" time="2.694">
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 log in has no violations, with the account-created message and after a refused attempt" classname="a11y.spec.ts" time="3.142">
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the list has no violations: empty, populated with pagination, and no matches" classname="a11y.spec.ts" time="3.567">
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the create and edit form has no violations, with and without errors" classname="a11y.spec.ts" time="3.24">
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the to-do detail page and its not-found state have no violations" classname="a11y.spec.ts" time="2.649">
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the delete confirmation dialog has no violations" classname="a11y.spec.ts" time="2.12">
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the clear-completed confirmation dialog has no violations" classname="a11y.spec.ts" time="2.107">
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › REQ-NAV-001 AC-7 NFR-001 AC-1 the page-not-found page has no violations, while signed in" classname="a11y.spec.ts" time="1.078">
+</testcase>
+<testcase name="NFR-001 structure checks in a real browser › NFR-001 AC-1 the page language is set and every route has a distinct title" classname="a11y.spec.ts" time="0.626">
+</testcase>
+<testcase name="NFR-001 structure checks in a real browser › NFR-001 AC-1 no horizontal scrolling at 320 CSS pixels wide on the list, form and not-found page (reflow, 1.4.10)" classname="a11y.spec.ts" time="0.986">
+</testcase>
+<testcase name="NFR-001 structure checks in a real browser › NFR-001 AC-3 a refused submit moves focus to the error summary and its link moves focus to the field" classname="a11y.spec.ts" time="0.81">
+</testcase>
+<testcase name="NFR-001 structure checks in a real browser › REQ-NAV-001 AC-6 under prefers-reduced-motion the not-found page runs no animation" classname="a11y.spec.ts" time="0.658">
+</testcase>
+</testsuite>
+<testsuite name="acceptance.spec.ts" timestamp="2026-11-09T13:02:16.415Z" hostname="webkit" tests="8" failures="0" skipped="0" time="9.539" errors="0">
+<testcase name="REQ-ACC-001 overall success scenario › REQ-ACC-001 AC-1 a signed-in user adds, sees, searches, filters, edits, completes and deletes their own to-dos" classname="acceptance.spec.ts" time="1.987">
+</testcase>
+<testcase name="REQ-ACC-001 overall success scenario › REQ-ACC-001 AC-2 REQ-ISO-001 AC-1 AC-2 AC-4 a second user cannot see or change the first user&apos;s to-dos by list, search or direct URL" classname="acceptance.spec.ts" time="1.499">
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-001 AC-4 a created to-do is still there after the page is reloaded" classname="acceptance.spec.ts" time="0.685">
+</testcase>
+<testcase name="persistence and list flows › REQ-LIST-003 AC-1 AC-2 AC-3 AC-5 paging 45 to-dos: 20, 20, 5 with no repeat or gap, Previous and Next disabled at the ends" classname="acceptance.spec.ts" time="1.193">
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-005 AC-3 marking a to-do done under the Active filter removes the row without a reload" classname="acceptance.spec.ts" time="0.68">
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-006 AC-5 deleting the only to-do on the last page shows the previous page, not an error" classname="acceptance.spec.ts" time="0.865">
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-007 AC-1 AC-2 clear all completed states the count, deletes completed across pages, keeps active" classname="acceptance.spec.ts" time="1.322">
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-002 AC-7 a due date shows as the same calendar date in any time zone" classname="acceptance.spec.ts" time="1.308">
+</testcase>
+</testsuite>
+<testsuite name="auth.spec.ts" timestamp="2026-11-09T13:02:16.415Z" hostname="webkit" tests="8" failures="0" skipped="0" time="5.219" errors="0">
+<testcase name="sign up, log in, log out › REQ-AUTH-001 AC-1 AC-4 a fresh browser opens /signup directly, signs up with no verification step, then logs in" classname="auth.spec.ts" time="0.774">
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-001 AC-2 AC-6 signing up again with another letter case of a taken identifier is refused" classname="auth.spec.ts" time="0.755">
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-002 AC-5 logging in with a different letter case of the identifier works" classname="auth.spec.ts" time="0.648">
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-002 AC-2 AC-3 NFR-006 AC-4 a wrong password and an unknown identifier show the same message" classname="auth.spec.ts" time="1.001">
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-002 AC-4 reloading the page keeps the user signed in" classname="auth.spec.ts" time="0.693">
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-004 AC-2 a fresh browser opening /todos lands on log in with no message, logs in and returns to /todos" classname="auth.spec.ts" time="0.673">
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-004 AC-3 logging out ends the session; going back to a to-do page asks to log in again" classname="auth.spec.ts" time="0.664">
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-004 AC-1 to-do API calls without a session are refused as unauthenticated" classname="auth.spec.ts" time="0.011">
+</testcase>
+</testsuite>
+<testsuite name="keyboard.spec.ts" timestamp="2026-11-09T13:02:16.415Z" hostname="webkit" tests="8" failures="0" skipped="0" time="12.012" errors="0">
+<testcase name="NFR-001 AC-2 sign up and log in with the keyboard only" classname="keyboard.spec.ts" time="0.831">
+</testcase>
+<testcase name="NFR-001 AC-2 create, search, filter, complete and page with the keyboard only" classname="keyboard.spec.ts" time="2">
+</testcase>
+<testcase name="NFR-001 AC-2 the delete dialog takes focus on Cancel, keeps it inside, and Escape returns focus to the Delete button" classname="keyboard.spec.ts" time="0.714">
+</testcase>
+<testcase name="NFR-001 AC-2 confirming deletion by keyboard moves focus to the list heading" classname="keyboard.spec.ts" time="0.786">
+</testcase>
+<testcase name="NFR-001 AC-2 the clear-completed dialog is operated and left by keyboard; focus returns to the control on cancel" classname="keyboard.spec.ts" time="0.662">
+</testcase>
+<testcase name="NFR-001 AC-2 the detail page is reached, read and left by keyboard (to edit and back to the list)" classname="keyboard.spec.ts" time="5.621">
+</testcase>
+<testcase name="NFR-001 AC-2 a to-do is edited and saved by keyboard; the detail page shows the new title and focus is on its heading" classname="keyboard.spec.ts" time="0.692">
+</testcase>
+<testcase name="NFR-001 AC-2 keyboard focus is always visible on the list controls" classname="keyboard.spec.ts" time="0.706">
+</testcase>
+</testsuite>
+<testsuite name="navigation.spec.ts" timestamp="2026-11-09T13:02:16.415Z" hostname="webkit" tests="9" failures="0" skipped="0" time="5.301" errors="0">
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-2 a fresh browser opening / lands on log in and, after logging in, on /todos" classname="navigation.spec.ts" time="0.623">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-1 a signed-in browser opening / with a query string lands on /todos with no query" classname="navigation.spec.ts" time="0.546">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /nope lands on log in with no message and never sees the not-found page; after login it lands on /todos" classname="navigation.spec.ts" time="0.585">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /todos/abc/def lands on log in with no message and never sees the not-found page; after login it lands on /todos" classname="navigation.spec.ts" time="0.613">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /login/extra lands on log in with no message and never sees the not-found page; after login it lands on /todos" classname="navigation.spec.ts" time="0.568">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /todos/not-a-uuid lands on log in and, after login, on /todos" classname="navigation.spec.ts" time="0.558">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-3 AC-5 AC-6 signed in, /nope shows the not-found page whose animation plays once within 5 seconds, and the home link leads to /todos" classname="navigation.spec.ts" time="0.564">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-4 signed in, /todos/not-a-uuid and its /edit show the to-do not-found state, not the page-not-found page" classname="navigation.spec.ts" time="0.686">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-7 the home link on the not-found page is reachable and operable by keyboard with visible focus" classname="navigation.spec.ts" time="0.558">
+</testcase>
+</testsuite>
+<testsuite name="network.spec.ts" timestamp="2026-11-09T13:02:16.415Z" hostname="webkit" tests="1" failures="0" skipped="0" time="0.94" errors="0">
+<testcase name="NFR-002 AC-1 sign up, log in, add, edit, complete and delete send every browser request to localhost only" classname="network.spec.ts" time="0.94">
+</testcase>
+</testsuite>
+<testsuite name="performance.spec.ts" timestamp="2026-11-09T13:02:16.415Z" hostname="webkit" tests="1" failures="0" skipped="0" time="19.392" errors="0">
+<testcase name="NFR-003 AC-1 with 500 to-dos, list, filter, search, page, create, edit, complete and delete each show their result within 1 second at the 95th percentile" classname="performance.spec.ts" time="19.392">
+<properties>
+<property name="p95-ms" value="{&quot;list&quot;:70,&quot;filter&quot;:74,&quot;search&quot;:49,&quot;page&quot;:55,&quot;create&quot;:81,&quot;edit&quot;:74,&quot;complete&quot;:54,&quot;delete&quot;:65}">
+</property>
+</properties>
+</testcase>
+</testsuite>
+<testsuite name="states.spec.ts" timestamp="2026-11-09T13:02:16.415Z" hostname="webkit" tests="5" failures="0" skipped="0" time="2.739" errors="0">
+<testcase name="NFR-006 AC-1 with the list request aborted, the list screen shows a friendly message with its next step; after the interception is removed, trying again loads the list" classname="states.spec.ts" time="0.674">
+</testcase>
+<testcase name="NFR-006 AC-2 a 500 problem response with internals in its body shows none of them to the user" classname="states.spec.ts" time="0.563">
+</testcase>
+<testcase name="REQ-LIST-003 AC-6 a page number past the last in the URL shows the last valid page without an error" classname="states.spec.ts" time="0.588">
+</testcase>
+<testcase name="REQ-LIST-001 AC-5 an unknown status in the URL is removed and the list shows All" classname="states.spec.ts" time="0.48">
+</testcase>
+<testcase name="REQ-TODO-003 AC-2 a user with no to-dos sees the first-use empty state" classname="states.spec.ts" time="0.434">
+</testcase>
+</testsuite>
+</testsuites>
