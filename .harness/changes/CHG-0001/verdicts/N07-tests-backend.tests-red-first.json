@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N07-tests-backend",
+  "gate": "tests-red-first",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "tool",
+    "id": "backend-qa",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "backend-qa",
+      "agentRunId": "a9e5120f48f49747f"
+    },
+    "modelAlias": "harness/tester"
+  },
+  "createdAt": "2026-11-09T09:07:56.586Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "reviewedCommit": "344cee05c41c0376fae2795ae07fd3710327e04e",
+  "summary": "Red run via api/mvnw test at 344cee0: 339 tests, 273 failures, 47 errors, 19 passed (tooling and architecture-fixture tests that need no production code). Failures: contract/status assertions because the stubbed app serves 404 for every API route; errors: UnsupportedOperationException not implemented (Whitespace), NoSuchBeanDefinition DataSource/HikariDataSource, missing SQLite tables. No compile errors.",
+  "findings": []
+}
