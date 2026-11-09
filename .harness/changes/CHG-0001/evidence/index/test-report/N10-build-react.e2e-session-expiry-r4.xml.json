@@ -1,0 +1,6 @@
+{
+  "kind": "test-report",
+  "path": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.e2e-session-expiry-r4.xml",
+  "description": "chromium and webkit, inside the sandbox, on 0615ba7; firefox is the accepted divergence",
+  "replaces": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.e2e-session-expiry-r3.xml"
+}

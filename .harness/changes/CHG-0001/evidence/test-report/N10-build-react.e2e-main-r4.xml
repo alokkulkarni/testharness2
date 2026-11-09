@@ -1,0 +1,250 @@
+<testsuites id="" name="" tests="104" failures="0" skipped="0" errors="0" time="48.422238">
+<testsuite name="a11y.spec.ts" timestamp="2026-11-09T15:37:36.373Z" hostname="chromium" tests="12" failures="0" skipped="0" time="17.653" errors="0">
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 sign-up has no violations, with and without errors" classname="a11y.spec.ts" time="1.589">
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 log in has no violations, with the account-created message and after a refused attempt" classname="a11y.spec.ts" time="1.986">
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the list has no violations: empty, populated with pagination, and no matches" classname="a11y.spec.ts" time="2.871">
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the create and edit form has no violations, with and without errors" classname="a11y.spec.ts" time="2.249">
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the to-do detail page and its not-found state have no violations" classname="a11y.spec.ts" time="1.9">
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the delete confirmation dialog has no violations" classname="a11y.spec.ts" time="1.58">
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the clear-completed confirmation dialog has no violations" classname="a11y.spec.ts" time="1.564">
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › REQ-NAV-001 AC-7 NFR-001 AC-1 the page-not-found page has no violations, while signed in" classname="a11y.spec.ts" time="1.453">
+</testcase>
+<testcase name="NFR-001 structure checks in a real browser › NFR-001 AC-1 the page language is set and every route has a distinct title" classname="a11y.spec.ts" time="0.491">
+</testcase>
+<testcase name="NFR-001 structure checks in a real browser › NFR-001 AC-1 no horizontal scrolling at 320 CSS pixels wide on the list, form and not-found page (reflow, 1.4.10)" classname="a11y.spec.ts" time="0.771">
+</testcase>
+<testcase name="NFR-001 structure checks in a real browser › NFR-001 AC-3 a refused submit moves focus to the error summary and its link moves focus to the field" classname="a11y.spec.ts" time="0.652">
+</testcase>
+<testcase name="NFR-001 structure checks in a real browser › REQ-NAV-001 AC-6 under prefers-reduced-motion the not-found page runs no animation" classname="a11y.spec.ts" time="0.547">
+</testcase>
+</testsuite>
+<testsuite name="acceptance.spec.ts" timestamp="2026-11-09T15:37:36.373Z" hostname="chromium" tests="8" failures="0" skipped="0" time="9.375" errors="0">
+<testcase name="REQ-ACC-001 overall success scenario › REQ-ACC-001 AC-1 a signed-in user adds, sees, searches, filters, edits, completes and deletes their own to-dos" classname="acceptance.spec.ts" time="2.076">
+</testcase>
+<testcase name="REQ-ACC-001 overall success scenario › REQ-ACC-001 AC-2 REQ-ISO-001 AC-1 AC-2 AC-4 a second user cannot see or change the first user&apos;s to-dos by list, search or direct URL" classname="acceptance.spec.ts" time="1.418">
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-001 AC-4 a created to-do is still there after the page is reloaded" classname="acceptance.spec.ts" time="0.783">
+</testcase>
+<testcase name="persistence and list flows › REQ-LIST-003 AC-1 AC-2 AC-3 AC-5 paging 45 to-dos: 20, 20, 5 with no repeat or gap, Previous and Next disabled at the ends" classname="acceptance.spec.ts" time="1.202">
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-005 AC-3 marking a to-do done under the Active filter removes the row without a reload" classname="acceptance.spec.ts" time="0.621">
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-006 AC-5 deleting the only to-do on the last page shows the previous page, not an error" classname="acceptance.spec.ts" time="0.846">
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-007 AC-1 AC-2 clear all completed states the count, deletes completed across pages, keeps active" classname="acceptance.spec.ts" time="1.393">
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-002 AC-7 a due date shows as the same calendar date in any time zone" classname="acceptance.spec.ts" time="1.036">
+</testcase>
+</testsuite>
+<testsuite name="auth.spec.ts" timestamp="2026-11-09T15:37:36.373Z" hostname="chromium" tests="8" failures="0" skipped="0" time="4.815" errors="0">
+<testcase name="sign up, log in, log out › REQ-AUTH-001 AC-1 AC-4 a fresh browser opens /signup directly, signs up with no verification step, then logs in" classname="auth.spec.ts" time="0.717">
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-001 AC-2 AC-6 signing up again with another letter case of a taken identifier is refused" classname="auth.spec.ts" time="0.609">
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-002 AC-5 logging in with a different letter case of the identifier works" classname="auth.spec.ts" time="0.747">
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-002 AC-2 AC-3 NFR-006 AC-4 a wrong password and an unknown identifier show the same message" classname="auth.spec.ts" time="0.797">
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-002 AC-4 reloading the page keeps the user signed in" classname="auth.spec.ts" time="0.614">
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-004 AC-2 a fresh browser opening /todos lands on log in with no message, logs in and returns to /todos" classname="auth.spec.ts" time="0.713">
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-004 AC-3 logging out ends the session; going back to a to-do page asks to log in again" classname="auth.spec.ts" time="0.587">
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-004 AC-1 to-do API calls without a session are refused as unauthenticated" classname="auth.spec.ts" time="0.031">
+</testcase>
+</testsuite>
+<testsuite name="keyboard.spec.ts" timestamp="2026-11-09T15:37:36.373Z" hostname="chromium" tests="8" failures="0" skipped="0" time="7.167" errors="0">
+<testcase name="NFR-001 AC-2 sign up and log in with the keyboard only" classname="keyboard.spec.ts" time="0.811">
+</testcase>
+<testcase name="NFR-001 AC-2 create, search, filter, complete and page with the keyboard only" classname="keyboard.spec.ts" time="2.185">
+</testcase>
+<testcase name="NFR-001 AC-2 the delete dialog takes focus on Cancel, keeps it inside, and Escape returns focus to the Delete button" classname="keyboard.spec.ts" time="0.702">
+</testcase>
+<testcase name="NFR-001 AC-2 confirming deletion by keyboard moves focus to the list heading" classname="keyboard.spec.ts" time="0.695">
+</testcase>
+<testcase name="NFR-001 AC-2 the clear-completed dialog is operated and left by keyboard; focus returns to the control on cancel" classname="keyboard.spec.ts" time="0.623">
+</testcase>
+<testcase name="NFR-001 AC-2 the detail page is reached, read and left by keyboard (to edit and back to the list)" classname="keyboard.spec.ts" time="0.869">
+</testcase>
+<testcase name="NFR-001 AC-2 a to-do is edited and saved by keyboard; the detail page shows the new title and focus is on its heading" classname="keyboard.spec.ts" time="0.604">
+</testcase>
+<testcase name="NFR-001 AC-2 keyboard focus is always visible on the list controls" classname="keyboard.spec.ts" time="0.678">
+</testcase>
+</testsuite>
+<testsuite name="navigation.spec.ts" timestamp="2026-11-09T15:37:36.373Z" hostname="chromium" tests="9" failures="0" skipped="0" time="5.698" errors="0">
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-2 a fresh browser opening / lands on log in and, after logging in, on /todos" classname="navigation.spec.ts" time="0.649">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-1 a signed-in browser opening / with a query string lands on /todos with no query" classname="navigation.spec.ts" time="0.494">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /nope lands on log in with no message and never sees the not-found page; after login it lands on /todos" classname="navigation.spec.ts" time="0.636">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /todos/abc/def lands on log in with no message and never sees the not-found page; after login it lands on /todos" classname="navigation.spec.ts" time="0.609">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /login/extra lands on log in with no message and never sees the not-found page; after login it lands on /todos" classname="navigation.spec.ts" time="0.631">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /todos/not-a-uuid lands on log in and, after login, on /todos" classname="navigation.spec.ts" time="0.69">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-3 AC-5 AC-6 signed in, /nope shows the not-found page whose animation plays once within 5 seconds, and the home link leads to /todos" classname="navigation.spec.ts" time="0.64">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-4 signed in, /todos/not-a-uuid and its /edit show the to-do not-found state, not the page-not-found page" classname="navigation.spec.ts" time="0.79">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-7 the home link on the not-found page is reachable and operable by keyboard with visible focus" classname="navigation.spec.ts" time="0.559">
+</testcase>
+</testsuite>
+<testsuite name="network.spec.ts" timestamp="2026-11-09T15:37:36.373Z" hostname="chromium" tests="1" failures="0" skipped="0" time="0.921" errors="0">
+<testcase name="NFR-002 AC-1 sign up, log in, add, edit, complete and delete send every browser request to localhost only" classname="network.spec.ts" time="0.921">
+</testcase>
+</testsuite>
+<testsuite name="performance.spec.ts" timestamp="2026-11-09T15:37:36.373Z" hostname="chromium" tests="1" failures="0" skipped="0" time="32.662" errors="0">
+<testcase name="NFR-003 AC-1 with 500 to-dos, list, filter, search, page, create, edit, complete and delete each show their result within 1 second at the 95th percentile" classname="performance.spec.ts" time="32.662">
+<properties>
+<property name="p95-ms" value="{&quot;list&quot;:117,&quot;filter&quot;:65,&quot;search&quot;:59,&quot;page&quot;:68,&quot;create&quot;:70,&quot;edit&quot;:66,&quot;complete&quot;:67,&quot;delete&quot;:62}">
+</property>
+</properties>
+</testcase>
+</testsuite>
+<testsuite name="states.spec.ts" timestamp="2026-11-09T15:37:36.373Z" hostname="chromium" tests="5" failures="0" skipped="0" time="2.659" errors="0">
+<testcase name="NFR-006 AC-1 with the list request aborted, the list screen shows a friendly message with its next step; after the interception is removed, trying again loads the list" classname="states.spec.ts" time="0.665">
+</testcase>
+<testcase name="NFR-006 AC-2 a 500 problem response with internals in its body shows none of them to the user" classname="states.spec.ts" time="0.481">
+</testcase>
+<testcase name="REQ-LIST-003 AC-6 a page number past the last in the URL shows the last valid page without an error" classname="states.spec.ts" time="0.676">
+</testcase>
+<testcase name="REQ-LIST-001 AC-5 an unknown status in the URL is removed and the list shows All" classname="states.spec.ts" time="0.434">
+</testcase>
+<testcase name="REQ-TODO-003 AC-2 a user with no to-dos sees the first-use empty state" classname="states.spec.ts" time="0.403">
+</testcase>
+</testsuite>
+<testsuite name="a11y.spec.ts" timestamp="2026-11-09T15:37:36.373Z" hostname="webkit" tests="12" failures="0" skipped="0" time="39.365" errors="0">
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 sign-up has no violations, with and without errors" classname="a11y.spec.ts" time="4.818">
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 log in has no violations, with the account-created message and after a refused attempt" classname="a11y.spec.ts" time="5.224">
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the list has no violations: empty, populated with pagination, and no matches" classname="a11y.spec.ts" time="5.976">
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the create and edit form has no violations, with and without errors" classname="a11y.spec.ts" time="5.469">
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the to-do detail page and its not-found state have no violations" classname="a11y.spec.ts" time="4.884">
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the delete confirmation dialog has no violations" classname="a11y.spec.ts" time="4.376">
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › NFR-001 AC-1 the clear-completed confirmation dialog has no violations" classname="a11y.spec.ts" time="4.239">
+</testcase>
+<testcase name="NFR-001 AC-1 axe on the eight audited screens (WCAG 2.1 A and AA) › REQ-NAV-001 AC-7 NFR-001 AC-1 the page-not-found page has no violations, while signed in" classname="a11y.spec.ts" time="1.212">
+</testcase>
+<testcase name="NFR-001 structure checks in a real browser › NFR-001 AC-1 the page language is set and every route has a distinct title" classname="a11y.spec.ts" time="0.727">
+</testcase>
+<testcase name="NFR-001 structure checks in a real browser › NFR-001 AC-1 no horizontal scrolling at 320 CSS pixels wide on the list, form and not-found page (reflow, 1.4.10)" classname="a11y.spec.ts" time="1.003">
+</testcase>
+<testcase name="NFR-001 structure checks in a real browser › NFR-001 AC-3 a refused submit moves focus to the error summary and its link moves focus to the field" classname="a11y.spec.ts" time="0.821">
+</testcase>
+<testcase name="NFR-001 structure checks in a real browser › REQ-NAV-001 AC-6 under prefers-reduced-motion the not-found page runs no animation" classname="a11y.spec.ts" time="0.616">
+</testcase>
+</testsuite>
+<testsuite name="acceptance.spec.ts" timestamp="2026-11-09T15:37:36.373Z" hostname="webkit" tests="8" failures="0" skipped="0" time="9.541" errors="0">
+<testcase name="REQ-ACC-001 overall success scenario › REQ-ACC-001 AC-1 a signed-in user adds, sees, searches, filters, edits, completes and deletes their own to-dos" classname="acceptance.spec.ts" time="2.102">
+</testcase>
+<testcase name="REQ-ACC-001 overall success scenario › REQ-ACC-001 AC-2 REQ-ISO-001 AC-1 AC-2 AC-4 a second user cannot see or change the first user&apos;s to-dos by list, search or direct URL" classname="acceptance.spec.ts" time="1.412">
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-001 AC-4 a created to-do is still there after the page is reloaded" classname="acceptance.spec.ts" time="0.836">
+</testcase>
+<testcase name="persistence and list flows › REQ-LIST-003 AC-1 AC-2 AC-3 AC-5 paging 45 to-dos: 20, 20, 5 with no repeat or gap, Previous and Next disabled at the ends" classname="acceptance.spec.ts" time="1.259">
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-005 AC-3 marking a to-do done under the Active filter removes the row without a reload" classname="acceptance.spec.ts" time="0.707">
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-006 AC-5 deleting the only to-do on the last page shows the previous page, not an error" classname="acceptance.spec.ts" time="0.876">
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-007 AC-1 AC-2 clear all completed states the count, deletes completed across pages, keeps active" classname="acceptance.spec.ts" time="1.267">
+</testcase>
+<testcase name="persistence and list flows › REQ-TODO-002 AC-7 a due date shows as the same calendar date in any time zone" classname="acceptance.spec.ts" time="1.082">
+</testcase>
+</testsuite>
+<testsuite name="auth.spec.ts" timestamp="2026-11-09T15:37:36.373Z" hostname="webkit" tests="8" failures="0" skipped="0" time="4.62" errors="0">
+<testcase name="sign up, log in, log out › REQ-AUTH-001 AC-1 AC-4 a fresh browser opens /signup directly, signs up with no verification step, then logs in" classname="auth.spec.ts" time="0.781">
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-001 AC-2 AC-6 signing up again with another letter case of a taken identifier is refused" classname="auth.spec.ts" time="0.616">
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-002 AC-5 logging in with a different letter case of the identifier works" classname="auth.spec.ts" time="0.631">
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-002 AC-2 AC-3 NFR-006 AC-4 a wrong password and an unknown identifier show the same message" classname="auth.spec.ts" time="0.798">
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-002 AC-4 reloading the page keeps the user signed in" classname="auth.spec.ts" time="0.596">
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-004 AC-2 a fresh browser opening /todos lands on log in with no message, logs in and returns to /todos" classname="auth.spec.ts" time="0.612">
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-004 AC-3 logging out ends the session; going back to a to-do page asks to log in again" classname="auth.spec.ts" time="0.571">
+</testcase>
+<testcase name="sign up, log in, log out › REQ-AUTH-004 AC-1 to-do API calls without a session are refused as unauthenticated" classname="auth.spec.ts" time="0.015">
+</testcase>
+</testsuite>
+<testsuite name="keyboard.spec.ts" timestamp="2026-11-09T15:37:36.373Z" hostname="webkit" tests="8" failures="0" skipped="0" time="8.852" errors="0">
+<testcase name="NFR-001 AC-2 sign up and log in with the keyboard only" classname="keyboard.spec.ts" time="0.837">
+</testcase>
+<testcase name="NFR-001 AC-2 create, search, filter, complete and page with the keyboard only" classname="keyboard.spec.ts" time="2.905">
+</testcase>
+<testcase name="NFR-001 AC-2 the delete dialog takes focus on Cancel, keeps it inside, and Escape returns focus to the Delete button" classname="keyboard.spec.ts" time="0.856">
+</testcase>
+<testcase name="NFR-001 AC-2 confirming deletion by keyboard moves focus to the list heading" classname="keyboard.spec.ts" time="0.808">
+</testcase>
+<testcase name="NFR-001 AC-2 the clear-completed dialog is operated and left by keyboard; focus returns to the control on cancel" classname="keyboard.spec.ts" time="0.684">
+</testcase>
+<testcase name="NFR-001 AC-2 the detail page is reached, read and left by keyboard (to edit and back to the list)" classname="keyboard.spec.ts" time="1.185">
+</testcase>
+<testcase name="NFR-001 AC-2 a to-do is edited and saved by keyboard; the detail page shows the new title and focus is on its heading" classname="keyboard.spec.ts" time="0.705">
+</testcase>
+<testcase name="NFR-001 AC-2 keyboard focus is always visible on the list controls" classname="keyboard.spec.ts" time="0.872">
+</testcase>
+</testsuite>
+<testsuite name="navigation.spec.ts" timestamp="2026-11-09T15:37:36.373Z" hostname="webkit" tests="9" failures="0" skipped="0" time="6.841" errors="0">
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-2 a fresh browser opening / lands on log in and, after logging in, on /todos" classname="navigation.spec.ts" time="0.707">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-1 a signed-in browser opening / with a query string lands on /todos with no query" classname="navigation.spec.ts" time="0.651">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /nope lands on log in with no message and never sees the not-found page; after login it lands on /todos" classname="navigation.spec.ts" time="0.872">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /todos/abc/def lands on log in with no message and never sees the not-found page; after login it lands on /todos" classname="navigation.spec.ts" time="0.868">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /login/extra lands on log in with no message and never sees the not-found page; after login it lands on /todos" classname="navigation.spec.ts" time="0.783">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-8 a fresh browser opening /todos/not-a-uuid lands on log in and, after login, on /todos" classname="navigation.spec.ts" time="0.755">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-3 AC-5 AC-6 signed in, /nope shows the not-found page whose animation plays once within 5 seconds, and the home link leads to /todos" classname="navigation.spec.ts" time="0.714">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-4 signed in, /todos/not-a-uuid and its /edit show the to-do not-found state, not the page-not-found page" classname="navigation.spec.ts" time="0.884">
+</testcase>
+<testcase name="REQ-NAV-001 against the real stack › REQ-NAV-001 AC-7 the home link on the not-found page is reachable and operable by keyboard with visible focus" classname="navigation.spec.ts" time="0.607">
+</testcase>
+</testsuite>
+<testsuite name="network.spec.ts" timestamp="2026-11-09T15:37:36.373Z" hostname="webkit" tests="1" failures="0" skipped="0" time="0.956" errors="0">
+<testcase name="NFR-002 AC-1 sign up, log in, add, edit, complete and delete send every browser request to localhost only" classname="network.spec.ts" time="0.956">
+</testcase>
+</testsuite>
+<testsuite name="performance.spec.ts" timestamp="2026-11-09T15:37:36.373Z" hostname="webkit" tests="1" failures="0" skipped="0" time="24.459" errors="0">
+<testcase name="NFR-003 AC-1 with 500 to-dos, list, filter, search, page, create, edit, complete and delete each show their result within 1 second at the 95th percentile" classname="performance.spec.ts" time="24.459">
+<properties>
+<property name="p95-ms" value="{&quot;list&quot;:72,&quot;filter&quot;:67,&quot;search&quot;:48,&quot;page&quot;:54,&quot;create&quot;:81,&quot;edit&quot;:72,&quot;complete&quot;:53,&quot;delete&quot;:59}">
+</property>
+</properties>
+</testcase>
+</testsuite>
+<testsuite name="states.spec.ts" timestamp="2026-11-09T15:37:36.373Z" hostname="webkit" tests="5" failures="0" skipped="0" time="2.917" errors="0">
+<testcase name="NFR-006 AC-1 with the list request aborted, the list screen shows a friendly message with its next step; after the interception is removed, trying again loads the list" classname="states.spec.ts" time="0.717">
+</testcase>
+<testcase name="NFR-006 AC-2 a 500 problem response with internals in its body shows none of them to the user" classname="states.spec.ts" time="0.609">
+</testcase>
+<testcase name="REQ-LIST-003 AC-6 a page number past the last in the URL shows the last valid page without an error" classname="states.spec.ts" time="0.65">
+</testcase>
+<testcase name="REQ-LIST-001 AC-5 an unknown status in the URL is removed and the list shows All" classname="states.spec.ts" time="0.522">
+</testcase>
+<testcase name="REQ-TODO-003 AC-2 a user with no to-dos sees the first-use empty state" classname="states.spec.ts" time="0.419">
+</testcase>
+</testsuite>
+</testsuites>
