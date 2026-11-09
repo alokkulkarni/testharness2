@@ -194,7 +194,7 @@
       ],
       "executor": "any",
       "isolation": "worktree",
-      "attempts": 0,
+      "attempts": 1,
       "maxAttempts": 3,
       "claim": {
         "runId": "run-mw918e2g",
