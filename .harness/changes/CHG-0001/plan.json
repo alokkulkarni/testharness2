@@ -296,7 +296,7 @@
         "N07-tests-backend",
         "N08-tests-web"
       ],
-      "status": "pending",
+      "status": "running",
       "kind": "agent",
       "agent": "react-engineer",
       "description": "Make the react tests pass in an isolated worktree.",
@@ -306,7 +306,13 @@
       "executor": "any",
       "isolation": "worktree",
       "attempts": 0,
-      "maxAttempts": 3
+      "maxAttempts": 3,
+      "claim": {
+        "runId": "run-mw95uf3f",
+        "executor": "claude-code",
+        "leaseUntil": "2026-11-09T11:25:57.771Z",
+        "claimedAt": "2026-11-09T11:10:57.771Z"
+      }
     },
     {
       "id": "N11-security",
