@@ -1,0 +1,10 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="10.649824">
+<testsuite name="restart.spec.ts" timestamp="2026-11-09T13:55:25.826Z" hostname="chromium" tests="1" failures="0" skipped="0" time="3.056" errors="0">
+<testcase name="REQ-ACC-001 AC-3 REQ-DATA-001 AC-1 after the API is restarted the first user logs in again and their to-dos, with all fields, are still there" classname="restart.spec.ts" time="3.056">
+</testcase>
+</testsuite>
+<testsuite name="restart.spec.ts" timestamp="2026-11-09T13:55:25.826Z" hostname="webkit" tests="1" failures="0" skipped="0" time="3.431" errors="0">
+<testcase name="REQ-ACC-001 AC-3 REQ-DATA-001 AC-1 after the API is restarted the first user logs in again and their to-dos, with all fields, are still there" classname="restart.spec.ts" time="3.431">
+</testcase>
+</testsuite>
+</testsuites>
