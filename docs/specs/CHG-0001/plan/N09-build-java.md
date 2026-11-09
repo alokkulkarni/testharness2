@@ -85,3 +85,15 @@ Make the java tests pass in an isolated worktree.
   `allowEmptyValue: true` although sdd.md 7 and REQ-LIST-002 AC-5/AC-7 require an empty or blank `q` to be accepted.
   The API answers those requests 200 with all items. Fix needs a contract change (re-freeze) or a test change.
 - `.harness/changes/CHG-0001/evidence/` receives the attached test reports (written by `harness evidence attach`).
+- `api/src/test/java/app/todo/testsupport/Contracts.java`: changed by backend-qa under N09 by requester decision. It
+  adds a narrow request-validation whitelist for an empty or blank `q` on `GET /api/v1/todos` (REQ-LIST-002 AC-5 and
+  AC-7), because the openapi-request-validator v3 reports an optional empty `q` as missing. This resolves the three
+  failures listed above (342/342 green). In future changes this kind of test fix is expected to go through the tests
+  node (the N07 equivalent), not the build node.
+
+## Accepted divergences (requester decisions)
+
+- JDK 23.0.2 compiling with `--release 21` is accepted by the requester instead of JDK 21. It diverges from sdd.md
+  section 11 and is to be listed in the PR; it is not a spec change.
+- Spring Boot 4.1.2 is accepted by the requester as the pin (4.1.3 and 4.2.0 did not resolve from Maven Central on
+  2026-11-09).
