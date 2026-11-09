@@ -23,6 +23,20 @@ function LocationSpy({ into }: { into: LocationRecord }) {
   return null;
 }
 
+/** Messages of the errors the tests throw on purpose to exercise AppErrorBoundary (a11y.test.tsx, errors.test.tsx). */
+const DELIBERATE_ERRORS = new Set(['boom', 'SENTINEL-INTERNALS-7f3a']);
+
+/**
+ * React 19 reports a render error that it recovered from (AppErrorBoundary caught it) through reportError, which
+ * jsdom turns into a window "error" event that vitest counts as unhandled. Ignore only that recovery report when its
+ * cause is one of the deliberate test errors; report every other recoverable error exactly as React's default does.
+ */
+function onRecoverableError(error: unknown): void {
+  const cause = error instanceof Error ? error.cause : undefined;
+  if (cause instanceof Error && DELIBERATE_ERRORS.has(cause.message)) return;
+  globalThis.reportError(error);
+}
+
 /**
  * Renders the whole SPA the way the SDD composes it (sdd §6.1, §8): a router, the SessionProvider, and
  * AppErrorBoundary around AppRoutes. The API is the FakeApi installed as global fetch.
@@ -43,6 +57,7 @@ export async function renderApp(entry: string, api: FakeApi, wrap?: (routes: Rea
         <AppErrorBoundary>{wrap ? wrap(routes) : routes}</AppErrorBoundary>
       </SessionProvider>
     </MemoryRouter>,
+    { onRecoverableError },
   );
   return { ...view, user, location };
 }
