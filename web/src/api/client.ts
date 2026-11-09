@@ -1,6 +1,9 @@
 import type { Failure } from '../errors/userMessage';
 import type { LoginRequest, Session, SignupRequest, SignupResult } from './identity';
-import type { ClearCompletedResult, Problem, StatusFilter, Todo, TodoCreate, TodoPage, TodoUpdate } from './todos';
+import type { ClearCompletedResult, Problem, Todo, TodoCreate, TodoPage, TodoUpdate, operations } from './todos';
+
+// The `status` query parameter of listTodos is an inline enum in the contract, so the generator emits no named type.
+export type StatusFilter = NonNullable<NonNullable<operations['listTodos']['parameters']['query']>['status']>;
 
 // The one fetch wrapper (sdd §2, §6.1, ADR-0001). It turns every failed call into a `Failure` and never hands a
 // raw Response, TypeError or exception text to a screen. Relative /api paths only; the dev server proxies them.
