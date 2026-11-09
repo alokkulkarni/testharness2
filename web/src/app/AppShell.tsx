@@ -1,17 +1,23 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
-import { Outlet } from 'react-router';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Outlet, useLocation } from 'react-router';
 import { useSession } from '../auth/SessionProvider';
 import { userMessageFor, type UserMessage } from '../errors/userMessage';
 import { ShellContext } from './usePageFocus';
 import { Message } from './ui';
 
-/** G1 (ux-design §3): skip link, header with Log out, <main>, and the one always-present polite live region. */
+/**
+ * G1 (ux-design §3): skip link, header with Log out, <main>, and the one always-present polite live region
+ * (REQ-AUTH-004 log out; NFR-001 skip link and live region; NFR-006 a failed log out shows its error until the user
+ * moves to another screen).
+ */
 export function AppShell() {
   const { state, logOutUser } = useSession();
   const [announcement, setAnnouncement] = useState('');
   const [logoutError, setLogoutError] = useState<UserMessage | null>(null);
   const [loggingOut, setLoggingOut] = useState(false);
   const firstScreen = useRef(true);
+  const { pathname } = useLocation();
+  useEffect(() => setLogoutError(null), [pathname]);
 
   const clearTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const announce = useCallback((text: string) => {

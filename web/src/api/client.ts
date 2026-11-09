@@ -5,7 +5,7 @@ import type { ClearCompletedResult, Problem, Todo, TodoCreate, TodoPage, TodoUpd
 // The `status` query parameter of listTodos is an inline enum in the contract, so the generator emits no named type.
 export type StatusFilter = NonNullable<NonNullable<operations['listTodos']['parameters']['query']>['status']>;
 
-// The one fetch wrapper (sdd §2, §6.1, ADR-0001). It turns every failed call into a `Failure` and never hands a
+// The one fetch wrapper (sdd §2, §6.1, ADR-0001; NFR-006). It turns every failed call into a `Failure` and never hands a
 // raw Response, TypeError or exception text to a screen. Relative /api paths only; the dev server proxies them.
 
 /** Thrown by every operation below; carries the Failure a screen maps with userMessageFor. */

@@ -28,7 +28,10 @@ const STATUSES: readonly string[] = ['all', 'active', 'completed'];
 const PAGE_PATTERN = /^0*[1-9][0-9]*$/;
 const isStatus = (value: string | null): value is StatusFilter => value !== null && STATUSES.includes(value);
 
-/** S3 My to-dos (ux-design S3, D1, D2): list, filter, search, pagination, mark done, delete, clear completed. */
+/**
+ * S3 My to-dos (ux-design S3, D1, D2): list, filter, search, pagination, mark done (REQ-TODO-005), delete
+ * (REQ-TODO-006), clear completed (REQ-TODO-007).
+ */
 export function TodoListPage() {
   const heading = usePageChrome('My to-dos', true);
   const announce = useAnnounce();
@@ -77,6 +80,8 @@ export function TodoListPage() {
   const skipKey = useRef<string | null>(null);
   const pendingNotice = useRef(false);
   const afterLoad = useRef<((data: TodoPage) => void) | null>(null);
+  // set once a toggle's PUT has succeeded: the first list shown after it replaces the requested state, whatever it carries
+  const dropRequestedOnShow = useRef(false);
 
   const focusHeading = () => heading.current?.focus();
   /** For after a dialog has closed: the dialog is modal until it unmounts, so focus moves in an effect. */
@@ -96,6 +101,10 @@ export function TodoListPage() {
     // rendered in the task that received the response, so the rows are on screen as soon as the data is
     flushSync(() => {
       setView({ kind: 'loaded', data });
+      if (dropRequestedOnShow.current) {
+        dropRequestedOnShow.current = false;
+        setRequested(null);
+      }
       setRefreshing(false);
       setPageAlert(notice ? { text: REFRESHED_TEXT } : null);
     });
@@ -135,6 +144,10 @@ export function TodoListPage() {
       (error: unknown) => {
         if (cancelled || isUnauthorized(error)) return;
         setView({ kind: 'error', failure: toFailure(error) });
+        if (dropRequestedOnShow.current) {
+          dropRequestedOnShow.current = false;
+          setRequested(null);
+        }
         setRefreshing(false);
         setPageAlert(null);
       },
@@ -165,20 +178,24 @@ export function TodoListPage() {
     return text ? `?${text}` : '';
   }
 
+  /** REQ-TODO-005: the new value reverses the state the checkbox shows (the requested one until a list replaces it). */
   async function toggle(todo: Todo) {
     if (toggling) return;
+    const shown = requested?.id === todo.id ? requested.done : todo.done;
     setToggling(todo.id);
-    setRequested({ id: todo.id, done: !todo.done });
+    setRequested({ id: todo.id, done: !shown });
     setPageAlert(null);
     try {
-      await setTodoDone(todo.id, !todo.done);
-      announce(todo.done ? `Marked not done: ${todo.title}.` : `Marked done: ${todo.title}.`);
+      await setTodoDone(todo.id, !shown);
+      announce(shown ? `Marked not done: ${todo.title}.` : `Marked done: ${todo.title}.`);
+      dropRequestedOnShow.current = true;
       reload({
         after: (data) => {
           if (!data.items.some((t) => t.id === todo.id)) focusHeading(); // the row left this view
         },
       });
     } catch (error) {
+      dropRequestedOnShow.current = false;
       setRequested(null);
       if (isUnauthorized(error)) return;
       const message = userMessageFor(toFailure(error), 'toggle-done');
@@ -259,12 +276,6 @@ export function TodoListPage() {
   }
 
   const data = view.kind === 'loaded' ? view.data : null;
-  useEffect(() => {
-    if (requested === null || toggling !== null) return;
-    if (view.kind !== 'loaded') return setRequested(null);
-    const row = view.data.items.find((t) => t.id === requested.id);
-    if (!row || row.done === requested.done) setRequested(null);
-  }, [view, requested, toggling]);
   const canClear = data !== null && data.totals.completed > 0;
 
   let body;
@@ -306,7 +317,7 @@ export function TodoListPage() {
             <TodoRow
               key={todo.id}
               todo={todo}
-              toggling={toggling === todo.id}
+              toggling={toggling !== null}
               requestedDone={requested?.id === todo.id ? requested.done : null}
               onToggle={toggle}
               onDelete={(t) => {

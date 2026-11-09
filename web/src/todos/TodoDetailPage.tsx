@@ -53,6 +53,11 @@ export function TodoDetailPage() {
     };
   }, [id, reloadToken]);
 
+  // NFR-001 AC-2, ux-design §6: when the dialog closes on a 404 the Delete button is gone, so focus moves to the h1
+  useEffect(() => {
+    if (state.kind === 'gone') heading.current?.focus();
+  }, [state.kind, heading]);
+
   async function confirmDelete(todo: Todo) {
     setBusy(true);
     setDialogError(null);
