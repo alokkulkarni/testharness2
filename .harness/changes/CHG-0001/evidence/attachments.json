@@ -32,5 +32,21 @@
   {
     "kind": "scan-report",
     "path": ".harness/changes/CHG-0001/evidence/scan-report/trivy-fs.sarif"
+  },
+  {
+    "kind": "scan-report",
+    "path": ".harness/changes/CHG-0001/evidence/scan-report/N11-security.gitleaks-r2.sarif"
+  },
+  {
+    "kind": "scan-report",
+    "path": ".harness/changes/CHG-0001/evidence/scan-report/N11-security.semgrep-r2.sarif"
+  },
+  {
+    "kind": "scan-report",
+    "path": ".harness/changes/CHG-0001/evidence/scan-report/N11-security.trivy-fs-r2.sarif"
+  },
+  {
+    "kind": "sbom",
+    "path": ".harness/changes/CHG-0001/evidence/sbom/N11-security.sbom-r2.cdx.json"
   }
 ]
