@@ -1,13 +1,18 @@
 import { expect, test } from '@playwright/test';
-import { apiCreateTodo, apiSeedMany, listHeading, newAccount, rowFor, rows, signedInUser } from './support/app';
+import { apiCreateTodo, apiSeedMany, listHeading, newAccount, pressTab, rowFor, rows, signedInUser } from './support/app';
 
 // NFR-001 AC-2: every action is reachable and operable with the keyboard alone, focus is visible, and focus moves
 // into and out of confirmation dialogs. These tests use page.keyboard only (no clicks) after the page has loaded.
 
-async function tabTo(page: import('@playwright/test').Page, target: import('@playwright/test').Locator, max = 40) {
+// Limit derived from the page size: a full page is 20 rows (sdd.md) at about 4 tab stops each (checkbox, title link,
+// Edit link, Delete button) = 80, plus about 20 stops of page chrome (header, filters, search, pagination links),
+// plus a margin: 150. It only bounds a failing search; a reachable control returns as soon as it is focused.
+const MAX_TAB_STOPS = 150;
+
+async function tabTo(page: import('@playwright/test').Page, target: import('@playwright/test').Locator, max = MAX_TAB_STOPS) {
   for (let i = 0; i < max; i++) {
     if (await target.evaluate((el) => el === document.activeElement)) return;
-    await page.keyboard.press('Tab');
+    await pressTab(page);
   }
   throw new Error('Could not reach the control with Tab');
 }

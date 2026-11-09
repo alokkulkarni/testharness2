@@ -31,6 +31,6 @@ test('REQ-ACC-001 AC-3 REQ-DATA-001 AC-1 after the API is restarted the first us
   await expect(row.getByRole('checkbox')).toBeChecked();
   await expect(row).toContainText(/due 3 feb 2027/i);
   await expect(row).toContainText(/priority: high/i);
-  await row.getByRole('link', { name: 'Outlives the restart' }).click();
+  await row.getByRole('link', { name: 'Outlives the restart', exact: true }).click();
   await expect(page.getByText('kept in SQLite')).toBeVisible();
 });

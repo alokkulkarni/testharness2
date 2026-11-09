@@ -84,7 +84,7 @@ test('NFR-003 AC-1 with 500 to-dos, list, filter, search, page, create, edit, co
   for (let i = 0; i < RUNS; i++) {
     const title = `Edited ${i}`;
     await page.goto('/todos');
-    await rows(page).first().getByRole('link', { name: 'Edit' }).click();
+    await rows(page).first().getByRole('link', { name: /^Edit / }).click();
     await page.getByLabel(/^title/i).fill(title);
     await timed('edit', async () => {
       await page.getByRole('button', { name: 'Save changes' }).click();
