@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N09-build-java",
+  "gate": "critic-verdict",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "critic",
+      "agentRunId": "a29be1a1e48233d03"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "java-engineer",
+      "agentRunId": "a8479dc53c8e6b18c"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "java-engineer",
+      "agentRunId": "a8a74c75b2a7a067a"
+    }
+  ],
+  "createdAt": "2026-11-09T13:19:28.722Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "reviewedCommit": "c7c4ae70ca17e2dfee176ae78f3582b15f726c89",
+  "diffHash": "f1e36b0062e58d03d2db7474ff3159e35e4cf602b454e24cbd5c5c0739a12c52",
+  "summary": "Round 1 (exhaustive). The API conforms to the contracts and sdd.md (security order, sessions, Argon2id, persistence, Problem model, request-id logging, NFR-007 modules); the plan file matches the diff; green evidence is 342/342. The q whitelist in Contracts.java (3807f87) is narrow: request-side key only, GET, text naming q, so it can fire only on listTodos, and the response side and all assertions are intact. b1df3fd conforms to ADR-0013. Carried: F-10 settled by requester decision (F-7); F-12 is worked around in production code, not fixed in the test (F-1); F-13 unchanged (F-8). 0 blocker, 0 major, 3 minor, 5 info follow-ups.",
+  "findings": [
+    {
+      "id": "F-1",
+      "severity": "minor",
+      "message": "newRequestId regenerates any id containing 500. sdd.md 10 fixes no id format, so this conforms, but it is production code shaped by the weak test selector of N07 F-12, not by a requirement. It also does not close F-12: FilterExceptionTest still matches any non-throwable app.todo entry of the request whose text contains 500 anywhere (MDC, arguments, durationMs).",
+      "requirement": "NFR-004",
+      "location": "api/src/main/java/app/todo/common/RequestIdFilter.java:L88-L95",
+      "suggestion": "Fix F-12 in the test through the tests node (match the per-request line structurally, for example a status key or argument equal to 500). Then drop the loop and use a plain random UUID."
+    },
+    {
+      "id": "F-2",
+      "severity": "minor",
+      "message": "Not verified by running (critic cannot run builds). The contract conventions say any Content-Type other than application/json gives 415. With @RequestBody Map, the Jackson JSON converter also reads application/*+json, so a body sent as application/vnd.x+json or application/merge-patch+json is likely accepted (201/200) instead of 415. ErrorSourcesTest covers only text/plain and a missing Content-Type.",
+      "requirement": "NFR-004",
+      "location": "api/src/main/java/app/todo/todo/TodoController.java:L42-L74",
+      "suggestion": "Have backend-qa add a 415 case with an application/*+json Content-Type on createTodo and signUp. If it fails, restrict the JSON converter or the mappings (consumes = application/json) so only application/json (with charset) is read."
+    },
+    {
+      "id": "F-3",
+      "severity": "minor",
+      "message": "sdd.md 10 asks for structured (JSON) per-request logs with method, route template, status and duration. Under the logstash format, requestId and userId are JSON fields (MDC), but method, route, status and durationMs are only text inside the message string.",
+      "requirement": "NFR-004",
+      "location": "api/src/main/java/app/todo/common/RequestIdFilter.java:L74-L86",
+      "suggestion": "Emit them as key-value pairs (SLF4J fluent addKeyValue) or MDC entries, so they are JSON fields. This would also let the F-12 test select the line by status."
+    },
+    {
+      "id": "F-4",
+      "severity": "info",
+      "message": "The whitelist is narrow, as the requester asked. pathContains(/api/v1/todos) also matches /api/v1/todos/{todoId} and /completed, but no GET there declares q, so the rule can drop a report only for listTodos. It names only the request-side key validation.request.parameter.missing, so response validation is untouched, and 3807f87 changes no assertion. Its comment says allowEmptyValue: true would not help, while the plan Departures (L83-L86) give the missing allowEmptyValue as the cause.",
+      "requirement": "REQ-LIST-002",
+      "location": "api/src/test/java/app/todo/testsupport/Contracts.java:L63-L82",
+      "suggestion": "Align the plan Departures text with the Contracts.java comment. If the validator is ever fixed upstream, remove the rule."
+    },
+    {
+      "id": "F-5",
+      "severity": "info",
+      "message": "Plan wording only. Departures still state the first run (339 pass, 3 fail) beside the later 342/342 bullet. Order lists the composition root as step 4, but it was committed last (c004086, after the auth and todo commits). The evidence directory is listed under both Files and Departures.",
+      "requirement": "NFR-007",
+      "location": "docs/specs/CHG-0001/plan/N09-build-java.md:L31-L52",
+      "suggestion": "Mark the 339/3 result as superseded and note the actual commit order."
+    },
+    {
+      "id": "F-6",
+      "severity": "info",
+      "message": ".env.example (sdd.md 11: TODO_DB_PATH, TODO_COOKIE_SECURE=false, SERVER_PORT=8080) does not exist at HEAD, and README.md is a one-line stub with no run steps. The NFR-002 review row of sdd.md 14 needs both. Neither is in the Files of N09 or of any other build node.",
+      "requirement": "NFR-002",
+      "location": "docs/specs/CHG-0001/sdd.md:L603-L620",
+      "suggestion": "The orchestrator assigns them to a node (or the docs gate) before the PR."
+    },
+    {
+      "id": "F-7",
+      "severity": "info",
+      "message": "Requester-accepted divergences, to be listed in the PR: JDK 23.0.2 compiling with --release 21 instead of JDK 21 (sdd.md 11); Spring Boot pinned at 4.1.2; request-id logging key requestId. This settles carried N07 F-10.",
+      "requirement": "NFR-005",
+      "location": "api/pom.xml:L7-L16",
+      "suggestion": "List them in the PR body and run the suite on JDK 21 in CI when one is available."
+    },
+    {
+      "id": "F-8",
+      "severity": "info",
+      "message": "Carried N07 F-13, unchanged: the request-id MDC key is declared separately in FilterExceptionTest and HandlerExceptionTest, not shared with RequestIdFilter.REQUEST_ID_KEY.",
+      "requirement": "NFR-004",
+      "location": "api/src/test/java/app/todo/auth/FilterExceptionTest.java:L42-L43",
+      "suggestion": "Tests node follow-up: declare the key once in app.todo.testsupport, or reference RequestIdFilter.REQUEST_ID_KEY."
+    }
+  ]
+}
