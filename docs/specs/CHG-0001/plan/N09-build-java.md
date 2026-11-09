@@ -97,3 +97,5 @@ Make the java tests pass in an isolated worktree.
   section 11 and is to be listed in the PR; it is not a spec change.
 - Spring Boot 4.1.2 is accepted by the requester as the pin (4.1.3 and 4.2.0 did not resolve from Maven Central on
   2026-11-09).
+- BouncyCastle bcprov-jdk18on bumped from 1.84 to 1.85 for SEC-1 (CVE-2026-8763) and SEC-2 (CVE-2026-13506) from
+  N11-security attempt 1, by requester decision; api/pom.xml is already under Files.
