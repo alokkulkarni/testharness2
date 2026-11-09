@@ -382,7 +382,7 @@
       "claim": {
         "runId": "run-mw9dkv3x",
         "executor": "claude-code",
-        "leaseUntil": "2026-11-09T15:49:09.754Z",
+        "leaseUntil": "2026-11-09T15:51:46.380Z",
         "claimedAt": "2026-11-09T14:47:28.893Z"
       }
     },
