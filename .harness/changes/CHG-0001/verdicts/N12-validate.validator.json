@@ -7,17 +7,17 @@
   "reviewer": {
     "kind": "tool",
     "id": "validator",
+    "modelAlias": "harness/validator",
     "session": {
       "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
       "changeId": "CHG-0001",
       "agent": "validator",
-      "agentRunId": "a5f12b0a2208c9a09"
-    },
-    "modelAlias": "harness/validator"
+      "agentRunId": "a0f1776fd38f837e2"
+    }
   },
-  "createdAt": "2026-11-09T14:33:34.781Z",
+  "createdAt": "2026-11-09T14:46:24.395Z",
   "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
-  "summary": "round 2, delta since 1f53eb8297bc6ab06acd4d4fe9c48c3cf5250824: pass. Fixed: F-1 (.env.example holds TODO_DB_PATH, TODO_COOKIE_SECURE=false, SERVER_PORT=8080; README gives JDK 21, Node LTS pinned in web/.nvmrc, pnpm and the API and SPA run steps, as sdd.md 11; neither names the e2e profile, clock variable or test classes). Spec integrity ok. 115 ACs: 104 tool-covered; the 7 missing-code and 4 missing-test rows are unchanged from round 1 and read as annotation or review gaps (F-4). Backend r3: 23 classes, 342/342 (each header read). Per-test results attach only from the component report (F-3, F-13). 98 unmapped hunks (91 tool-classed creep, 1 generated, 6 test-support), 0 judged creep; the delta (.env.example, README, bcprov 1.85) maps to NFR-002 and NFR-004 (F-12). New: F-11 minor, F-12 and F-13 info. Follow-ups: F-2 to F-11 and F-13.",
+  "summary": "round 3, delta since 3b295b50e95200ce49e5e14b6998ac29866a26fb: pass. Fixed: none. Spec integrity ok. The delta outside .harness/ is 01d0f33, which deletes .env.example and README.md L2-L39 (back to the base branch) by the written deferral of the requester: 0 creep. HEAD again lacks the sdd.md 11 deliverables F-1 asked for, so NFR-002 AC-1 is recorded as deferred, not met (F-14, minor): the requester accepted the gap in writing, the resolution F-1 itself offered, but the frozen spec is unchanged, so the PR needs product-owner acceptance of the divergence. 115 ACs: 104 tool-covered, 7 missing-code, 4 missing-test, as in round 2 (F-4). 96 unmapped hunks (89 tool-classed creep, 1 generated, 6 test-support), 0 judged creep. Per-test results attach for component tests only (F-3, F-13). Follow-ups: F-2 to F-11, F-13, F-14.",
   "findings": [
     {
       "id": "F-2",
@@ -38,7 +38,7 @@
     {
       "id": "F-4",
       "severity": "minor",
-      "message": "Rows the tool marks missing are annotation gaps, verified by reading. missing-code: REQ-LIST-003 AC-2 (JdbcTodoRepository.java:L73-L74), AC-3 (web/src/todos/Pagination.tsx:L41-L60), AC-8 (TodoQuery.java:L9, TodoController.java:L34-L40); REQ-ACC-001 AC-1, AC-2 (scenario over all to-do code; AcceptanceScenarioApiTest and acceptance.spec.ts); NFR-002 AC-1 (web/vite.config.ts:L5-L10, application.properties:L3-L6, DatabaseConfig.java:L23-L28, and now .env.example and README.md); NFR-003 AC-1 (V1__init.sql:L38-L39). missing-test (review-verified): NFR-004 AC-1 via PasswordStorageTest and PasswordHasher.java:L14; NFR-005 AC-1 via api/pom.xml and web/package.json; NFR-002 AC-2: the diff adds no deployment workflow; NFR-004 AC-3: not verified by me (N11-security gate). it.each tests are not mapped.",
+      "message": "Rows the tool marks missing are annotation gaps, verified by reading. missing-code: REQ-LIST-003 AC-2 (JdbcTodoRepository.java:L73-L74), AC-3 (web/src/todos/Pagination.tsx:L41-L60), AC-8 (TodoQuery.java:L9, TodoController.java:L34-L40); REQ-ACC-001 AC-1, AC-2 (scenario over all to-do code; AcceptanceScenarioApiTest and acceptance.spec.ts); NFR-002 AC-1 (web/vite.config.ts:L5-L10, application.properties:L3-L6, DatabaseConfig.java:L23-L28; the .env.example and README run steps no longer exist at HEAD, see F-14); NFR-003 AC-1 (V1__init.sql:L38-L39). missing-test (review-verified): NFR-004 AC-1 via PasswordStorageTest and PasswordHasher.java:L14; NFR-005 AC-1 via api/pom.xml and web/package.json; NFR-002 AC-2: the diff adds no deployment workflow; NFR-004 AC-3: not verified by me (N11-security gate). it.each tests are not mapped.",
       "requirement": "REQ-LIST-003",
       "location": "api/src/main/java/app/todo/todo/JdbcTodoRepository.java:L66-L79",
       "suggestion": "Add REQ comments above the serving declarations (or let the tool read class-level comments) so the matrix maps them mechanically."
@@ -46,7 +46,7 @@
     {
       "id": "F-5",
       "severity": "info",
-      "message": "89 hunks of round 1 are tool-classed creep; none is creep on reading: build and run scaffolding for NFR-005 and sdd.md 11, classes named by sdd.md 2, 4, 6, 7, 10, generate-tokens.mjs for UX DD-1, Java and e2e test support (ADR-0013, sdd.md 12.1 item 20, 14). intent/a-new-todo-list-app-where-user-can-creat.md is a 100 percent rename to docs/specs/CHG-0001/intent.md. The 6 test-support hunks hide no weakened assertion.",
+      "message": "89 hunks are tool-classed creep; none is creep on reading: build and run scaffolding for NFR-005 and sdd.md 11, classes named by sdd.md 2, 4, 6, 7, 10, generate-tokens.mjs for UX DD-1, Java and e2e test support (ADR-0013, sdd.md 12.1 item 20, 14). intent/a-new-todo-list-app-where-user-can-creat.md is a 100 percent rename to docs/specs/CHG-0001/intent.md. The 6 test-support hunks hide no weakened assertion.",
       "requirement": "NFR-007",
       "location": "api/src/main/java/app/todo/config/WebConfig.java:L20-L27",
       "suggestion": "Annotate with REQ comments so later diffs map mechanically."
@@ -94,15 +94,15 @@
     {
       "id": "F-11",
       "severity": "minor",
-      "message": ".env.example line 1 says Copy to .env and adjust, but nothing loads a .env file: the API reads the settings from the process environment (application.properties:L3-L6, DatabaseConfig.java:L23 via todo.db.path), Spring Boot has no dotenv support and Vite reads only web/.env VITE_ variables. The root .gitignore also has no .env entry, so a copied .env would show as untracked. The README sends the reader to .env.example without saying the values must be exported.",
+      "message": "Raised on the round 2 .env.example (3f66ef3), which 01d0f33 removed: its line 1 said Copy to .env and adjust, but nothing loads a .env file (the API reads the settings from the process environment, application.properties:L3-L6, DatabaseConfig.java:L23 via todo.db.path; Spring Boot has no dotenv support; Vite reads only web/.env VITE_ variables), and the root .gitignore has no .env entry. Folded by the requester into the NFR-002 AC-1 follow-up change (F-14); it applies when that change restores the file.",
       "requirement": "NFR-002",
-      "location": ".env.example:L1-L1",
-      "suggestion": "Say to export the variables in the shell (or pass them on the command line) instead of copying to .env, or add .env to .gitignore if a .env workflow is intended."
+      "location": "README.md:L1-L1",
+      "suggestion": "In the follow-up, say to export the variables in the shell (or pass them on the command line) instead of copying to .env, or add .env to .gitignore if a .env workflow is intended."
     },
     {
       "id": "F-12",
       "severity": "info",
-      "message": "Delta since round 1 mapped by reading; no creep. .env.example:L1-L10 and README.md:L2-L39 (tool-classed creep) serve NFR-002 AC-1 and sdd.md 11, the deliverable F-1 asked for. api/pom.xml:L28 bumps bcprov-jdk18on 1.84 to 1.85 for N11 SEC-1 (CVE-2026-8763) and SEC-2 (CVE-2026-13506), serving NFR-004 by requester decision recorded at docs/specs/CHG-0001/plan/N09-build-java.md:L100-L101; one property line, no API or code change, backend r3 342/342 across 23 classes with 0 failures, errors or skips. The remaining delta is harness evidence (r3 reports, N11 SBOM and scans, plan.json, verdict history).",
+      "message": "Round 2 delta, mapped by reading, no creep: api/pom.xml:L28 bumps bcprov-jdk18on 1.84 to 1.85 for N11 SEC-1 (CVE-2026-8763) and SEC-2 (CVE-2026-13506), serving NFR-004 by requester decision recorded at docs/specs/CHG-0001/plan/N09-build-java.md:L100-L101; one property line, no API or code change, backend r3 342/342 across 23 classes. The round 2 .env.example:L1-L10 and README.md:L2-L39 were removed again by 01d0f33 (round 3 delta, see F-14). The remaining delta is harness evidence (r3 reports, N11 r2 SBOM and scans, plan.json, verdicts).",
       "requirement": "NFR-004",
       "location": "api/pom.xml:L28-L28",
       "suggestion": "None."
@@ -110,10 +110,18 @@
     {
       "id": "F-13",
       "severity": "info",
-      "message": "Harness tooling: harness trace build keeps only the last --results flag. Passing the 23 backend r3, the component r3 and the three e2e r3 reports dropped every result; a single backend r3 report attached none. traceability.json at HEAD 3b295b5 was therefore built with N10-build-react.component-junit-r3.xml only, so per-test results exist for component tests only.",
+      "message": "Harness tooling: harness trace build keeps only the last --results flag. Passing the 23 backend r3, the component r3 and the three e2e r3 reports dropped every result; a single backend r3 report attached none. traceability.json at the round 3 HEAD 5a368cc was therefore built with N10-build-react.component-junit-r3.xml only, so per-test results exist for component tests only.",
       "requirement": "NFR-004",
       "location": ".harness/changes/CHG-0001/traceability.json:L1-L6",
       "suggestion": "Accept repeated --results (or a directory) in the sdlc-harness CLI, together with the F-3 matching fix."
+    },
+    {
+      "id": "F-14",
+      "severity": "minor",
+      "message": "NFR-002 AC-1 is deferred, not met. 01d0f33 restored .env.example (absent) and README.md (the one-line stub) to the base branch, so HEAD does not deliver sdd.md 11 (.env.example with TODO_DB_PATH, TODO_COOKIE_SECURE=false, SERVER_PORT=8080, and the run steps) and the sdd.md 14 NFR-002 review (README run steps on a fresh checkout) cannot be performed; the prerequisites are written only in the frozen sdd.md 11. The runtime half keeps its evidence: the e2e main configuration starts the API and SPA with the sdd.md 11 commands on localhost (result hand-checked, F-3). The requester deferred it in writing for this PR to a separate change because no node in this plan can own repository-root files (a harness gap); F-1 offered that written acceptance as its resolution, which is why this is minor and not blocking. It is a decision, not a re-freeze: the frozen spec still requires these files, so it is a divergence from the spec. Raised anew because F-1 was fixed in round 2 and its fix was then reverted. Follow-up content: 3f66ef3 .env.example and README, plus F-11.",
+      "requirement": "NFR-002",
+      "location": "README.md:L1-L1",
+      "suggestion": "List it in the PR body as a deferred divergence for product-owner acceptance (conformance row NFR-002/AC-1 deferred, debt type doc, once F-3 lets the register be built); open the follow-up change; fix the harness so a node can own repository-root files."
     }
   ]
 }
