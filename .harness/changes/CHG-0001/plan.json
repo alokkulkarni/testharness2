@@ -348,7 +348,7 @@
         "N09-build-java",
         "N10-build-react"
       ],
-      "status": "complete",
+      "status": "pending",
       "kind": "agent",
       "agent": "validator",
       "description": "Map the PR delta to the frozen requirements (traceability).",
