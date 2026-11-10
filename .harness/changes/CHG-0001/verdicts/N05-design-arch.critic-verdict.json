@@ -11,7 +11,7 @@
       "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
       "changeId": "CHG-0001",
       "agent": "critic",
-      "agentRunId": "a9606d1c4dc1ba5cf"
+      "agentRunId": "aeea49fa33cc68e97"
     },
     "modelAlias": "harness/critic"
   },
@@ -27,6 +27,12 @@
       "changeId": "CHG-0001",
       "agent": "drawio-architect",
       "agentRunId": "a1b4e275022c93b3b"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "drawio-architect",
+      "agentRunId": "a26ee010790d263af"
     },
     {
       "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
@@ -53,20 +59,12 @@
       "agentRunId": "ae118b53d3d401a8e"
     }
   ],
-  "createdAt": "2026-11-10T08:27:58.334Z",
+  "createdAt": "2026-11-10T09:22:34.611Z",
   "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
-  "reviewedCommit": "f782e44564c6fae350490bf6cddb7d319523941b",
-  "diffHash": "685fa9d3c214958b1cc48b0e30cdcde7f12cb66b8c2b1f328438a13a1dbc7855",
-  "summary": "round 4, delta since 57b8ba5: no blockers or majors were open; none to fix. The only change to the node outputs since 57b8ba5 is a stray .DS_Store added by the orchestrator completion commit 806e33d (new F-34, minor). Diagram sources, PNGs, PDFs and README are unchanged. harness docs diagram export --check now REFUSES (it passed in round 3 under the older harness): all 10 sources exported without recorded settings (uneven margins), and c4-container PDF page 1512.96 x 426 pt does not match its PNG shape 4265 x 1243 px. This is the substance of carried F-27 on unchanged content, so it is not a new finding here, but the exports must be regenerated under the current harness before plan complete will accept them. Follow-ups: 3 minor (F-27, F-33 carried; F-34 new), 2 info (F-31, F-32 carried). Totals: 0 blocker, 0 major.",
+  "reviewedCommit": "bfbd5c818881c9bfa6fcccba546c09841b85620e",
+  "diffHash": "2c57bf9487489785d97a5b366208a0910ef1a28801f1b6cfdb575a2e121bd7c0",
+  "summary": "round 5, delta since f782e44: F-27, F-32, F-34 fixed. No blockers or majors were open. Delta is 5da8fb9 (all 10 PNG/PDF re-exported, manifest now records border 20, scale 2, pdf crop; no .drawio or README change) and 9ce46e4 (.DS_Store removed). export --check: 10 diagrams, exports current. All 10 PNGs viewed: even margins on every side, no clipping, overlap or cut-off text. F-27 fixed: margins now present, and crop PDFs match README L9 and the recorded setting. F-32 fixed: --check now verifies each PDF page and size against its PNG (PDFs not rendered by other tools, per critic rules). F-34 fixed by 9ce46e4 (the .gitignore entry is deferred to a follow-up change, outside this node). Follow-ups: 1 minor (F-33), 1 info (F-31), both carried on unchanged content. Totals: 0 blocker, 0 major.",
   "findings": [
-    {
-      "id": "F-27",
-      "severity": "minor",
-      "message": "Requested export settings are not met: PNGs have no border on the right and bottom (content ends within a few pixels of the image edge, for example the SQLite cylinder in c4-component-api.png, Controllers and services in c4-component-errors.png, the cross-origin note in seq-signup-login.png, the SQLite participant in seq-clear-completed.png and seq-todo-crud-list.png, the system boundary in c4-container.png), and PDFs are cropped to content rather than fit-to-page (README L9-L10). Nothing is cut off. harness docs diagram export takes only paths and --check, so the author cannot set a border or fit-to-page; this is a platform gap.",
-      "requirement": "NFR-007",
-      "location": "docs/specs/CHG-0001/design/architecture/README.md:L9-L10",
-      "suggestion": "Ask the platform team to add border and fit-to-page options to harness docs diagram export; until then, optionally keep at least 40 px of empty canvas right of and below the last shape so the crop leaves a margin."
-    },
     {
       "id": "F-31",
       "severity": "info",
@@ -76,28 +74,12 @@
       "suggestion": "Optionally reword to: config registers RequestIdFilter (FilterRegistrationBean, sdd 10)."
     },
     {
-      "id": "F-32",
-      "severity": "info",
-      "message": "The ten re-exported PDFs in pdf/ were not visually checked in round 3: the PDF renderer (pdftoppm) is not installed in the review environment. harness docs diagram export --check confirms they were regenerated from the current sources, and the matching PNGs render cleanly, but PDF rendering itself is unverified this round.",
-      "requirement": "NFR-007",
-      "location": "docs/specs/CHG-0001/design/architecture/pdf/c4-component-api.pdf:L1-L1",
-      "suggestion": "Open the PDFs once (or install poppler for the reviewer) before the PR to confirm they match the PNGs."
-    },
-    {
       "id": "F-33",
       "severity": "minor",
       "message": "README L13 now says 8 px text padding is a layout rule applied to every diagram, but the padding was added only to component, screen and lifeline boxes. c4-context.drawio (user: no spacing; todo, none: 10), c4-container.drawio (user: none; spa, proxy, api: 10), deployment-local.drawio (browser, vite, jvm, file, env: none), data-model.drawio tables (10) and the sequence notes (6) use other values, so the stated rule is inaccurate.",
       "requirement": "NFR-007",
       "location": "docs/specs/CHG-0001/design/architecture/README.md:L13-L13",
       "suggestion": "Reword to what was applied (for example: at least 6-10 px text padding on boxes that hold wrapped text), or add spacingLeft=8;spacingRight=8 to the remaining boxes and re-export."
-    },
-    {
-      "id": "F-34",
-      "severity": "minor",
-      "message": "A macOS Finder metadata file (.DS_Store, 6148 bytes, binary) was committed into the node outputs by the orchestrator completion commit 806e33d (chore(harness): complete N05-design-arch), not by the architect. It serves no requirement and is the only change since 57b8ba5; it also made the round-3 verdict stale.",
-      "requirement": "NFR-007",
-      "location": "docs/specs/CHG-0001/design/architecture/.DS_Store:L1-L1",
-      "suggestion": "Remove the file from the node outputs and add .DS_Store to the repository .gitignore so completion commits do not pick it up again."
     }
   ]
 }
