@@ -215,7 +215,8 @@
     "updatedAt": "2026-11-11T10:28:11.675Z"
   },
   "links": {
-    "branch": "feature/CHG-0001-create-a-to-do-list"
+    "branch": "feature/CHG-0001-create-a-to-do-list",
+    "auto-merge": "3"
   },
   "running": [],
   "overlaps": []
