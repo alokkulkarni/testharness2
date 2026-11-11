@@ -1,0 +1,233 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N08-tests-web",
+  "gate": "critic-verdict",
+  "verdict": "changes-required",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "critic",
+      "agentRunId": "a1c3520849f0b6c65"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6XB646QJT90D8NBJE5WZ549",
+      "changeId": "CHG-0001",
+      "agent": "web-qa",
+      "agentRunId": "a7b10fcb55cddef9a"
+    }
+  ],
+  "createdAt": "2026-11-08T11:08:19.646Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "reviewedCommit": "abb31768ff8b7874080512953fb66a86fa372520",
+  "diffHash": "cf98a36b3988ff4ebee426e98f1a9f68ae24758fdd449204a92487f65e06544f",
+  "summary": "Round 1, exhaustive. 4 major, 17 minor, 4 info. The tests cover almost every web-relevant AC, they name their REQ and AC IDs, and they mostly assert the frozen sdd and the UX copy. Lazy loading is sound: each test is red on its own because a module is missing, and a green run will be meaningful test by test. The evidence matches d7249a2. Majors: (F-1) assertions that no role=status element is present conflict with the always-present app-shell live region in UX section 6; (F-2) states.spec unroute passes a new function, so the abort is never removed and the test can never pass; (F-3) the pnpm e2e script skips the session-expiry configuration that sdd section 11 requires; (F-4) the sdd N-2 tests (an event handler that throws) are missing. The 17 minors and 4 infos are follow-ups.",
+  "findings": [
+    {
+      "id": "F-1",
+      "severity": "major",
+      "message": "Many tests assert that no role=status element exists, or query a single status with getByRole/findByRole. UX design section 6 (L454) puts one always-present polite live region with role=status in the app shell, and section 3 applies the shell to public screens too. If N10 renders that region, even when empty, these tests fail (absence checks) or throw on multiple matches (single-match queries). N10 would have to choose between the design input and the tests. The sdd does not forbid the region.",
+      "requirement": "REQ-AUTH-004",
+      "location": "web/tests/component/auth.test.tsx:L26-L26, L105, L183, L230, L255, L271, L282; web/tests/component/navigation.test.tsx:L30, L83; web/tests/component/todo-form.test.tsx:L276; web/e2e/auth.spec.ts:L67, L79; web/e2e/navigation.spec.ts:L36, L58",
+      "suggestion": "Check for the absence of the message text instead (for example queryByText(/session has ended|account created/i)). Find a status by its text (Playwright filter hasText; RTL findAllByRole(\"status\") filtered on textContent). Never assert that no status region exists."
+    },
+    {
+      "id": "F-2",
+      "severity": "major",
+      "message": "page.unroute is called with a new arrow function. Playwright matches function URL matchers by reference, so this call removes nothing and the abort route stays installed. Retry is then aborted again, so rows never reach 2, and the test can never pass against a correct implementation. Under CLAUDE.md rule 6, N10 may not fix or weaken it.",
+      "requirement": "NFR-006",
+      "location": "web/e2e/states.spec.ts:L10-L25",
+      "suggestion": "Keep the predicate (and the handler) in a const and pass the same reference to route and unroute, or use a string glob such as **/api/v1/todos?** for both calls."
+    },
+    {
+      "id": "F-3",
+      "severity": "major",
+      "message": "sdd section 11 says pnpm -C web e2e runs the main configuration and then the session-expiry configuration. The e2e script runs only the main one, so a green pnpm -C web e2e never runs the only end-to-end proof of REQ-AUTH-004 AC-4. This departure is not recorded anywhere.",
+      "requirement": "REQ-AUTH-004",
+      "location": "web/package.json:L13-L14",
+      "suggestion": "Make e2e run both: playwright test && playwright test -c e2e/playwright.session-expiry.config.ts. Keep e2e:session-expiry for running it alone."
+    },
+    {
+      "id": "F-4",
+      "severity": "major",
+      "message": "The sdd section 14 NFR-006 row names two component tests that are missing: a done toggle whose handler throws (a stubbed dependency throwing a plain Error with a sentinel) shows the unexpected message in the page-level alert above the list, the list stays rendered (not the AppErrorBoundary page) and the sentinel is never shown; and the same for a create/edit form submit whose handler throws (form-level alert). Only the render-time throw and the home-link reset are tested.",
+      "requirement": "NFR-006",
+      "location": "web/tests/component/errors.test.tsx:L182-L218",
+      "suggestion": "Add both N-2 tests. For example, make a response body throw a plain Error when read (a Response whose json() rejects with Error(SENTINEL)), so the failure is unexpected and not a network failure. Assert the reload-or-home message, that the screen is not replaced, and that the sentinel is absent."
+    },
+    {
+      "id": "F-5",
+      "severity": "minor",
+      "message": "The NFR-006 component coverage per screen has gaps the sdd lists. There is no failed save on the edit page (500 or network). There is no network error on the detail page or in either dialog. The row-delete 404 whose re-query fails is not followed by a retry that loads the list without the refreshed sentence (the toggle case has this).",
+      "requirement": "NFR-006",
+      "location": "web/tests/component/errors.test.tsx:L76-L145",
+      "suggestion": "Add the edit-save 500 and network cases, a network variant for the detail page and for both dialogs, and the retry step in the row-delete re-query-failure test."
+    },
+    {
+      "id": "F-6",
+      "severity": "minor",
+      "message": "In userMessage, the code loop sends impossible pairs: http status 500 with prob(500, IDENTIFIER_TAKEN / UNAUTHENTICATED / VALIDATION_FAILED), and 404 with problem.status 500. A correct implementation that keys on code could legitimately return no text (IDENTIFIER_TAKEN text is errors[].message; session-probe 401 shows nothing) and fail. The status and network loops also leave out session-probe, although sdd section 14 says across every UserAction (it maps to the section 4.1 alert).",
+      "requirement": "NFR-006",
+      "location": "web/tests/unit/userMessage.test.ts:L40-L67",
+      "suggestion": "Give each code its real status (400, 401, 403, 404, 405, 409, 415, 500) and the same problem.status. Exclude only the three sdd-excluded rows. Include session-probe in the status and network loops, expecting try-again."
+    },
+    {
+      "id": "F-7",
+      "severity": "minor",
+      "message": "expectTypeOf is checked only at type level. vitest run does nothing with it at runtime (vitest.config has no test.typecheck), so the test passes whenever the modules load, even if the two Problem types differ, and traceability would record NFR-006 AC-2 as met.",
+      "requirement": "NFR-006",
+      "location": "web/tests/unit/userMessage.test.ts:L33-L38",
+      "suggestion": "Enable test.typecheck (or move the check to a .test-d.ts), or make sure pnpm -C web typecheck is a gate, and say so in the test."
+    },
+    {
+      "id": "F-8",
+      "severity": "minor",
+      "message": "The pagination tests find page links with getByText of a bare number. UX 9.3 names the links Page n. If that name comes from visually hidden text (for example a hidden Page span before the visible number), getByText of the bare number matches no element. Only an aria-label implementation passes.",
+      "requirement": "REQ-LIST-003",
+      "location": "web/tests/component/list.test.tsx:L193-L209",
+      "suggestion": "Query getByRole(\"link\", {name: /page 2/i}) and find the current page by aria-current, not by its text."
+    },
+    {
+      "id": "F-9",
+      "severity": "minor",
+      "message": "The detail-page Delete button is queried by the exact accessible name Delete. UX 9.3 gives Delete buttons visually hidden title text, so a shared button component would be named Delete plus the title and these queries would fail.",
+      "requirement": "REQ-TODO-006",
+      "location": "web/tests/component/todo-form.test.tsx:L359-L370",
+      "suggestion": "Use name: /^delete/i outside the dialog. Keep the exact match only inside the dialog."
+    },
+    {
+      "id": "F-10",
+      "severity": "minor",
+      "message": "Tests require the SPA to send the title and the identifier already trimmed. sdd section 5 makes trimming of title and identifier a server rule, and UX 7.1 has the client trim only when validating. Only q is specified as trimmed by the SPA (sdd section 8). This constrains the implementation beyond the spec.",
+      "requirement": "REQ-TODO-002",
+      "location": "web/tests/component/todo-form.test.tsx:L63-L71; web/tests/component/auth.test.tsx:L94-L108",
+      "suggestion": "Accept a body whose value trims to the expected one (for example compare trimWhitespace(body.title)), or record the decision in the sdd."
+    },
+    {
+      "id": "F-11",
+      "severity": "minor",
+      "message": "The REQ-AUTH-001 AC-7 test asserts toBeRequired on the identifier field. The AC and the UX ask only for one field and (required) in the label text. A native required attribute would also block the custom on-submit error summary in real browsers unless noValidate is set.",
+      "requirement": "REQ-AUTH-001",
+      "location": "web/tests/component/auth.test.tsx:L11-L18",
+      "suggestion": "Drop toBeRequired, or assert the label text contains (required)."
+    },
+    {
+      "id": "F-12",
+      "severity": "minor",
+      "message": "The 255-character identifier case is a@b.co with a 250-character local part. It breaks both the length rule and the email local-part limit of 64, so the expected length message depends on a precedence the spec does not set.",
+      "requirement": "REQ-AUTH-001",
+      "location": "web/tests/component/auth.test.tsx:L77-L80",
+      "suggestion": "Use a 255-character username such as a repeated 255 times, which breaks only the length rule."
+    },
+    {
+      "id": "F-13",
+      "severity": "minor",
+      "message": "The time-zone tests set process.env.TZ at runtime but never check that it took effect in the Vitest worker. If it did not, the due-date test passes without testing anything.",
+      "requirement": "REQ-TODO-002",
+      "location": "web/tests/component/todo-form.test.tsx:L333-L352",
+      "suggestion": "Assert new Date(Date.UTC(2026,10,6)).getTimezoneOffset() equals the expected offset for each zone, or run these tests in a Vitest project with env TZ set."
+    },
+    {
+      "id": "F-14",
+      "severity": "minor",
+      "message": "The REQ-NAV-001 AC-6 component test passes when any aria-hidden element exists anywhere (for example the pagination ellipsis or an icon) and requires the sentence to be a p element. It does not tie aria-hidden to the animated element.",
+      "requirement": "REQ-NAV-001",
+      "location": "web/tests/component/navigation.test.tsx:L109-L123",
+      "suggestion": "Look for the aria-hidden element inside main and next to the heading. Check the sentence by its text, not by the p tag."
+    },
+    {
+      "id": "F-15",
+      "severity": "minor",
+      "message": "The restart project depends on chromium and firefox. Playwright skips a dependent project when any test in a dependency fails, so one unrelated failure silently skips the only REQ-ACC-001 AC-3 and REQ-DATA-001 AC-1 web test. It is reported as skipped, not failed.",
+      "requirement": "REQ-ACC-001",
+      "location": "web/playwright.config.ts:L30-L38",
+      "suggestion": "Run restart.spec as a separate invocation after the main run (as for session-expiry), chained in the e2e script."
+    },
+    {
+      "id": "F-16",
+      "severity": "minor",
+      "message": "The NFR-003 timings for list and page use page.goto, a full reload of the Vite dev server, instead of the user action (a pagination link). This risks failures unrelated to the SPA. The complete timing stops when the checkbox is checked, which an optimistic UI does at once, so it may measure nothing.",
+      "requirement": "NFR-003",
+      "location": "web/e2e/performance.spec.ts:L26-L62",
+      "suggestion": "Time page changes by clicking pagination links. For complete, wait for the re-queried list or the live-region text Marked done."
+    },
+    {
+      "id": "F-17",
+      "severity": "minor",
+      "message": "The e2e database paths are fixed in tmpdir, reused across runs and never cleared, while sdd sections 11 and 14 say temporary DB. The performance spec adds 500 rows per run, so the database grows and NFR-003 results drift.",
+      "requirement": "NFR-003",
+      "location": "web/e2e/support/launch.ts:L17-L36",
+      "suggestion": "Use a fresh mkdtemp directory per run (created in global setup and reused by restartApi), or delete the file before startApi."
+    },
+    {
+      "id": "F-18",
+      "severity": "minor",
+      "message": "NFR-001 AC-2 lists editing by keyboard, but the keyboard spec only opens the edit page and cancels. No edit is saved with the keyboard.",
+      "requirement": "NFR-001",
+      "location": "web/e2e/keyboard.spec.ts:L116-L133",
+      "suggestion": "Change the title, save with Enter, and assert the detail page shows the new title and that focus is on its h1."
+    },
+    {
+      "id": "F-19",
+      "severity": "minor",
+      "message": "sdd section 14 NFR-002 says the main e2e configuration talks only to localhost. No test asserts it.",
+      "requirement": "NFR-002",
+      "location": "web/playwright.config.ts:L22-L26",
+      "suggestion": "Add a test or fixture that records page requests and asserts that every URL host is localhost."
+    },
+    {
+      "id": "F-20",
+      "severity": "minor",
+      "message": "The test name claims that clearing deletes completed to-dos across pages, but the test seeds 3 to-dos on one page.",
+      "requirement": "REQ-TODO-007",
+      "location": "web/e2e/acceptance.spec.ts:L176-L194",
+      "suggestion": "Seed more than 20 to-dos with completed ones on page 2, or drop across pages from the name."
+    },
+    {
+      "id": "F-21",
+      "severity": "minor",
+      "message": "The session-expiry configuration writes playwright-report-session-expiry under web/, and neither .gitignore nor the eslint ignores list it, so the generated report can be committed or linted.",
+      "requirement": "REQ-AUTH-004",
+      "location": "web/.gitignore:L1-L5; web/eslint.config.js:L5",
+      "suggestion": "Add playwright-report-session-expiry (and blob-report) to both."
+    },
+    {
+      "id": "F-22",
+      "severity": "info",
+      "message": "Red evidence: every component test fails with ERR_MODULE_NOT_FOUND, and every e2e test (chromium only, 50 + 1 + 2) fails with connection refused. The reports match d7249a2. Neither failure reaches test logic, so the red run cannot tell a missing module from broken test code (F-2 got through this way). Firefox never ran, and keyboard.spec L41 types digits into a date input, which depends on the engine and locale. In jsdom the dialog is a shim, so focus containment is proven only by the e2e keyboard spec.",
+      "requirement": "NFR-001",
+      "location": ".harness/changes/CHG-0001/verdicts/N08-tests-web.tests-red-first.json:L20-L21",
+      "suggestion": "Make typecheck (with errors filtered to missing src modules) and lint part of the red proof, and run firefox once the stack exists. Use fill for the date where keyboard input is not the point."
+    },
+    {
+      "id": "F-23",
+      "severity": "info",
+      "message": "No list of the ACs not web-tested, with reasons, is in the node outputs, so it cannot be checked. Derived gaps: REQ-TODO-006 AC-3 (a deleted to-do is never checked after reload or restart); REQ-DATA-002 AC-1 (no UI check that two-tab edits show no conflict message); REQ-AUTH-003 AC-3 (no UI check that a password is never echoed). All are covered by backend integration per sdd section 14.",
+      "requirement": "REQ-TODO-006",
+      "location": "web/e2e/acceptance.spec.ts:L66-L74",
+      "suggestion": "Commit the not-web-tested list with reasons (for example in the test plan or a README under web/tests), and consider a reload after delete in the acceptance flow."
+    },
+    {
+      "id": "F-24",
+      "severity": "info",
+      "message": "The e2e commit downgrades TypeScript from 7 to 6 without saying why. Test-only dependencies beyond the ADR-0001 list (jsdom, @testing-library/jest-dom, @vitejs/plugin-react, eslint and typescript-eslint) are added. They are needed test infrastructure under MIT licences, but they are not recorded.",
+      "requirement": "NFR-005",
+      "location": "web/package.json:L21-L40",
+      "suggestion": "Have the react-engineer record the extra dev dependencies and the TypeScript line when pinning versions (ADR-0001)."
+    },
+    {
+      "id": "F-25",
+      "severity": "info",
+      "message": "Loading-state tests are named NFR-003 AC-1 but do not test the 1-second requirement. Traceability would count them as proof of NFR-003.",
+      "requirement": "NFR-003",
+      "location": "web/tests/component/list.test.tsx:L56-L70; web/tests/component/todo-form.test.tsx:L271-L278",
+      "suggestion": "Name them after the UX loading state they check, without an AC ID, and leave NFR-003 AC-1 to the performance spec."
+    }
+  ]
+}

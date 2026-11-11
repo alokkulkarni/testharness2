@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N05-design-arch",
+  "gate": "critic-verdict",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "critic",
+      "agentRunId": "aeea49fa33cc68e97"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "drawio-architect",
+      "agentRunId": "a1370a6887b781eb9"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "drawio-architect",
+      "agentRunId": "a1b4e275022c93b3b"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "drawio-architect",
+      "agentRunId": "a26ee010790d263af"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "drawio-architect",
+      "agentRunId": "a3e721a9ff77bad03"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "drawio-architect",
+      "agentRunId": "a5397e348ff16ee94"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "drawio-architect",
+      "agentRunId": "aa377598e2b225ad9"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "drawio-architect",
+      "agentRunId": "ae118b53d3d401a8e"
+    }
+  ],
+  "createdAt": "2026-11-10T09:22:34.611Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "reviewedCommit": "bfbd5c818881c9bfa6fcccba546c09841b85620e",
+  "diffHash": "2c57bf9487489785d97a5b366208a0910ef1a28801f1b6cfdb575a2e121bd7c0",
+  "summary": "round 5, delta since f782e44: F-27, F-32, F-34 fixed. No blockers or majors were open. Delta is 5da8fb9 (all 10 PNG/PDF re-exported, manifest now records border 20, scale 2, pdf crop; no .drawio or README change) and 9ce46e4 (.DS_Store removed). export --check: 10 diagrams, exports current. All 10 PNGs viewed: even margins on every side, no clipping, overlap or cut-off text. F-27 fixed: margins now present, and crop PDFs match README L9 and the recorded setting. F-32 fixed: --check now verifies each PDF page and size against its PNG (PDFs not rendered by other tools, per critic rules). F-34 fixed by 9ce46e4 (the .gitignore entry is deferred to a follow-up change, outside this node). Follow-ups: 1 minor (F-33), 1 info (F-31), both carried on unchanged content. Totals: 0 blocker, 0 major.",
+  "findings": [
+    {
+      "id": "F-31",
+      "severity": "info",
+      "message": "SecurityConfig is described as registering RequestIdFilter. sdd 10 L579-L581 says a FilterRegistrationBean in config registers it ahead of the security chain, without naming the class; the label is a reasonable reading but more specific than the spec.",
+      "requirement": "NFR-007",
+      "location": "docs/specs/CHG-0001/design/architecture/c4-component-api.drawio:L76-L76",
+      "suggestion": "Optionally reword to: config registers RequestIdFilter (FilterRegistrationBean, sdd 10)."
+    },
+    {
+      "id": "F-33",
+      "severity": "minor",
+      "message": "README L13 now says 8 px text padding is a layout rule applied to every diagram, but the padding was added only to component, screen and lifeline boxes. c4-context.drawio (user: no spacing; todo, none: 10), c4-container.drawio (user: none; spa, proxy, api: 10), deployment-local.drawio (browser, vite, jvm, file, env: none), data-model.drawio tables (10) and the sequence notes (6) use other values, so the stated rule is inaccurate.",
+      "requirement": "NFR-007",
+      "location": "docs/specs/CHG-0001/design/architecture/README.md:L13-L13",
+      "suggestion": "Reword to what was applied (for example: at least 6-10 px text padding on boxes that hold wrapped text), or add spacingLeft=8;spacingRight=8 to the remaining boxes and re-export."
+    }
+  ]
+}

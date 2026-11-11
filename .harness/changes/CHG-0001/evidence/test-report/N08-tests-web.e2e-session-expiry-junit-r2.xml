@@ -1,0 +1,82 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="2" time="0.780668">
+<testsuite name="session-expiry.spec.ts" timestamp="2026-11-08T11:18:53.099Z" hostname="chromium" tests="2" failures="0" skipped="0" time="0.123" errors="2">
+<testcase name="REQ-AUTH-004 AC-4 REQ-AUTH-002 AC-4 after the 8-hour session ends, the next request sends the user to log in with the session-ended message" classname="session-expiry.spec.ts" time="0.062">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../../test-results/e2e-session-expiry-artifacts/session-expiry-REQ-AUTH-00-deccd-h-the-session-ended-message-chromium/error-context.md]]
+
+[[ATTACHMENT|../../test-results/e2e-session-expiry-artifacts/session-expiry-REQ-AUTH-00-deccd-h-the-session-ended-message-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › session-expiry.spec.ts:11:1 › REQ-AUTH-004 AC-4 REQ-AUTH-002 AC-4 after the 8-hour session ends, the next request sends the user to log in with the session-ended message 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a4d86af6484ed6006/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a4d86af6484ed6006/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a4d86af6484ed6006/web/e2e/session-expiry.spec.ts:12:9
+
+    Error Context: ../test-results/e2e-session-expiry-artifacts/session-expiry-REQ-AUTH-00-deccd-h-the-session-ended-message-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-session-expiry-artifacts/session-expiry-REQ-AUTH-00-deccd-h-the-session-ended-message-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-session-expiry-artifacts/session-expiry-REQ-AUTH-00-deccd-h-the-session-ended-message-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="REQ-AUTH-002 AC-4 a session that has not reached 8 hours is still valid" classname="session-expiry.spec.ts" time="0.061">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../../test-results/e2e-session-expiry-artifacts/session-expiry-REQ-AUTH-00-45727-ched-8-hours-is-still-valid-chromium/error-context.md]]
+
+[[ATTACHMENT|../../test-results/e2e-session-expiry-artifacts/session-expiry-REQ-AUTH-00-45727-ched-8-hours-is-still-valid-chromium/trace.zip]]
+]]>
+</system-out>
+<error message="apiRequestContext.post: connect ECONNREFUSED ::1:5173" type="AggregateError">
+<![CDATA[  [chromium] › session-expiry.spec.ts:23:1 › REQ-AUTH-002 AC-4 a session that has not reached 8 hours is still valid 
+
+    AggregateError: apiRequestContext.post: connect ECONNREFUSED ::1:5173
+    connect ECONNREFUSED 127.0.0.1:5173
+    Call log:
+      - → POST http://localhost:5173/api/v1/auth/signup
+        - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - X-Todo-Client: web
+        - content-type: application/json
+        - content-length: 64
+
+        at apiRequestContext.post: connect ECONNREFUSED ::1:5173
+        at apiSignUp (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a4d86af6484ed6006/web/e2e/support/app.ts:34:29)
+        at signedInUser (/Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a4d86af6484ed6006/web/e2e/support/app.ts:46:9)
+        at /Users/alokkulkarni/Documents/Development/testharness2/.claude/worktrees/agent-a4d86af6484ed6006/web/e2e/session-expiry.spec.ts:24:9
+
+    Error Context: ../test-results/e2e-session-expiry-artifacts/session-expiry-REQ-AUTH-00-45727-ched-8-hours-is-still-valid-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-session-expiry-artifacts/session-expiry-REQ-AUTH-00-45727-ched-8-hours-is-still-valid-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-session-expiry-artifacts/session-expiry-REQ-AUTH-00-45727-ched-8-hours-is-still-valid-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+</testsuites>

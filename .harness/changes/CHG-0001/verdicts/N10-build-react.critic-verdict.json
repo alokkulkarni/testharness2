@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N10-build-react",
+  "gate": "critic-verdict",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "critic",
+      "agentRunId": "a56ebc6bcf3adadd2"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "a2d605e7a68e7bc95"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "a56446fc9d361e33a"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "a60fb623702586e08"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "a6809e24795576252"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "a767bd3f583698bab"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "a8a05244ebd80fb0a"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "a8d695bc2b72c5f94"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "ac775b8ae56e1e833"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "acfc9f0fb7584ab38"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "af4da2dcb663a79e9"
+    }
+  ],
+  "createdAt": "2026-11-09T14:03:55.167Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "reviewedCommit": "15d2c32cec3a6b891f9e72a2742f015d7177dc4d",
+  "diffHash": "03672242a2e365de3531c46f2e4fbc33185d610c4134a92d6bde6aaa7ace1677",
+  "summary": "round 2, delta since a7c1f40c37ecd9ee0cbcf8ee8d6f8220feac5780: F-1, F-2, F-3, F-4, F-5 fixed; minors F-6 to F-12 fixed. F-1: row 2 due 2026-12-20 (todo-form.test.tsx L296). F-2: requested dropped by the first list after the PUT, next value from the shown state, tested both ways (list.test.tsx L446-L491). F-3: h1 focus effect on gone (TodoDetailPage.tsx L56-L59), asserted. F-4: r3 reports on a70f2c8, web/ identical at HEAD. F-5: openapi-typescript 7.13.0 and @redocly/cli 2.76.0 pinned, redocly.yaml, generated files, gen:api and lint:contracts per ADR-0001. Pass with 3 new minors and 1 new info as follow-ups, plus infos F-13 to F-16 carried. Typecheck, lint and lint:contracts results were not verified by me (no artefact).",
+  "findings": [
+    {
+      "id": "F-13",
+      "severity": "info",
+      "message": "The not-found illustration grows its third line from 20 to 100 percent width; UX design section 7.2 describes the third line being struck through left to right. Timing, iteration count and reduced motion match.",
+      "requirement": "REQ-NAV-001",
+      "location": "web/src/styles/app.css:L487-L509",
+      "suggestion": "Draw a strike line over the third line and animate that, if the UX designer wants the described motion."
+    },
+    {
+      "id": "F-14",
+      "severity": "info",
+      "message": "The new Tab wrap in ConfirmDialog is proven only for forward Tab (keyboard.spec.ts L86-L89); Shift+Tab from Cancel is untested, and the focusable selector does not skip disabled or hidden controls (none exist in the dialogs today).",
+      "requirement": "NFR-001",
+      "location": "web/src/todos/ConfirmDialog.tsx:L52-L66",
+      "suggestion": "Add a Shift+Tab case through the tests node; filter out disabled and hidden elements in the selector."
+    },
+    {
+      "id": "F-15",
+      "severity": "info",
+      "message": "Carried from N08 F-22: Firefox e2e has never run; on this macOS host it fails at launch. Accepted by the requester as an environment limitation; the firefox projects stay in the configs.",
+      "requirement": "NFR-001",
+      "location": "docs/specs/CHG-0001/plan/N10-build-react.md:L104-L106",
+      "suggestion": "Run the Firefox e2e in CI on Linux as the plan states, and list it in the PR."
+    },
+    {
+      "id": "F-16",
+      "severity": "info",
+      "message": "Carried from N08 F-27: the e2e script chains the three runs with POSIX shell syntax, which fails under cmd on Windows.",
+      "requirement": "REQ-AUTH-004",
+      "location": "web/package.json:L14-L14",
+      "suggestion": "If Windows matters, chain the runs with a small Node script."
+    },
+    {
+      "id": "F-17",
+      "severity": "minor",
+      "message": "dropRequestedOnShow is one flag not scoped to the toggle that set it. After toggle A succeeds (flag true, reload A in flight, toggling already null at L205), a second click starts toggle B; reload A then reaches show and clears the requested state of B while PUT B is in flight, so the checkbox visibly reverts, contrary to plan L75. A third click between PUT B resolving and reload B showing reads the stale todo.done and re-sends the value of B instead of reversing it. The end state is consistent with what was sent and the window is two round-trips, so in the normal flow this is a transient flicker.",
+      "requirement": "REQ-TODO-005",
+      "location": "web/src/todos/TodoListPage.tsx:L181-L206",
+      "suggestion": "Set dropRequestedOnShow.current to false at the start of toggle, or tag requested with a toggle sequence number compared in show, and add a tests-node case: a second click before the re-query keeps the requested state until its own re-query."
+    },
+    {
+      "id": "F-18",
+      "severity": "minor",
+      "message": "Proof names pnpm -C web typecheck and lint (L82) but records no result for HEAD, and L83 states gen:api and lint:contracts results only in prose, with no attached output. The generated root types (Problem, Session, LoginRequest, SignupRequest, SignupResult, StatusFilter derived in client.ts) are proven to resolve only by tsc, since type imports are erased under Vitest. The reviewer could not run these commands.",
+      "requirement": "NFR-006",
+      "location": "docs/specs/CHG-0001/plan/N10-build-react.md:L82-L83",
+      "suggestion": "Attach the typecheck, lint and lint:contracts output for a70f2c8 or HEAD as evidence, or let the build gates record them, and name them in Proof; list the 8 lint:contracts warnings."
+    },
+    {
+      "id": "F-19",
+      "severity": "minor",
+      "message": "Two plan entries are stale. L71 says the remembered error is cleared on pathname change or unmount, but the F-6 fix also clears it on any commit without an error (AppErrorBoundary.tsx L71-L78), and the first-mount-only behaviour F-6 asked to note is not recorded. L94 still says row 2 has due date 2026-11-07; L105 supersedes it.",
+      "requirement": "NFR-006",
+      "location": "docs/specs/CHG-0001/plan/N10-build-react.md:L71-L94",
+      "suggestion": "Update L71 to describe when remembered is cleared now, and merge L94 into L105 with the current date."
+    },
+    {
+      "id": "F-20",
+      "severity": "info",
+      "message": "The first chromium and webkit run of the main e2e config by the verifier exited 1 and its output was not kept; the attached e2e-main-r3 (104 passed) is the immediate re-run. A flaky e2e test cannot be ruled out.",
+      "requirement": "NFR-001",
+      "location": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.e2e-main-r3.xml:L1-L1",
+      "suggestion": "Run the e2e suite in CI on the PR and keep the output of every run, failed ones included."
+    }
+  ]
+}

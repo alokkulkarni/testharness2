@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N02-requirements",
+  "gate": "critic-verdict",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "critic",
+      "agentRunId": "abe7c0081dc2a9db7"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "requirements-analyst",
+      "agentRunId": "run-mw4qgud8"
+    }
+  ],
+  "createdAt": "2026-11-06T09:23:59.614Z",
+  "reviewedCommit": "1585d46e66883fa6cd3f997c02e52daed8dd407e",
+  "diffHash": "c59f8a73691ea51b138d2573609a5a55daf3bc85eb407f78fa47b5092475d342",
+  "summary": "Round 2 re-review of 1585d46. Round-1 F-1 to F-14 all fixed: F-1 (Q31/Q32, L28, L49-L50, L273, L295), F-2 (L95), F-3 (L202, residual API detail now F-5), F-4 (L167 UI; API outcome now F-4), F-5 (L51-L54), F-6 (L135, L140), F-7 (L106), F-8 (L164), F-9 (L147), F-10 (L148), F-11 (L259-L260), F-12 (L62), F-13 (Q33, L282-L291), F-14 (L276). Every answer Q1-Q34 is captured and traced; no AC contradicts an answer; the six analyst defaults are tagged and listed and none is risky. No finding needs a requester decision before freeze. New: nine minors and four infos.",
+  "findings": [
+    {
+      "id": "F-1",
+      "severity": "minor",
+      "message": "Identifier trimming is specified only when it is saved at sign-up (AC-8); login (REQ-AUTH-002) states case-insensitive matching (AC-5) but not whether the submitted identifier is trimmed, so a login with a trailing space has no defined outcome.",
+      "requirement": "REQ-AUTH-002",
+      "location": "docs/specs/CHG-0001/requirements.md:L51-L64",
+      "suggestion": "Add to REQ-AUTH-002 that login trims the submitted identifier the same way as sign-up before the case-insensitive match (tag analyst default)."
+    },
+    {
+      "id": "F-2",
+      "severity": "minor",
+      "message": "The 8-hour session lifetime does not say whether it is absolute (from login) or an idle timeout renewed by activity; the two need different tests.",
+      "requirement": "REQ-AUTH-002",
+      "location": "docs/specs/CHG-0001/requirements.md:L63-L63",
+      "suggestion": "State one, for example: the session expires 8 hours after login regardless of activity (analyst default), and list it under Analyst defaults."
+    },
+    {
+      "id": "F-3",
+      "severity": "minor",
+      "message": "The Glossary defines Identifier as the value a user signs up and logs in with, but REQ-ISO-001 AC-2 (by its identifier, an identifier that does not exist) and REQ-ACC-001 AC-2 (direct identifier) use the same word for a to-do ID.",
+      "requirement": "REQ-ISO-001",
+      "location": "docs/specs/CHG-0001/requirements.md:L95-L95",
+      "suggestion": "Use to-do ID in REQ-ISO-001 AC-2 and REQ-ACC-001 AC-2 (L228), or add a glossary entry for it."
+    },
+    {
+      "id": "F-4",
+      "severity": "minor",
+      "message": "REQ-TODO-007 AC-4 now fixes the UI (control disabled) but the API outcome of a clear-completed request when the user has no completed to-dos is unspecified (follow-up of round-1 F-4).",
+      "requirement": "REQ-TODO-007",
+      "location": "docs/specs/CHG-0001/requirements.md:L167-L167",
+      "suggestion": "Add: the API call succeeds, deletes nothing, reports 0 deleted and returns no error (analyst default)."
+    },
+    {
+      "id": "F-5",
+      "severity": "minor",
+      "message": "REQ-LIST-003 AC-6 says the last valid page is shown but not what the API returns (the last page items and the effective page number), which the contract needs; its second sentence (the empty or no matching to-dos state) reads as either/or on its own.",
+      "requirement": "REQ-LIST-003",
+      "location": "docs/specs/CHG-0001/requirements.md:L202-L202",
+      "suggestion": "State that the API returns the items of the last page with that page number and the total count, and that with no matches the first-use empty state (REQ-TODO-003 AC-2) applies when the user has no to-dos at all and the no matching state (REQ-LIST-001 AC-4, REQ-LIST-002 AC-4) otherwise."
+    },
+    {
+      "id": "F-6",
+      "severity": "minor",
+      "message": "REQ-LIST-003 AC-7 defines only the API response to a page that is zero, negative or not a number; AC-6 covers a page requested by URL, but the UI outcome for such an invalid page in the URL is undefined.",
+      "requirement": "REQ-LIST-003",
+      "location": "docs/specs/CHG-0001/requirements.md:L203-L203",
+      "suggestion": "Add the UI behaviour, for example the UI shows page 1 with no error (analyst default), and list it under Analyst defaults item 5."
+    },
+    {
+      "id": "F-7",
+      "severity": "minor",
+      "message": "REQ-TODO-001 AC-1 says a new to-do appears at the top of my list, which holds only with the All or Active filter, no search and page 1; with the Completed filter or a non-matching search it is not shown.",
+      "requirement": "REQ-TODO-001",
+      "location": "docs/specs/CHG-0001/requirements.md:L105-L105",
+      "suggestion": "Qualify it: given the All filter, no search and page 1, the new to-do appears first; otherwise the list follows REQ-LIST-001 to REQ-LIST-003."
+    },
+    {
+      "id": "F-8",
+      "severity": "minor",
+      "message": "Three elaborations are neither traced to an answer nor tagged analyst default, so the Analyst defaults list is not complete: REQ-AUTH-003 AC-3 (no password or hash in responses or logs; the security-baseline note covers hashing only, L72), REQ-TODO-002 AC-1 title trimming (from the Q6/Q17 question text, not stated in an answer, L114), and REQ-LIST-001 AC-5 All selected by default (L179). All are low risk.",
+      "requirement": "REQ-AUTH-003",
+      "location": "docs/specs/CHG-0001/requirements.md:L282-L291",
+      "suggestion": "Tag each (analyst default or security baseline elaboration) and add them to the Analyst defaults list for the approver."
+    },
+    {
+      "id": "F-9",
+      "severity": "minor",
+      "message": "REQ-LIST-002 AC-7 (search text that is only leading or trailing whitespace) is unclear, and whether a non-empty term with surrounding spaces (\"  milk \") is trimmed before matching is not stated.",
+      "requirement": "REQ-LIST-002",
+      "location": "docs/specs/CHG-0001/requirements.md:L191-L191",
+      "suggestion": "Reword: search text is trimmed before matching; text that is empty after trimming applies no search restriction (Q33)."
+    },
+    {
+      "id": "F-10",
+      "severity": "info",
+      "message": "A 128-character password maximum (analyst default) exceeds the 72-byte input limit of bcrypt, which silently truncates; characters versus bytes is also not stated.",
+      "requirement": "REQ-AUTH-001",
+      "location": "docs/specs/CHG-0001/requirements.md:L54-L54",
+      "suggestion": "For the SDD: choose Argon2id, scrypt or PBKDF2 (or document a pre-hash) so REQ-AUTH-003 holds for 128-character passwords, and define length in characters."
+    },
+    {
+      "id": "F-11",
+      "severity": "info",
+      "message": "Last write wins (REQ-DATA-002 AC-1) implies the later write replaces the whole record, so a stale field from a second tab can overwrite a change made in the first; partial updates would behave differently. Both satisfy Q18.",
+      "requirement": "REQ-DATA-002",
+      "location": "docs/specs/CHG-0001/requirements.md:L220-L220",
+      "suggestion": "For the SDD: state whether an edit is a full replace or a partial update and test that outcome."
+    },
+    {
+      "id": "F-12",
+      "severity": "info",
+      "message": "REQ-AUTH-001 AC-9 requires a valid email address without naming the syntax rule (for example, whether non-ASCII local parts are allowed), which also affects case-insensitive uniqueness (AC-6).",
+      "requirement": "REQ-AUTH-001",
+      "location": "docs/specs/CHG-0001/requirements.md:L52-L52",
+      "suggestion": "For the SDD: name the email validation rule and the case-folding used for uniqueness."
+    },
+    {
+      "id": "F-13",
+      "severity": "info",
+      "message": "Analyst default 1 allows usernames up to 254 characters, while the Q31 option (b) example suggested 3-50; not a contradiction, since the requester chose (c), but the approver may want to tighten it.",
+      "requirement": "REQ-AUTH-001",
+      "location": "docs/specs/CHG-0001/requirements.md:L286-L288",
+      "suggestion": "Approver to confirm 3-254 for both forms at freeze, or set a separate username maximum."
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N08-tests-web",
+  "gate": "critic-verdict",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "critic",
+      "agentRunId": "a35a74c69c024c154"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "web-qa",
+      "agentRunId": "ad203fa1aed5110be"
+    }
+  ],
+  "createdAt": "2026-11-09T10:58:41.637Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "reviewedCommit": "a6afc9e278576dbda0f84ace071e8754a15f1173",
+  "diffHash": "4a3a1e6f028b38232b1939c309879b63a7e153c8346c4557531d3d24908cab4e",
+  "summary": "round 2, delta since abb31768ff8b7874080512953fb66a86fa372520: F-1, F-2, F-3, F-4 fixed (all round-1 majors); F-5 to F-21, F-23 and F-25 also fixed. No blocker or major remains, so pass. Follow-ups: 1 new minor (F-26: the N-2 throwing response fires only if the SPA reads the 2xx body) and 3 infos (F-22 and F-24 carried, trimmed to what remains; new F-27).",
+  "findings": [
+    {
+      "id": "F-22",
+      "severity": "info",
+      "message": "Firefox never ran in the red runs (round 2 red evidence: Firefox not installed), so the firefox project of the main configuration is unproven until the stack exists. In jsdom the dialog is a shim, so focus containment is proven only by the e2e keyboard spec. The date-fill, typecheck and lint parts of round 1 are done.",
+      "requirement": "NFR-001",
+      "location": ".harness/changes/CHG-0001/verdicts/N08-tests-web.tests-red-first.json:L21-L21",
+      "suggestion": "Install the Firefox browser for Playwright and run the main configuration on both projects once the stack exists."
+    },
+    {
+      "id": "F-24",
+      "severity": "info",
+      "message": "The TypeScript 7 to 6 downgrade still has no stated reason. tests/README.md now records the extra test-only dev dependencies and defers the TypeScript line to the react-engineer.",
+      "requirement": "NFR-005",
+      "location": "web/tests/README.md:L571-L573",
+      "suggestion": "State why TypeScript 6 is used, or have the react-engineer record it with the ADR-0001 version pins."
+    },
+    {
+      "id": "F-26",
+      "severity": "minor",
+      "message": "throwingResponse is a 2xx Response with no body and no Content-Type whose json/text readers reject. The three N-2 tests (toggle, create, save) see the unexpected error only if the SPA reads the success body of setTodoDone, createTodo and updateTodo. A compliant client that skips parsing when there is no JSON Content-Type (for example to handle 204 from logout and delete), or a screen that re-queries or navigates without reading those bodies, never meets the throw, so these tests would fail against a correct build and N10 may not weaken them (CLAUDE.md rule 6).",
+      "requirement": "NFR-006",
+      "location": "web/tests/helpers/fakeApi.ts:L57-L70",
+      "suggestion": "Give the throwing Response a Content-Type: application/json header, and state in web/tests/README.md that src/api/client.ts reads the JSON body of every 2xx response that has one, so N10 builds to that seam."
+    },
+    {
+      "id": "F-27",
+      "severity": "info",
+      "message": "The e2e script chains the three runs with POSIX shell syntax ($?, test -a). pnpm runs scripts with cmd on Windows, where it fails. The sdd section 11 prerequisites name no operating system.",
+      "requirement": "REQ-AUTH-004",
+      "location": "web/package.json:L13-L13",
+      "suggestion": "If Windows matters, chain the runs with a small Node script (or npm-run-all) that runs all three and fails if any failed."
+    }
+  ]
+}

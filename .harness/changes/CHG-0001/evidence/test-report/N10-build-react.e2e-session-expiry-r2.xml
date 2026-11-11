@@ -1,0 +1,108 @@
+<testsuites id="" name="" tests="6" failures="0" skipped="0" errors="2" time="6.661641">
+<testsuite name="session-expiry.spec.ts" timestamp="2026-11-09T12:21:36.941Z" hostname="chromium" tests="2" failures="0" skipped="0" time="0.94" errors="0">
+<testcase name="REQ-AUTH-004 AC-4 REQ-AUTH-002 AC-4 after the 8-hour session ends, the next request sends the user to log in with the session-ended message" classname="session-expiry.spec.ts" time="0.602">
+</testcase>
+<testcase name="REQ-AUTH-002 AC-4 a session that has not reached 8 hours is still valid" classname="session-expiry.spec.ts" time="0.338">
+</testcase>
+</testsuite>
+<testsuite name="session-expiry.spec.ts" timestamp="2026-11-09T12:21:36.941Z" hostname="firefox" tests="2" failures="0" skipped="0" time="0" errors="2">
+<testcase name="REQ-AUTH-004 AC-4 REQ-AUTH-002 AC-4 after the 8-hour session ends, the next request sends the user to log in with the session-ended message" classname="session-expiry.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-session-expiry-artifacts/session-expiry-REQ-AUTH-00-deccd-h-the-session-ended-message-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-session-expiry-artifacts/session-expiry-REQ-AUTH-00-deccd-h-the-session-ended-message-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › session-expiry.spec.ts:11:1 › REQ-AUTH-004 AC-4 REQ-AUTH-002 AC-4 after the 8-hour session ends, the next request sends the user to log in with the session-ended message 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-eRsr1K -juggler-pipe -silent
+    <launched> pid=36338
+    [pid=36338][err] *** You are running in headless mode.
+    [pid=36338][err] Could not find profile folder.
+    [pid=36338] <process did exit: exitCode=1, signal=null>
+    [pid=36338] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-eRsr1K -juggler-pipe -silent
+      - <launched> pid=36338
+      - [pid=36338][err] *** You are running in headless mode.
+      - [pid=36338][err] Could not find profile folder.
+      - [pid=36338] <process did exit: exitCode=1, signal=null>
+      - [pid=36338] starting temporary directories cleanup
+      - [pid=36338] <gracefully close start>
+      - [pid=36338] <kill>
+      - [pid=36338] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=36338] finished temporary directories cleanup
+      - [pid=36338] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-session-expiry-artifacts/session-expiry-REQ-AUTH-00-deccd-h-the-session-ended-message-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-session-expiry-artifacts/session-expiry-REQ-AUTH-00-deccd-h-the-session-ended-message-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-session-expiry-artifacts/session-expiry-REQ-AUTH-00-deccd-h-the-session-ended-message-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="REQ-AUTH-002 AC-4 a session that has not reached 8 hours is still valid" classname="session-expiry.spec.ts" time="0">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-session-expiry-artifacts/session-expiry-REQ-AUTH-00-45727-ched-8-hours-is-still-valid-firefox/error-context.md]]
+
+[[ATTACHMENT|e2e-session-expiry-artifacts/session-expiry-REQ-AUTH-00-45727-ched-8-hours-is-still-valid-firefox/trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Failed to launch the browser process." type="Error">
+<![CDATA[  [firefox] › session-expiry.spec.ts:23:1 › REQ-AUTH-002 AC-4 a session that has not reached 8 hours is still valid 
+
+    Error: browserType.launch: Failed to launch the browser process.
+    Browser logs:
+
+    <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-klk9Sy -juggler-pipe -silent
+    <launched> pid=36340
+    [pid=36340][err] *** You are running in headless mode.
+    [pid=36340][err] Could not find profile folder.
+    [pid=36340] <process did exit: exitCode=1, signal=null>
+    [pid=36340] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/alokkulkarni/Library/Caches/ms-playwright/firefox-1572/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/k1/7hq882zd4t77t631_m6j0r180000gn/T/playwright_firefoxdev_profile-klk9Sy -juggler-pipe -silent
+      - <launched> pid=36340
+      - [pid=36340][err] *** You are running in headless mode.
+      - [pid=36340][err] Could not find profile folder.
+      - [pid=36340] <process did exit: exitCode=1, signal=null>
+      - [pid=36340] starting temporary directories cleanup
+      - [pid=36340] <gracefully close start>
+      - [pid=36340] <kill>
+      - [pid=36340] <skipped force kill spawnedProcess.killed=false processClosed=true>
+      - [pid=36340] finished temporary directories cleanup
+      - [pid=36340] <gracefully close end>
+
+
+    Error Context: ../test-results/e2e-session-expiry-artifacts/session-expiry-REQ-AUTH-00-45727-ched-8-hours-is-still-valid-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-session-expiry-artifacts/session-expiry-REQ-AUTH-00-45727-ched-8-hours-is-still-valid-firefox/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../test-results/e2e-session-expiry-artifacts/session-expiry-REQ-AUTH-00-45727-ched-8-hours-is-still-valid-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+<testsuite name="session-expiry.spec.ts" timestamp="2026-11-09T12:21:36.941Z" hostname="webkit" tests="2" failures="0" skipped="0" time="0.863" errors="0">
+<testcase name="REQ-AUTH-004 AC-4 REQ-AUTH-002 AC-4 after the 8-hour session ends, the next request sends the user to log in with the session-ended message" classname="session-expiry.spec.ts" time="0.499">
+</testcase>
+<testcase name="REQ-AUTH-002 AC-4 a session that has not reached 8 hours is still valid" classname="session-expiry.spec.ts" time="0.364">
+</testcase>
+</testsuite>
+</testsuites>

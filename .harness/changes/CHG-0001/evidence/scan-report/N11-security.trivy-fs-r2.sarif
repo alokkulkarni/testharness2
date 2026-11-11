@@ -1,0 +1,142 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/main/sarif-2.1/schema/sarif-schema-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "fullName": "Trivy Vulnerability Scanner",
+          "informationUri": "https://github.com/aquasecurity/trivy",
+          "name": "Trivy",
+          "rules": [
+            {
+              "id": "CVE-2026-8763",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "org.bouncycastle/bcprov-jdk15on: org.bouncycastle/bcpkix-jdk15on: Bouncy Castle for Java: Name Constraints bypass via trailing dot in rfc822Name and URI"
+              },
+              "fullDescription": {
+                "text": "In Bouncy Castle for Java before 1.85, Name Constraints bypass via trailing dot in rfc822Name and URI. This issue also affects Bouncy Castle for Java LTS before 2.73.12, and Bouncy Castle for Java FIPS (BC-FJA) before bc-fips 1.0.2.7 (1.0.X series), 2.0.2 (2.0.X series) and 2.1.3 (2.1.X series)."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2026-8763",
+              "help": {
+                "text": "Vulnerability CVE-2026-8763\nSeverity: CRITICAL\nPackage: org.bouncycastle:bcprov-jdk18on\nFixed Version: 1.85\nLink: [CVE-2026-8763](https://avd.aquasec.com/nvd/cve-2026-8763)\nIn Bouncy Castle for Java before 1.85, Name Constraints bypass via trailing dot in rfc822Name and URI. This issue also affects Bouncy Castle for Java LTS before 2.73.12, and Bouncy Castle for Java FIPS (BC-FJA) before bc-fips 1.0.2.7 (1.0.X series), 2.0.2 (2.0.X series) and 2.1.3 (2.1.X series).",
+                "markdown": "**Vulnerability CVE-2026-8763**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|CRITICAL|org.bouncycastle:bcprov-jdk18on|1.85|[CVE-2026-8763](https://avd.aquasec.com/nvd/cve-2026-8763)|\n\nIn Bouncy Castle for Java before 1.85, Name Constraints bypass via trailing dot in rfc822Name and URI. This issue also affects Bouncy Castle for Java LTS before 2.73.12, and Bouncy Castle for Java FIPS (BC-FJA) before bc-fips 1.0.2.7 (1.0.X series), 2.0.2 (2.0.X series) and 2.1.3 (2.1.X series)."
+              },
+              "properties": {
+                "cvssv3_baseScore": 9.1,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
+                "cvssv40_baseScore": 9.3,
+                "cvssv40_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N/U:Amber",
+                "precision": "very-high",
+                "security-severity": "9.1",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "CRITICAL"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-13506",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "bouncycastle: Bouncy Castle for Java: Denial of Service via lazy ASN.1 sequence processing"
+              },
+              "fullDescription": {
+                "text": "In Bouncy Castle for Java before 1.85, Lazy ASN.1 sequence forcing resets nesting-depth guard. This issue also affects Bouncy Castle for Java LTS before 2.73.12, and Bouncy Castle for Java FIPS (BC-FJA) before bc-fips 1.0.2.7 (1.0.X series), 2.0.2 (2.0.X series) and 2.1.3 (2.1.X series)."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2026-13506",
+              "help": {
+                "text": "Vulnerability CVE-2026-13506\nSeverity: HIGH\nPackage: org.bouncycastle:bcprov-jdk18on\nFixed Version: 1.85\nLink: [CVE-2026-13506](https://avd.aquasec.com/nvd/cve-2026-13506)\nIn Bouncy Castle for Java before 1.85, Lazy ASN.1 sequence forcing resets nesting-depth guard. This issue also affects Bouncy Castle for Java LTS before 2.73.12, and Bouncy Castle for Java FIPS (BC-FJA) before bc-fips 1.0.2.7 (1.0.X series), 2.0.2 (2.0.X series) and 2.1.3 (2.1.X series).",
+                "markdown": "**Vulnerability CVE-2026-13506**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|HIGH|org.bouncycastle:bcprov-jdk18on|1.85|[CVE-2026-13506](https://avd.aquasec.com/nvd/cve-2026-13506)|\n\nIn Bouncy Castle for Java before 1.85, Lazy ASN.1 sequence forcing resets nesting-depth guard. This issue also affects Bouncy Castle for Java LTS before 2.73.12, and Bouncy Castle for Java FIPS (BC-FJA) before bc-fips 1.0.2.7 (1.0.X series), 2.0.2 (2.0.X series) and 2.1.3 (2.1.X series)."
+              },
+              "properties": {
+                "cvssv3_baseScore": 7.5,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+                "cvssv40_baseScore": 8.7,
+                "cvssv40_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N/U:Amber",
+                "precision": "very-high",
+                "security-severity": "7.5",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "HIGH"
+                ]
+              }
+            }
+          ],
+          "version": "0.76.0"
+        }
+      },
+      "results": [
+        {
+          "ruleId": "CVE-2026-8763",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "Package: org.bouncycastle:bcprov-jdk18on\nInstalled Version: 1.84\nVulnerability CVE-2026-8763\nSeverity: CRITICAL\nFixed Version: 1.85\nLink: [CVE-2026-8763](https://avd.aquasec.com/nvd/cve-2026-8763)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": ".claude/worktrees/agent-a8e99ccd937795596/api/pom.xml",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 59,
+                  "startColumn": 1,
+                  "endLine": 63,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": ".claude/worktrees/agent-a8e99ccd937795596/api/pom.xml: org.bouncycastle:bcprov-jdk18on@1.84"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-13506",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "text": "Package: org.bouncycastle:bcprov-jdk18on\nInstalled Version: 1.84\nVulnerability CVE-2026-13506\nSeverity: HIGH\nFixed Version: 1.85\nLink: [CVE-2026-13506](https://avd.aquasec.com/nvd/cve-2026-13506)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": ".claude/worktrees/agent-a8e99ccd937795596/api/pom.xml",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 59,
+                  "startColumn": 1,
+                  "endLine": 63,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": ".claude/worktrees/agent-a8e99ccd937795596/api/pom.xml: org.bouncycastle:bcprov-jdk18on@1.84"
+              }
+            }
+          ]
+        }
+      ],
+      "columnKind": "utf16CodeUnits",
+      "originalUriBaseIds": {
+        "ROOTPATH": {
+          "uri": "file:///Users/alokkulkarni/Documents/Development/testharness2/"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N06-design-ux",
+  "gate": "critic-verdict",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "critic",
+      "agentRunId": "a2abb34347c4712ca"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "ux-designer",
+      "agentRunId": "a1caa83f85508d878"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "ux-designer",
+      "agentRunId": "a2b14cf53301ba804"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "ux-designer",
+      "agentRunId": "a3bdb608009a41c5b"
+    }
+  ],
+  "createdAt": "2026-11-07T07:34:54.286Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "reviewedCommit": "99b8cde502eb01fdb99abafca4d1c0cc83f8c73f",
+  "diffHash": "d7ec36939a69ee74b4c73dde731eb4025b4851ab99b4dc8546b5b0e7bb2448cb",
+  "summary": "round 2, delta since a040b5a: F-1, F-2, F-3, F-4 fixed (F-1: D2 opening re-fetch failure row L314, focus row L448, section 7.3 row L514, section 11 L706; F-2: Show password removed from L182, L204, the component inventory and L657; F-3: link removed at L257; F-4: identifier removed from header L98-L99); minors F-5, F-6, F-7, F-8, F-9, F-10, F-12, F-13 and info F-15 also fixed. F-11 (minor) carried, F-14 (info) carried (tokens.json unchanged). SDD-cited lines still hold at HEAD: L254 S3 loading, L299-L302 D2 opening sequence and N = 0, L344 S6 not found with Back link, L347 save refused 404 with Back link, L376 S5 not found, L436-L437 filter/search and pagination focus; the author joined lines at L323 and L369-L370 to offset the inserted rows. New: 1 minor, 2 info. No blocker or major; follow-ups: 2 minor, 3 info.",
+  "findings": [
+    {
+      "id": "F-11",
+      "severity": "minor",
+      "message": "Partly fixed: section 11 L710 lists the reworded strings and the reason, but not the Q39(a)/Q42 originals they replace, and it lists a generic Something went wrong. Please try again. that appears nowhere in the design body (E1 at L496 uses a different sentence). The D2 Error row (L318) still has no inline [proposed] mark, unlike L263, L265 and L292.",
+      "requirement": "NFR-006 AC-1; Q39(a); Q42",
+      "location": "docs/specs/CHG-0001/design/ux/ux-design.md:L710, L318",
+      "suggestion": "Give each original string beside its new text, drop or locate the generic string, and mark L318 [proposed] like the S3 and D1 rows."
+    },
+    {
+      "id": "F-14",
+      "severity": "info",
+      "message": "Two hand-computed contrast figures look slightly off: text.danger on surface.danger computes to about 5.9:1 (stated 6.0:1) and focus.ring on surface.danger to about 6.1:1 (stated 5.9:1). Both stay above their thresholds, and section 9 already asks web-qa to verify by tool.",
+      "requirement": "NFR-001 AC-1",
+      "location": "docs/specs/CHG-0001/design/ux/tokens.json:L97, L118",
+      "suggestion": "Correct the figures when web-qa verifies them."
+    },
+    {
+      "id": "F-16",
+      "severity": "minor",
+      "message": "The new D2 opening re-fetch failure row excludes a 404, which leaves a 404 on the pre-dialog listTodos undefined; sdd section 6.1 L368 maps any other status on load-list to try-again, and the S3 list fetch failure row (L265) excludes only 401.",
+      "requirement": "NFR-006 AC-1; REQ-TODO-007 AC-1",
+      "location": "docs/specs/CHG-0001/design/ux/ux-design.md:L314",
+      "suggestion": "Drop non-404 from the row condition so it reads any non-401 failure, matching L265 and sdd section 6.1."
+    },
+    {
+      "id": "F-17",
+      "severity": "info",
+      "message": "The D2 opening re-fetch failure row has no inline [proposed] mark, while section 11 (L706) lists it as a [proposed] item; L23 makes section 11 the index, so this is consistency only.",
+      "requirement": "NFR-006 AC-1",
+      "location": "docs/specs/CHG-0001/design/ux/ux-design.md:L314, L706",
+      "suggestion": "Add the [proposed] (sec. 11) mark to L314 as on L263 and L265."
+    },
+    {
+      "id": "F-18",
+      "severity": "info",
+      "message": "The added 1.2.x Time-based media row sits after 1.3.2, breaking the numeric order of the 9.1 checklist.",
+      "requirement": "NFR-001 AC-1",
+      "location": "docs/specs/CHG-0001/design/ux/ux-design.md:L612",
+      "suggestion": "Move the 1.2.x row above 1.3.1."
+    }
+  ]
+}

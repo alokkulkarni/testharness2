@@ -1,0 +1,221 @@
+openapi: 3.1.0
+info:
+  title: To-do API — identity module
+  version: 1.0.0
+  description: |
+    Identity module of the CHG-0001 To-do API (NFR-007 AC-3; Source: clarifications Q51, Q56, Q57): sign-up, login,
+    logout and the current session. Served by package `app.todo.auth` of the one Spring Boot application (sdd.md §2,
+    adr/0018). The to-do and list operations are in `todo-api-v1.yaml`; every operation belongs to exactly one of
+    the two files. See docs/specs/CHG-0001/sdd.md for behaviour and docs/specs/CHG-0001/requirements.md for the
+    requirement IDs cited in each operation.
+
+    The shared error body (`Problem`, `FieldError`), the shared error responses, the `X-Todo-Client` header and the
+    session cookie are defined in `common-problem-v1.yaml` and referenced here by `$ref`. The conventions in that
+    file's `info.description` (content type, error bodies for every path under `/api/`, characters, whitespace,
+    trimming, unknown properties, the session cookie, the `X-Todo-Client` header and the order of checks) apply to
+    every operation of this file. The three files change together and carry the same `info.version`.
+servers:
+  - url: http://localhost:8080
+    description: API process, local run (NFR-002)
+  - url: http://localhost:5173
+    description: Vite dev server, which proxies /api to the API process (same origin for the SPA)
+security:
+  - sessionCookie: []
+tags:
+  - name: auth
+paths:
+  /api/v1/auth/signup:
+    post:
+      tags: [auth]
+      operationId: signUp
+      summary: Create an account (REQ-AUTH-001)
+      description: |
+        Creates an account and does not start a session; the client then logs in (REQ-AUTH-001 AC-1).
+        The identifier is trimmed; it is unique regardless of letter case (AC-6). No email verification (AC-4).
+      security: []
+      parameters:
+        - $ref: './common-problem-v1.yaml#/components/parameters/ClientHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
+      responses:
+        '201':
+          description: Account created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignupResult'
+        '400':
+          $ref: './common-problem-v1.yaml#/components/responses/BadRequest'
+        '403':
+          $ref: './common-problem-v1.yaml#/components/responses/ClientHeaderMissing'
+        '409':
+          description: |
+            The identifier is already in use, compared case-insensitively (REQ-AUTH-001 AC-2, AC-6).
+            `code` is `IDENTIFIER_TAKEN` and `errors` holds one entry with field `identifier` and code `TAKEN`.
+          content:
+            application/problem+json:
+              schema:
+                $ref: './common-problem-v1.yaml#/components/schemas/Problem'
+        '415':
+          $ref: './common-problem-v1.yaml#/components/responses/UnsupportedMediaType'
+        '500':
+          $ref: './common-problem-v1.yaml#/components/responses/InternalError'
+  /api/v1/auth/login:
+    post:
+      tags: [auth]
+      operationId: logIn
+      summary: Log in and start a session (REQ-AUTH-002)
+      description: |
+        The identifier is trimmed and compared case-insensitively, exactly as at sign-up (REQ-AUTH-002 AC-5).
+        No format rule is applied at login: an unknown identifier, a wrong password, or a password over 128
+        characters all return the same 401 `INVALID_CREDENTIALS` body (REQ-AUTH-002 AC-2, AC-3).
+        An empty identifier (after trimming) or an empty password is refused with 400 `VALIDATION_FAILED`.
+      security: []
+      parameters:
+        - $ref: './common-problem-v1.yaml#/components/parameters/ClientHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Signed in. The session cookie is set.
+          headers:
+            Set-Cookie:
+              description: |
+                `todo_session=<opaque token>; Path=/; HttpOnly; SameSite=Strict; Max-Age=28800`, plus `Secure`
+                when the API is configured for HTTPS (sdd.md "Local run").
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+        '400':
+          $ref: './common-problem-v1.yaml#/components/responses/BadRequest'
+        '401':
+          description: |
+            Wrong password or unknown identifier; the body is identical in both cases (REQ-AUTH-002 AC-2, AC-3).
+            `code` is `INVALID_CREDENTIALS`; `detail` is "Invalid identifier or password."
+          content:
+            application/problem+json:
+              schema:
+                $ref: './common-problem-v1.yaml#/components/schemas/Problem'
+        '403':
+          $ref: './common-problem-v1.yaml#/components/responses/ClientHeaderMissing'
+        '415':
+          $ref: './common-problem-v1.yaml#/components/responses/UnsupportedMediaType'
+        '500':
+          $ref: './common-problem-v1.yaml#/components/responses/InternalError'
+  /api/v1/auth/logout:
+    post:
+      tags: [auth]
+      operationId: logOut
+      summary: End the current session (REQ-AUTH-004 AC-3)
+      description: |
+        Deletes the server-side session named by the cookie, if any, and clears the cookie. Always 204, also when
+        there is no session or it has already expired.
+      security: []
+      parameters:
+        - $ref: './common-problem-v1.yaml#/components/parameters/ClientHeader'
+      responses:
+        '204':
+          description: Session ended (or there was none).
+          headers:
+            Set-Cookie:
+              description: '`todo_session=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0`'
+              schema:
+                type: string
+        '403':
+          $ref: './common-problem-v1.yaml#/components/responses/ClientHeaderMissing'
+        '500':
+          $ref: './common-problem-v1.yaml#/components/responses/InternalError'
+  /api/v1/auth/session:
+    get:
+      tags: [auth]
+      operationId: getSession
+      summary: The current session, used by the SPA on load (REQ-AUTH-002 AC-4, REQ-AUTH-004 AC-2, AC-4)
+      description: |
+        Called once when the SPA loads. A 401 here is the normal answer for a visitor who has never signed in or
+        whose cookie the browser has already dropped; the API does not distinguish these from an ended session.
+        The SPA treats a 401 from this operation as "signed out" (no message, no redirect from /signup or /login),
+        and shows "session ended" only when a later request fails with 401 while it holds a signed-in user
+        (sdd.md §4.1).
+      responses:
+        '200':
+          description: A valid, unexpired session.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+        '401':
+          $ref: './common-problem-v1.yaml#/components/responses/Unauthenticated'
+        '500':
+          $ref: './common-problem-v1.yaml#/components/responses/InternalError'
+components:
+  securitySchemes:
+    sessionCookie:
+      $ref: './common-problem-v1.yaml#/components/securitySchemes/sessionCookie'
+  schemas:
+    SignupRequest:
+      type: object
+      additionalProperties: false
+      required: [identifier, password]
+      properties:
+        identifier:
+          type: string
+          description: |
+            Email address or username (REQ-AUTH-001 AC-7). Leading and trailing whitespace is removed; the trimmed
+            value must be 3 to 254 characters (AC-8). Contains "@": must satisfy the email rule in sdd.md
+            "Validation" (AC-9). No "@": only A-Z, a-z, 0-9, ".", "_", "-" (AC-10).
+        password:
+          type: string
+          minLength: 8
+          maxLength: 128
+          description: |
+            8 to 128 characters (REQ-AUTH-001 AC-5, AC-11). Not trimmed or normalised; stored only as an Argon2id
+            hash (REQ-AUTH-003).
+    SignupResult:
+      type: object
+      additionalProperties: false
+      required: [user]
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+    LoginRequest:
+      type: object
+      additionalProperties: false
+      required: [identifier, password]
+      properties:
+        identifier:
+          type: string
+          description: Trimmed, then compared case-insensitively with stored identifiers. Must not be empty after trimming.
+        password:
+          type: string
+          minLength: 1
+          description: Not trimmed. Must not be empty.
+    User:
+      type: object
+      additionalProperties: false
+      required: [identifier]
+      properties:
+        identifier:
+          type: string
+          description: The identifier as stored at sign-up (trimmed, original letter case).
+    Session:
+      type: object
+      additionalProperties: false
+      required: [user, expiresAt]
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        expiresAt:
+          type: string
+          format: date-time
+          description: UTC instant when the session ends (login time + 8 hours).

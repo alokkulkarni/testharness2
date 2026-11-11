@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N07-tests-backend",
+  "gate": "critic-verdict",
+  "verdict": "changes-required",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "critic",
+      "agentRunId": "a67fe710d4c6385a8"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "backend-qa",
+      "agentRunId": "a0b76dc020ba59495"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "backend-qa",
+      "agentRunId": "a9e5120f48f49747f"
+    }
+  ],
+  "createdAt": "2026-11-09T09:22:56.413Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "reviewedCommit": "31d3f013afde7620ba4492c3bb1753ddcd5827fa",
+  "diffHash": "7a3cc20f270b40faf2c266f725a248e41d7217fb8cd40e575c8960008700ab85",
+  "summary": "Round 1 (exhaustive). Stubs hold no logic, the pom adds only what the tests need, and the tests cover the API rows of sdd.md 14 and fail for the right reason in the red run. Three majors: an unrecorded departure from the 14 / ADR-0012 integration level (embedded container + core validator + one shared SQLite file instead of MockMvc + v3 adapter + fresh file per class), missing request-id log assertions in the filter-exception test, and no forced 500 on the handler path. Plus 5 minor and 3 info follow-ups.",
+  "findings": [
+    {
+      "id": "F-1",
+      "severity": "major",
+      "message": "Unrecorded departure from the frozen verification design (sdd.md 14, ADR-0012, 12.1 item 21): every integration test runs on the embedded container at a random port through java.net.http and the core OpenApiInteractionValidator (ApiClient.java), not Spring Boot + MockMvc with the v3 MockMvc adapter; the pom has no openapi-request-validator-mockmvc, so the java-engineer artifact-id check of ADR-0012 is bypassed; and all contexts share one SQLite file per JVM instead of a fresh file per test class. Real HTTP also puts container behaviour under test that the spec assigns to the firewall (Tomcat may reject an encoded slash before Spring Security, ErrorSourcesTest.java L141). The only trace of this is a Javadoc.",
+      "requirement": "NFR-004",
+      "location": "api/src/test/java/app/todo/testsupport/SpringContextTestBase.java:L13-L43",
+      "suggestion": "Either conform to sdd.md 14 (MockMvc + v3 adapter, fresh database file per test class, embedded container only for the filter-exception test), or record the departure with its reason (real-container coverage of the error dispatch and firewall) and raise it to the approver as a spec question before N09 starts."
+    },
+    {
+      "id": "F-2",
+      "severity": "major",
+      "message": "The sdd.md 14 NFR-004 filter-exception assertions are only partly tested: nothing checks that the captured log holds exactly one per-request line for the request with status 500 and a request id, that the stack-trace entry carries the same request id, that every entry from app.todo loggers for the request carries that id, or that no entry contains the SHA-256 hash of the cookie token (only the raw token is checked).",
+      "requirement": "NFR-004",
+      "location": "api/src/test/java/app/todo/auth/FilterExceptionTest.java:L77-L95",
+      "suggestion": "Pin the logging-context key of the request id (as SpringContextTestBase pins TODO_DB_PATH), select the request events by it, and assert one per-request line with status 500, the stack-trace event with the same id, every app.todo event carrying the id, and no event containing the SHA-256 hex of the sentinel token."
+    },
+    {
+      "id": "F-3",
+      "severity": "major",
+      "message": "No test forces an unexpected exception on the handler path, the sdd.md 14 NFR-004 item forced internal error returns generic 500 with no stack trace or SQL, distinct from the filter case: the forwarded-500 test drives ProblemErrorController through MockMvc only, so the 500 mapping of ProblemDetailsAdvice and its once-only stack-trace log with the request id (sdd.md 10) are never exercised.",
+      "requirement": "NFR-004",
+      "location": "api/src/test/java/app/todo/common/ErrorSourcesTest.java:L148-L169",
+      "suggestion": "Add an integration test that replaces a package-private repository of a module (a TodoRepository stub in app.todo.todo, as done for SessionRepository) with a double throwing a runtime exception carrying SQL-like text, call the operation with a valid session, and assert the contract-valid generic 500 INTERNAL_ERROR Problem with no internals and one stack-trace log entry carrying the request id."
+    },
+    {
+      "id": "F-4",
+      "severity": "minor",
+      "message": "The data-unchanged check for expired and logged-out sessions is weak: update, done and delete target a random UUID and the user has no completed to-do, so the todos count stays equal even if those operations ran; only the count is compared.",
+      "requirement": "REQ-AUTH-004",
+      "location": "api/src/test/java/app/todo/auth/AuthenticationRequiredApiTest.java:L25-L83",
+      "suggestion": "Target the caller own to-do id (and mark one done before expiry or logout) and assert its content, done flag and the totals are unchanged after the refused calls."
+    },
+    {
+      "id": "F-5",
+      "severity": "minor",
+      "message": "The once-only stack-trace count covers every logger, including the container own ERROR entry (Servlet.service() ... threw exception) that Tomcat writes when an exception escapes the filter chain, which sdd.md 10 has RequestIdFilter rethrow; a correct implementation may fail this unless it silences the container logger, which the spec does not ask for.",
+      "requirement": "NFR-004",
+      "location": "api/src/test/java/app/todo/auth/FilterExceptionTest.java:L87-L89",
+      "suggestion": "Count only app.todo logger events for the once-only assertion and keep the sensitive-value check over all loggers, or raise a spec question on whether the container entry must be suppressed."
+    },
+    {
+      "id": "F-6",
+      "severity": "minor",
+      "message": "The rule only config creates a DataSource or HikariConfig forbids dependencies on com.zaxxer.hikari.., org.springframework.jdbc.datasource.. and DataSourceBuilder: a class outside config that creates org.sqlite.SQLiteDataSource or opens a DriverManager connection passes, while a mere use (not a creation) of a spring jdbc.datasource class fails.",
+      "requirement": "NFR-007",
+      "location": "api/src/test/java/app/todo/architecture/ArchitectureRules.java:L48-L61",
+      "suggestion": "Express it as no constructor call outside config to a class assignable to javax.sql.DataSource or HikariConfig (plus DataSourceBuilder and DriverManager.getConnection), and add the matching deliberate violation to archfixture."
+    },
+    {
+      "id": "F-7",
+      "severity": "minor",
+      "message": "The display name says concurrent creates by several users but the test uses one signed-in user.",
+      "requirement": "REQ-DATA-002",
+      "location": "api/src/test/java/app/todo/todo/ConcurrentEditsApiTest.java:L114-L117",
+      "suggestion": "Rename to one user, or create the to-dos from several signed-in users and assert each total."
+    },
+    {
+      "id": "F-8",
+      "severity": "minor",
+      "message": "The fixed identifier x-y relies on a single sign-up per JVM on the shared database file: a surefire re-run in the same JVM, or any other test using it, gets 409.",
+      "requirement": "REQ-AUTH-001",
+      "location": "api/src/test/java/app/todo/auth/SignUpApiTest.java:L238-L245",
+      "suggestion": "Run this boundary on a database file of its own (see F-1), or check the 3-character boundary through a unique 3-character identifier per run."
+    },
+    {
+      "id": "F-9",
+      "severity": "info",
+      "message": "The session-token-hash test is labelled REQ-AUTH-003 AC-1 (password storage) although it checks sdd.md 3 sessions.token_hash; traceability will count it as password-storage proof.",
+      "requirement": "REQ-AUTH-003",
+      "location": "api/src/test/java/app/todo/auth/PasswordStorageTest.java:L85-L99",
+      "suggestion": "Label it with the requirement it serves (for example NFR-004 AC-2 or REQ-AUTH-004) or keep the label and note the SDD section."
+    },
+    {
+      "id": "F-10",
+      "severity": "info",
+      "message": "Spring Boot 4.1.2 is a provisional pin by the tests node; sdd.md 12.1 item 21 gives the exact latest-4.x pin and the v3 MockMvc adapter check to the java-engineer. The red run used JDK 23 with java.version 21, while sdd.md 11 names JDK 21.",
+      "requirement": "NFR-005",
+      "location": "api/pom.xml:L11-L16",
+      "suggestion": "N09 confirms or replaces the pin and runs the suite on JDK 21."
+    },
+    {
+      "id": "F-11",
+      "severity": "info",
+      "message": "Some REQ-named tests pass with no production code because they read only the contract files or the environment (this one, EndpointInventoryTest NFR_007_AC3_every_operation_is_in_exactly_one_contract_file, ModuleWiringTest REQ_AUTH_004_AC4_no_clock_offset_property_is_configured_by_default); they guard the spec but do not prove the AC on their own.",
+      "requirement": "REQ-AUTH-005",
+      "location": "api/src/test/java/app/todo/config/EndpointInventoryTest.java:L122-L131",
+      "suggestion": "Keep them, but let traceability rely on the behaviour tests (inventory equality, TodoIsolationApiTest) for these ACs."
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N11-security",
+  "gate": "security",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "tool",
+    "id": "security-reviewer",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "security-reviewer",
+      "agentRunId": "a7742322a630c4129"
+    },
+    "modelAlias": "harness/security"
+  },
+  "createdAt": "2026-11-09T15:20:45.531Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "summary": "round 3, delta since 3b295b5: no new findings. Assumed blockOn critical and high (config sets none). semgrep p/java on TodoController and AuthController: 0 findings. gitleaks on delta: hits are self-matches in the round-2 gitleaks SARIF (false positives, SEC-6); no source or config secret. No dependency change since round 2, so SCA (trivy offline, bcprov 1.85) and SBOM stand; syft and grype not installed. Prior SEC-3 to SEC-6 carried.",
+  "findings": [
+    {
+      "id": "SEC-3",
+      "severity": "minor",
+      "location": "api/src/main/java/app/todo/common/ProblemErrorController.java:26",
+      "message": "semgrep unrestricted-request-mapping on /error; standard Spring error endpoint, likely false positive."
+    },
+    {
+      "id": "SEC-4",
+      "severity": "info",
+      "location": "web/e2e/keyboard.spec.ts:128",
+      "message": "semgrep non-literal RegExp in e2e test; test-only, false positive."
+    },
+    {
+      "id": "SEC-5",
+      "severity": "info",
+      "location": ".harness/changes/CHG-0001/spec-freeze.json",
+      "message": "gitleaks generic-api-key hits on content hashes; false positives."
+    },
+    {
+      "id": "SEC-6",
+      "severity": "info",
+      "location": ".harness/changes/CHG-0001/evidence/scan-report/N11-security.gitleaks-r2.sarif",
+      "message": "gitleaks sourcegraph-access-token self-matches inside prior gitleaks SARIF reports; false positive."
+    }
+  ]
+}

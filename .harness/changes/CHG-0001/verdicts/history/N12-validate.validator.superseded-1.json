@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N12-validate",
+  "gate": "validator",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "tool",
+    "id": "validator",
+    "modelAlias": "harness/validator",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "validator",
+      "agentRunId": "a0aaf455b2813090e"
+    }
+  },
+  "createdAt": "2026-11-09T15:33:41.612Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "summary": "round 4, delta since 5a368cc97d63b5643495bcb63ba207b5b168dffb: pass. Fixed: none open; the N09 F-2 item inside info F-8 is closed by 2f9fc45 and d68c4de. Spec integrity ok. Delta outside .harness/: consumes application/json on the five request-body mappings (AuthController.java L34 L40, TodoController.java L42 L58 L70), serving NFR-004 AC-2 per common-problem-v1.yaml L18-L20; JsonSuffixMediaTypeTest is its test, by recorded requester decision (N09 plan L94-L99); 0 creep, no missing logic. Backend r4 345/345 across 24 reports; web r3 reports stand (no web/ change). 115 ACs: 104 tool-covered, 7 missing-code, 4 missing-test, as in round 3 (F-4). 96 unmapped hunks, 0 judged creep. Conformance register not built: harness conformance build refuses met for ACs whose only passing tests are Surefire or Playwright (F-15, cause F-3 and F-13). Follow-ups: F-2 to F-11, F-13 to F-16.",
+  "findings": [
+    {
+      "id": "F-2",
+      "severity": "minor",
+      "message": "web/.nvmrc holds lts/*, which floats to whatever LTS is current rather than pinning one; sdd.md 11 says Node.js (current LTS, pinned in web/.nvmrc). Requester-accepted as a PR follow-up.",
+      "requirement": "NFR-002",
+      "location": "web/.nvmrc:L1-L1",
+      "suggestion": "Pin a concrete LTS version (for example the major used for the attached runs)."
+    },
+    {
+      "id": "F-3",
+      "severity": "minor",
+      "message": "Harness tooling: harness trace build --results attaches no per-test result for Surefire or Playwright reports. Causes seen: Surefire reports method names (REQ_LIST_002_AC7_...) not display names, Playwright classname lacks the web/e2e/ prefix. Results were checked by hand from the report headers instead. Re-confirmed in round 4: the JsonSuffixMediaTypeTest r4 report and N10-build-react.e2e-main-r3.xml each attached 0 results. Consequence: the conformance register cannot prove met for API and e2e tests (F-15).",
+      "requirement": "NFR-004",
+      "location": ".harness/changes/CHG-0001/traceability.json:L1-L6",
+      "suggestion": "Fix result matching in the sdlc-harness CLI (map Surefire method names to display names, resolve Playwright classnames against the test dir), then rebuild traceability and the conformance register."
+    },
+    {
+      "id": "F-4",
+      "severity": "minor",
+      "message": "Rows the tool marks missing are annotation gaps, verified by reading. missing-code: REQ-LIST-003 AC-2 (JdbcTodoRepository.java:L73-L74), AC-3 (web/src/todos/Pagination.tsx:L41-L60), AC-8 (TodoQuery.java:L9, TodoController.java:L34-L40); REQ-ACC-001 AC-1, AC-2 (scenario over all to-do code; AcceptanceScenarioApiTest and acceptance.spec.ts); NFR-002 AC-1 (web/vite.config.ts:L5-L10, application.properties:L3-L6, DatabaseConfig.java:L23-L28; the .env.example and README run steps no longer exist at HEAD, see F-14); NFR-003 AC-1 (V1__init.sql:L38-L39). missing-test (review-verified): NFR-004 AC-1 via PasswordStorageTest and PasswordHasher.java:L14; NFR-005 AC-1 via api/pom.xml and web/package.json; NFR-002 AC-2: the diff adds no deployment workflow; NFR-004 AC-3: not verified by me (N11-security gate). it.each tests are not mapped.",
+      "requirement": "REQ-LIST-003",
+      "location": "api/src/main/java/app/todo/todo/JdbcTodoRepository.java:L66-L79",
+      "suggestion": "Add REQ comments above the serving declarations (or let the tool read class-level comments) so the matrix maps them mechanically."
+    },
+    {
+      "id": "F-5",
+      "severity": "info",
+      "message": "89 hunks are tool-classed creep; none is creep on reading: build and run scaffolding for NFR-005 and sdd.md 11, classes named by sdd.md 2, 4, 6, 7, 10, generate-tokens.mjs for UX DD-1, Java and e2e test support (ADR-0013, sdd.md 12.1 item 20, 14). intent/a-new-todo-list-app-where-user-can-creat.md is a 100 percent rename to docs/specs/CHG-0001/intent.md. The 6 test-support hunks hide no weakened assertion.",
+      "requirement": "NFR-007",
+      "location": "api/src/main/java/app/todo/config/WebConfig.java:L20-L27",
+      "suggestion": "Annotate with REQ comments so later diffs map mechanically."
+    },
+    {
+      "id": "F-6",
+      "severity": "minor",
+      "message": "Carried N09 critic F-1: newRequestId loops until the id has no 500, shaped by the FilterExceptionTest selector, not by a requirement. Not counted as creep: it stays inside the sdd.md 10 request-id generator and changes no behaviour a client sees.",
+      "requirement": "NFR-004",
+      "location": "api/src/main/java/app/todo/common/RequestIdFilter.java:L88-L95",
+      "suggestion": "Fix the test selector through the tests node, then use a plain random UUID."
+    },
+    {
+      "id": "F-7",
+      "severity": "info",
+      "message": "Frozen-spec inconsistency: todo-api-v1.yaml listTodos q is rejected as missing by the contract validator when empty or blank, while sdd.md 7 and REQ-LIST-002 AC-5, AC-7 require it accepted. The API behaves as specified (TodoValidator.java:L72); the test whitelist in Contracts.java:L63-L82 was added by requester decision.",
+      "requirement": "REQ-LIST-002",
+      "location": "api/src/test/java/app/todo/testsupport/Contracts.java:L63-L82",
+      "suggestion": "Settle at the next re-freeze (contract or validator) and remove the whitelist."
+    },
+    {
+      "id": "F-8",
+      "severity": "info",
+      "message": "Open critic follow-ups carried unverified: N09 F-3 (method, route, status, duration only inside the log message text), N10 F-17 (dropRequestedOnShow flicker), N10 F-18 (typecheck, lint, lint:contracts results not attached), N10 F-13, F-14, F-16, F-20. N09 F-2 (application/*+json body accepted instead of 415) is closed in round 4 by 2f9fc45 (tests) and d68c4de (consumes application/json on the five body mappings).",
+      "requirement": "NFR-004",
+      "location": "api/src/main/java/app/todo/todo/TodoController.java:L42-L74",
+      "suggestion": "Track the remaining items in the PR."
+    },
+    {
+      "id": "F-9",
+      "severity": "info",
+      "message": "Requester-accepted divergences to list in the PR: JDK 23.0.2 compiling with --release 21 (sdd.md 11); Spring Boot 4.1.2 pin; request-id logging key requestId; Firefox e2e cannot launch on this host (e2e-main-full 156 tests, 51 errors, all Firefox launch); test and test-support changes made under N09 and N10 by requester decision; BouncyCastle 1.85 bump under N09 for N11 SEC-1/SEC-2.",
+      "requirement": "NFR-005",
+      "location": "docs/specs/CHG-0001/plan/N10-build-react.md:L86-L110",
+      "suggestion": "List them in the PR body; run Firefox e2e and JDK 21 in CI."
+    },
+    {
+      "id": "F-10",
+      "severity": "info",
+      "message": "Spot checks against the spec found no missing logic in code: order of checks (SecurityConfig.java:L54-L60, TodoService.java:L51-L60); absolute 8-hour session and cookie (SessionService.java:L35-L57, AuthController.java:L61-L69); dummy-hash login and 128 limit (AuthService.java:L84-L95); page clamp and long overflow (TodoValidator.java:L74-L84, JdbcTodoRepository.java:L69-L71); updated_at strictly advances (JdbcTodoRepository.java:L25-L26); returnTo and isTodoId patterns equal sdd.md 4.2 and 8; clear-completed texts equal sdd.md 8 (TodoListPage.tsx L406-L410).",
+      "requirement": "REQ-TODO-007",
+      "location": "web/src/todos/TodoListPage.tsx:L396-L412",
+      "suggestion": "None."
+    },
+    {
+      "id": "F-11",
+      "severity": "minor",
+      "message": "Raised on the round 2 .env.example (3f66ef3), which 01d0f33 removed: its line 1 said Copy to .env and adjust, but nothing loads a .env file (the API reads the settings from the process environment, application.properties:L3-L6, DatabaseConfig.java:L23 via todo.db.path; Spring Boot has no dotenv support; Vite reads only web/.env VITE_ variables), and the root .gitignore has no .env entry. Folded by the requester into the NFR-002 AC-1 follow-up change (F-14); it applies when that change restores the file.",
+      "requirement": "NFR-002",
+      "location": "README.md:L1-L1",
+      "suggestion": "In the follow-up, say to export the variables in the shell (or pass them on the command line) instead of copying to .env, or add .env to .gitignore if a .env workflow is intended."
+    },
+    {
+      "id": "F-12",
+      "severity": "info",
+      "message": "Round 2 delta, mapped by reading, no creep: api/pom.xml:L28 bumps bcprov-jdk18on 1.84 to 1.85 for N11 SEC-1 (CVE-2026-8763) and SEC-2 (CVE-2026-13506), serving NFR-004 by requester decision recorded at docs/specs/CHG-0001/plan/N09-build-java.md:L100-L101; one property line, no API or code change, backend r3 342/342 across 23 classes. The round 2 .env.example:L1-L10 and README.md:L2-L39 were removed again by 01d0f33 (round 3 delta, see F-14). The remaining delta is harness evidence (r3 reports, N11 r2 SBOM and scans, plan.json, verdicts).",
+      "requirement": "NFR-004",
+      "location": "api/pom.xml:L28-L28",
+      "suggestion": "None."
+    },
+    {
+      "id": "F-13",
+      "severity": "info",
+      "message": "Harness tooling: harness trace build keeps only the last --results flag. traceability.json at the round 4 HEAD d70d66f is therefore built with N10-build-react.component-junit-r3.xml only (component and unit tests), so per-test results exist for those tests only; the 24 backend r4 reports (345 tests, 0 failures, 0 errors by their headers) and the e2e r3 reports (main 104, restart 2, session-expiry 4, 0 failures) were read by hand.",
+      "requirement": "NFR-004",
+      "location": ".harness/changes/CHG-0001/traceability.json:L1-L6",
+      "suggestion": "Accept repeated --results (or a directory) in the sdlc-harness CLI, together with the F-3 matching fix."
+    },
+    {
+      "id": "F-14",
+      "severity": "minor",
+      "message": "NFR-002 AC-1 is deferred, not met. 01d0f33 restored .env.example (absent) and README.md (the one-line stub) to the base branch, so HEAD does not deliver sdd.md 11 (.env.example with TODO_DB_PATH, TODO_COOKIE_SECURE=false, SERVER_PORT=8080, and the run steps) and the sdd.md 14 NFR-002 review (README run steps on a fresh checkout) cannot be performed; the prerequisites are written only in the frozen sdd.md 11. The runtime half keeps its evidence: the e2e main configuration starts the API and SPA with the sdd.md 11 commands on localhost (result hand-checked, F-3). The requester deferred it in writing for this PR to a separate change because no node in this plan can own repository-root files (a harness gap); F-1 offered that written acceptance as its resolution, which is why this is minor and not blocking. It is a decision, not a re-freeze: the frozen spec still requires these files, so it is a divergence from the spec. Follow-up content: 3f66ef3 .env.example and README, plus F-11.",
+      "requirement": "NFR-002",
+      "location": "README.md:L1-L1",
+      "suggestion": "List it in the PR body as a deferred divergence for product-owner acceptance (conformance row NFR-002/AC-1 deferred, debt type doc, once F-3 lets the register be built); open the follow-up change; fix the harness so a node can own repository-root files."
+    },
+    {
+      "id": "F-15",
+      "severity": "minor",
+      "message": "Conformance register not built. A probe of harness conformance build --agent validator --run-id probe with one met row citing SignUpApiTest was refused with: REQ-AUTH-001/AC-5 is met but no evidence is a passing test of it (plus the missing-rows list of the probe). The CLI accepts met only with a passing result in traceability.json, which exists for component and unit tests only (F-3, F-13). Partition of the 115 ACs: 79 provable met from component-junit-r3 results; 31 implemented and passing only in backend r4 or e2e r3 reports, which the CLI cannot see: REQ-AUTH-001 AC-5 AC-9 AC-10 AC-11, REQ-AUTH-003 AC-1 to AC-3, REQ-AUTH-004 AC-1, REQ-AUTH-005 AC-1 AC-2, REQ-ISO-001 AC-1 to AC-4, REQ-TODO-001 AC-4, REQ-TODO-007 AC-1, REQ-LIST-002 AC-5, REQ-LIST-003 AC-7, REQ-DATA-001 AC-1 to AC-3, REQ-DATA-002 AC-1 AC-2, REQ-ACC-001 AC-1 to AC-3, NFR-003 AC-1, NFR-004 AC-2, NFR-007 AC-1 to AC-3; 4 with no test, provable only by code reading or the N11 gate (NFR-002 AC-2, NFR-004 AC-1, NFR-004 AC-3, NFR-005 AC-1); 1 deferred (NFR-002 AC-1, F-14). Only 10 of 25 requirement rows could be met. Recording the 31 as partial would state a gap that does not exist, so no register was written. Also unresolved: HARNESS_AGENT_RUN_ID is empty in the validator shell, so the run id for --run-id is unknown to the agent.",
+      "requirement": "NFR-004",
+      "location": ".harness/changes/CHG-0001/traceability.json:L1-L6",
+      "suggestion": "Fix F-3 and F-13 in the sdlc-harness CLI, rebuild traceability with every report, then build the register with the divergences JDK 23.0.2 with --release 21 (sdd.md 11), Spring Boot 4.1.2 pin, logging key requestId (sdd.md 10), Firefox e2e launch failure (follow-up CI on Linux), and NFR-002 AC-1 deferred (debt type doc); or let the register accept a report path plus test name as met evidence."
+    },
+    {
+      "id": "F-16",
+      "severity": "info",
+      "message": "Round 4 delta reading, no creep and no missing logic: the +json tests cover createTodo and signUp only; logIn, updateTodo and setTodoDone carry the same consumes attribute (AuthController.java:L40, TodoController.java:L58, L70) without a +json test. A 415 is now raised at handler mapping, so its per-request log line has no route= (JsonSuffixMediaTypeTest r4 report L99-L100, L113-L114; RequestIdFilter.java:L77-L82), as for 404 and 405. The e2e r3 reports ran on a70f2c8, before d68c4de; the SPA sends application/json, so no change is expected, but they were not re-run.",
+      "requirement": "NFR-004",
+      "location": "api/src/main/java/app/todo/auth/AuthController.java:L34-L41",
+      "suggestion": "Optionally add +json cases for logIn, updateTodo and setTodoDone through the tests node; re-run e2e on the final HEAD in CI."
+    }
+  ]
+}

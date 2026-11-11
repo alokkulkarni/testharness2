@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N09-build-java",
+  "gate": "critic-verdict",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "critic",
+      "agentRunId": "a356f33e7ccb7a40b"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "java-engineer",
+      "agentRunId": "a58b7d8aa3237ea97"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "java-engineer",
+      "agentRunId": "a816b3e8c71ca0774"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "java-engineer",
+      "agentRunId": "a8479dc53c8e6b18c"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "java-engineer",
+      "agentRunId": "a8a74c75b2a7a067a"
+    }
+  ],
+  "createdAt": "2026-11-09T15:22:30.322Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "reviewedCommit": "1fd35b3a4d785b0b843c41fa66c37002e1ac4a94",
+  "diffHash": "e4dad4b15ac95dfc98514ffda3ddac62e632fc05969d30805e4fcb48d02fb76c",
+  "summary": "round 3, delta since 3b295b50e95200ce49e5e14b6998ac29866a26fb: F-2 fixed (2f9fc45 red tests, d68c4de consumes application/json on exactly the five body mappings signUp, logIn, createTodo, updateTodo, setTodoDone). JsonSuffixMediaTypeTest pins 415 UNSUPPORTED_MEDIA_TYPE with a contract-valid Problem and unchanged todos and users counts for application/*+json, and keeps application/json;charset=UTF-8 accepted (common-problem-v1.yaml L18-L20). Ordering holds: 415 now comes from handler mapping, after the 401/403 filters and the 405 method check, before body reading (400) and ownership (404); a missing Content-Type stays 415 (ErrorSourcesTest r4 12/12). r4 reports b4e7d97 read for JsonSuffixMediaTypeTest 3/3 and ErrorSourcesTest 12/12. 0 blocker, 0 major; follow-ups: 4 minor, 7 info (F-1, F-3 to F-9 carried; F-10, F-11, F-12 new).",
+  "findings": [
+    {
+      "id": "F-1",
+      "severity": "minor",
+      "message": "newRequestId regenerates any id containing 500. sdd.md 10 fixes no id format, so this conforms, but it is production code shaped by the weak test selector of N07 F-12, not by a requirement. It also does not close F-12: FilterExceptionTest still matches any non-throwable app.todo entry of the request whose text contains 500 anywhere (MDC, arguments, durationMs).",
+      "requirement": "NFR-004",
+      "location": "api/src/main/java/app/todo/common/RequestIdFilter.java:L88-L95",
+      "suggestion": "Fix F-12 in the test through the tests node (match the per-request line structurally, for example a status key or argument equal to 500). Then drop the loop and use a plain random UUID."
+    },
+    {
+      "id": "F-3",
+      "severity": "minor",
+      "message": "sdd.md 10 asks for structured (JSON) per-request logs with method, route template, status and duration. Under the logstash format, requestId and userId are JSON fields (MDC), but method, route, status and durationMs are only text inside the message string.",
+      "requirement": "NFR-004",
+      "location": "api/src/main/java/app/todo/common/RequestIdFilter.java:L74-L86",
+      "suggestion": "Emit them as key-value pairs (SLF4J fluent addKeyValue) or MDC entries, so they are JSON fields. This would also let the F-12 test select the line by status."
+    },
+    {
+      "id": "F-4",
+      "severity": "info",
+      "message": "The whitelist is narrow, as the requester asked. pathContains(/api/v1/todos) also matches /api/v1/todos/{todoId} and /completed, but no GET there declares q, so the rule can drop a report only for listTodos. It names only the request-side key validation.request.parameter.missing, so response validation is untouched, and 3807f87 changes no assertion. Its comment says allowEmptyValue: true would not help, while the plan Departures (L83-L86) give the missing allowEmptyValue as the cause.",
+      "requirement": "REQ-LIST-002",
+      "location": "api/src/test/java/app/todo/testsupport/Contracts.java:L63-L82",
+      "suggestion": "Align the plan Departures text with the Contracts.java comment. If the validator is ever fixed upstream, remove the rule."
+    },
+    {
+      "id": "F-5",
+      "severity": "info",
+      "message": "Plan wording only. Departures still state the first run (339 pass, 3 fail) beside the later 342/342 bullet. Order lists the composition root as step 4, but it was committed last (c004086, after the auth and todo commits). The evidence directory is listed under both Files and Departures.",
+      "requirement": "NFR-007",
+      "location": "docs/specs/CHG-0001/plan/N09-build-java.md:L31-L52",
+      "suggestion": "Mark the 339/3 result as superseded and note the actual commit order."
+    },
+    {
+      "id": "F-6",
+      "severity": "info",
+      "message": ".env.example (sdd.md 11: TODO_DB_PATH, TODO_COOKIE_SECURE=false, SERVER_PORT=8080) does not exist at HEAD, and README.md is a one-line stub with no run steps. The NFR-002 review row of sdd.md 14 needs both. Neither is in the Files of N09 or of any other build node.",
+      "requirement": "NFR-002",
+      "location": "docs/specs/CHG-0001/sdd.md:L603-L620",
+      "suggestion": "The orchestrator assigns them to a node (or the docs gate) before the PR."
+    },
+    {
+      "id": "F-7",
+      "severity": "info",
+      "message": "Requester-accepted divergences, to be listed in the PR: JDK 23.0.2 compiling with --release 21 instead of JDK 21 (sdd.md 11); Spring Boot pinned at 4.1.2; request-id logging key requestId. This settles carried N07 F-10.",
+      "requirement": "NFR-005",
+      "location": "api/pom.xml:L7-L16",
+      "suggestion": "List them in the PR body and run the suite on JDK 21 in CI when one is available."
+    },
+    {
+      "id": "F-8",
+      "severity": "info",
+      "message": "Carried N07 F-13, unchanged: the request-id MDC key is declared separately in FilterExceptionTest and HandlerExceptionTest, not shared with RequestIdFilter.REQUEST_ID_KEY.",
+      "requirement": "NFR-004",
+      "location": "api/src/test/java/app/todo/auth/FilterExceptionTest.java:L42-L43",
+      "suggestion": "Tests node follow-up: declare the key once in app.todo.testsupport, or reference RequestIdFilter.REQUEST_ID_KEY."
+    },
+    {
+      "id": "F-9",
+      "severity": "info",
+      "message": "The bump line sits under Accepted divergences, but a dependency patch bump is not a divergence from the frozen spec, and the line does not name the r3 run as the new proof. ADR-0005 needs no successor since it fixes no version.",
+      "requirement": "REQ-AUTH-003",
+      "location": "docs/specs/CHG-0001/plan/N09-build-java.md:L100-L101",
+      "suggestion": "List the bump in the PR body as a security fix for SEC-1 and SEC-2, cite the r3 reports as its proof, and let N11-security attempt 2 confirm by a fresh SCA scan."
+    },
+    {
+      "id": "F-10",
+      "severity": "minor",
+      "message": "With consumes on the mappings, every 415 (text/plain, missing Content-Type and +json alike) is now raised during handler mapping, so BEST_MATCHING_PATTERN_ATTRIBUTE is unset and the per-request line has no route (r4 JsonSuffixMediaTypeTest report L113-L114: request method=POST status=415). Before, text/plain 415s came from argument resolution and carried the route. sdd.md 10 L588 permits a line without route when no route was matched, so this conforms, but operators lose the endpoint for all 415s. Same for AuthController.java L34-L40.",
+      "requirement": "NFR-004",
+      "location": "api/src/main/java/app/todo/todo/TodoController.java:L42-L70",
+      "suggestion": "In RequestIdFilter.logRequest (L77-L82), log a coarse path (for example the request URI with ids masked, or the controller prefix) when no pattern matched, if the SDD allows it; otherwise accept and note it in the PR."
+    },
+    {
+      "id": "F-11",
+      "severity": "minor",
+      "message": "The +json 415 tests cover createTodo and signUp only (the scope F-2 suggested), while the same consumes change applies to logIn, updateTodo and setTodoDone, which have no +json case. A removed consumes on one of those three would not be caught.",
+      "requirement": "NFR-004",
+      "location": "api/src/test/java/app/todo/common/JsonSuffixMediaTypeTest.java:L18-L48",
+      "suggestion": "Tests node follow-up: parameterise the 415 case over all five body operations (with an unchanged-state check per operation)."
+    },
+    {
+      "id": "F-12",
+      "severity": "info",
+      "message": "Proof (L65-L72) lists the suite by test class but does not name JsonSuffixMediaTypeTest or the r4 reports; the new Departures lines (L93-L99) do. The controllers are under the listed api/src/main/java/app/todo/, so their Departures entry is a note, not a departure.",
+      "requirement": "NFR-004",
+      "location": "docs/specs/CHG-0001/plan/N09-build-java.md:L93-L99",
+      "suggestion": "Add JsonSuffixMediaTypeTest and the r4 report set to Proof."
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "kind": "other",
+  "path": ".harness/changes/CHG-0001/evidence/other/N10-build-react.lint-contracts-r4.txt",
+  "description": "pnpm -C web lint:contracts, exit 0 (8 warnings), on 0615ba7"
+}

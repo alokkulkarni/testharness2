@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N07-tests-backend",
+  "gate": "tests-red-first",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "tool",
+    "id": "backend-qa",
+    "modelAlias": "harness/tester",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "backend-qa",
+      "agentRunId": "a2fd42deb2dda980b"
+    }
+  },
+  "createdAt": "2026-11-09T09:38:02.600Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "reviewedCommit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+  "summary": "Round 2 red run via api/mvnw test at e5c8931 (report names -r2): 342 tests, 274 failures, 47 errors, 21 passed (contract-file, tooling and architecture-fixture tests that need no production code). Failures: contract/status assertions because the stubbed app serves 404 for every API route (MockMvc plus the v3 adapter), architecture rules on the near-empty main tree; errors: UnsupportedOperationException not implemented (Whitespace), NoSuchBeanDefinition DataSource/HikariDataSource. No compile errors.",
+  "findings": []
+}

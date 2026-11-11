@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N11-security",
+  "gate": "security",
+  "verdict": "fail",
+  "reviewer": {
+    "kind": "tool",
+    "id": "security-reviewer",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "security-reviewer",
+      "agentRunId": "a321209ee1ce34e7e"
+    },
+    "modelAlias": "harness/security"
+  },
+  "createdAt": "2026-11-09T14:12:58.344Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "summary": "Round 1. Blocking: bcprov-jdk18on 1.84 in api/pom.xml:59-63 has CVE-2026-8763 (critical) and CVE-2026-13506 (high), both fixed in 1.85. gitleaks (15) are false positives (content hashes); semgrep 4 are non-blocking in practice. syft and grype not installed; trivy offline used for SBOM and SCA. No Dockerfiles or IaC.",
+  "findings": [
+    {
+      "id": "SEC-1",
+      "severity": "blocker",
+      "location": "api/pom.xml:59-63",
+      "message": "trivy: org.bouncycastle:bcprov-jdk18on 1.84 CVE-2026-8763 (critical) name constraints bypass; introduced by this change (ADR-0005). Fix: set bouncycastle.version to 1.85 or later."
+    },
+    {
+      "id": "SEC-2",
+      "severity": "major",
+      "location": "api/pom.xml:59-63",
+      "message": "trivy: bcprov-jdk18on 1.84 CVE-2026-13506 (high) DoS via lazy ASN.1. Fix: same bump to 1.85."
+    },
+    {
+      "id": "SEC-3",
+      "severity": "minor",
+      "location": "api/src/main/java/app/todo/common/ProblemErrorController.java:26",
+      "message": "semgrep unrestricted-request-mapping on /error; standard Spring error endpoint, likely false positive. Confirm it performs no mutation."
+    },
+    {
+      "id": "SEC-4",
+      "severity": "info",
+      "location": "web/e2e/keyboard.spec.ts:128",
+      "message": "semgrep non-literal RegExp (also lines 135, 149) in e2e test from server-generated todo id; test-only, false positive."
+    },
+    {
+      "id": "SEC-5",
+      "severity": "info",
+      "location": ".harness/changes/CHG-0001/spec-freeze.json",
+      "message": "gitleaks 15 generic-api-key hits on content hashes in harness and doc JSON (also history/spec-freeze-*.json, diagram-exports.json:4); false positives, no credentials."
+    }
+  ]
+}

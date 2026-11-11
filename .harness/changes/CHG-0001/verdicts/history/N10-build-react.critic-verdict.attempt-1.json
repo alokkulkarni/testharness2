@@ -1,0 +1,191 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N10-build-react",
+  "gate": "critic-verdict",
+  "verdict": "changes-required",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "critic",
+      "agentRunId": "a42e9308e8d1d078d"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "a2d605e7a68e7bc95"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "a60fb623702586e08"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "a6809e24795576252"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "a8d695bc2b72c5f94"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "ac775b8ae56e1e833"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "react-engineer",
+      "agentRunId": "af4da2dcb663a79e9"
+    }
+  ],
+  "createdAt": "2026-11-09T13:34:41.888Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "reviewedCommit": "a7c1f40c37ecd9ee0cbcf8ee8d6f8220feac5780",
+  "diffHash": "5035660d4f55ad9073207f517f918de7b5dc91aa6a53b35b96329f179a49b86a",
+  "summary": "Round 1, exhaustive. The SPA conforms to the contracts (hand-written types match all three files), sdd and most of the UX design; the e2e run on 13f00a0 (same web/ and api/ as HEAD) passes in chromium and webkit. Five majors: the bf0c889 fixture change makes the list half of the REQ-TODO-002 AC-7 time-zone test vacuous; the optimistic requested state can stick and invert the next toggle; the detail-page delete 404 drops focus to body; the 484/484 component report predates the SPA fixes 864156b and 10eb534 and there is no typecheck or lint evidence at HEAD; the ADR-0001 generator, redocly.yaml and lint:contracts script are missing with a weak recorded reason. Also 7 minors and 4 infos as follow-ups. N08 F-24 and F-26 are resolved; N08 F-22 and F-27 carried as infos (F-15, F-16).",
+  "findings": [
+    {
+      "id": "F-1",
+      "severity": "major",
+      "message": "bf0c889 weakens the list half of the time-zone test. With row 2 at 2026-11-07, a UTC-midnight parse bug under Pacific/Pago_Pago (UTC-11) renders row 2 as due 6 Nov 2026 and row 1 as due 5 Nov 2026, so findByText(/due 6 nov 2026/i) matches exactly one element and passes; under Kiritimati the same bug shows the right date anyway. The list assertion no longer catches the bug class it names in either zone; only the detail dl assertion (L350) does. The plan (L96) says no assertion changed, but the assertion became vacuous.",
+      "requirement": "REQ-TODO-002",
+      "location": "web/tests/component/todo-form.test.tsx:L294-L297",
+      "suggestion": "Give row 2 a due date that no one-day shift can turn into 6 Nov 2026 (for example 2026-12-20), or scope the list assertion to the Detail me row (within its li), and route the change through the tests node."
+    },
+    {
+      "id": "F-2",
+      "severity": "major",
+      "message": "The optimistic checkbox state (10eb534) is cleared only when the re-queried row matches it. If the re-query returns the row with the other done value (a write from another tab, the REQ-DATA-002 case), requested stays set: the checkbox shows a state the server does not hold, indefinitely, and the next click computes !todo.done from the list row and sends the opposite of what the user asked. A click between the PUT resolving and the re-query resolving (toggling is already null) has the same effect: it re-sends the first value instead of reversing it, and announces Marked done again. No test covers the requested state or its clearing.",
+      "requirement": "REQ-TODO-005",
+      "location": "web/src/todos/TodoListPage.tsx:L167-L189",
+      "suggestion": "Clear requested when the first loaded view after the toggle arrives, whatever it carries (in the after callback of the reload or in show), and ignore clicks on that row while requested is pending, or compute the new value from the shown state (requested ?? todo.done). Add a component test via the tests node: a re-query that returns the other state shows the server state."
+    },
+    {
+      "id": "F-3",
+      "severity": "major",
+      "message": "On the detail page a delete that gets a 404 sets the gone state, which unmounts the Delete button and the dialog; the dialog cleanup does not return focus (returnFocus is false) and nothing focuses the h1, so focus falls to body. UX design section 6 (L451) says D1 closing on a 404 from S5 moves focus to the h1. The list page handles the same case with focusHeadingAfterRender (TodoListPage.tsx L231-L234), so this is an unrecorded departure, and NFR-001 AC-2 focus out of the dialog is lost for keyboard users.",
+      "requirement": "NFR-001",
+      "location": "web/src/todos/TodoDetailPage.tsx:L63-L69",
+      "suggestion": "After the dialog has unmounted in the 404 path, move focus to the page h1 (an effect keyed on the gone state, as the list page does), and add a focus assertion to the detail-page 404 test via the tests node."
+    },
+    {
+      "id": "F-4",
+      "severity": "major",
+      "message": "The only unit and component report (component-junit-r2, run 12:11:31, attached in 9e1f44c at 12:11:42) predates 864156b (12:18:59) and 10eb534 (12:20:36), which change TodoRow, FilterGroup, ConfirmDialog and TodoListPage. The 484/484 result therefore does not cover the reviewed source, and the component tests that exercise these files (toggle revert and focus, filter focus without remount, dialogs) are unproven at HEAD. Proof (plan L79) names pnpm -C web typecheck and lint, which sdd section 14 relies on for the type-level Problem equality (NFR-006); no typecheck or lint result is attached for HEAD.",
+      "requirement": "NFR-006",
+      "location": "docs/specs/CHG-0001/plan/N10-build-react.md:L75-L81",
+      "suggestion": "Run pnpm -C web test:junit, typecheck and lint on HEAD (or after the fixes for F-1 to F-3) and attach the results as evidence replacing component-junit-r2."
+    },
+    {
+      "id": "F-5",
+      "severity": "major",
+      "message": "ADR-0001 (L21-L34, L45-L46) and sdd section 12.1 item 17 require web/src/api/identity.ts and todos.ts to be generated by openapi-typescript from web/redocly.yaml, with @redocly/cli as a dev dependency whose version the react-engineer pins; sdd section 14 names pnpm -C web lint:contracts as a gate script. HEAD has hand-written types, no redocly.yaml, neither dependency and no lint:contracts script. The recorded reason (plan L85, this node adds no dependency) does not hold, because the ADR assigns exactly these dependencies to the react-engineer, and the missing contract-lint script is not recorded at all. The hand-written types do match the three contract files today, so behaviour is unaffected.",
+      "requirement": "NFR-005",
+      "location": "web/package.json:L6-L18",
+      "suggestion": "Add openapi-typescript and @redocly/cli (pinned), web/redocly.yaml with the identity and todos apis, regenerate the two files, and add the lint:contracts script; or get the requester to approve the departure through a re-freeze and record it."
+    },
+    {
+      "id": "F-6",
+      "severity": "minor",
+      "message": "AppErrorBoundary keeps a caught error in a module variable written from the static getDerivedStateFromError and getDerivedStateFromProps, which React expects to be pure. It only works when the boundary itself is constructed again (first mount); when an already-mounted boundary meets a throw-once error, React recovers silently, no error page shows, and remembered stays set, so any later mount of the boundary starts on the error page. The choice is recorded (plan L90).",
+      "requirement": "NFR-006",
+      "location": "web/src/app/AppErrorBoundary.tsx:L49-L80",
+      "suggestion": "Clear remembered when a render commits without the error (componentDidMount or componentDidUpdate when not in the error state), or scope it to the instance tree; note the first-mount-only behaviour in the plan."
+    },
+    {
+      "id": "F-7",
+      "severity": "minor",
+      "message": "While one toggle is in flight, a click on any other row checkbox is silently ignored (toggle returns at once and the controlled checkbox reverts); only the toggling row is aria-disabled, so other rows give no cue that the click did nothing.",
+      "requirement": "REQ-TODO-005",
+      "location": "web/src/todos/TodoListPage.tsx:L167-L170",
+      "suggestion": "Either allow one toggle per row, or mark the other checkboxes aria-disabled while a toggle is in flight."
+    },
+    {
+      "id": "F-8",
+      "severity": "minor",
+      "message": "The log-out failure alert is AppShell state that is never cleared on navigation, so after a failed log out it stays at the top of main on every screen the user visits next.",
+      "requirement": "NFR-006",
+      "location": "web/src/app/AppShell.tsx:L12-L60",
+      "suggestion": "Clear logoutError on a pathname change (or show it only on the screen where log out was chosen)."
+    },
+    {
+      "id": "F-9",
+      "severity": "minor",
+      "message": "SearchForm resets the box to the URL q after a submit, so a search typed with leading or trailing spaces is rewritten to its trimmed form; UX design S3 (L269) says the search text is displayed as the user typed it.",
+      "requirement": "REQ-LIST-002",
+      "location": "web/src/todos/SearchForm.tsx:L6-L7",
+      "suggestion": "Sync the box from q only when q changes for another reason than this form submit (for example Back), or keep the typed text after submit."
+    },
+    {
+      "id": "F-10",
+      "severity": "minor",
+      "message": "The current page in the pagination is a span whose text is only the number; UX design section 9.3 asks for Page n, current page (the links are labelled Page n, the current one is not).",
+      "requirement": "REQ-LIST-003",
+      "location": "web/src/todos/Pagination.tsx:L48-L53",
+      "suggestion": "Add visually hidden Page text before the number in the current-page span."
+    },
+    {
+      "id": "F-11",
+      "severity": "minor",
+      "message": "The plan file is stale: Departures L94 says two component tests fail and are left unchanged, contradicted by L96 (fixture fixed, 484/484); Proof L80 says the e2e specs are to be run in the next dispatch, while the full e2e reports are now attached, and Proof names no report.",
+      "requirement": "REQ-ACC-001",
+      "location": "docs/specs/CHG-0001/plan/N10-build-react.md:L80-L96",
+      "suggestion": "Remove or rewrite L94, and update Proof to name the component and e2e reports that prove the node."
+    },
+    {
+      "id": "F-12",
+      "severity": "minor",
+      "message": "Several changed declarations carry no REQ id in their comment block, so harness trace build will list their hunks as unmapped creep: ConfirmDialog (L3-L7, keepFocusInside L52), TodoListPage (L30, toggle and the requested effect), AppShell (L8), usePageFocus, client.ts.",
+      "requirement": "NFR-001",
+      "location": "web/src/todos/ConfirmDialog.tsx:L3-L7",
+      "suggestion": "Add REQ ids to those comment blocks (REQ-TODO-006, REQ-TODO-007, NFR-001 AC-2 for the dialog; REQ-TODO-005 for the toggle; NFR-006 for the client)."
+    },
+    {
+      "id": "F-13",
+      "severity": "info",
+      "message": "The not-found illustration grows its third line from 20 to 100 percent width; UX design section 7.2 describes the third line being struck through left to right. Timing, iteration count and reduced motion match.",
+      "requirement": "REQ-NAV-001",
+      "location": "web/src/styles/app.css:L487-L509",
+      "suggestion": "Draw a strike line over the third line and animate that, if the UX designer wants the described motion."
+    },
+    {
+      "id": "F-14",
+      "severity": "info",
+      "message": "The new Tab wrap in ConfirmDialog is proven only for forward Tab (keyboard.spec.ts L86-L89); Shift+Tab from Cancel is untested, and the focusable selector does not skip disabled or hidden controls (none exist in the dialogs today).",
+      "requirement": "NFR-001",
+      "location": "web/src/todos/ConfirmDialog.tsx:L52-L66",
+      "suggestion": "Add a Shift+Tab case through the tests node; filter out disabled and hidden elements in the selector."
+    },
+    {
+      "id": "F-15",
+      "severity": "info",
+      "message": "Carried from N08 F-22: Firefox e2e has never run; on this macOS host it fails at launch. Accepted by the requester as an environment limitation (plan L104-L106); the firefox projects stay in the configs.",
+      "requirement": "NFR-001",
+      "location": "docs/specs/CHG-0001/plan/N10-build-react.md:L104-L106",
+      "suggestion": "Run the Firefox e2e in CI on Linux as the plan states, and list it in the PR."
+    },
+    {
+      "id": "F-16",
+      "severity": "info",
+      "message": "Carried from N08 F-27: the e2e script chains the three runs with POSIX shell syntax, which fails under cmd on Windows.",
+      "requirement": "REQ-AUTH-004",
+      "location": "web/package.json:L14-L14",
+      "suggestion": "If Windows matters, chain the runs with a small Node script."
+    }
+  ]
+}
