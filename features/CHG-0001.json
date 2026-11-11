@@ -89,6 +89,7 @@
           "api/src/test/java/app/todo/auth/PasswordStorageTest.java",
           "api/src/test/java/app/todo/auth/SignUpApiTest.java",
           "api/src/test/java/app/todo/common/ErrorSourcesTest.java",
+          "api/src/test/java/app/todo/common/JsonSuffixMediaTypeTest.java",
           "api/src/test/java/app/todo/common/ProblemCodeTest.java",
           "api/src/test/java/app/todo/common/WhitespaceTest.java",
           "api/src/test/java/app/todo/config/EndpointInventoryTest.java",
@@ -211,7 +212,7 @@
       }
     ],
     "source": "diff",
-    "updatedAt": "2026-11-09T14:04:25.635Z"
+    "updatedAt": "2026-11-11T10:28:11.675Z"
   },
   "links": {
     "branch": "feature/CHG-0001-create-a-to-do-list"
