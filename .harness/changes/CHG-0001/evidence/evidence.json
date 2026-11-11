@@ -1,0 +1,2027 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "profile": "lite",
+  "enforcement": "github",
+  "requestedBy": "@alokkulkarni",
+  "modelAccess": "claude-subscription",
+  "pr": {
+    "repo": "alokkulkarni/testharness2",
+    "branch": "feature/CHG-0001-create-a-to-do-list",
+    "baseBranch": "develop"
+  },
+  "specFreeze": {
+    "files": {
+      "docs/specs/CHG-0001/adr/0001-react-typescript-spa.md": "d959a585540f5fce376d7588e0a433147f64a6d9a1b9378dfc9ab929ea3b2a54",
+      "docs/specs/CHG-0001/adr/0002-spring-boot-rest-api.md": "fc5affa1eb380f07f34b7e0c97198eff9f1b3fb42455f6abc7cba6be17d17d24",
+      "docs/specs/CHG-0001/adr/0003-sqlite-persistence.md": "2dce862223d3d5361b6e7c76757d6ee8211910771a5b147b9c5c3b00f11125d8",
+      "docs/specs/CHG-0001/adr/0004-server-side-session-cookie.md": "d5ed6e046d4e9046a301504816eea46f7f31618528759fd130b0f29e62431489",
+      "docs/specs/CHG-0001/adr/0005-argon2id-password-hashing.md": "1fa150797da4286689b94a70ba87cddf8b269d8d0bccbce3722c409824725d45",
+      "docs/specs/CHG-0001/adr/0006-last-write-wins-whole-content-replace.md": "0e2e13344f15cd27aea1b5cda2854a896f288dc5be1ee6904959350cbc054c07",
+      "docs/specs/CHG-0001/adr/0007-client-header-cross-site-request-defence.md": "c307a83ebd9c7ae453d992d8f0229686894d3f1154c5ad26ac23938d57bd774e",
+      "docs/specs/CHG-0001/adr/0008-absolute-session-lifetime.md": "a62f2ff3d99701c08b0b00f79a9958e916ea60bc90b2e5fc10af9d650d6024d5",
+      "docs/specs/CHG-0001/adr/0009-spring-jdbc-without-jpa.md": "a99f91db6c7e75595a464ceb75f68c1d5688d4947b64bafacc718bea327b8079",
+      "docs/specs/CHG-0001/adr/0010-explicit-validator-classes.md": "235adc0f9270895cde6aeb4c760702e0abfa5de03ab9365a5adc8c84c68b91bf",
+      "docs/specs/CHG-0001/adr/0011-problem-details-error-model.md": "afded36ceb4a13abdb4db5232f47ecde9a968a78025d9ed36bbba346ad5dda89",
+      "docs/specs/CHG-0001/adr/0012-contract-tests-swagger-request-validator.md": "f7c915c87cac2df352ff795864a549a85c1db91764307d9c4e87797d9b0732df",
+      "docs/specs/CHG-0001/adr/0013-injected-clock-and-e2e-test-clock.md": "e1b0e5ef93a1db8cbb594c432dcbdc6bcca75db2de1d322f89ecd18e246cb977",
+      "docs/specs/CHG-0001/adr/0014-flyway-migrations.md": "402bcec7d0a4da5240367ccf57c2b2667056cc21166ebe797d253f35b6622fa4",
+      "docs/specs/CHG-0001/adr/0015-derived-lowercase-columns.md": "2dea5408949a71d39ea14a37708cbe4d8e4cec7694b0fdcfa86664f511ccf6c4",
+      "docs/specs/CHG-0001/adr/0016-single-connection-pool.md": "2afbccda48eceae44b0a41713765ae231b8d3eaf67fdffdac552de326dedcb23",
+      "docs/specs/CHG-0001/adr/0017-timestamps-as-utc-text.md": "ba287880ca0a5e38a60d16ccd5ae4eb405137d74211f91f7cfd6ce46a4342554",
+      "docs/specs/CHG-0001/adr/0018-modular-monolith-module-boundaries.md": "5779b2a7ceea984263dc26c887f240bef17b9b12bb3157359ae4aaa688cc51be",
+      "docs/specs/CHG-0001/contracts/common-problem-v1.yaml": "6da4bad92910f83f354d7ad9abbb2b8e6f9b4ad31f5bec819d13f1a39abf973b",
+      "docs/specs/CHG-0001/contracts/identity-api-v1.yaml": "31df253ec9180e4af6fce83d555553a74a8abf9a4663deb7995c2d3198075397",
+      "docs/specs/CHG-0001/contracts/todo-api-v1.yaml": "3b1414a704a9d2773e7602fb28d0d1bdc2514cd88747f4aa14a64634bd251ddf",
+      "docs/specs/CHG-0001/intent.md": "8465eeb8e5e930d7bd165b4c152e9be5bd62e33d8350a11291867d0b16792c98",
+      "docs/specs/CHG-0001/requirements.md": "266b5b6d3d319d635b6fbe7e01d1750d017d704a0a24dada7243c8b6264241bb",
+      "docs/specs/CHG-0001/sdd.md": "13262e8e00cf325ca29d7a40011bd6e88949bcd0c854029e8f79f3e9eee41d4b"
+    },
+    "approvedBy": "@alokkulkarni",
+    "approvedAt": "2026-11-07T07:03:18.281Z"
+  },
+  "plan": {
+    "nodes": [
+      {
+        "id": "N01-clarify",
+        "agent": "orchestrator",
+        "executor": "claude-code",
+        "attempts": 0,
+        "status": "complete"
+      },
+      {
+        "id": "N02-requirements",
+        "agent": "requirements-analyst",
+        "executor": "claude-code",
+        "attempts": 0,
+        "status": "complete"
+      },
+      {
+        "id": "N03-spec",
+        "agent": "spec-author",
+        "executor": "claude-code",
+        "attempts": 0,
+        "status": "complete"
+      },
+      {
+        "id": "N05-design-arch",
+        "agent": "drawio-architect",
+        "executor": "claude-code",
+        "attempts": 2,
+        "status": "complete"
+      },
+      {
+        "id": "N06-design-ux",
+        "agent": "ux-designer",
+        "executor": "claude-code",
+        "attempts": 1,
+        "status": "complete"
+      },
+      {
+        "id": "N07-tests-backend",
+        "agent": "backend-qa",
+        "executor": "claude-code",
+        "attempts": 1,
+        "status": "complete"
+      },
+      {
+        "id": "N08-tests-web",
+        "agent": "web-qa",
+        "executor": "claude-code",
+        "attempts": 1,
+        "status": "complete"
+      },
+      {
+        "id": "N09-build-java",
+        "agent": "java-engineer",
+        "executor": "claude-code",
+        "attempts": 0,
+        "status": "complete"
+      },
+      {
+        "id": "N10-build-react",
+        "agent": "react-engineer",
+        "executor": "claude-code",
+        "attempts": 1,
+        "status": "complete"
+      },
+      {
+        "id": "N11-security",
+        "agent": "security-reviewer",
+        "executor": "claude-code",
+        "attempts": 1,
+        "status": "complete"
+      },
+      {
+        "id": "N12-validate",
+        "agent": "validator",
+        "executor": "claude-code",
+        "attempts": 1,
+        "status": "complete"
+      },
+      {
+        "id": "N13-pr-review",
+        "agent": "critic",
+        "executor": "claude-code",
+        "attempts": 1,
+        "status": "complete"
+      }
+    ]
+  },
+  "tddCommits": [
+    {
+      "ac": "REQ-ACC-001/AC-1",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.AcceptanceScenarioApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.AcceptanceScenarioApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-ACC-001/AC-2",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoIsolationApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoIsolationApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-ACC-001/AC-3",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.config.PersistenceTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.config.PersistenceTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-AUTH-001/AC-1",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 2,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.auth.SignUpApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 2,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.auth.SignUpApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-AUTH-001/AC-2",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.auth.SignUpApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.auth.SignUpApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-AUTH-001/AC-3",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 5,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.auth.SignUpApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 5,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.auth.SignUpApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-AUTH-001/AC-4",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.auth.SignUpApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.auth.SignUpApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-AUTH-001/AC-5",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 3,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.auth.SignUpApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 3,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.auth.SignUpApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-AUTH-001/AC-6",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 5,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.auth.SignUpApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 5,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.auth.SignUpApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-AUTH-001/AC-7",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.auth.SignUpApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.auth.SignUpApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-AUTH-001/AC-8",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 6,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.auth.SignUpApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 6,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.auth.SignUpApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-AUTH-001/AC-9",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 29,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.auth.SignUpApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 29,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.auth.SignUpApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-AUTH-001/AC-10",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 9,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.auth.SignUpApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 9,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.auth.SignUpApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-AUTH-001/AC-11",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 7,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.auth.SignUpApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 7,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.auth.SignUpApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-AUTH-002/AC-1",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 3,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.auth.LoginSessionApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 3,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.auth.LoginSessionApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-AUTH-002/AC-2",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 2,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.auth.LoginSessionApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 2,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.auth.LoginSessionApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-AUTH-002/AC-3",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 2,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.auth.LoginSessionApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 2,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.auth.LoginSessionApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-AUTH-002/AC-4",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 4,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.auth.LoginSessionApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 4,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.auth.LoginSessionApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-AUTH-002/AC-5",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 2,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.auth.LoginSessionApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 2,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.auth.LoginSessionApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-AUTH-003/AC-1",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 3,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.auth.PasswordStorageTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 3,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.auth.PasswordStorageTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-AUTH-003/AC-2",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.auth.PasswordStorageTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.auth.PasswordStorageTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-AUTH-003/AC-3",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.auth.PasswordStorageTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.auth.PasswordStorageTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-AUTH-004/AC-1",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 7,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.auth.AuthenticationRequiredApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 7,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.auth.AuthenticationRequiredApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-AUTH-004/AC-2",
+      "red": {
+        "commit": "1264c92",
+        "failed": 16,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N08-tests-web.component-junit-r2.xml"
+      },
+      "green": {
+        "commit": "b561104a788f20162f3f4ab8a3a8fd7b5f1295be",
+        "failed": 0,
+        "passed": 9,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.component-junit-r3.xml"
+      }
+    },
+    {
+      "ac": "REQ-AUTH-004/AC-3",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 2,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.auth.LoginSessionApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 2,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.auth.LoginSessionApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-AUTH-004/AC-4",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 2,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.auth.LoginSessionApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 3,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.auth.LoginSessionApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-AUTH-005/AC-1",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.config.EndpointInventoryTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 2,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.config.EndpointInventoryTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-AUTH-005/AC-2",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 2,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.auth.PasswordStorageTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 2,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.auth.PasswordStorageTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-DATA-001/AC-1",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 2,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.config.PersistenceTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 2,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.config.PersistenceTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-DATA-001/AC-2",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 2,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.config.ModuleWiringTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 2,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.config.ModuleWiringTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-DATA-001/AC-3",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.config.PersistenceTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.config.PersistenceTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-DATA-002/AC-1",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 3,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.ConcurrentEditsApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 3,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.ConcurrentEditsApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-DATA-002/AC-2",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 3,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.config.ModuleWiringTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 3,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.config.ModuleWiringTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-ISO-001/AC-1",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 2,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoIsolationApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 2,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoIsolationApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-ISO-001/AC-2",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoIsolationApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoIsolationApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-ISO-001/AC-3",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoIsolationApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoIsolationApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-ISO-001/AC-4",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoIsolationApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoIsolationApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-LIST-001/AC-1",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 7,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoListApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 7,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoListApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-LIST-001/AC-2",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoListApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoListApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-LIST-001/AC-3",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoListApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoListApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-LIST-001/AC-4",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoListApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoListApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-LIST-001/AC-5",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoListApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoListApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-LIST-002/AC-1",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 2,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoListApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 2,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoListApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-LIST-002/AC-2",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoListApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoListApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-LIST-002/AC-3",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoListApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoListApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-LIST-002/AC-4",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoListApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoListApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-LIST-002/AC-5",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoListApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoListApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-LIST-002/AC-6",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoListApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoListApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-LIST-002/AC-7",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 7,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.common.WhitespaceTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 7,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.common.WhitespaceTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-LIST-003/AC-1",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoListApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoListApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-LIST-003/AC-2",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 2,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoListApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 2,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoListApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-LIST-003/AC-4",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoListApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoListApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-LIST-003/AC-5",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoListApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoListApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-LIST-003/AC-6",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 6,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoListApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 6,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoListApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-LIST-003/AC-7",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 10,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoListApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 10,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoListApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-LIST-003/AC-8",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoListApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoListApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-NAV-001/AC-1",
+      "red": {
+        "commit": "1264c92",
+        "failed": 6,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N08-tests-web.component-junit-r2.xml"
+      },
+      "green": {
+        "commit": "b561104a788f20162f3f4ab8a3a8fd7b5f1295be",
+        "failed": 0,
+        "passed": 4,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.component-junit-r3.xml"
+      }
+    },
+    {
+      "ac": "REQ-NAV-001/AC-2",
+      "red": {
+        "commit": "1264c92",
+        "failed": 4,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N08-tests-web.component-junit-r2.xml"
+      },
+      "green": {
+        "commit": "b561104a788f20162f3f4ab8a3a8fd7b5f1295be",
+        "failed": 0,
+        "passed": 3,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.component-junit-r3.xml"
+      }
+    },
+    {
+      "ac": "REQ-NAV-001/AC-3",
+      "red": {
+        "commit": "1264c92",
+        "failed": 14,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N08-tests-web.component-junit-r2.xml"
+      },
+      "green": {
+        "commit": "b561104a788f20162f3f4ab8a3a8fd7b5f1295be",
+        "failed": 0,
+        "passed": 8,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.component-junit-r3.xml"
+      }
+    },
+    {
+      "ac": "REQ-NAV-001/AC-4",
+      "red": {
+        "commit": "1264c92",
+        "failed": 38,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N08-tests-web.component-junit-r2.xml"
+      },
+      "green": {
+        "commit": "b561104a788f20162f3f4ab8a3a8fd7b5f1295be",
+        "failed": 0,
+        "passed": 20,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.component-junit-r3.xml"
+      }
+    },
+    {
+      "ac": "REQ-NAV-001/AC-5",
+      "red": {
+        "commit": "1264c92",
+        "failed": 2,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N08-tests-web.component-junit-r2.xml"
+      },
+      "green": {
+        "commit": "b561104a788f20162f3f4ab8a3a8fd7b5f1295be",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.component-junit-r3.xml"
+      }
+    },
+    {
+      "ac": "REQ-NAV-001/AC-6",
+      "red": {
+        "commit": "1264c92",
+        "failed": 4,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N08-tests-web.component-junit-r2.xml"
+      },
+      "green": {
+        "commit": "b561104a788f20162f3f4ab8a3a8fd7b5f1295be",
+        "failed": 0,
+        "passed": 3,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.component-junit-r3.xml"
+      }
+    },
+    {
+      "ac": "REQ-NAV-001/AC-7",
+      "red": {
+        "commit": "1264c92",
+        "failed": 6,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N08-tests-web.component-junit-r2.xml"
+      },
+      "green": {
+        "commit": "b561104a788f20162f3f4ab8a3a8fd7b5f1295be",
+        "failed": 0,
+        "passed": 5,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.component-junit-r3.xml"
+      }
+    },
+    {
+      "ac": "REQ-NAV-001/AC-8",
+      "red": {
+        "commit": "1264c92",
+        "failed": 16,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N08-tests-web.component-junit-r2.xml"
+      },
+      "green": {
+        "commit": "b561104a788f20162f3f4ab8a3a8fd7b5f1295be",
+        "failed": 0,
+        "passed": 12,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.component-junit-r3.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-001/AC-1",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 3,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoCreateApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 3,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoCreateApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-001/AC-2",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 2,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoCreateApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 2,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoCreateApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-001/AC-3",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 2,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoCreateApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 2,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoCreateApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-001/AC-4",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoCreateApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoCreateApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-002/AC-1",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 39,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.common.WhitespaceTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 40,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.common.WhitespaceTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-002/AC-2",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 11,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.common.WhitespaceTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 11,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.common.WhitespaceTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-002/AC-3",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 4,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoValidationApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 4,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoValidationApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-002/AC-4",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 3,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoValidationApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 3,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoValidationApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-002/AC-5",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.testsupport.ContractFilesTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 2,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.testsupport.ContractFilesTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-002/AC-6",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 18,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoValidationApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 18,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoValidationApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-002/AC-7",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoCreateApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoCreateApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-002/AC-8",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 11,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoValidationApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 11,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoValidationApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-002/AC-9",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoValidationApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoValidationApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-002/AC-10",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoValidationApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoValidationApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-003/AC-1",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 2,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoCreateApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 2,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoCreateApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-003/AC-2",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoCreateApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoCreateApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-003/AC-3",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoCreateApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoCreateApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-004/AC-1",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 4,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoUpdateApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 4,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoUpdateApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-004/AC-2",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoUpdateApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoUpdateApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-004/AC-3",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoUpdateApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoUpdateApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-004/AC-4",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 2,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoUpdateApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 2,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoUpdateApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-005/AC-1",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 4,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoUpdateApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 4,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoUpdateApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-005/AC-2",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoUpdateApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoUpdateApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-005/AC-3",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoUpdateApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoUpdateApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-006/AC-1",
+      "red": {
+        "commit": "1264c92",
+        "failed": 2,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N08-tests-web.component-junit-r2.xml"
+      },
+      "green": {
+        "commit": "b561104a788f20162f3f4ab8a3a8fd7b5f1295be",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.component-junit-r3.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-006/AC-2",
+      "red": {
+        "commit": "1264c92",
+        "failed": 2,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N08-tests-web.component-junit-r2.xml"
+      },
+      "green": {
+        "commit": "b561104a788f20162f3f4ab8a3a8fd7b5f1295be",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.component-junit-r3.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-006/AC-3",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoDeleteAndClearApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoDeleteAndClearApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-006/AC-4",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoDeleteAndClearApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoDeleteAndClearApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-006/AC-5",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoDeleteAndClearApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoDeleteAndClearApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-007/AC-1",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoDeleteAndClearApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoDeleteAndClearApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-007/AC-2",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 3,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoDeleteAndClearApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 3,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoDeleteAndClearApiTest-r4.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-007/AC-3",
+      "red": {
+        "commit": "1264c92",
+        "failed": 2,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N08-tests-web.component-junit-r2.xml"
+      },
+      "green": {
+        "commit": "b561104a788f20162f3f4ab8a3a8fd7b5f1295be",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.component-junit-r3.xml"
+      }
+    },
+    {
+      "ac": "REQ-TODO-007/AC-4",
+      "red": {
+        "commit": "e5c8931beea47f46c7efb792070599b02f7b6e26",
+        "failed": 1,
+        "passed": 0,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoDeleteAndClearApiTest-r2.xml"
+      },
+      "green": {
+        "commit": "cd4fd338d2e118a2b99c794e7303fb741bdc8bcf",
+        "failed": 0,
+        "passed": 1,
+        "report": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoDeleteAndClearApiTest-r4.xml"
+      }
+    }
+  ],
+  "attachments": [
+    {
+      "kind": "sbom",
+      "path": ".harness/changes/CHG-0001/evidence/sbom/sbom.cdx.json"
+    },
+    {
+      "kind": "scan-report",
+      "path": ".harness/changes/CHG-0001/evidence/scan-report/gitleaks.sarif"
+    },
+    {
+      "kind": "scan-report",
+      "path": ".harness/changes/CHG-0001/evidence/scan-report/semgrep.sarif"
+    },
+    {
+      "kind": "scan-report",
+      "path": ".harness/changes/CHG-0001/evidence/scan-report/trivy-fs.sarif"
+    },
+    {
+      "kind": "scan-report",
+      "path": ".harness/changes/CHG-0001/evidence/scan-report/N11-security.gitleaks-r2.sarif"
+    },
+    {
+      "kind": "scan-report",
+      "path": ".harness/changes/CHG-0001/evidence/scan-report/N11-security.semgrep-r2.sarif"
+    },
+    {
+      "kind": "scan-report",
+      "path": ".harness/changes/CHG-0001/evidence/scan-report/N11-security.trivy-fs-r2.sarif"
+    },
+    {
+      "kind": "sbom",
+      "path": ".harness/changes/CHG-0001/evidence/sbom/N11-security.sbom-r2.cdx.json"
+    },
+    {
+      "kind": "scan-report",
+      "path": ".harness/changes/CHG-0001/evidence/scan-report/N11-security.gitleaks-r3.sarif"
+    },
+    {
+      "kind": "scan-report",
+      "path": ".harness/changes/CHG-0001/evidence/scan-report/N11-security.semgrep-r3.sarif"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.architecture.ArchitectureNonVacuityTest-r2.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.architecture.ArchitectureTest-r2.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.auth.AuthenticationRequiredApiTest-r2.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.auth.FilterExceptionTest-r2.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.auth.LoginSessionApiTest-r2.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.auth.PasswordStorageTest-r2.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.auth.SignUpApiTest-r2.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.common.ErrorSourcesTest-r2.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.common.ProblemCodeTest-r2.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.common.WhitespaceTest-r2.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.config.EndpointInventoryTest-r2.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.config.ModuleWiringTest-r2.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.config.PersistenceTest-r2.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.testsupport.ContractFilesTest-r2.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.AcceptanceScenarioApiTest-r2.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.ConcurrentEditsApiTest-r2.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.HandlerExceptionTest-r2.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoCreateApiTest-r2.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoDeleteAndClearApiTest-r2.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoIsolationApiTest-r2.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoListApiTest-r2.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoUpdateApiTest-r2.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N07-tests-backend.TEST-app.todo.todo.TodoValidationApiTest-r2.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N08-tests-web.component-junit-r2.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N08-tests-web.component-junit.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N08-tests-web.e2e-chromium-junit-r2.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N08-tests-web.e2e-junit.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N08-tests-web.e2e-restart-junit-r2.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N08-tests-web.e2e-restart-junit.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N08-tests-web.e2e-session-expiry-junit-r2.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N08-tests-web.e2e-session-expiry-junit.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.architecture.ArchitectureNonVacuityTest-r4.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.architecture.ArchitectureTest-r4.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.auth.AuthenticationRequiredApiTest-r4.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.auth.FilterExceptionTest-r4.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.auth.LoginSessionApiTest-r4.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.auth.PasswordStorageTest-r4.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.auth.SignUpApiTest-r4.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.common.ErrorSourcesTest-r4.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.common.JsonSuffixMediaTypeTest-r4.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.common.ProblemCodeTest-r4.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.common.WhitespaceTest-r4.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.config.EndpointInventoryTest-r4.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.config.ModuleWiringTest-r4.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.config.PersistenceTest-r4.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.testsupport.ContractFilesTest-r4.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.AcceptanceScenarioApiTest-r4.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.ConcurrentEditsApiTest-r4.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.HandlerExceptionTest-r4.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoCreateApiTest-r4.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoDeleteAndClearApiTest-r4.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoIsolationApiTest-r4.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoListApiTest-r4.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoUpdateApiTest-r4.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N09-build-java.TEST-app.todo.todo.TodoValidationApiTest-r4.xml"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.component-junit-r3.xml",
+      "description": "Vitest 486/486 on a70f2c8, r3, inside the sandbox"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.e2e-main-r4.xml",
+      "description": "chromium and webkit, inside the sandbox, on 0615ba7; firefox is the accepted divergence"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.e2e-restart-r4.xml",
+      "description": "chromium and webkit, inside the sandbox, on 0615ba7; firefox is the accepted divergence"
+    },
+    {
+      "kind": "test-report",
+      "path": ".harness/changes/CHG-0001/evidence/test-report/N10-build-react.e2e-session-expiry-r4.xml",
+      "description": "chromium and webkit, inside the sandbox, on 0615ba7; firefox is the accepted divergence"
+    },
+    {
+      "kind": "other",
+      "path": ".harness/changes/CHG-0001/evidence/other/N10-build-react.lint-contracts-r4.txt",
+      "description": "pnpm -C web lint:contracts, exit 0 (8 warnings), on 0615ba7"
+    },
+    {
+      "kind": "other",
+      "path": ".harness/changes/CHG-0001/evidence/other/N10-build-react.lint-r4.txt",
+      "description": "pnpm -C web lint, exit 0, on 0615ba7"
+    },
+    {
+      "kind": "other",
+      "path": ".harness/changes/CHG-0001/evidence/other/N10-build-react.typecheck-r4.txt",
+      "description": "pnpm -C web typecheck, exit 0, on 0615ba7"
+    }
+  ],
+  "verdicts": [
+    ".harness/changes/CHG-0001/verdicts/N01-clarify.clarified.json",
+    ".harness/changes/CHG-0001/verdicts/N02-requirements.critic-verdict.json",
+    ".harness/changes/CHG-0001/verdicts/N03-spec.critic-verdict.json",
+    ".harness/changes/CHG-0001/verdicts/N04-spec-freeze.spec-freeze-approval.json",
+    ".harness/changes/CHG-0001/verdicts/N05-design-arch.critic-verdict.json",
+    ".harness/changes/CHG-0001/verdicts/N06-design-ux.critic-verdict.json",
+    ".harness/changes/CHG-0001/verdicts/N07-tests-backend.critic-verdict.json",
+    ".harness/changes/CHG-0001/verdicts/N07-tests-backend.tests-red-first.json",
+    ".harness/changes/CHG-0001/verdicts/N08-tests-web.critic-verdict.json",
+    ".harness/changes/CHG-0001/verdicts/N08-tests-web.tests-red-first.json",
+    ".harness/changes/CHG-0001/verdicts/N09-build-java.critic-verdict.json",
+    ".harness/changes/CHG-0001/verdicts/N10-build-react.critic-verdict.json",
+    ".harness/changes/CHG-0001/verdicts/N11-security.security.json",
+    ".harness/changes/CHG-0001/verdicts/N12-validate.validator.json",
+    ".harness/changes/CHG-0001/verdicts/N13-pr-review.critic-verdict.json"
+  ],
+  "tests": {
+    "suites": [
+      {
+        "name": "traceability",
+        "kind": "unit",
+        "passed": 389,
+        "failed": 0,
+        "skipped": 0,
+        "report": ".harness/changes/CHG-0001/traceability.json"
+      }
+    ]
+  },
+  "security": {
+    "scans": [
+      {
+        "tool": "gitleaks",
+        "kind": "secrets",
+        "blocking": 0,
+        "critical": 0,
+        "high": 0,
+        "medium": 15,
+        "low": 0,
+        "report": ".harness/changes/CHG-0001/evidence/scan-report/gitleaks.sarif"
+      },
+      {
+        "tool": "Semgrep OSS",
+        "kind": "sast",
+        "blocking": 0,
+        "critical": 0,
+        "high": 0,
+        "medium": 4,
+        "low": 0,
+        "report": ".harness/changes/CHG-0001/evidence/scan-report/semgrep.sarif"
+      },
+      {
+        "tool": "Trivy",
+        "kind": "sca",
+        "blocking": 2,
+        "critical": 1,
+        "high": 1,
+        "medium": 0,
+        "low": 0,
+        "report": ".harness/changes/CHG-0001/evidence/scan-report/trivy-fs.sarif"
+      },
+      {
+        "tool": "gitleaks",
+        "kind": "secrets",
+        "blocking": 0,
+        "critical": 0,
+        "high": 0,
+        "medium": 36,
+        "low": 0,
+        "report": ".harness/changes/CHG-0001/evidence/scan-report/N11-security.gitleaks-r2.sarif"
+      },
+      {
+        "tool": "Semgrep OSS",
+        "kind": "sast",
+        "blocking": 0,
+        "critical": 0,
+        "high": 0,
+        "medium": 4,
+        "low": 0,
+        "report": ".harness/changes/CHG-0001/evidence/scan-report/N11-security.semgrep-r2.sarif"
+      },
+      {
+        "tool": "Trivy",
+        "kind": "sca",
+        "blocking": 2,
+        "critical": 1,
+        "high": 1,
+        "medium": 0,
+        "low": 0,
+        "report": ".harness/changes/CHG-0001/evidence/scan-report/N11-security.trivy-fs-r2.sarif"
+      },
+      {
+        "tool": "gitleaks",
+        "kind": "secrets",
+        "blocking": 0,
+        "critical": 0,
+        "high": 0,
+        "medium": 42,
+        "low": 0,
+        "report": ".harness/changes/CHG-0001/evidence/scan-report/N11-security.gitleaks-r3.sarif"
+      },
+      {
+        "tool": "Semgrep OSS",
+        "kind": "sast",
+        "blocking": 0,
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 0,
+        "report": ".harness/changes/CHG-0001/evidence/scan-report/N11-security.semgrep-r3.sarif"
+      }
+    ],
+    "sbom": ".harness/changes/CHG-0001/evidence/sbom/sbom.cdx.json"
+  },
+  "models": [],
+  "versions": {
+    "harness": "1.0.0+0050c14c",
+    "plugins": {
+      "sdlc-core": "channel:stable",
+      "sdlc-quality": "channel:stable",
+      "sdlc-docs": "channel:stable",
+      "sdlc-backend": "channel:stable",
+      "sdlc-web": "channel:stable",
+      "sdlc-design": "channel:stable"
+    }
+  },
+  "approvals": [
+    {
+      "gate": "spec-freeze-approval",
+      "by": "@alokkulkarni",
+      "at": "2026-11-07T07:03:18.281Z",
+      "reference": "https://github.com/alokkulkarni/testharness2/pull/3#pullrequestreview-5810670897"
+    }
+  ],
+  "conformance": {
+    "registerSha256": "225fe08df1a0ab25ef9d46f58667c354a2da1862c65e31002c2a3e5d34e8510f",
+    "acceptedBy": []
+  },
+  "feature": {
+    "squad": "default",
+    "platform": "testharness2"
+  }
+}
