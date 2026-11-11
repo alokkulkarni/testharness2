@@ -8,7 +8,8 @@
   "pr": {
     "repo": "alokkulkarni/testharness2",
     "branch": "feature/CHG-0001-create-a-to-do-list",
-    "baseBranch": "develop"
+    "baseBranch": "develop",
+    "number": 3
   },
   "specFreeze": {
     "files": {
@@ -2018,7 +2019,14 @@
   ],
   "conformance": {
     "registerSha256": "225fe08df1a0ab25ef9d46f58667c354a2da1862c65e31002c2a3e5d34e8510f",
-    "acceptedBy": []
+    "acceptedBy": [
+      {
+        "login": "@alokkulkarni",
+        "role": "product-owner",
+        "ref": "https://github.com/alokkulkarni/testharness2/pull/3",
+        "commit": "59e5ae6988bfabfd21e0a05bb454d3b6a32aabb7"
+      }
+    ]
   },
   "feature": {
     "squad": "default",
