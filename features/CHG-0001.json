@@ -216,14 +216,6 @@
   "links": {
     "branch": "feature/CHG-0001-create-a-to-do-list"
   },
-  "running": [
-    {
-      "node": "N12-validate",
-      "role": "reviewer",
-      "runId": "run-mwahfi0q",
-      "holder": "claude-code",
-      "leaseUntil": "2026-11-11T10:07:18.876Z"
-    }
-  ],
+  "running": [],
   "overlaps": []
 }
