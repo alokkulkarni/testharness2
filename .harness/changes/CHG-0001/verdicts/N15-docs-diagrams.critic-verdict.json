@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N15-docs-diagrams",
+  "gate": "critic-verdict",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "critic",
+      "agentRunId": "ad065280eadfb9280"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "drawio-architect",
+      "agentRunId": "a066526e726224ad4"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "drawio-architect",
+      "agentRunId": "a18de52297e24f001"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "drawio-architect",
+      "agentRunId": "a8a0f6a899a8cc0e5"
+    }
+  ],
+  "createdAt": "2026-11-13T10:10:35.416Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "reviewedCommit": "f686bff2539ebd4591541109f0e5d49635314c89",
+  "diffHash": "4452984c9d7a5b0e6ba982f475db048a67b90ddf9f1b29cc29922e98ab15b425",
+  "summary": "round 3, delta since 9a17847f17047a12f6025f0e6def36d4321d4411: F-16, F-17, F-18 fixed. F-16: the space between id=sessions and value= is restored (todo-data-model.drawio L22). F-17: the citation now says no Maven modules element, and the containers PNG shows it. F-18: the citation now includes L317-L330, which I checked against web/src/todos/TodoListPage.tsx (TodoRow toggle and delete at L317-L327, Pagination at L330). export --check: 4 diagrams, exports current. One new minor on a changed line: clear completed is backed only by the javadoc. F-14 info carried. 0 blocker, 0 major, 1 minor, 1 info.",
+  "findings": [
+    {
+      "id": "F-14",
+      "severity": "info",
+      "message": "Layout notes carried from round 1, partly addressed: the JDBC edge labels in the API component view still sit on the dashed boundary lines, and the legend and citation boxes leave large empty areas.",
+      "location": "docs/knowledge/diagrams/todo-api-components.drawio:L115-L128",
+      "suggestion": "Move the JDBC labels off the boundary lines and shrink the legend and notes boxes to their content."
+    },
+    {
+      "id": "F-19",
+      "severity": "minor",
+      "message": "In the changed TodoListPage citation, clear completed (REQ-TODO-007) is backed only by the javadoc at L31-L34. Its code is not cited: the Clear all completed button is at L344-L352, and startClear and confirmClear are at L209-L230 and L261-L276.",
+      "requirement": "REQ-TODO-007",
+      "location": "docs/knowledge/diagrams/todo-spa-routes.drawio:L46-L46",
+      "suggestion": "Add L209-L230, L261-L276 and L344-L352 to the TodoListPage citation, then re-export."
+    }
+  ]
+}
