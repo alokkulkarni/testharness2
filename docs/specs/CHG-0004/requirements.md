@@ -5,7 +5,7 @@ authors:
   - squadSessionId: SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM
     changeId: CHG-0004
     agent: requirements-analyst
-    agentRunId: run-chg4-n02-1
+    agentRunId: run-chg4-n02-2
 upstream: []
 ---
 
@@ -56,12 +56,12 @@ Evidences CHG-0001 NFR-001 AC-3 and AC-1. Source: clarifications Q10 items 1-3.
 
 ## REQ-A11Y-002 List announcements and focus (M)
 
-Evidences CHG-0001 NFR-001 AC-2 and AC-3. Source: clarifications Q10 items 4-5.
+Evidences CHG-0001 NFR-001 AC-2 and AC-3. Source: clarifications Q10 items 4-5, Q12.
 
 - AC-1: Given the list has 45 to-dos, when page 1 is shown, then a polite live region holds the text "Showing 1-20 of 45" with a hyphen-minus (analyst default 2: the app renders it so, `web/src/todos/TodoListPage.tsx:L314`, as a `<p role="status">`; Q10 item 4 and CHG-0001 SDD §9 at `docs/specs/CHG-0001/sdd.md:L558` write an en dash).
 - AC-2: Given a user with no to-dos, when the list is shown, then a level-2 heading "You have no to-dos yet" is in the accessibility tree; and given a search with no match, then a level-2 heading "No matching to-dos" is (analyst default 5).
 - AC-3: Given the list, when I read the accessibility tree, then the filter is a group with an accessible name containing radio inputs, exactly one of them checked.
-- AC-4: Given more than one page, when I read the accessibility tree, then a navigation landmark named "Pagination" exists and the current page's link has `aria-current="page"`.
+- AC-4: Given more than one page, when I read the accessibility tree, then a navigation landmark named "Pagination" exists and the element for the current page has `aria-current="page"`.
 - AC-5: Given the list, when I choose a pagination link, then focus lands on the `<h1>` "My to-dos".
 - AC-6: Given the list, when I change the filter or run a search, then focus is on the control I used.
 - AC-7: Given the list has no completed to-dos at the moment I choose to clear completed (for example after a clear in another tab), when the action is refused, then the polite live region (the shell's, `aria-live="polite"`) holds "There are no completed to-dos to clear." and no dialog opens.
@@ -96,11 +96,11 @@ Evidences CHG-0001 NFR-001 AC-3 (SDD §4.1). Source: clarifications Q10 item 9.
 
 ## REQ-A11Y-006 Non-text contrast, WCAG 1.4.11 (M)
 
-Evidences CHG-0001 NFR-001 AC-1. Source: clarifications Q7.
+Evidences CHG-0001 NFR-001 AC-1. Source: clarifications Q7, Q13, Q14.
 
 - AC-1: Given each audited screen, when the test measures the visible focus outline of every kind of focusable control against its adjacent colour, then each ratio is at least 3:1.
 - AC-2: Given each audited screen, when the test measures the border of every input, checkbox, radio and button against its adjacent colour, then each ratio is at least 3:1. For a control identified by its fill, the fill against its adjacent colour is measured (analyst default 7).
-- AC-3: Given each audited screen, when the test measures the hover state and the selected state of each control that has one against its adjacent colour, then each ratio is at least 3:1.
+- AC-3: Given each audited screen, when the test measures the hover state and the selected state of each control that has one against its adjacent colour, then each ratio is at least 3:1. The pagination current-page marker's fill is not a control's selected state and is not asserted here (Q14); its text is asserted under REQ-A11Y-007.
 - AC-4: Given a control in a disabled state, when the test measures it, then its ratio is listed in the ratio table (REQ-A11Y-011 AC-3) and is not asserted.
 - AC-5: Given any measurement in AC-1 to AC-3 is under 3:1, when the test runs, then it fails and names the control, the state and the measured ratio.
 
