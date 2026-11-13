@@ -398,7 +398,7 @@
         "N13-pr-review",
         "N15-docs-diagrams"
       ],
-      "status": "pending",
+      "status": "running",
       "kind": "agent",
       "agent": "okf-documenter",
       "description": "Fold the change into the OKF bundle.",
@@ -409,7 +409,13 @@
       "executor": "any",
       "isolation": "none",
       "attempts": 0,
-      "maxAttempts": 3
+      "maxAttempts": 3,
+      "claim": {
+        "runId": "run-mwetgsul",
+        "executor": "claude-code",
+        "leaseUntil": "2026-11-13T11:11:04.077Z",
+        "claimedAt": "2026-11-13T10:11:04.077Z"
+      }
     },
     {
       "id": "N15-docs-diagrams",
