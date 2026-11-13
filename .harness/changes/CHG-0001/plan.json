@@ -427,7 +427,7 @@
         "N12-validate",
         "N13-pr-review"
       ],
-      "status": "pending",
+      "status": "running",
       "kind": "agent",
       "agent": "drawio-architect",
       "description": "Update the diagrams for the merged change.",
@@ -437,7 +437,13 @@
       "executor": "any",
       "isolation": "none",
       "attempts": 0,
-      "maxAttempts": 3
+      "maxAttempts": 3,
+      "claim": {
+        "runId": "run-mwesehfj",
+        "executor": "claude-code",
+        "leaseUntil": "2026-11-13T10:41:16.351Z",
+        "claimedAt": "2026-11-13T09:41:16.351Z"
+      }
     }
   ]
 }
