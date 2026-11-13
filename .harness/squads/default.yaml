@@ -49,4 +49,4 @@ owns:
   - repo: testharness2
     paths:
       - "**"
-wipLimit: 2
+wipLimit: 3
