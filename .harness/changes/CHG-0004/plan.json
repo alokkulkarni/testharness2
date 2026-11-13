@@ -49,17 +49,11 @@
       "gates": [
         "critic-verdict"
       ],
-      "executor": "any",
+      "executor": "claude-code",
       "isolation": "none",
-      "status": "running",
+      "status": "complete",
       "attempts": 2,
-      "maxAttempts": 3,
-      "claim": {
-        "runId": "run-chg4-n02-1",
-        "executor": "claude-code",
-        "leaseUntil": "2026-11-13T14:29:20.457Z",
-        "claimedAt": "2026-11-13T13:07:17.789Z"
-      }
+      "maxAttempts": 3
     },
     {
       "id": "N03-spec",
