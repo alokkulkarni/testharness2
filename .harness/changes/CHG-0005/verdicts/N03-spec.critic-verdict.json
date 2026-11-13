@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0005",
+  "node": "N03-spec",
+  "gate": "critic-verdict",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0005",
+      "agent": "critic",
+      "agentRunId": "a728092114e7ecfb5"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0005",
+      "agent": "spec-author",
+      "agentRunId": "a2fbcdac23eaa5b6b"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0005",
+      "agent": "spec-author",
+      "agentRunId": "a8bcad1f7cdb0d945"
+    }
+  ],
+  "createdAt": "2026-11-13T15:37:31.169Z",
+  "reviewedCommit": "813cce5d4baa48a93239652dc49380abd7e18bda",
+  "diffHash": "5b9ad84a4f35dc3ffa3183b5723d3e054a9a64f60a3a119492e28714800ba925",
+  "summary": "round 2, delta since 62e7a2e (spec as of 24c2847; docs/specs/CHG-0005 is unchanged from 62e7a2e to 24c2847 and from f1f0450 to HEAD): F-1, F-2, F-3, F-5, F-8 fixed. The SDD records Q14 (a) as decided at L50-L53, L115, L399 and L426-L431 and leaves no open question; it names corepack 0.34.0 in a build argument and in A11, adds the events block, adds the wrong-media-type smoke test cases, and adds host install steps plus Node for the smoke check. New: 2 minor (corepack auto-pin could change web/package.json on the host; a global npm install of corepack can collide with existing shims) and 1 info (0.34.0 could not be checked against npm here and is correctly an assumption). Carried unchanged: F-4, F-6 and F-7 (minor), F-9 to F-14 (info). Pass with 5 minor and 7 info follow-ups.",
+  "findings": [
+    {
+      "id": "F-4",
+      "severity": "minor",
+      "message": "The tests-first plan gives the test to the tests node and the script to the build node, but does not say who writes web/scripts/compose-smoke.d.mts, or whether the red commit carries a failing stub .mjs. Without the .d.mts, tsc --noEmit (pnpm typecheck and pnpm build) fails in the red commit for a missing module, not for the behaviour.",
+      "requirement": "REQ-SMK-001",
+      "location": "docs/specs/CHG-0005/sdd.md:L81, L319-L320",
+      "suggestion": "State that the React tests node writes compose-smoke.d.mts (signatures only) and a stub compose-smoke.mjs whose functions throw not implemented, and that the build node replaces the stub."
+    },
+    {
+      "id": "F-6",
+      "severity": "minor",
+      "message": "Section 1 says that Section 6 below answers each section-9 question, but the answers are in section 4 (section 6 is Security and privacy).",
+      "location": "docs/specs/CHG-0005/sdd.md:L24-L26",
+      "suggestion": "Change Section 6 to Section 4."
+    },
+    {
+      "id": "F-7",
+      "severity": "minor",
+      "message": "The citation web/playwright.config.ts:L27-L29 for Chromium, Firefox and WebKit misses WebKit: L27 opens projects, and the three projects are L28-L30.",
+      "requirement": "REQ-DOC-001",
+      "location": "docs/specs/CHG-0005/sdd.md:L226",
+      "suggestion": "Cite web/playwright.config.ts:L28-L30."
+    },
+    {
+      "id": "F-9",
+      "severity": "info",
+      "message": "An error_log at emerg also drops alert-level lines (for example a worker process exiting on a signal), which carry no request data. Request-bearing lines are logged at crit and below, so alert would keep the privacy rule and lose less.",
+      "location": "docs/specs/CHG-0005/sdd.md:L130, L406, L418",
+      "suggestion": "Consider error_log /dev/stdout alert, and update A10 and R6 to match."
+    },
+    {
+      "id": "F-10",
+      "severity": "info",
+      "message": "The jar and the SPA dist are platform-independent, yet both build stages run under emulation in the buildx proof, which is the slow part (R8).",
+      "location": "docs/specs/CHG-0005/sdd.md:L96, L115, L251-L256",
+      "suggestion": "Consider FROM --platform=BUILDPLATFORM (the BuildKit build argument) for both build stages so that only the run stages are per platform. Dockerfiles allow this; the no-dollar rule covers only docker-compose.yml."
+    },
+    {
+      "id": "F-11",
+      "severity": "info",
+      "message": "Neither .dockerignore excludes .env files. Vite reads a web/.env that a person made at build time, and an api/.env would enter the build stage. Neither reaches the run image, but excluding them is a cheap defence for NFR-102.",
+      "requirement": "NFR-102",
+      "location": "docs/specs/CHG-0005/sdd.md:L102-L103, L118-L120",
+      "suggestion": "Add .env and .env.* (keeping .env.example) to api/.dockerignore and web/.dockerignore."
+    },
+    {
+      "id": "F-12",
+      "severity": "info",
+      "message": "The java module (api/) is listed as a plan module but gets no test. A java tests node therefore has no red commit to make, and the SDD does not say how that node is satisfied.",
+      "location": "docs/specs/CHG-0005/sdd.md:L62, L327",
+      "suggestion": "State what the java tests node delivers (nothing, a test-plan note, or that the plan has no java tests node) so plan extension does not stall."
+    },
+    {
+      "id": "F-13",
+      "severity": "info",
+      "message": "NFR-101, REQ-CMP-004 AC-1 and the no-query-string constraint are verified by inspection only. Cheap static Vitest checks (docker-compose.yml has no dollar sign and only 127.0.0.1 ports; the nginx log_format uses none of the request, args, query_string or http_referer variables) would turn them into regression tests.",
+      "location": "docs/specs/CHG-0005/sdd.md:L319-L328",
+      "suggestion": "Optional: add such checks in web/tests if the approver wants automated proof. The requirements do not require them."
+    },
+    {
+      "id": "F-14",
+      "severity": "info",
+      "message": "The base image tags pin only the major line (21-jdk-noble, 21-jre-noble, 26-slim) and rely on the P6 reading. Q11 as answered said major/minor tags. If the approver rejects P6 at freeze, the tags must change.",
+      "requirement": "REQ-CMP-001",
+      "location": "docs/specs/CHG-0005/sdd.md:L96-L97, L115, L432-L434",
+      "suggestion": "Mention in section 12 that the tags follow P6, and what they become if P6 is not confirmed."
+    },
+    {
+      "id": "F-15",
+      "severity": "minor",
+      "message": "Corepack can write a packageManager field into a package.json that lacks one when it runs a package manager there (auto-pin, controlled by COREPACK_ENABLE_AUTO_PIN). The default in corepack 0.34.0 cannot be verified here, so the SDD should not depend on it. In the image a pin would touch only the build-stage copy. On the host, though, following 3.7 items 1 and 2 (corepack enable pnpm, then pnpm -C web install) could leave web/package.json modified. Section 2 says that file is not changed, and nothing records or checks the expectation.",
+      "requirement": "REQ-DOC-001",
+      "location": "docs/specs/CHG-0005/sdd.md:L67, L115, L222-L225, L231",
+      "suggestion": "Set COREPACK_ENABLE_AUTO_PIN=0 in the web build stage beside COREPACK_ENABLE_DOWNLOAD_PROMPT=0. Add an assumption that the native README steps leave web/package.json unmodified, checked by git status after following them (U or I during build-node work). If the check fails, the README tells the person to export COREPACK_ENABLE_AUTO_PIN=0 before the native run."
+    },
+    {
+      "id": "F-16",
+      "severity": "minor",
+      "message": "npm install -g corepack@0.34.0 may also install the shims corepack ships for pnpm and yarn, and npm can stop with EEXIST when such a bin already exists and npm does not own it. Examples: yarn 1 that official node images have placed in /usr/local/bin, a Homebrew or standalone pnpm, or shims left by an earlier corepack enable. This cannot be verified here. In the image, B would fail loudly. But L115 claims the step works on any Node, A7 says the npm install makes corepack present either way, and the host steps in 3.7 item 1 have no fallback or troubleshooting entry.",
+      "requirement": "REQ-CMP-001",
+      "location": "docs/specs/CHG-0005/sdd.md:L115, L222-L225, L403",
+      "suggestion": "Mark the works-on-any-Node claim as an assumption checked by B. Name the fallback the build node may use if B fails on a bin conflict (for example npm install -g --force with the same pinned version). Add a README troubleshooting entry for EEXIST on the host step: remove the conflicting global pnpm or yarn, or use --force."
+    },
+    {
+      "id": "F-17",
+      "severity": "info",
+      "message": "corepack 0.34.0 is plausible (a 2025 release, after the npm signing-key rotation that broke older corepack releases), but it could not be checked against the npm registry here, and newer releases may exist by 2026-11. A11 correctly marks it as an assumption, and B fails if the version is not published or cannot activate pnpm 10.34.8.",
+      "requirement": "REQ-CMP-001",
+      "location": "docs/specs/CHG-0005/sdd.md:L115, L407, L432",
+      "suggestion": "Build node: record the corepack --version line from an uncached build log as A11 evidence. If the version is changed, change the build argument default and the README pin together."
+    }
+  ]
+}
