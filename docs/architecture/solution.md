@@ -28,8 +28,10 @@ upstream:
 ## 1. Context and scope
 
 The app lets people sign up, log in and manage only their own to-dos through a web UI backed by an HTTP API, stored in
-a SQLite file (`docs/specs/CHG-0001/sdd.md:L16-L31`). It runs on one machine. No external system exists: no cloud
-service, hosted database or email service (`docs/specs/CHG-0001/sdd.md:L41`, `L611`). Out of scope: any cloud or
+a SQLite file (`docs/specs/CHG-0001/sdd.md:L16-L31`). It runs on one machine. No external system exists at run time: no
+cloud service, hosted database or email service (`docs/specs/CHG-0001/sdd.md:L41`, `L611`). Image builds (Compose) and
+the native tool chain fetch base images and packages from public registries (Docker Hub, Maven Central, npm registry;
+**Assumption:** Docker Hub for the official base images); the context view draws them as build-time externals. Out of scope: any cloud or
 hosted deployment, `dev`/`test` environments, release automation, CI, registry publishing, HTTPS, Playwright against the
 Compose stack (`docs/specs/CHG-0005/requirements.md:L303-L316`).
 
@@ -68,12 +70,13 @@ request-correlated structured logs.
 
 | Container | Technology | Responsibility | Owns | Calls |
 |---|---|---|---|---|
-| SPA | React, TypeScript, Vite; `web/` (`web/package.json:L21-L25`) | screens, mirror validation, routing, session state; the one fetch wrapper `web/src/api/client.ts` sends `X-Todo-Client: web` on unsafe methods (ADR-0007) | no data | `/api/v1/**` on its own origin |
+| SPA | React, TypeScript, Vite; `web/` (`web/package.json:L21-L25`, `L42-L44`) | screens, mirror validation, routing, session state; the one fetch wrapper `web/src/api/client.ts` sends `X-Todo-Client: web` on unsafe methods (ADR-0007) | no data | `/api/v1/**` on its own origin |
 | SPA web host and `/api` proxy **[changed]** | native run: Vite dev server on 5173 proxying `/api` to `http://localhost:8080` (`web/vite.config.ts:L5-L10`); Compose **[new]**: nginx serving the production build and proxying `/api` to the API container | one origin for page and API, so no CORS (ADR-0007) | nothing | API |
 | API | Java 21, Spring Boot 4.1.2 (`api/pom.xml:L11-L16`, `L24`), one process, one pool | sign-up, login, sessions, validation (authoritative), to-do operations, problem+json errors, request logging | the SQLite file | SQLite (JDBC) |
 | SQLite file | sqlite-jdbc 3.50.3.0 (`api/pom.xml:L52-L57`), WAL, one connection (`api/src/main/java/app/todo/config/DatabaseConfig.java:L22-L39`) | `users`, `sessions`, `todos`, `flyway_schema_history` | one owner: the API | — |
 | API log stream | JSON (logstash format) to stdout (`api/src/main/resources/application.properties:L12`) | one line per request with request id; never bodies, cookies, hashes (`docs/specs/CHG-0001/sdd.md:L573-L577`) | — | — |
-| Smoke-check script **[new]** | Node.js script under `web/` (path is the SDD's) | checks the SPA page and an unauthenticated `/api` call through the host | no data | web host |
+| Web host log stream **[new]** | Compose only: nginx access and error logs to stdout | host request log; must not record query strings (section 7.1, section 9) | — | — |
+| Smoke-check script **[new]** | Node.js tool run on the host, outside the app's boundary (its path is the SDD's) | checks the SPA page and an unauthenticated `/api` call through the host | no data | web host |
 
 **Components.** The API is a modular monolith: identity module `app.todo.auth`, to-dos module `app.todo.todo`, shared
 kernel `app.todo.common`, composition root `app.todo.config` (`docs/specs/CHG-0001/sdd.md:L43-L73`; ADR-0018). Its
@@ -135,7 +138,8 @@ One store: the SQLite file at `TODO_DB_PATH` (default `./data/todo.db`,
 
 Environments: CHG-0001 NFR-002 AC-2 allows no `dev` or `test` deployment; the only environment is the person's own
 machine, in one of two modes. A change moves to no other environment. No network zones beyond the machine: no ingress
-from other hosts, no egress needed at run time (image builds fetch base images and dependencies at build time).
+from other hosts, no egress needed at run time. Build time is a trust boundary: image builds and the native tool chain
+fetch base images and dependencies from public registries (see section 1; drawn in the context view).
 
 ### 6.1 Native run (as built by CHG-0001; documentation added by CHG-0005)
 
@@ -145,11 +149,11 @@ API: `cd api && ./mvnw spring-boot:run`, port 8080; SPA: `pnpm -C web install` t
 (`docs/specs/CHG-0001/sdd.md:L603-L611`; `web/vite.config.ts:L5-L10`). Prerequisites: JDK 21, Node.js LTS (`web/.nvmrc:L1`
 is `lts/*`), pnpm. Settings are `TODO_DB_PATH`, `TODO_COOKIE_SECURE`, `SERVER_PORT`
 (`api/src/main/resources/application.properties:L3-L6`); nothing loads a `.env` file, the person exports them in the
-shell (`docs/specs/CHG-0005/requirements.md:L77-L78`). **[new]** `README.md` run steps and `.env.example` (neither has
-run steps or exists today: `README.md:L1` is a title only; `docs/specs/CHG-0001/conformance.md:L153-L154`). The
-Playwright e2e (`pnpm -C web e2e`) starts its own API and SPA on a temporary database and needs ports 8080 and 5173
-free (`web/e2e/support/api-process.ts:L33`; `web/e2e/support/launch.ts:L7-L8`, `L33-L42`;
-`web/playwright.config.ts:L35-L42`).
+shell (`docs/specs/CHG-0005/requirements.md:L77-L78`). **[changed]** `README.md` gains the run steps (it exists today as a
+title only: `README.md:L1`; `docs/specs/CHG-0001/conformance.md:L153-L154`); **[new]** `.env.example`. The
+Playwright e2e (`pnpm -C web e2e`) starts its own API on a temporary database and checks that port 8080 is free
+(`web/e2e/support/api-process.ts:L33`; `web/e2e/support/launch.ts:L7-L8`, `L33-L42`); it starts the SPA on 5173 unless
+one already runs there, which it reuses outside CI (`web/playwright.config.ts:L35-L42`).
 
 ### 6.2 Docker Compose stack (target of CHG-0005, **[new]**, not yet built)
 
@@ -158,18 +162,23 @@ free (`web/e2e/support/api-process.ts:L33`; `web/e2e/support/launch.ts:L7-L8`, `
 - **web container [new]**: `nginx:stable-alpine`, non-root, image from `web/Dockerfile` (multi-stage: Node LTS and
   pnpm through corepack build the SPA with `pnpm build`). Serves the build and reverse-proxies `/api` to the api
   service, so the browser sees one origin and the `todo_session` cookie and `X-Todo-Client` header pass as in the
-  native run. Publishes `127.0.0.1:5173`. Starts after the API is healthy.
+  native run. Client routes (for example the to-do list and login screens, `docs/specs/CHG-0001/adr/0001-react-typescript-spa.md:L16-L20`)
+  must work on reload and direct entry, as they do under the Vite dev server, so every non-`/api` path that is not a
+  file must answer `index.html` and `/api` must never do so (REQ-CMP-003 AC-3, REQ-CMP-002 AC-2; the nginx
+  configuration is the spec author's, section 9). Writes access and error logs to stdout, which must not record query
+  strings (section 7.1). Publishes `127.0.0.1:5173`. Starts after the API is healthy.
 - **api container [new]**: image from `api/Dockerfile` (multi-stage: `eclipse-temurin` JDK 21 builds with `./mvnw`;
   `eclipse-temurin` JRE 21 on the Ubuntu variant runs it, not Alpine, because the SQLite driver ships native code),
   non-root. Publishes `127.0.0.1:8080` (for debugging). Settings as literal values in `docker-compose.yml`:
   `TODO_DB_PATH` inside the volume's directory, `TODO_COOKIE_SECURE=false`, `SERVER_PORT=8080`.
 - **named volume [new]** holding the SQLite file; **compose project network [new]** between the two containers;
   **healthcheck [new]** on an existing endpoint (401 = up), no Actuator, no API change.
-- **Builds.** `docker compose up` builds for the machine's own architecture from official multi-architecture base
-  images; a documented `docker buildx build --platform linux/amd64,linux/arm64` with no push or load proves both
-  build. No registry and no credentials.
+- **Builds.** `docker compose up --build` (or `docker compose build`) builds for the machine's own architecture from
+  official multi-architecture base images, pulled with dependencies from public registries; a documented
+  `docker buildx build --platform linux/amd64,linux/arm64` with no push or load proves both build. No publishing
+  registry and no credentials.
 - **Scaling.** None: one replica of each container.
-- **Cost drivers.** None beyond the person's machine: no cloud resources, no registry.
+- **Cost drivers.** None beyond the person's machine: no cloud resources, no publishing registry.
 
 ## 7. Well-Architected
 
@@ -179,13 +188,19 @@ This is a one-machine, one-user-at-a-time app, so each pillar is treated at that
 
 - **Observability.** The API writes one structured JSON log line per request (request id, method, route template,
   status, duration, internal user id) and logs unexpected exceptions with a stack trace and the request id; bodies,
-  identifiers, passwords, cookies and titles are never logged; no metrics or tracing (`docs/specs/CHG-0001/sdd.md:L571-L601`).
-  Native run: the console of the API process. Compose **[new]**: each container's stdout through `docker compose logs`
-  (nginx access and error logs from the web container). Request ids are not returned to the client, so a log line is
-  matched by time.
-- **Deployment and rollback.** No deployment pipeline. Native: restart the process. Compose: `docker compose up`
-  rebuilds; `docker compose down` stops without losing data; `down -v` wipes it (the README warns it deletes the
-  person's own to-dos).
+  identifiers, passwords, cookies, titles and search text are never logged by the API; no metrics or tracing
+  (`docs/specs/CHG-0001/sdd.md:L571-L601`). Native run: the console of the API process. Compose **[new]**: each
+  container's stdout through `docker compose logs`, including nginx access and error logs from the web container.
+  **[new] Design constraint for the spec author:** that rule is CHG-0001's for the whole app
+  (`docs/specs/CHG-0001/sdd.md:L575-L576`), and the SPA keeps the search text `q` in the URL query string
+  (`docs/specs/CHG-0001/adr/0001-react-typescript-spa.md:L19-L20`), so a default nginx access log, which records the
+  request line with its query string, would write search text into `docker compose logs`. The Compose web host must
+  not log query strings (for example `access_log off`, or a log format without `$request`, `$args` and `$query_string`);
+  the spec author decides the form (section 9). Request ids are not returned to the client, so a line is matched by time.
+- **Deployment and rollback.** No deployment pipeline. Native: restart the process. Compose: after a code change the
+  images must be rebuilt (`docker compose up --build` or `docker compose build`), because Compose reuses an existing
+  image otherwise; the exact README command is the SDD's. `docker compose down` stops without losing data; `down -v`
+  wipes it (the README warns it deletes the person's own to-dos).
 - **Runbooks.** The README troubleshooting (port in use, Docker not running). Smoke check and the person's UAT are the
   checks of the Compose stack.
 
@@ -206,7 +221,9 @@ This is a one-machine, one-user-at-a-time app, so each pillar is treated at that
   (`TODO_COOKIE_SECURE=false`, `AuthController.java:L29`, `L64`); any hosting would need HTTPS and `true`
   (`docs/specs/CHG-0001/sdd.md:L761`; CHG-0005 REQ-CMP-006).
 - **Containers [new].** Non-root users, official base images with explicit non-`latest` tags (CHG-0005 REQ-CMP-001,
-  NFR-103). Digest pinning is out of scope (`requirements.md:L314`).
+  NFR-103). Digest pinning is out of scope (`requirements.md:L314`). Build-time fetches from public registries are a
+  supply-chain trust boundary; versions come from `api/pom.xml` and the `web/` lockfile (**Assumption:** a lockfile is
+  committed; the SDD verifies).
 - **Test-only clock.** Exists only in the test source set and the `e2e` profile; it is not part of either run
   (ADR-0013; `docs/specs/CHG-0001/sdd.md:L613-L620`).
 
@@ -222,16 +239,23 @@ No redundancy (section 8).
 
 Load is one local user with up to 500 to-dos; p95 at most 1 s per action (CHG-0001 NFR-003, ADR-0015, ADR-0016
 risk row `docs/specs/CHG-0001/sdd.md:L765`). No caching. Scaling out is not a goal. **[new]** nginx serves a static
-production build, lighter than the Vite dev server; the API still serialises all database access.
+production build, lighter than the Vite dev server; the API still serialises all database access. **Risks:** first
+image builds (Maven and pnpm downloads) and the multi-arch proof under emulation are slow on a person's machine, and
+image size grows with the JDK build stage; the 120 s warm-machine target (NFR-106) bounds only start-up. Met by multi-stage
+builds, so the run images carry only the JRE and nginx, and by the warm-machine scope of the target.
 
 ### 7.5 Cost optimisation
 
-No running cost: no cloud, no registry. Costs are build time and disk for images and the volume.
+No running cost: no cloud, no publishing registry. Costs are build time and disk for images and the volume.
+**Risk:** disk use from build layers and old images accumulates on the person's machine; none at any other scale.
+Met by the README's cleanup note (`down -v`, image removal), which the SDD words.
 
 ### 7.6 Sustainability
 
 No idle cloud capacity. Data is kept only on the person's machine and is deletable by one command
-(native: delete the file; Compose: `docker compose down -v`). Sessions expire at 8 h.
+(native: delete the file; Compose: `docker compose down -v`). Sessions expire at 8 h. **Risk:** the volume and
+images keep using disk and the emulated multi-arch build uses CPU until the person removes them; negligible at one
+local user, so no further measure.
 
 ## 8. Decisions
 
@@ -253,15 +277,15 @@ Non-distributed choices, and whether an existing ADR already covers them:
 
 | Choice | Covered by | Marking |
 |---|---|---|
-| One deployable (modular monolith), one process | ADR-0018 (decided for the app; its context is one machine) | covered |
+| One deployable (modular monolith), one process | ADR-0018 (decided for the app: one deployable, one process and one SQLite file, `adr/0018-modular-monolith-module-boundaries.md:L9-L11`) | covered |
 | One shared SQLite file for all modules, `todos.user_id` foreign key into `users` | ADR-0003, ADR-0018, ADR-0014 | covered |
 | One connection serialising all access | ADR-0016 | covered |
-| Session state in the same single SQLite file, not in a separate session store (note: sessions are database rows, not in-process memory) | ADR-0004, ADR-0008 | covered for the native run |
+| Session state in the same single SQLite file, not in a separate session store (note: sessions are database rows, not in-process memory) | ADR-0004, ADR-0008 | covered (sessions are rows in the one SQLite file in either run); the Compose volume part is the ADR needed on the next row |
 | Single API replica writing one SQLite file on one named volume in Compose (never more than one writer; no bind mount of the checkout) | none: ADR-0003, ADR-0016 name the file and the pool, not a container or volume | **ADR needed: single API container with SQLite on a named volume (single writer, no scale-out) — why: one local user, cost, no shared database server** |
 | Same-origin delivery through an nginx reverse proxy serving the production build, instead of the Vite proxy | ADR-0001 decides same origin through the Vite dev proxy only | **ADR needed: nginx serves the SPA build and proxies `/api` in Compose — why: keeps the same-origin and cookie design (ADR-0001, ADR-0004, ADR-0007), no CORS, no API change (Q1)** |
-| Compose healthcheck on an existing endpoint (401 = up), no Actuator | none | **ADR proposed for the spec author to decide**: ADR needed only if the spec treats it as a decision rather than a requirement (REQ-CMP-005) |
-| Container images: official multi-arch bases, Ubuntu JRE not Alpine, non-root, built locally, buildx proof, no registry | none | **ADR proposed**: recorded as requirements (REQ-CMP-001, REQ-CMP-007); an ADR is the spec author's call |
-| No cloud, no HA, no horizontal scale | CHG-0001 NFR-002 and `docs/specs/CHG-0001/sdd.md:L31`; not an ADR | requirement, not a design choice |
+| Compose healthcheck on an existing endpoint (401 = up), no Actuator | none | not a non-distributed choice: fixed by requirement (REQ-CMP-005), no ADR required |
+| Container images: official multi-arch bases, Ubuntu JRE not Alpine, non-root, built locally, buildx proof, no publishing registry | none | not a non-distributed choice: fixed by requirements (REQ-CMP-001, REQ-CMP-007), no ADR required |
+| No cloud, no HA, no horizontal scale | CHG-0001 NFR-002 and `docs/specs/CHG-0001/sdd.md:L41`; not an ADR | requirement, not a design choice |
 
 The spec author writes any ADR above in `docs/specs/CHG-0005/adr/`.
 
@@ -277,7 +301,10 @@ The spec author writes any ADR above in `docs/specs/CHG-0005/adr/`.
 | The API binds all interfaces by default inside the container (no `server.address` is set: `application.properties:L1-L14`) so the web container can reach it | Compose | spec author | **Assumption** |
 | One connection, one writer: a second API replica or a bind-mounted file on another filesystem could corrupt or lock SQLite | data integrity | covered by the ADR needed in section 8 | open |
 | Session cookie not `Secure` on plain http; no login throttling; sign-up discloses that an identifier exists | security if ever exposed beyond localhost | accepted (`docs/specs/CHG-0001/sdd.md:L761-L763`) | accepted |
-| Warm-machine 120 s target and a Docker-less agent environment | NFR-106, REQ-SMK-001 AC-6 | requester at freeze (P1, P5) | open |
+| **[new]** The Compose web host's nginx access log, by default, records the request line with its query string, so search text `q` (kept in the URL, `docs/specs/CHG-0001/adr/0001-react-typescript-spa.md:L19-L20`) would reach `docker compose logs`, against `docs/specs/CHG-0001/sdd.md:L575-L576` (search text never logged) | privacy; CHG-0001 observability rule | spec author: the nginx configuration must not log query strings (no access log, or a format without `$request`, `$args`, `$query_string`) | open (constraint) |
+| **[new]** SPA history fallback in nginx: non-`/api` paths that are not files must answer `index.html`; `/api` must never do so | REQ-CMP-003 AC-3, REQ-CMP-002 AC-2, smoke check (a 200 HTML answer on `/api` fails it) | spec author | open (constraint) |
+| Warm-machine 120 s target (proposed, requirements P1) | NFR-106 | requester at freeze (P1) | open |
+| Who runs the smoke check where Docker is absent: settled by REQ-SMK-001 AC-6 (P5 covers only the record form) | REQ-SMK-001 AC-6 | settled in the requirements | closed |
 | Multi-arch proof needs a buildx builder and emulation on the person's machine | NFR-104 | documented in the README | accepted |
 
 ## 10. Improvement opportunities
@@ -291,12 +318,16 @@ None yet: this is the first version.
 - **Added:** this document, the first solution architecture, with four views (`docs/architecture/drawio/`:
   `todo-context`, `todo-containers`, `todo-deployment-native`, `todo-deployment-compose`) covering the app as CHG-0001
   built it, because the repository had no `docs/architecture/` (requester decision D4, Q10 (a)).
-- **Added [new]:** the Compose stack (web container, api container, project network, named volume, healthcheck, both
-  published loopback ports), the smoke-check script, and `README.md` run steps with `.env.example`, because the
+- **Added [new]:** the Compose stack (web container and its nginx log stream, api container, project network, named
+  volume, healthcheck, both published loopback ports), the smoke-check script and `.env.example`, because the
   request asks for one-command local runs and CHG-0001 NFR-002 AC-1 was deferred (`docs/specs/CHG-0005/requirements.md:L14-L26`).
+- **Changed [changed]:** `README.md` (exists, gains the run steps), because the same requirement asks for documented
+  runs.
 - **Changed [changed]:** the SPA web host and `/api` proxy is now either the Vite dev server (native run) or nginx
   (Compose), because the dev proxy target is `localhost:8080` and does not reach another container
   (`web/vite.config.ts:L9`). The native run itself is unchanged.
 - **Removed:** nothing.
 - **ADRs the spec needs** (section 8): single API container with SQLite on a named volume; nginx same-origin delivery
-  of the production build. Proposed: healthcheck choice; image and build choices.
+  of the production build. The healthcheck and image choices are requirement-fixed and need no ADR.
+- **Constraints for the spec author** (section 9): the Compose web host must not log query strings; nginx falls back to
+  `index.html` for client routes.
