@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N15-docs-diagrams",
+  "gate": "critic-verdict",
+  "verdict": "changes-required",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "critic",
+      "agentRunId": "a8abca6a2a4ad236d"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "drawio-architect",
+      "agentRunId": "a066526e726224ad4"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "drawio-architect",
+      "agentRunId": "a18de52297e24f001"
+    }
+  ],
+  "createdAt": "2026-11-13T10:08:18.482Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "reviewedCommit": "9a17847f17047a12f6025f0e6def36d4321d4411",
+  "diffHash": "c3e2f3df77b5822979e86f90a193834e49edf32f04d7e2fc67453adaea34d534",
+  "summary": "round 2, delta since 172b6326403143ea012c6fd6b0fa895a62bbba88: F-1, F-2 fixed (split UserRepository/SessionRepository with edges e4c, e6b, e7; WebConfig and RequestIdFilter drawn with e0, e1 relabelled; all new code citations checked against the files, CurrentUser is in app.todo.auth.api). F-3 to F-13 and F-15 fixed. One new major: todo-data-model.drawio L22 is not well-formed XML (no whitespace between the id and value attributes of the sessions cell), so the editable source fails a strict XML parser even though export --check passed. Two new minors on changed lines (swallowed modules tag in the containers PNG; pagination citation range). F-14 info carried. 1 major, 2 minor, 1 info.",
+  "findings": [
+    {
+      "id": "F-14",
+      "severity": "info",
+      "message": "Layout notes carried from round 1, partly addressed: the JDBC edge labels in the API component view still sit on the dashed boundary lines, and the legend and citation boxes leave large empty areas.",
+      "location": "docs/knowledge/diagrams/todo-api-components.drawio:L115-L128",
+      "suggestion": "Move the JDBC labels off the boundary lines and shrink the legend and notes boxes to their content."
+    },
+    {
+      "id": "F-16",
+      "severity": "major",
+      "message": "The sessions cell has no whitespace between its id attribute and its value attribute (the space was lost in this round edit). That makes the .drawio file, the editable source of record, not well-formed XML: a strict parser such as draw.io (browser DOMParser) or libxml rejects it with an attribute construct error. The harness renderer tolerated it (export --check passed and the PNG shows the sessions table); I could not run draw.io or a strict parser here, so the open failure is inferred from the XML spec, not observed.",
+      "requirement": "NFR-007",
+      "location": "docs/knowledge/diagrams/todo-data-model.drawio:L22-L22",
+      "suggestion": "Restore the space between id=sessions and value=, re-export, and check the file opens in draw.io (or passes xmllint --noout)."
+    },
+    {
+      "id": "F-17",
+      "severity": "minor",
+      "message": "The new single-deployable citation writes the Maven modules element as an escaped tag inside an html=1 label, so the renderer treats it as an HTML tag and drops it: the PNG reads one module with no , Java 21. The claim itself holds (api/pom.xml has no modules element, L1-L108; Java 21 at L24).",
+      "requirement": "NFR-007",
+      "location": "docs/knowledge/diagrams/todo-containers.drawio:L34-L34",
+      "suggestion": "Reword without angle brackets (no modules element) or double-escape the brackets, then re-export."
+    },
+    {
+      "id": "F-18",
+      "severity": "minor",
+      "message": "The TodoListPage citation L355-L373 covers only the SearchForm and FilterGroup; pagination is supported only by the javadoc at L31-L34. The Pagination component renders at L330, and the row toggle and delete wiring at L317-L327. The range came from the round-1 F-9 suggestion, so this is a new finding, not F-9 unfixed.",
+      "requirement": "REQ-LIST-003",
+      "location": "docs/knowledge/diagrams/todo-spa-routes.drawio:L46-L46",
+      "suggestion": "Cite web/src/todos/TodoListPage.tsx:L31-L34, L317-L330 and L355-L373."
+    }
+  ]
+}
