@@ -24,8 +24,13 @@ delete dialog, clear-completed dialog, to-do detail, not-found page while signed
 2.2.1 Timing Adjustable recorded as met under the "essential" exception (Q36); the flash review's inputs (the keyframes
 and a screen recording of the full run); and that web-qa records the result.
 
-This change is planned with the `smoke` template: no product code, tests or build nodes, only requirements, spec,
-freeze, verify and PR. Some answers below (Q9 (b), Q10 (b)) would not fit that plan; they are flagged.
+This change is planned with the `smoke` template. `harness plan create` reported that after the freeze, `plan extend`
+adds only phases 6 and 7 (verify and PR), so the plan has no web-qa, tests, build or docs node, and no agent works
+without a node of its own. Under this plan, the options in which web-qa does work (Q1 (a) and (c), Q5 (a) and (c),
+Q6 (a)) have no node to run in, and neither has writing and attaching the record of Q7 (the orchestrator attaches only a
+test or scan report a person ran and git ignores, never a record it writes); nor have Q9 (b) and Q10 (b). Which node
+writes and attaches the record is therefore your decision before the requirements step: answer the questions as you
+want the work done, and I will report what plan that needs (another template, or a new change) before going on.
 
 ## Q1. Who performs the screen-reader pass, and who writes the record?
 
@@ -157,6 +162,6 @@ date.
 (b) Yes, in this change. The `smoke` plan has no docs (okf-documenter) node, so this would need a different plan.
 (c) No.
 Recommended: (a), because this plan cannot own `docs/knowledge/`. If you want the notes fixed in the same PR, choose (b)
-and I will report what the plan needs before going on.
+and I will report what plan that needs before going on.
 
 **Answer:**
