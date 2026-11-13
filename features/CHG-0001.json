@@ -5,7 +5,7 @@
   "baseBranch": "develop",
   "squad": "default",
   "platform": "testharness2",
-  "status": "analysis",
+  "status": "merged",
   "requestedBy": "@alokkulkarni",
   "footprint": {
     "repos": [
@@ -215,8 +215,9 @@
     "updatedAt": "2026-11-11T10:28:11.675Z"
   },
   "links": {
-    "branch": "feature/CHG-0001-create-a-to-do-list",
-    "auto-merge": "3"
+    "branch": "docs/CHG-0001-create-a-to-do-list",
+    "merged-pr": "3",
+    "merge-commit": "751bdf1d2e650507725e29316fa877cd61926691"
   },
   "running": [],
   "overlaps": []
