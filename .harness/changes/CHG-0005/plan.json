@@ -106,7 +106,7 @@
       "gates": [
         "spec-freeze-approval"
       ],
-      "status": "pending"
+      "status": "complete"
     },
     {
       "id": "N05-solution-arch",
