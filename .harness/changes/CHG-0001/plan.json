@@ -10,7 +10,7 @@
     "sha256": "8465eeb8e5e930d7bd165b4c152e9be5bd62e33d8350a11291867d0b16792c98",
     "acceptanceRef": "https://github.com/alokkulkarni/testharness2/pull/1#pullrequestreview-5797517809"
   },
-  "status": "active",
+  "status": "complete",
   "branch": "docs/CHG-0001-create-a-to-do-list",
   "baseBranch": "develop",
   "squad": "default",
@@ -398,7 +398,7 @@
         "N13-pr-review",
         "N15-docs-diagrams"
       ],
-      "status": "running",
+      "status": "complete",
       "kind": "agent",
       "agent": "okf-documenter",
       "description": "Fold the change into the OKF bundle.",
@@ -406,16 +406,10 @@
         "critic-verdict",
         "docs-valid"
       ],
-      "executor": "any",
+      "executor": "claude-code",
       "isolation": "none",
       "attempts": 1,
-      "maxAttempts": 3,
-      "claim": {
-        "runId": "run-mwetgsul",
-        "executor": "claude-code",
-        "leaseUntil": "2026-11-13T12:28:06.498Z",
-        "claimedAt": "2026-11-13T10:11:04.077Z"
-      }
+      "maxAttempts": 3
     },
     {
       "id": "N15-docs-diagrams",

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N14-docs",
+  "gate": "docs-valid",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "tool",
+    "id": "okf-documenter",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "okf-documenter",
+      "agentRunId": "a07fd419256579875"
+    },
+    "modelAlias": "harness/documenter"
+  },
+  "createdAt": "2026-11-13T11:28:00.556Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "reviewedCommit": "21eb4ab99eada3f3aa3bebacbadf82e9d22b4c54",
+  "summary": "harness docs validate: docs/knowledge is a valid OKF v0.1 bundle (harness profile): 79 concepts, 792 links checked",
+  "findings": []
+}
