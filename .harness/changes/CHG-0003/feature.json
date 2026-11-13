@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0003",
+  "title": "Record CHG-0001 manual accessibility evidence",
+  "baseBranch": "develop",
+  "squad": "default",
+  "platform": "testharness2",
+  "status": "analysis",
+  "requestedBy": "@alokkulkarni",
+  "footprint": {},
+  "links": {
+    "branch": "feature/CHG-0003-record-chg-0001-manual-accessibility-evi"
+  }
+}
