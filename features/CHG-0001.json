@@ -219,14 +219,6 @@
     "merged-pr": "3",
     "merge-commit": "751bdf1d2e650507725e29316fa877cd61926691"
   },
-  "running": [
-    {
-      "node": "N15-docs-diagrams",
-      "role": "designer",
-      "runId": "run-mwesehfj",
-      "holder": "claude-code",
-      "leaseUntil": "2026-11-13T11:10:43.936Z"
-    }
-  ],
+  "running": [],
   "overlaps": []
 }
