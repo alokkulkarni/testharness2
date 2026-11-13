@@ -78,17 +78,11 @@
       "gates": [
         "critic-verdict"
       ],
-      "executor": "any",
+      "executor": "claude-code",
       "isolation": "none",
-      "status": "running",
+      "status": "complete",
       "attempts": 1,
-      "maxAttempts": 3,
-      "claim": {
-        "runId": "run-chg4-n03-1",
-        "executor": "claude-code",
-        "leaseUntil": "2026-11-13T19:18:20.365Z",
-        "claimedAt": "2026-11-13T17:15:47.042Z"
-      }
+      "maxAttempts": 3
     },
     {
       "id": "N04-spec-freeze",
