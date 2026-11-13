@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N14-docs",
+  "gate": "critic-verdict",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "critic",
+      "agentRunId": "a94b2bac8564006b5"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "okf-documenter",
+      "agentRunId": "a591dc00bd59b2e1a"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "okf-documenter",
+      "agentRunId": "acbdaa4d801e35765"
+    }
+  ],
+  "createdAt": "2026-11-13T10:53:23.503Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "reviewedCommit": "4d64c2fbd4f2a7da27873d5c37d39d5a82ea29f2",
+  "diffHash": "3068ac772998a8677a4cba1d6b5460206df687fe00c7d833e50ae2f291510a81",
+  "summary": "round 2, delta since b15c11d: F-1, F-2, F-3, F-4, F-5, F-6, F-7, F-10, F-11, F-12, F-13 fixed. F-1: nfr-001.md, accessibility-tests.md, req-nav-001.md and the overview now say the manual screen-reader, contrast and flash reviews are not recorded. F-8 and F-9 are partly fixed and carried as minor. The new line-range citations were checked against AuthController, AuthService, SessionService, the Jdbc repositories, WebConfig, RequestIdFilter, TodoValidator, JdbcTodoRepository, TodoDetailPage, application.properties, sdd.md, config.yaml and the N10 plan, and all match. New: three minors (F-15 to F-17) and two infos (F-18, F-19). No blocker or major: pass with 5 minor and 3 info follow-ups. docs/knowledge/diagrams is unchanged in the delta.",
+  "findings": [
+    {
+      "id": "F-8",
+      "severity": "minor",
+      "message": "Partly fixed. req-todo-005.md, the web-component-tests list.test.tsx row, req-acc-001.md, nfr-004.md (inspected vs tested) and api-integration-tests.md (unit tests marked) are fixed. Not done: the traceability.json and conformance.md pointer for the AC-level mapping is still only on req-auth-001.md, and the other requirement pages, req-todo-005.md among them, have none.",
+      "requirement": "REQ-TODO-005",
+      "location": "docs/knowledge/requirements/req-todo-005.md:L21-L23",
+      "suggestion": "Add one line to each requirement page pointing to .harness/changes/CHG-0001/traceability.json and docs/specs/CHG-0001/conformance.md for the AC-level test mapping."
+    },
+    {
+      "id": "F-9",
+      "severity": "minor",
+      "message": "Partly fixed. identity-module.md and identity-api.md now cite line ranges, and every range checked matches the code. Other as-built behaviour claims are still cited at file level only, for example the todos-module.md Isolation and Behaviour paragraphs (owner filter, MEDIUM default, strict updated_at advance, page clamp) cite no lines.",
+      "requirement": "REQ-ISO-001",
+      "location": "docs/knowledge/components/todos-module.md:L26-L40",
+      "suggestion": "Give path:Lstart-Lend for these claims, for example JdbcTodoRepository.java L46, L55, L69-L70, L25-L26 and TodoValidator.java L134."
+    },
+    {
+      "id": "F-14",
+      "severity": "info",
+      "message": "Author limits judged (carried from round 1). NFR-002 AC-1 recorded as deferred matches conformance.md, N12 F-14 and N13 F-9. Owners match feature.json requestedBy. docs/knowledge/diagrams is linked, not edited. harness docs validate was not run by this reviewer.",
+      "requirement": "NFR-002",
+      "location": "docs/knowledge/requirements/nfr-002.md:L19-L23",
+      "suggestion": "None."
+    },
+    {
+      "id": "F-15",
+      "severity": "minor",
+      "message": "The never-logged list names bodies, identifiers, passwords, hashes, cookies, tokens, titles, descriptions and search text and says the list is stated in the RequestIdFilter javadoc at L33-L34. The javadoc lists only request bodies, identifiers, passwords, cookies, titles and search text; hashes, tokens and descriptions come from SDD section 10, not the javadoc.",
+      "requirement": "REQ-AUTH-003",
+      "location": "docs/knowledge/components/shared-kernel.md:L47-L48",
+      "suggestion": "Cite SDD section 10 for the full list and say the javadoc (RequestIdFilter.java:L33-L34) states a subset."
+    },
+    {
+      "id": "F-16",
+      "severity": "minor",
+      "message": "e2e-tests.md names the chromium and webkit r3 runs as the evidence of record. The N10 r4 runs (N10-build-react.e2e-main-r4.xml, restart-r4, session-expiry-r4, run on 0615ba7 after d68c4de) are attached and are the Playwright reports N12 round 5 rebuilt traceability with (N12 F-17, summary). The N10 plan L83 still names r3, so the plan is the stale source.",
+      "requirement": "NFR-001",
+      "location": "docs/knowledge/tests/e2e-tests.md:L30-L34",
+      "suggestion": "Say the r4 runs are the latest attached chromium and webkit results used by the validator, citing N12 F-17, and keep r3 as the plan record."
+    },
+    {
+      "id": "F-17",
+      "severity": "minor",
+      "message": "The two N13 items added for F-2 cite N13 critic verdict F-2 and F-8 with no file path, while the N12 items name their verdict file. The cited findings do say what the page says (checked).",
+      "requirement": "NFR-004",
+      "location": "docs/knowledge/system/overview.md:L69-L74",
+      "suggestion": "Add .harness/changes/CHG-0001/verdicts/N13-pr-review.critic-verdict.json beside the N13 references."
+    },
+    {
+      "id": "F-18",
+      "severity": "info",
+      "message": "nfr-001.md says the evidence holds lint, typecheck and lint-contracts outputs. That describes evidence/other only; the evidence also holds the test reports. The point it makes (no manual review record) stands. The conformance register marks the NFR-001 row met on automated tests alone, which the page could mention.",
+      "requirement": "NFR-001",
+      "location": "docs/knowledge/requirements/nfr-001.md:L27-L31",
+      "suggestion": "Say no evidence file records a manual review, and note that conformance.md marks NFR-001 met on the automated tests."
+    },
+    {
+      "id": "F-19",
+      "severity": "info",
+      "message": "Not verified by this reviewer: the todo-list.md URL values claim against TodoListPage.tsx (checked against sdd.md section 14 rows REQ-LIST-001 and REQ-LIST-003 only), the COOKIE_NAME value in identity-api.md, and what FilterExceptionTest and PasswordStorageTest assert beyond their test names in conformance.md and sdd.md section 14.",
+      "requirement": "REQ-LIST-003",
+      "location": "docs/knowledge/screens/todo-list.md:L25-L26",
+      "suggestion": "None, or cite the code lines for these claims."
+    }
+  ]
+}

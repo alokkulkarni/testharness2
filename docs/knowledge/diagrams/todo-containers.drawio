@@ -1,0 +1,58 @@
+<mxfile host="sdlc-harness">
+  <diagram id="todo-containers" name="Containers">
+    <mxGraphModel grid="1" gridSize="10" page="1" pageWidth="1700" pageHeight="900">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title" value="&lt;b&gt;To-do list · C4 container view (as built)&lt;/b&gt;&lt;br&gt;CHG-0001 · 2026-11-13&lt;br&gt;REQ-AUTH-001..005, REQ-DATA-001, NFR-002, NFR-005, NFR-007" style="text;harness=title;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="460" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="user" value="&lt;b&gt;User&lt;/b&gt;&lt;br&gt;Person who signs up and manages own to-dos" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#073B6F;fontColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="40" y="270" width="160" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="machine" value="Developer machine (local only, NFR-002)" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#666666;container=1;verticalAlign=top;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="260" y="140" width="1340" height="360" as="geometry"/>
+        </mxCell>
+        <mxCell id="spa" value="&lt;b&gt;SPA&lt;/b&gt; [React, TypeScript, Vite]&lt;br&gt;Screens, client-side validation mirror, routing, accessibility" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;" vertex="1" parent="machine">
+          <mxGeometry x="40" y="120" width="260" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="api" value="&lt;b&gt;API&lt;/b&gt; [Java 21, Spring Boot]&lt;br&gt;One process: identity and to-dos modules, authoritative validation, sessions, error model" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;" vertex="1" parent="machine">
+          <mxGeometry x="560" y="120" width="260" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="db" value="&lt;b&gt;SQLite file&lt;/b&gt; [SQLite, WAL]&lt;br&gt;users, sessions, todos" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;" vertex="1" parent="machine">
+          <mxGeometry x="1060" y="110" width="200" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1" value="Uses [HTTP]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="user" target="spa">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e2" value="Calls [HTTP/JSON, Vite proxy]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="spa" target="api">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e3" value="Reads, writes [JDBC]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="api" target="db">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="notes" value="&lt;b&gt;Citations (as built)&lt;/b&gt;&lt;br&gt;Vite dev server on 5173 proxies /api to localhost:8080: web/vite.config.ts:L5-L10.&lt;br&gt;One HikariCP pool of 1 connection, SQLite WAL, path from todo.db.path: api/src/main/java/app/todo/config/DatabaseConfig.java:L22-L39.&lt;br&gt;Stateless security chain, session cookie only: api/src/main/java/app/todo/config/SecurityConfig.java:L52-L60.&lt;br&gt;Schema (users, sessions, todos): api/src/main/resources/db/migration/V1__init.sql:L6-L39.&lt;br&gt;Single deployable, one module with no Maven modules element, Java 21 (C-2, NFR-007 AC-1): api/pom.xml:L7-L8, L18-L21, L24." style="text;whiteSpace=wrap;html=1;align=left;fontSize=11;strokeColor=#999999;" vertex="1" parent="1">
+          <mxGeometry x="400" y="540" width="900" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend" value="&lt;b&gt;Legend&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;container=1;harness=legend;fillColor=none;strokeColor=#666666;verticalAlign=top;align=left;spacingLeft=6;" vertex="1" parent="1">
+          <mxGeometry x="20" y="540" width="360" height="200" as="geometry"/>
+        </mxCell>
+        <mxCell id="lg1" value="Person" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#073B6F;fontColor=#FFFFFF;" vertex="1" parent="legend">
+          <mxGeometry x="10" y="30" width="100" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="lg2" value="Container" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;" vertex="1" parent="legend">
+          <mxGeometry x="130" y="30" width="100" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="lg3" value="Store" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;" vertex="1" parent="legend">
+          <mxGeometry x="250" y="25" width="90" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="lg4" value="Boundary (dashed)" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#666666;" vertex="1" parent="legend">
+          <mxGeometry x="10" y="100" width="140" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="lg5" value="Arrow: verb [protocol], points in the direction of the call" style="text;whiteSpace=wrap;html=1;align=left;fontSize=11;" vertex="1" parent="legend">
+          <mxGeometry x="170" y="95" width="180" height="50" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -11,7 +11,7 @@
     "acceptanceRef": "https://github.com/alokkulkarni/testharness2/pull/1#pullrequestreview-5797517809"
   },
   "status": "complete",
-  "branch": "feature/CHG-0001-create-a-to-do-list",
+  "branch": "docs/CHG-0001-create-a-to-do-list",
   "baseBranch": "develop",
   "squad": "default",
   "nodes": [
@@ -386,7 +386,8 @@
       "inputs": [
         ".harness/changes/CHG-0001/evidence/scan-report/",
         ".harness/changes/CHG-0001/traceability.json",
-        ".harness/changes/CHG-0001/verdicts/"
+        ".harness/changes/CHG-0001/verdicts/",
+        "docs/knowledge/diagrams/"
       ],
       "outputs": [
         "docs/knowledge/"
@@ -394,9 +395,10 @@
       "dependsOn": [
         "N11-security",
         "N12-validate",
-        "N13-pr-review"
+        "N13-pr-review",
+        "N15-docs-diagrams"
       ],
-      "status": "pending",
+      "status": "complete",
       "kind": "agent",
       "agent": "okf-documenter",
       "description": "Fold the change into the OKF bundle.",
@@ -404,9 +406,9 @@
         "critic-verdict",
         "docs-valid"
       ],
-      "executor": "any",
+      "executor": "claude-code",
       "isolation": "none",
-      "attempts": 0,
+      "attempts": 1,
       "maxAttempts": 3
     },
     {
@@ -418,23 +420,23 @@
         ".harness/changes/CHG-0001/verdicts/"
       ],
       "outputs": [
-        "docs/architecture/"
+        "docs/knowledge/diagrams/"
       ],
       "dependsOn": [
         "N11-security",
         "N12-validate",
         "N13-pr-review"
       ],
-      "status": "pending",
+      "status": "complete",
       "kind": "agent",
       "agent": "drawio-architect",
       "description": "Update the diagrams for the merged change.",
       "gates": [
         "critic-verdict"
       ],
-      "executor": "any",
+      "executor": "claude-code",
       "isolation": "none",
-      "attempts": 0,
+      "attempts": 2,
       "maxAttempts": 3
     }
   ]

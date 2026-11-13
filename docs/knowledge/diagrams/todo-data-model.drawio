@@ -1,0 +1,55 @@
+<mxfile host="sdlc-harness">
+  <diagram id="todo-data-model" name="Data model">
+    <mxGraphModel grid="1" gridSize="10" page="1" pageWidth="1600" pageHeight="900">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title" value="&lt;b&gt;To-do list · Data (ERD) view (as built)&lt;/b&gt;&lt;br&gt;CHG-0001 · 2026-11-13&lt;br&gt;REQ-DATA-001, REQ-AUTH-003, REQ-AUTH-005, REQ-ISO-001, NFR-007" style="text;harness=title;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="520" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="idb" value="Identity module owns users and sessions (app.todo.auth)" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#666666;container=1;verticalAlign=top;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="20" y="120" width="850" height="340" as="geometry"/>
+        </mxCell>
+        <mxCell id="tdb" value="To-dos module owns todos (app.todo.todo)" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#666666;container=1;verticalAlign=top;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="120" width="400" height="350" as="geometry"/>
+        </mxCell>
+        <mxCell id="cfgb" value="Composition root owns flyway_schema_history (app.todo.config)" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#666666;container=1;verticalAlign=top;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="500" width="400" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="flyway" value="&lt;b&gt;flyway_schema_history&lt;/b&gt; [SQLite table]&lt;br&gt;Flyway migration bookkeeping" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;fontSize=11;" vertex="1" parent="cfgb">
+          <mxGeometry x="40" y="40" width="320" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="sessions" value="&lt;b&gt;sessions&lt;/b&gt; [SQLite table]&lt;br&gt;token_hash TEXT PK (SHA-256 of token)&lt;br&gt;user_id INTEGER NOT NULL FK&lt;br&gt;created_at TEXT NOT NULL&lt;br&gt;expires_at TEXT NOT NULL&lt;br&gt;index ix_sessions_expires_at" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="idb">
+          <mxGeometry x="30" y="50" width="300" height="240" as="geometry"/>
+        </mxCell>
+        <mxCell id="users" value="&lt;b&gt;users&lt;/b&gt; [SQLite table]&lt;br&gt;id INTEGER PK (never returned)&lt;br&gt;identifier TEXT NOT NULL (trimmed, original case)&lt;br&gt;identifier_key TEXT NOT NULL UNIQUE (lower-cased)&lt;br&gt;password_hash TEXT NOT NULL&lt;br&gt;created_at TEXT NOT NULL&lt;br&gt;No role column" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="idb">
+          <mxGeometry x="520" y="50" width="300" height="240" as="geometry"/>
+        </mxCell>
+        <mxCell id="todos" value="&lt;b&gt;todos&lt;/b&gt; [SQLite table]&lt;br&gt;id INTEGER PK AUTOINCREMENT&lt;br&gt;public_id TEXT NOT NULL UNIQUE (API id)&lt;br&gt;user_id INTEGER NOT NULL FK&lt;br&gt;title, title_search TEXT NOT NULL&lt;br&gt;description, description_search TEXT NULL&lt;br&gt;due_date TEXT NOT NULL (YYYY-MM-DD)&lt;br&gt;priority TEXT NOT NULL CHECK LOW, MEDIUM, HIGH&lt;br&gt;done INTEGER NOT NULL CHECK 0, 1&lt;br&gt;created_at, updated_at TEXT NOT NULL&lt;br&gt;index ix_todos_user_created&lt;br&gt;index ix_todos_user_done_created" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="tdb">
+          <mxGeometry x="40" y="40" width="320" height="260" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1" value="Belongs to [FK, cascade]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="sessions" target="users">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e2" value="Owned by [FK, cascade]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="todos" target="users">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="notes" value="&lt;b&gt;Citations (as built)&lt;/b&gt;&lt;br&gt;Table and index definitions: api/src/main/resources/db/migration/V1__init.sql:L6-L39 (users L6-L12, sessions L14-L21, todos L23-L39).&lt;br&gt;todos.user_id to users is the only foreign key between two modules' tables: V1__init.sql:L26; the to-dos module takes userId only from CurrentUser: api/src/main/java/app/todo/todo/TodoController.java:L34-L74.&lt;br&gt;Every todos statement is filtered by owner (user_id = :userId): api/src/main/java/app/todo/todo/JdbcTodoRepository.java:L44-L165; contract: TodoRepository.java:L7-L31.&lt;br&gt;Token stored as SHA-256 hex only: api/src/main/java/app/todo/auth/SessionService.java:L16-L19, L35-L43, L64-L70.&lt;br&gt;Argon2id password hash (m=19456 KiB, t=2, p=1, 16-byte salt): api/src/main/java/app/todo/auth/PasswordHasher.java:L6-L14. No role column on users: V1__init.sql:L6-L12. Identifier stored trimmed, original case, key lower-cased: api/src/main/java/app/todo/auth/AuthService.java:L41, L59.&lt;br&gt;flyway_schema_history belongs to the composition root: V1__init.sql:L2-L3.&lt;br&gt;File location and SQLite pragmas: api/src/main/java/app/todo/config/DatabaseConfig.java:L22-L39." style="text;whiteSpace=wrap;html=1;align=left;fontSize=11;strokeColor=#999999;" vertex="1" parent="1">
+          <mxGeometry x="420" y="640" width="1000" height="180" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend" value="&lt;b&gt;Legend&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;container=1;harness=legend;fillColor=none;strokeColor=#666666;verticalAlign=top;align=left;spacingLeft=6;" vertex="1" parent="1">
+          <mxGeometry x="20" y="540" width="380" height="200" as="geometry"/>
+        </mxCell>
+        <mxCell id="lg1" value="Table" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;" vertex="1" parent="legend">
+          <mxGeometry x="10" y="30" width="110" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="lg4" value="Owning module (dashed)" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#666666;" vertex="1" parent="legend">
+          <mxGeometry x="140" y="30" width="150" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="lg5" value="Arrow: relationship [constraint], from the table holding the foreign key to the table it references" style="text;whiteSpace=wrap;html=1;align=left;fontSize=11;" vertex="1" parent="legend">
+          <mxGeometry x="10" y="100" width="350" height="60" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

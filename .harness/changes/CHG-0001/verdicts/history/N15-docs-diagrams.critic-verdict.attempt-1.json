@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N15-docs-diagrams",
+  "gate": "critic-verdict",
+  "verdict": "changes-required",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "critic",
+      "agentRunId": "a1c6a2174cba236d4"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "drawio-architect",
+      "agentRunId": "a066526e726224ad4"
+    }
+  ],
+  "createdAt": "2026-11-13T10:00:17.394Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "reviewedCommit": "172b6326403143ea012c6fd6b0fa895a62bbba88",
+  "diffHash": "174fcded6be2f72046f58ef45a5c1474718a1ac3239800bbcb601594340e1863",
+  "summary": "Round 1 (exhaustive). Exports current (export --check passed); PNG layouts readable; outputs stay in docs/knowledge/diagrams/; every REQ/NFR ID named exists in requirements.md. Two majors in todo-api-components: the identity column contradicts the code (AuthService uses UserRepository directly; the filter calls SessionService.resolve; SessionService holds only SessionRepository), and RequestIdFilter/WebConfig are missing, so the drawn filter order (SessionCookieAuthenticationFilter registered first) is wrong as built (sdd.md section 10). The author-flagged claims hold in code (PasswordHasher Argon2id, V1 users has no role column, page files match the route labels) but are cited to the SDD only. 2 major, 11 minor, 2 info.",
+  "findings": [
+    {
+      "id": "F-1",
+      "severity": "major",
+      "message": "The identity column contradicts the code. The only edge into User and Session repositories comes from SessionService, but SessionService holds only SessionRepository (SessionService.java:L25-L32). AuthService reads and writes users through UserRepository directly (AuthService.java:L18, L59, L88, L102), and there is no AuthService-to-repository edge. The filter call to SessionService.resolve (SessionCookieAuthenticationFilter.java:L42) is not drawn.",
+      "requirement": "NFR-007",
+      "location": "docs/knowledge/diagrams/todo-api-components.drawio:L34-L47",
+      "suggestion": "Split the box into UserRepository and SessionRepository. Draw AuthService to UserRepository (find by key, findById, insert), SessionService to SessionRepository, and SessionCookieAuthenticationFilter to SessionService (resolves session). Cite the lines above."
+    },
+    {
+      "id": "F-2",
+      "severity": "major",
+      "message": "RequestIdFilter (common) and WebConfig (config), which registers it, are missing from the as-built component view. They run ahead of the whole Spring Security chain and before SessionCookieAuthenticationFilter (WebConfig.java:L18-L27, RequestIdFilter.java:L18-L21; sdd.md:L579-L581). So edge e1 (Registers first) and the note Filter chain order misstate the runtime order, and the API has no observability element on the diagram.",
+      "requirement": "NFR-007",
+      "location": "docs/knowledge/diagrams/todo-api-components.drawio:L61-L62",
+      "suggestion": "Add RequestIdFilter in the shared kernel column and WebConfig in the composition root, with WebConfig registering it before the security chain [FilterRegistrationBean, order -200]. Relabel e1 so it does not say first. Cite WebConfig.java:L18-L27 and RequestIdFilter.java:L18-L21 in the notes."
+    },
+    {
+      "id": "F-3",
+      "severity": "minor",
+      "message": "Edge e4 runs from SessionCookieAuthenticationFilter to TodoController. By the legend (arrow points in the direction of the call) it reads as auth calling todo, but the real dependency is todo on auth.api: TodoController imports CurrentUser and reads it with @AuthenticationPrincipal (TodoController.java:L3, L35; sdd.md:L70-L73). The published CurrentUser type is not drawn. In the PNG the label also covers the arrowhead.",
+      "requirement": "NFR-007",
+      "location": "docs/knowledge/diagrams/todo-api-components.drawio:L70-L72",
+      "suggestion": "Draw an auth.api CurrentUser element. The filter sets it as principal, and TodoController reads it (arrow from TodoController to CurrentUser). Move the label off the arrowhead."
+    },
+    {
+      "id": "F-4",
+      "severity": "minor",
+      "message": "The Argon2id hash and no role column claims are cited to sdd.md:L113-L123 (hasher class not read). Both hold in the built code, so the as-built diagram should cite the code.",
+      "requirement": "REQ-AUTH-003",
+      "location": "docs/knowledge/diagrams/todo-data-model.drawio:L31-L31",
+      "suggestion": "Cite api/src/main/java/app/todo/auth/PasswordHasher.java:L6-L14 for Argon2id (m=19456 KiB, t=2, p=1, 16-byte salt) and V1__init.sql:L6-L12 for the users columns (no role). Drop the not-read remark."
+    },
+    {
+      "id": "F-5",
+      "severity": "minor",
+      "message": "users.identifier is labelled as typed, but it is stored trimmed in its original case (AuthService.java:L41, L59; sdd.md:L118).",
+      "requirement": "REQ-AUTH-001",
+      "location": "docs/knowledge/diagrams/todo-data-model.drawio:L19-L19",
+      "suggestion": "Label it: identifier TEXT NOT NULL (trimmed, original case)."
+    },
+    {
+      "id": "F-6",
+      "severity": "minor",
+      "message": "The ERD drops NOT NULL on identifier_key, public_id, priority and done, which V1 declares NOT NULL (V1__init.sql:L9, L25, L32, L33).",
+      "requirement": "REQ-DATA-001",
+      "location": "docs/knowledge/diagrams/todo-data-model.drawio:L19-L22",
+      "suggestion": "Show NOT NULL on those four columns as V1 declares."
+    },
+    {
+      "id": "F-7",
+      "severity": "minor",
+      "message": "flyway_schema_history, owned by the composition root (sdd.md:L109-L110; V1__init.sql:L2-L3), is not in the ERD, though the component view lists it in the SQLite file (todo-api-components.drawio:L58).",
+      "requirement": "NFR-007",
+      "location": "docs/knowledge/diagrams/todo-data-model.drawio:L10-L15",
+      "suggestion": "Add flyway_schema_history in a composition root (app.todo.config) boundary, or state in the notes that it is omitted and why."
+    },
+    {
+      "id": "F-8",
+      "severity": "minor",
+      "message": "The note Every todos statement is filtered by owner cites the TodoRepository interface and its javadoc (TodoRepository.java:L7-L10, L13-L31). The SQL that proves it is in JdbcTodoRepository.",
+      "requirement": "REQ-ISO-001",
+      "location": "docs/knowledge/diagrams/todo-data-model.drawio:L31-L31",
+      "suggestion": "Cite api/src/main/java/app/todo/todo/JdbcTodoRepository.java:L44-L165, where every statement has user_id = :userId."
+    },
+    {
+      "id": "F-9",
+      "severity": "minor",
+      "message": "The per-route page labels are cited to sdd.md section 4.1 and 8 (page files not re-read). They hold in code, so the as-built diagram should cite the page files.",
+      "requirement": "REQ-NAV-001",
+      "location": "docs/knowledge/diagrams/todo-spa-routes.drawio:L46-L46",
+      "suggestion": "Cite web/src/todos/TodoListPage.tsx:L31-L34 and L355-L373 (filter, search, pagination), web/src/todos/TodoDetailPage.tsx:L34-L37 and L85-L91 (bad id gives the to-do not-found message, no API call), and web/src/app/NotFoundPage.tsx:L1-L30."
+    },
+    {
+      "id": "F-10",
+      "severity": "minor",
+      "message": "The guard labels omit two built branches. RequireAuth and PublicRoute show a Retry alert, not nothing, when the session probe fails (RequireAuth.tsx:L24, L43). After an explicit log out RequireAuth renders null while the provider navigates to /login with no returnTo (L26), so edge e2 (always /login?returnTo) is incomplete.",
+      "requirement": "REQ-AUTH-004",
+      "location": "docs/knowledge/diagrams/todo-spa-routes.drawio:L22-L22",
+      "suggestion": "Add both cases to the RequireAuth and PublicRoute labels or the notes, and say that e2 is the case of a signed-out visitor who did not log out."
+    },
+    {
+      "id": "F-11",
+      "severity": "minor",
+      "message": "Some citation ranges stop short of what they support. TodoService.java:L17-L60 omits setDone, delete and clearCompleted (L62-L81). The SHA-256 hash function (SessionService.java:L64-L70) is outside the data model ranges L16-L19, L35-L43.",
+      "requirement": "REQ-TODO-005",
+      "location": "docs/knowledge/diagrams/todo-api-components.drawio:L97-L97",
+      "suggestion": "Widen to TodoService.java:L17-L86 and add SessionService.java:L64-L70 to the data model token note."
+    },
+    {
+      "id": "F-12",
+      "severity": "minor",
+      "message": "In the containers diagram, Single deployable, no other service (C-2, NFR-007 AC-1) is cited to DatabaseConfig.java:L13-L16. That javadoc covers the one DataSource and pool, not a single deployable or the absence of other services. Java 21 is uncited.",
+      "requirement": "NFR-007",
+      "location": "docs/knowledge/diagrams/todo-containers.drawio:L34-L34",
+      "suggestion": "Cite the API build file and main class for the single deployable and the Java version, and keep DatabaseConfig.java:L22-L39 for the single pool."
+    },
+    {
+      "id": "F-13",
+      "severity": "minor",
+      "message": "The containers title names REQ-AUTH-*, which is not a requirement ID.",
+      "requirement": "REQ-AUTH-001",
+      "location": "docs/knowledge/diagrams/todo-containers.drawio:L7-L7",
+      "suggestion": "Write REQ-AUTH-001..005 (or the specific ones the view serves)."
+    },
+    {
+      "id": "F-14",
+      "severity": "info",
+      "message": "Layout notes. The label Reads and writes users, sessions [JDBC] sits on the API boundary dashed line. The legends leave large empty areas. The data model geometry runs past pageWidth 1400 (L3, L14), though the cropped export shows no defect.",
+      "location": "docs/knowledge/diagrams/todo-api-components.drawio:L91-L93",
+      "suggestion": "Move the label below the boundary, shrink the legend boxes, and set pageWidth to fit the content."
+    },
+    {
+      "id": "F-15",
+      "severity": "info",
+      "message": "No diagram names REQ-LIST-001..003, though the list route (filter, search, pagination) and the owner-scoped list query are drawn. The list page label also omits mark done, delete and clear completed (REQ-TODO-005..007, TodoListPage.tsx:L31-L34).",
+      "location": "docs/knowledge/diagrams/todo-spa-routes.drawio:L7-L7",
+      "suggestion": "Add REQ-LIST-001..003 (and REQ-TODO-005..007 for the list page) to the SPA routes title or the list label."
+    }
+  ]
+}
