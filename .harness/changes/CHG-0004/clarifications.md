@@ -18,7 +18,7 @@ the summary only; the videos are kept local and described in the summary. Recomm
 the evidence the SDD's REQ-NAV-001 row asks for ("a screen recording of its full run") and stay small, while the HTML
 report adds bulk and nothing the JUnit and summary do not.
 
-**Answer:**
+**Answer:** (a) JUnit XML + chromium/webkit videos + one Markdown summary, committed; HTML report stays local. (@alokkulkarni: all as suggested, 2026-11-13)
 
 ## Q2. What exactly do the new tests run against?
 
@@ -31,7 +31,7 @@ not grow. (c) A production build (`vite build` and `vite preview`) instead of th
 it is the §11 run the SDD names, keeps the checks running on every later change, and needs no new configuration; (c)
 departs from §11.
 
-**Answer:**
+**Answer:** (a) new specs in web/e2e/ under the main config (SDD §11 run), part of `pnpm -C web e2e`; video only on the not-found tests. (@alokkulkarni: all as suggested, 2026-11-13)
 
 ## Q3. Which browsers do the new tests run in?
 
@@ -42,7 +42,7 @@ excluded from them; (b) all three, with firefox installed first; (c) chromium an
 check, chromium only for the accessibility-tree and contrast checks. Recommended: (a), because it matches the
 required projects and the videos you asked for, and avoids the firefox launch problem.
 
-**Answer:**
+**Answer:** (a) chromium + webkit (tests.requiredProjects). (@alokkulkarni: all as suggested, 2026-11-13)
 
 ## Q4. What happens when a new test finds a real WCAG failure on develop?
 
@@ -56,7 +56,7 @@ follow-up change, so the suite is green while the failure stays visible and the 
 this is close to what rule 6 forbids, so it needs your explicit choice. Recommended: (a), because it keeps your
 "separate change" decision without weakening any test.
 
-**Answer:**
+**Answer:** (a) a real WCAG failure: this change waits for a separate fix change to merge. (@alokkulkarni: all as suggested, 2026-11-13)
 
 ## Q5. Who does the manual screen-reader pass, with which screen reader and browser?
 
@@ -66,7 +66,7 @@ VoiceOver and Safari on macOS; (b) @alokkulkarni, with VoiceOver and Safari, and
 Windows; (c) someone else (please name them and the reader). Recommended: (a), because VoiceOver and Safari are on the
 build host (webkit is a required project); say if you want NVDA as well.
 
-**Answer:**
+**Answer:** (a) @alokkulkarni, VoiceOver + Safari, as an open human note. (@alokkulkarni: all as suggested, 2026-11-13)
 
 ## Q6. Does the open screen-reader note block anything?
 
@@ -75,7 +75,7 @@ change of its own; (b) it blocks this change's merge until the pass is done and 
 product owner's acceptance of CHG-0001's accessibility, not this change's merge. Recommended: (a), which matches
 "leave a note for this to be human", while the summary and the knowledge bundle keep saying the pass is not done.
 
-**Answer:**
+**Answer:** (a) the open screen-reader note blocks nothing; it gets its own change later. (@alokkulkarni: all as suggested, 2026-11-13)
 
 ## Q7. Which contrast checks are measured and asserted?
 
@@ -88,7 +88,7 @@ adjacent colour and asserted at least 3:1; disabled states measured and listed i
 at least 3:1. Recommended: (b), because SDD §9 states "text contrast ≥ 4.5:1" and a measured table is the evidence the
 manual contrast pass would have given.
 
-**Answer:**
+**Answer:** (b) 1.4.11 non-text ≥3:1 plus a 1.4.3 text-contrast table asserted ≥4.5:1 (3:1 large); disabled states measured, not asserted. (@alokkulkarni: all as suggested, 2026-11-13)
 
 ## Q8. How does the automated flash check decide pass or fail?
 
@@ -103,7 +103,7 @@ videos (needs `ffmpeg`, which the project does not use today). (c) Screenshots t
 pausing. Recommended: (a), because stepping is deterministic in both browsers and needs no new tool; (c) cannot hold
 60 samples per second reliably.
 
-**Answer:**
+**Answer:** (a) Web Animations API stepping at 60 samples/s, screenshot per step, count general and red flashes per WCAG 2.3.1 in every 1-second window, ≤3 passes, no small-area exemption. (@alokkulkarni: all as suggested, 2026-11-13)
 
 ## Q9. When is the knowledge bundle's open-gap note updated?
 
@@ -115,7 +115,7 @@ screen-reader pass is still open; (b) a separate docs change after this one merg
 docs node changes nothing in those notes. Recommended: (a), because the node runs anyway and the bundle would
 otherwise state a gap this change closes.
 
-**Answer:**
+**Answer:** (a) this change's own docs node updates the knowledge-bundle open-gap notes. (@alokkulkarni: all as suggested, 2026-11-13)
 
 ## Q10. Is this the list of announcements and states the accessibility-tree checks must cover?
 
@@ -145,4 +145,4 @@ From SDD §4.1, §6.1, §8 and §9 and the states `web/e2e/a11y.spec.ts` opens, 
 (a) This list as written; (b) this list with changes (please say which); (c) only the states `a11y.spec.ts` opens
 today (items 1–4, 6–8). Recommended: (a), because it covers the states and the announcements NFR-001 relies on.
 
-**Answer:**
+**Answer:** (a) the 9-item announcement/state list as written. (@alokkulkarni: all as suggested, 2026-11-13)
