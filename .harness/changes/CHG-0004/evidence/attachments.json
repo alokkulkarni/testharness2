@@ -1,0 +1,12 @@
+[
+  {
+    "kind": "solution-architecture",
+    "path": ".harness/changes/CHG-0004/evidence/solution-architecture/solution-f1bb7c256574.pdf",
+    "description": "the solution architecture rendered by harness docs render (PDF)"
+  },
+  {
+    "kind": "solution-architecture",
+    "path": ".harness/changes/CHG-0004/evidence/solution-architecture/solution-f1bb7c256574.docx",
+    "description": "the solution architecture rendered by harness docs render (DOCX)"
+  }
+]
