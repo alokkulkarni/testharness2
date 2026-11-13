@@ -324,5 +324,6 @@
     "merge-commit": "751bdf1d2e650507725e29316fa877cd61926691"
   },
   "running": [],
-  "overlaps": []
+  "overlaps": [],
+  "checks": "none-configured"
 }
