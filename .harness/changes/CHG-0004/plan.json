@@ -33,7 +33,7 @@
       "claim": {
         "runId": "run-chg4-n01-1",
         "executor": "claude-code",
-        "leaseUntil": "2026-11-13T13:50:27.966Z",
+        "leaseUntil": "2026-11-13T14:06:11.469Z",
         "claimedAt": "2026-11-13T12:50:27.966Z"
       }
     },
