@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0001",
+  "node": "N14-docs",
+  "gate": "critic-verdict",
+  "verdict": "changes-required",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "critic",
+      "agentRunId": "abe2b5353be077557"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0001",
+      "agent": "okf-documenter",
+      "agentRunId": "a591dc00bd59b2e1a"
+    }
+  ],
+  "createdAt": "2026-11-13T10:41:31.531Z",
+  "specFreezeHash": "d8ec0ad87a94b1cc80ccfc425e394400b2f3794a3f7708faa77350f5df01c2ca",
+  "reviewedCommit": "b15c11d48e46d979283a0214f8c1e199a84980e7",
+  "diffHash": "562d04db65fdd9c4769ca89e5b22156f809b2f2dbd1a24414e0c41fa2eff0192",
+  "summary": "Round 1, exhaustive. One major: the bundle says a manual screen-reader and contrast pass is recorded in the N10 and N11 evidence, but no such record exists. Ten minors and four infos are follow-ups: overview divergences omit N12 and N13 items, the todos summary says the description is trimmed, composition-root misdescribes WebConfig and the config docs, wrong clamp location, ADR-0009 page overstates the owner filter, the Firefox evidence wording, test-mapping gaps, file-level citations for as-built claims, and a dangling logging-rules link. Checked: diagrams/ untouched in 1613695...b15c11d, the linked PNG and PDF exist, owners match feature.json requestedBy, NFR-002 AC-1 deferred matches the conformance register and N12 F-14. harness docs validate was not run by me (not on my command list).",
+  "findings": [
+    {
+      "id": "F-1",
+      "severity": "major",
+      "message": "Unsupported verification claim. nfr-001.md says the manual screen-reader and contrast pass is recorded in the N10 and N11 evidence, and accessibility-tests.md says it is recorded in the evidence. No such record exists: evidence/other holds only lint, typecheck and lint-contracts outputs, attachments.json lists no a11y review, the N10 plan and critic verdict do not mention one, and N11 is the security gate. SDD section 14 (NFR-001 row) requires this manual pass on eight screens, recorded by web-qa, and the REQ-NAV-001 AC-6 flash review. The bundle therefore presents an unperformed or unrecorded check as done.",
+      "requirement": "NFR-001",
+      "location": "docs/knowledge/requirements/nfr-001.md:L24-L25",
+      "suggestion": "State that no manual screen-reader, contrast or flash review is recorded for CHG-0001, both here and in docs/knowledge/tests/accessibility-tests.md:L21, and list it under Gaps and in the overview known divergences. Alternatively cite the actual record if one exists."
+    },
+    {
+      "id": "F-2",
+      "severity": "minor",
+      "message": "Known divergences (as recorded at N12 and N13) lists three items but omits others those verdicts record as departures: N13 F-2 (method, route, status and duration only inside the log message text, a partial departure from SDD section 10), N12 F-2 (web/.nvmrc holds lts/*, not a pinned LTS, against SDD section 11) and N12 F-9 and N13 F-8 (JDK 23.0.2 compiling with --release 21).",
+      "requirement": "NFR-004",
+      "location": "docs/knowledge/system/overview.md:L57-L66",
+      "suggestion": "Add these, or retitle the section so it does not imply completeness, and link the verdicts."
+    },
+    {
+      "id": "F-3",
+      "severity": "minor",
+      "message": "The todos concept summary says the table stores a trimmed title and description. The description is stored as sent, and only a blank one becomes NULL (TodoValidator.java content method, SDD section 5). The body table is right. The generated data/index.md copies the wrong summary.",
+      "requirement": "REQ-TODO-002",
+      "location": "docs/knowledge/data/todos.md:L4-L4",
+      "suggestion": "Say a trimmed title and an optional description stored as sent, then rerun harness docs index."
+    },
+    {
+      "id": "F-4",
+      "severity": "minor",
+      "message": "composition-root.md lists WebConfig in sources but calls it web MVC configuration that was not reviewed. WebConfig registers RequestIdFilter ahead of Spring Security for the REQUEST and ERROR dispatches (SDD section 10), which is a 30-line file. The known gap also says the documented configuration is not visible in the repo, but api/src/main/resources/application.properties L3-L6 lists TODO_DB_PATH, TODO_COOKIE_SECURE and SERVER_PORT with defaults. Only the README run steps and .env.example are missing.",
+      "requirement": "NFR-007",
+      "location": "docs/knowledge/components/composition-root.md:L27-L40",
+      "suggestion": "Describe WebConfig as the RequestIdFilter registration (order -200, REQUEST and ERROR). Narrow the gap to the missing README run steps and .env.example, and point to application.properties."
+    },
+    {
+      "id": "F-5",
+      "severity": "minor",
+      "message": "req-list-003.md puts the page clamp in TodoValidator or TodoService. The clamp is in JdbcTodoRepository.list (min of requested and totalPages, or 1 with no matches), and TodoValidator only maps an oversized page to Long.MAX_VALUE. The same page cites the return-to rule for URL page normalisation, but that rule page says nothing about page normalisation (SDD section 8, URL page values).",
+      "requirement": "REQ-LIST-003",
+      "location": "docs/knowledge/requirements/req-list-003.md:L20-L23",
+      "suggestion": "Name JdbcTodoRepository.list for the clamp. Link the to-do list screen, or add the URL page and status normalisation to it, instead of the return-to rule."
+    },
+    {
+      "id": "F-6",
+      "severity": "minor",
+      "message": "The ADR-0009 page summary says the repositories are one per module, but the identity module has two (UserRepository, SessionRepository). The body says each statement filters on user_id while listing JdbcUserRepository and JdbcSessionRepository. Their lookups go by identifier_key and token_hash. ADR-0009 requires the owner parameter only on TodoRepository methods.",
+      "requirement": "REQ-ISO-001",
+      "location": "docs/knowledge/decisions/adr-0009-spring-jdbc-without-jpa.md:L4-L22",
+      "suggestion": "Say package-private repositories in their module, and that every TodoRepository statement filters on user_id."
+    },
+    {
+      "id": "F-7",
+      "severity": "minor",
+      "message": "e2e-tests.md says Firefox runs are not part of the evidence. attachments.json does attach the three-browser runs (N10-build-react.e2e-main-full.xml, restart-full, session-expiry-full), in which every Firefox case fails at launch. The evidence records the launch failures, and Firefox is excluded from tests.requiredProjects.",
+      "requirement": "NFR-001",
+      "location": "docs/knowledge/tests/e2e-tests.md:L30-L31",
+      "suggestion": "Say that Firefox is configured but not required, and that the attached full runs show every Firefox case failing at launch (N10 plan Accepted divergences, N12 F-9)."
+    },
+    {
+      "id": "F-8",
+      "severity": "minor",
+      "message": "There are gaps in the suite-level mapping. req-todo-005.md omits list.test.tsx, which holds the toggle and re-query tests (N10 plan L106), and the web-component-tests list.test.tsx row omits REQ-TODO-005 and REQ-DATA-002. req-acc-001.md omits the API tests the conformance register uses as evidence: AcceptanceScenarioApiTest, TodoIsolationApiTest and PersistenceTest. nfr-004.md presents tests as verifying the requirement, but the register marks the NFR-004 row, AC-1 and AC-3 as inspected. api-integration-tests.md files the WhitespaceTest and ProblemCodeTest unit tests under integration. Only req-auth-001.md points to traceability.json for the AC-level mapping.",
+      "requirement": "REQ-TODO-005",
+      "location": "docs/knowledge/requirements/req-todo-005.md:L21-L21",
+      "suggestion": "Add the missing suites. Say which NFR-004 criteria are inspected rather than tested. Mark the unit tests as unit. Add the traceability.json and conformance.md pointer to every requirement page."
+    },
+    {
+      "id": "F-9",
+      "severity": "minor",
+      "message": "As-built behaviour claims are cited at file level only. Examples: the dummy-hash login in identity-module.md cites AuthService.java with no range, and identity-api.md L28-L29 cites the cookie attributes to LoginSessionApiTest.java, a test that is not in its sources, rather than the code (AuthController cookie builder). Harness contract item 3 asks for path:Lstart-Lend on code claims. okf-authoring permits plain paths in sources, so this is a follow-up, not a blocker.",
+      "requirement": "REQ-AUTH-002",
+      "location": "docs/knowledge/components/identity-module.md:L33-L42",
+      "suggestion": "Give line ranges for behavioural claims, for example AuthService.java dummy-hash lines and AuthController.java cookie lines, and cite code rather than tests for as-built facts."
+    },
+    {
+      "id": "F-10",
+      "severity": "minor",
+      "message": "req-auth-003.md says it is implemented by shared kernel logging rules and links the common problem model, but neither page has logging rules. The SDD section 10 never-logged list, which AC-3 depends on, and the RequestIdFilter request-id behaviour have no home in the bundle (bodies, identifiers, passwords, hashes, cookies, tokens, titles, descriptions and search text are never logged).",
+      "requirement": "REQ-AUTH-003",
+      "location": "docs/knowledge/requirements/req-auth-003.md:L19-L20",
+      "suggestion": "Add the observability rules to shared-kernel.md, or add a logging rule concept, and link it from REQ-AUTH-003 and NFR-004."
+    },
+    {
+      "id": "F-11",
+      "severity": "info",
+      "message": "adr-0012 page cites risk row 768 and risk row 769 of SDD section 13. Those are sdd.md line numbers, not row numbers.",
+      "requirement": "NFR-007",
+      "location": "docs/knowledge/decisions/adr-0012-contract-tests-swagger-request-validator.md:L21-L24",
+      "suggestion": "Write sdd.md:L768 and sdd.md:L769, or name the risk rows by their text."
+    },
+    {
+      "id": "F-12",
+      "severity": "info",
+      "message": "Some concept titles differ from the frozen headings: REQ-AUTH-002 Log in (frozen: Login), REQ-AUTH-004 Unauthenticated access, logout and session end (frozen: Unauthenticated access and logout), NFR-001 Accessibility (WCAG 2.1 AA).",
+      "requirement": "REQ-AUTH-002",
+      "location": "docs/knowledge/requirements/req-auth-002.md:L3-L3",
+      "suggestion": "Use the frozen heading text as the title so searches match the spec."
+    },
+    {
+      "id": "F-13",
+      "severity": "info",
+      "message": "todo-detail.md says an id that is not a UUID, or one the API does not find, shows the not-found state without a second request. A non-UUID makes no request, and an unknown UUID makes one getTodo call that returns 404 (SDD section 8).",
+      "requirement": "REQ-NAV-001",
+      "location": "docs/knowledge/screens/todo-detail.md:L19-L19",
+      "suggestion": "Split the two cases."
+    },
+    {
+      "id": "F-14",
+      "severity": "info",
+      "message": "Author limits judged. NFR-002 AC-1 recorded as deferred matches conformance.md, N12 F-14 and N13 F-9. Firefox not launched is accurate apart from F-7. Owners alokkulkarni match feature.json requestedBy. ADR summaries were checked against the frozen ADR bodies, and only ADR-0009 departs (F-6). docs/knowledge/diagrams is unchanged in the range and is linked, not edited. harness docs validate was not run by this reviewer.",
+      "requirement": "NFR-002",
+      "location": "docs/knowledge/requirements/nfr-002.md:L19-L23",
+      "suggestion": "None."
+    }
+  ]
+}
