@@ -51,7 +51,7 @@
       ],
       "executor": "claude-code",
       "isolation": "none",
-      "status": "complete",
+      "status": "pending",
       "attempts": 2,
       "maxAttempts": 3
     },
