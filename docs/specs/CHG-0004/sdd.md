@@ -8,7 +8,7 @@ authors:
     agentRunId: run-chg4-n03-1
 upstream:
   - path: docs/specs/CHG-0004/requirements.md
-    sha256: a393f8fb5e2b2c6351a7a4e40e1f917ba6b665ee981322bf99c4619885776ddb
+    sha256: c67cab9d65db8c4d5eed647062b13def283addb1bd930d1aace77c8979dc5f43
 ---
 
 # SDD — CHG-0004 Automated accessibility audit of CHG-0001
@@ -197,7 +197,7 @@ attributes, live-region membership and focus (`toBeFocused`).
 | 002 AC-1 | 45 to-dos seeded by API; open `/todos` | A polite live region holds "Showing 1-20 of 45" (hyphen-minus, analyst default 2) |
 | 002 AC-2 | New account, open `/todos`; then search "no-such-text" | A level-2 heading "You have no to-dos yet"; then a level-2 heading "No matching to-dos" (analyst default 5) |
 | 002 AC-3 | 1 to-do; open `/todos` | A `group` role with a non-empty accessible name contains radios, and exactly one radio in it is checked |
-| 002 AC-4 | 45 to-dos; open `/todos` | A `navigation` named "Pagination" exists. Inside it, exactly one element has `aria-current="page"`, and that element holds "1". This is pending open question 1: the app's current-page element is a `<span>`, not a link (`web/src/todos/Pagination.tsx` L49-L53) |
+| 002 AC-4 | 45 to-dos; open `/todos` | A `navigation` named "Pagination" exists. Inside it, exactly one element has `aria-current="page"`, and that element holds "1". The element for the current page is checked whatever its role (Q12 a): the app's is a `<span>`, not a link (`web/src/todos/Pagination.tsx` L49-L53) |
 | 002 AC-5 | 45 to-dos; open `/todos`; activate the "Page 2" link | URL has `page=2`; the `<h1>` "My to-dos" is focused |
 | 002 AC-6 | 3 to-dos; open `/todos`. Filter: focus the checked radio "All" with Tab and press ArrowRight. Search: type a first text in the search box and press Enter. Then replace it with a different text, so that a new query runs, focus the Search button and press Enter. After each, wait for the URL's `q=` to change and the result to render | After each re-query has rendered, focus is on "Active", on the search box and on the Search button respectively |
 | 002 AC-7 | One active and one done to-do; open `/todos` (Clear all completed enabled). Delete the completed ones with the `clearCompletedTodos` operation (`DELETE /api/v1/todos/completed`) through `page.request`, standing in for another tab. Then activate "Clear all completed" by keyboard | The shell region (`[aria-live="polite"]`, `web/src/app/AppShell.tsx` L69) holds "There are no completed to-dos to clear.", checked before the shell clears it after 10 s (L27). The count of `dialog` role elements is 0 |
@@ -295,6 +295,9 @@ colour is the fill. Its adjacent colour is the page, row or dialog colour outsid
     not the text, which sits behind the padding;
   - for a native checkbox or radio (`native: true`): the whole element box. There the UA-painted ring, fill or check is
     the only paint.
+- **Native checkboxes and radios are asserted at 3:1** like every other boundary (Q13 a; REQ-A11Y-006 AC-2, AC-3,
+  AC-5). If a browser paints one under 3:1, the test fails, web-qa stops and reports it, and this change waits for a
+  CSS fix in a separate change (Q4).
 - **Text links** (no border, no fill) are identified by their text. They have no boundary row and are covered by the
   text table.
 
@@ -326,8 +329,9 @@ colour is the fill. Its adjacent colour is the page, row or dialog colour outsid
 - **Programmatic focus targets.** `<h1 tabindex="-1">`, `<main tabindex="-1">` and the error summary
   `[role=alert][tabindex=-1]` are focus targets, not controls; they have `outline: none` (`app.css` L32-L36).
 - **The pagination current-page marker** is a `<span aria-current="page">`, not focusable and not operable
-  (`Pagination.tsx` L49-L53). Its state is carried by text: bold weight, underline and `aria-current`. It is in the
-  text table, not the non-text table (open question 3).
+  (`Pagination.tsx` L49-L53). Its state is carried by text: bold weight, underline and `aria-current`. Its fill
+  (`#EFF6FF`, about 1.04:1 against the page `#F9FAFB`) is not a control's selected state and is not asserted (Q14 a;
+  REQ-A11Y-006 AC-3). Its text is measured and asserted in the REQ-A11Y-007 text table (§6.5, list screen).
 
 ### 6.5 Controls and states per audited screen
 
@@ -338,7 +342,7 @@ boundary, **T** text.
 |---|---|
 | Sign-up `/signup`, signed out; then after an empty submit | Skip link (O, T: focus). Identifier and password inputs (O: focus; B: normal, hover, invalid; T: normal, hover, focus with a typed value). "Sign up" primary button (O; B: normal, hover; T: normal, hover, focus). "Already have an account? Log in" text link (O; T: normal, hover, focus). Error-summary links (O; T: normal, hover, focus) |
 | Log-in `/login`, signed out; then after an empty submit | As sign-up, with the "Log in" button and the "No account yet? Sign up" link |
-| List `/todos`: 21 to-dos, one of them done (two pages); then the completed one deleted by API and the page reloaded (disabled state) | Skip link (O, T: focus). "Log out" secondary button in the header (O; B: normal, hover; T: normal, hover, focus). "Add a to-do" primary link (O; B, T as a button). "Clear all completed" danger-outline button (O; B: normal, hover, disabled; T: normal, hover, focus, disabled). Search box (O; B: normal, hover; T with a typed value). "Search" secondary button (O; B; T). Filter radio, native (O on the checked one; B: normal on "Active", hover, selected on "All"). Filter option label (B: normal, hover, selected; T: normal, selected). Row checkbox, native (O; B: normal, hover, selected on the done row). Row title link (O; T: normal, hover, focus). Row "Edit" secondary link (O; B; T). Row "Delete" danger-outline button (O; B; T). Pagination links "Page 2" and "Next" (O; T: normal, hover, focus). "Previous" marker (T: disabled). Current-page marker (T: normal) |
+| List `/todos`: 21 to-dos, one of them done (two pages); then the completed one deleted by API and the page reloaded (disabled state) | Skip link (O, T: focus). "Log out" secondary button in the header (O; B: normal, hover; T: normal, hover, focus). "Add a to-do" primary link (O; B, T as a button). "Clear all completed" danger-outline button (O; B: normal, hover, disabled; T: normal, hover, focus, disabled). Search box (O; B: normal, hover; T with a typed value). "Search" secondary button (O; B; T). Filter radio, native (O on the checked one; B: normal on "Active", hover, selected on "All"). Filter option label (B: normal, hover, selected; T: normal, selected). Row checkbox, native (O; B: normal, hover, selected on the done row). Row title link (O; T: normal, hover, focus). Row "Edit" secondary link (O; B; T). Row "Delete" danger-outline button (O; B; T). Pagination links "Page 2" and "Next" (O; T: normal, hover, focus). "Previous" marker (T: disabled). Current-page marker `<span aria-current="page">` (T: normal, asserted; its fill not asserted, Q14) |
 | Create/edit form: `/todos/new`, then after an empty submit, then `/todos/<id>/edit` | Skip link, "Log out". Title input, description textarea, due-date input, priority select (O; B: normal, hover, invalid where the field can be invalid; T with a value). "Add to-do" and "Save changes" primary buttons (O; B; T). "Cancel" secondary link (O; B; T). Error-summary links (O; T) |
 | Delete dialog: from the list, opened by keyboard | "Cancel" secondary button and "Delete" danger button on the dialog surface (O; B: normal, hover; T: normal, hover, focus) |
 | Clear-completed dialog: from the list with one done to-do, opened by keyboard | "Cancel" and "Delete 1 completed" (as the delete dialog) |
@@ -621,8 +625,7 @@ Its sections, in order:
    - default 1: `web/src/auth/LoginPage.tsx` L14, L89;
    - default 2: `web/src/todos/TodoListPage.tsx` L314;
    - default 3: `TodoListPage.tsx` L314;
-   - default 6: `TodoListPage.tsx` L244, L268;
-   - and the answer to open question 1, if it is recorded as one.
+   - default 6: `TodoListPage.tsx` L244, L268.
 9. **Test defects** (REQ-A11Y-012 AC-6): each, with its fix.
 10. **Reproducibility and suite time** (NFR-101, NFR-102).
 11. **Open note: manual screen-reader pass** (REQ-A11Y-013):
@@ -668,7 +671,7 @@ done, passed or waived (REQ-A11Y-013 AC-2).
 
 | # | Risk or follow-up | Handling |
 |---|---|---|
-| R1 | A native checkbox or radio is painted under 3:1 by a browser. WCAG 1.4.11 exempts appearance "determined by the user agent and not modified by the author", but REQ-A11Y-006 AC-2 asserts it | The design asserts it as written. Such a failure is neither a listed wording difference nor a test defect, and arguably not a WCAG failure, so web-qa stops and reports it (open question 2) |
+| R1 | A native checkbox or radio is painted under 3:1 by a browser. WCAG 1.4.11 exempts appearance "determined by the user agent and not modified by the author", but REQ-A11Y-006 AC-2 asserts it | Asserted at 3:1 as written (Q13 a; §6.3). If a browser paints one under 3:1, the test fails, web-qa stops and reports it, and this change waits for a CSS fix in a separate change (Q4) |
 | R2 | WebKit may not paint a paused animation's `currentTime` in a screenshot, or may paint it a frame late | The two `requestAnimationFrame` waits. The non-vacuity assertion (§8.5) fails if frames never change. The calibration covers decoding, not stepping. A stepping problem is reported as a test defect, and the count is not loosened |
 | R3 | Canvas decoding applies colour management to the PNG and shifts colours | `colorSpaceConversion: 'none'`. The calibration's 21.00 and 4.54 reference ratios would expose a shift |
 | R4 | `:focus-visible` heuristics differ between engines | Focus reached by keyboard (`focusByKeyboard`), and `:focus-visible` is checked before measuring |
@@ -681,27 +684,7 @@ done, passed or waived (REQ-A11Y-013 AC-2).
 | R11 | The boundary measure takes the highest-contrast pixel in its region (§6.3), the most lenient statistic. A thin or partial dark edge, such as a UA shadow on a native control, could pass a control whose main boundary is lighter | The table shows the identifying colour found, so a reviewer can see which colour carried the ratio. If a reviewer finds a pass carried by such an edge, they report it as a finding against this design; the statistic is not changed during the build |
 | F1 | **Follow-up (requester's decision, relayed from @alokkulkarni: "switch N05 to a minimal architecture stub and continue but make a note so its not lost and fixed after M22").** `docs/architecture/solution.md` is a placeholder that CHG-0004 wrote. CHG-0005 (PR #7, frozen, parked until harness M22) writes the whole-app solution architecture | Whichever of CHG-0004 and CHG-0005 merges second reconciles `docs/architecture/solution.md`. CHG-0005's version is the intended content |
 
-## 14. Open questions
-
-1. **REQ-A11Y-002 AC-4: needs an answer before freeze.**
-   - **The contradiction.** The AC says "the current page's link has `aria-current="page"`". The app marks the current
-     page with a `<span aria-current="page">`, not a link (`web/src/todos/Pagination.tsx` L49-L53). CHG-0001 SDD §9
-     L554 and Q10 item 4 say only "`aria-current="page"`".
-   - **Why it needs an answer.** The difference is not among analyst defaults 1, 2, 3 and 6, so REQ-A11Y-012 AC-5 does
-     not cover it.
-   - **Options.** (a) Reword AC-4 to "the element for the current page has `aria-current="page"`". (b) Add it to the
-     listed spec-wording differences.
-   - **What the design does.** §5 checks the current-page element whatever its role. Under either answer the test is
-     the same.
-2. **REQ-A11Y-006 AC-2, AC-3, AC-5: please confirm.** Native checkboxes and radios are painted by the browser (R1).
-   - **Options.** (a) Assert them at 3:1 as the AC says; this is the design's default. (b) Measure and list them as "UA
-     appearance, not asserted".
-   - **Why it matters.** Under (a), a browser that paints them under 3:1 blocks the merge until a separate CSS change.
-3. **REQ-A11Y-006 AC-3: please confirm.** The pagination current-page marker's fill (`#EFF6FF`, about 1.04:1 against
-   the page `#F9FAFB`) is not treated as a control's selected state, because the marker is not a control (§6.4). Its
-   bold, underlined text is measured in the REQ-A11Y-007 table instead.
-
-## 15. Traceability
+## 14. Traceability
 
 "e2e" means a Playwright test under the main configuration in chromium and webkit. "review" means a check by the
 validator or reviewer on the diff, evidence or files. Contract element: none for every row (no interface).
@@ -717,7 +700,7 @@ validator or reviewer on the diff, evidence or files. Contract element: none for
 | REQ-A11Y-002 AC-1 | §5 | e2e "REQ-A11Y-002 AC-1 page 1 of 45 announces Showing 1-20 of 45 in a polite live region" |
 | REQ-A11Y-002 AC-2 | §5 | e2e "REQ-A11Y-002 AC-2 the empty and no-match states are level-2 headings" |
 | REQ-A11Y-002 AC-3 | §5 | e2e "REQ-A11Y-002 AC-3 the filter is a named group of radios with exactly one checked" |
-| REQ-A11Y-002 AC-4 | §5, §14 Q1 | e2e "REQ-A11Y-002 AC-4 the Pagination landmark marks the current page with aria-current" |
+| REQ-A11Y-002 AC-4 | §5 (Q12) | e2e "REQ-A11Y-002 AC-4 the Pagination landmark marks the current page with aria-current" |
 | REQ-A11Y-002 AC-5 | §5 | e2e "REQ-A11Y-002 AC-5 a pagination link moves focus to the list h1" |
 | REQ-A11Y-002 AC-6 | §5 | e2e "REQ-A11Y-002 AC-6 a filter change and a search keep focus on the control used" |
 | REQ-A11Y-002 AC-7 | §5 | e2e "REQ-A11Y-002 AC-7 clearing with no completed to-dos left announces politely and opens no dialog" |
