@@ -86,7 +86,7 @@
       "claim": {
         "runId": "run-chg5-n03-1",
         "executor": "claude-code",
-        "leaseUntil": "2026-11-13T15:31:26.168Z",
+        "leaseUntil": "2026-11-13T15:45:42.341Z",
         "claimedAt": "2026-11-13T14:11:52.256Z"
       }
     },
