@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0004",
+  "node": "N02-requirements",
+  "gate": "critic-verdict",
+  "verdict": "changes-required",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0004",
+      "agent": "critic",
+      "agentRunId": "a4237e19254cd6dbf"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0004",
+      "agent": "requirements-analyst",
+      "agentRunId": "a324ec2b83f46005f"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0004",
+      "agent": "requirements-analyst",
+      "agentRunId": "a443a2269800f903f"
+    }
+  ],
+  "createdAt": "2026-11-13T13:22:27.879Z",
+  "reviewedCommit": "0af85eb7e8fa24c899324a1c16c2e4f0c927c421",
+  "diffHash": "63f9466d74037a11ca44bd22bb505fe9498e77eb747cf653834c68ae8622245b",
+  "summary": "round 2, delta since 529fb4b: F-1, F-2, F-3, F-4, F-5, F-6 fixed (minors F-7 to F-18 and info F-20 also addressed). One new major on a changed line: REQ-A11Y-010 AC-4 now bans any artificial red state, which conflicts with the tests-red-first gate the web-qa tests node carried in CHG-0001 and needs a human decision (F-21). Two new minors (F-22, F-23) and one new info (F-24) are follow-ups; info F-19 carried.",
+  "findings": [
+    {
+      "id": "F-19",
+      "severity": "info",
+      "message": "REQ-A11Y-001 AC-4 (session ended) must run under the main configuration (REQ-A11Y-010 AC-1), which has no test clock (docs/specs/CHG-0001/sdd.md:L613-L620); the state is reachable by a signed-in user whose next request gets 401 (web/src/auth/SessionProvider.tsx:L61-L67), for example after the session cookie is removed.",
+      "requirement": "REQ-A11Y-001",
+      "location": "docs/specs/CHG-0004/requirements.md:L49-L49",
+      "suggestion": "No change needed; the SDD can name how the state is reached."
+    },
+    {
+      "id": "F-21",
+      "severity": "major",
+      "message": "REQ-A11Y-010 AC-4 and analyst default 11 now forbid any stub or artificial failing state and expect tests that pass on their first run against develop (REQ-A11Y-012 AC-4 is the expected outcome). The request settles that the tests are written test-first by web-qa (clarifications.md:L4-L5), and in CHG-0001 the web-qa tests node carried the tests-red-first gate (.harness/changes/CHG-0001/plan.json, N08-tests-web gates critic-verdict and tests-red-first). If this change gets the same node, an honest all-green first run cannot give it a red commit, and AC-4 forbids making one, so the node could not complete. Nothing in Q1-Q10 settles this; it needs the requester or approver. I could not confirm how the gate evaluates (its code is out of my reach), so this is the conflict as the plans show it.",
+      "requirement": "REQ-A11Y-010",
+      "location": "docs/specs/CHG-0004/requirements.md:L146-L146",
+      "suggestion": "Raise an open question to the approver: how test-first is evidenced in an audit-only change (for example the tests node runs without the tests-red-first gate, or the gate is waived by the approver with a reason), record the answer, and reference it from AC-4 and analyst default 11 (L236)."
+    },
+    {
+      "id": "F-22",
+      "severity": "minor",
+      "message": "REQ-A11Y-010 AC-4 routes every test that fails on its first run to REQ-A11Y-012, but REQ-A11Y-012 defines only a real WCAG failure (AC-1) and a spec-wording difference (AC-5). A first-run failure caused by a defect in the test itself, or by test support not yet in place (for example video not yet switched on for the REQ-A11Y-008 test), has no class. Rated minor, unlike round 1 F-1: the spec no longer asserts anything known to fail on develop, and fixing a defective test is not weakening it under AC-5.",
+      "requirement": "REQ-A11Y-010",
+      "location": "docs/specs/CHG-0004/requirements.md:L146-L146",
+      "suggestion": "Say that a first-run failure caused by the test or its support is fixed in the test and recorded in the summary as such, and that the playwright.config.ts change of AC-3 lands in the test commit; only a failure of the app goes to REQ-A11Y-012."
+    },
+    {
+      "id": "F-23",
+      "severity": "minor",
+      "message": "REQ-A11Y-012 AC-5 reads as a standing rule: any difference between spec or Q10 wording and the app that is not a WCAG failure is checked against the app and does not block the merge; the listed defaults (1, 2, 3, 6) read as examples. A difference found after freeze would then be settled by the test author rather than the approver (harness contract item 2: stop and report). The glossary at L27-L28 is limited to defaults 1 and 2, so the two places also differ in scope.",
+      "requirement": "REQ-A11Y-012",
+      "location": "docs/specs/CHG-0004/requirements.md:L167-L167",
+      "suggestion": "Limit AC-5 to the differences listed in analyst defaults 1, 2, 3 and 6, and say that any other difference found later is reported for the approver before the test is adapted."
+    },
+    {
+      "id": "F-24",
+      "severity": "info",
+      "message": "REQ-A11Y-010 AC-3 (analyst default 10) adds no devDependency, while REQ-A11Y-009 AC-2 computes per-pixel luminance from screenshots, which needs a PNG decode. That fits Q8 (a) (no new tool) and can be done in the page (canvas) or with what Playwright already provides.",
+      "requirement": "REQ-A11Y-009",
+      "location": "docs/specs/CHG-0004/requirements.md:L145-L145",
+      "suggestion": "No change needed; the SDD should name how screenshots are decoded without a new dependency."
+    }
+  ]
+}
