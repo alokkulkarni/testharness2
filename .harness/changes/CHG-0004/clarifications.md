@@ -157,16 +157,16 @@ Raised in phase 1 by the critic (finding F-21 of `.harness/changes/CHG-0004/verd
 
 Raised in phase 2 by the spec author (`docs/specs/CHG-0004/sdd.md` §14 item 1). The app marks the current page with `<span aria-current="page">`, not a link (`web/src/todos/Pagination.tsx` L49–L53); CHG-0001 SDD §9 and Q10 item 4 say only `aria-current="page"`. It is not one of the listed wording differences (analyst defaults 1, 2, 3, 6), so REQ-A11Y-012 AC-5 makes it a question. The test is the same under (a) and (b). (a) Reword REQ-A11Y-002 AC-4 to "the element for the current page has `aria-current="page"`". (b) Keep the wording and add it as a listed spec-wording difference (a new analyst default), recorded in the summary. Recommended: (a), because the requirement then says what is checked and no difference needs recording. Either way `requirements.md` changes after its review passed, so N02-requirements has to be reopened, which only a person can do: `harness plan reopen N02-requirements --reason "Q12: REQ-A11Y-002 AC-4 wording"` in your own terminal on this branch.
 
-**Answer:**
+**Answer:** (a) Reword REQ-A11Y-002 AC-4 to "the element for the current page". (@alokkulkarni: "1 - a", 2026-11-13)
 
 ## Q13. Are native checkboxes and radios asserted at 3:1 (REQ-A11Y-006 AC-2, AC-3, AC-5)?
 
 Raised in phase 2 by the spec author (`docs/specs/CHG-0004/sdd.md` §13 R1, §14 item 2). The filter radios and the done checkboxes are painted by the browser. WCAG 1.4.11 exempts appearance "determined by the user agent and not modified by the author". (a) Assert them at 3:1 as REQ-A11Y-006 says (the SDD's default); if a browser paints one under 3:1 the test fails, web-qa stops and reports, and this change waits for a CSS fix in a separate change (Q4). (b) Measure them and list them in the ratio table as "browser appearance, not asserted", like disabled states. Recommended: (a), because it is what REQ-A11Y-006 says and needs no requirement change; (b) would change `requirements.md` (see Q12 on reopening).
 
-**Answer:**
+**Answer:** (a) Assert native checkboxes and radios at 3:1 per REQ-A11Y-006; if one fails, the change waits for a separate CSS fix (Q4). (@alokkulkarni: "2 - a", 2026-11-13)
 
 ## Q14. Is the pagination current-page marker's fill left out of the non-text contrast assertions?
 
 Raised in phase 2 by the spec author (`docs/specs/CHG-0004/sdd.md` §6.4, §14 item 3). The marker's fill (`#EFF6FF`) against the page (`#F9FAFB`) is about 1.04:1. The SDD treats the marker as not a control, so its fill is not a "selected state" under REQ-A11Y-006 AC-3; its bold, underlined text is measured and asserted in the text-contrast table (REQ-A11Y-007). (a) Yes, as the SDD says. (b) No: assert the fill at 3:1, which fails on develop today and makes this change wait for a separate fix (Q4). Recommended: (a), because the current page is shown by text weight, underline and `aria-current`, not by the fill alone, so the fill is not what identifies it.
 
-**Answer:**
+**Answer:** (a) Leave the pagination current-page marker's fill out of the non-text assertions; its text is asserted. (@alokkulkarni: "3 - a", 2026-11-13)
