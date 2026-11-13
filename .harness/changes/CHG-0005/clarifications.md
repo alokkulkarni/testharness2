@@ -7,10 +7,13 @@ Request (requester @alokkulkarni): make the merged to-do app of CHG-0001 (Spring
 SQLite file on a named volume; and how to run the Playwright e2e against it. No cloud or hosted deployment
 (CHG-0001 NFR-002 AC-2), no release automation, no CI workflows.
 
-Already settled by the repository, so not asked: the SPA and API share one origin through a proxy of `/api`
-(ADR-0001, `web/vite.config.ts` L4-L10); the cookie is not Secure over plain http (`TODO_COOKIE_SECURE=false`,
-`docs/specs/CHG-0001/sdd.md` L610-L611); the API runs its Flyway migration on start and creates the database file
-(ADR-0014, sdd.md L607-L608); JDK 21 (`api/pom.xml` L24).
+Already settled by the repository, so not asked: the native run's SPA and API share one origin through a proxy of
+`/api` (ADR-0001, `web/vite.config.ts` L4-L10); the native run's cookie is not Secure over plain http
+(`TODO_COOKIE_SECURE=false`, `docs/specs/CHG-0001/sdd.md` L610-L611); the API runs its Flyway migration on start and
+creates the database file (ADR-0014, sdd.md L607-L608); JDK 21 (`api/pom.xml` L24). The SPA builds from `web/` alone:
+the generated `web/src/styles/tokens.css` is committed.
+
+The requester answered Q1, Q3 and Q5 on 2026-11-13, before seeing the questions; their words are quoted as given.
 
 ## Q1. How should the SPA container serve the app?
 
@@ -22,7 +25,7 @@ change to `api/`).
 Recommended: (a), because it is closest to how the app would really be served, keeps the same-origin design of
 ADR-0001 and leaves the native dev run untouched.
 
-**Answer:**
+**Answer:** "web to be production build." and "for browser to api in compose as suggested same origin and session cookie." — @alokkulkarni, 2026-11-13
 
 ## Q2. Which host ports should the stack publish?
 
@@ -47,7 +50,7 @@ multi-platform `docker buildx` build.
 Recommended: (a), because official multi-arch images built locally work on both Apple silicon and x86-64 without a
 registry, and minor-version tags are easy to keep current.
 
-**Answer:**
+**Answer:** "images are both arch created. not just apple silicon.." — @alokkulkarni, 2026-11-13
 
 ## Q4. What state should the database be in when the e2e runs against the stack?
 
@@ -72,7 +75,7 @@ Playwright container (Microsoft's Playwright image) inside compose, under a prof
 Recommended: (a), because it reuses the existing switch with no test change and needs only Node and the Playwright
 browsers on the host.
 
-**Answer:**
+**Answer:** "dont run playwright e-e against compose.. user would check and validate and run User acceptance testing." — @alokkulkarni, 2026-11-13
 
 ## Q6. Should the containers have healthchecks, and how?
 
@@ -129,5 +132,45 @@ with two deployment views: the native local run and the Docker Compose stack. (b
 view, linking CHG-0001's design for the rest. (c) The whole app with the Compose stack as its only deployment view.
 Recommended: (a), because a first solution architecture should describe the system as it is, and both ways of
 running it remain supported.
+
+**Answer:**
+
+## Q11. With images for both architectures (Q3), which base images and version pinning?
+
+Q3's answer settles the architectures, not the images or their pinning. (a) Official multi-arch images:
+`eclipse-temurin:21-jdk` to build the API and `eclipse-temurin:21-jre` (Ubuntu based, not Alpine, because the SQLite
+JDBC driver ships native code) to run it; `node:<current LTS major>` with pnpm through corepack to build the SPA and
+`nginx:stable-alpine` to serve it; tags pinned to a major/minor version; containers run as a non-root user. (b) As
+(a), but every image pinned by the digest of its multi-arch index. (c) Minimal runtimes (distroless).
+Recommended: (a), because each of these images is published for both linux/amd64 and linux/arm64, and minor-version
+tags are easy to keep current.
+
+**Answer:**
+
+## Q12. How are the images for both architectures produced, with no registry?
+
+Plain `docker compose up` builds for the machine's own architecture only. Docker keeps an image for several platforms
+locally only with its containerd image store turned on; otherwise a multi-platform image must be pushed to a
+registry. (a) `docker compose up` builds for the machine's own architecture from multi-arch base images, so the same
+files work on linux/amd64 and linux/arm64 machines, and the README gives a `docker buildx build --platform
+linux/amd64,linux/arm64` command (no push) that proves both build. (b) `docker-compose.yml` lists both platforms
+(`build.platforms`), so every build makes both; the README states the prerequisite (buildx and the containerd image
+store). (c) Build both and publish them to a registry such as GitHub Container Registry (needs a registry, which the
+request does not mention).
+Recommended: (a), because `docker compose up` stays fast and needs no extra Docker setup, while the documented
+command still shows both architectures build.
+
+**Answer:**
+
+## Q13. In the compose stack, should the session cookie be sent without the Secure flag?
+
+Q1's answer puts the browser and the API on one origin with the existing session cookie, served over plain http on
+`localhost`. The API marks the cookie Secure only when `TODO_COOKIE_SECURE=true` (sdd.md L610-L611). (a)
+`docker-compose.yml` sets `TODO_COOKIE_SECURE=false`, as the native run does, and the README says any hosting would
+need HTTPS and `true`. (b) Set it to `true` and rely on browsers treating `http://localhost` as secure (Chromium and
+Firefox do; Safari/WebKit may not keep the cookie). (c) Serve the stack over HTTPS with a local self-signed
+certificate and set it to `true`.
+Recommended: (a), because it works in every browser on plain http, matches the native run, and keeps certificates out
+of a local-only stack.
 
 **Answer:**
