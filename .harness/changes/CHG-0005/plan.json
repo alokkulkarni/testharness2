@@ -80,9 +80,15 @@
       ],
       "executor": "any",
       "isolation": "none",
-      "status": "pending",
+      "status": "running",
       "attempts": 0,
-      "maxAttempts": 3
+      "maxAttempts": 3,
+      "claim": {
+        "runId": "run-chg5-n03-1",
+        "executor": "claude-code",
+        "leaseUntil": "2026-11-13T15:11:52.256Z",
+        "claimedAt": "2026-11-13T14:11:52.256Z"
+      }
     },
     {
       "id": "N04-spec-freeze",
