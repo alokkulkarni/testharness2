@@ -11,13 +11,5 @@
   "links": {
     "branch": "feature/CHG-0003-record-chg-0001-manual-accessibility-evi"
   },
-  "running": [
-    {
-      "node": "N01-clarify",
-      "role": "lead",
-      "runId": "run-mweysjrq",
-      "holder": "claude-code",
-      "leaseUntil": "2026-11-13T13:41:49.788Z"
-    }
-  ]
+  "running": []
 }
