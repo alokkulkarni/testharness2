@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0002",
+  "title": "Declare github.checks none and security.blockOn critical/high",
+  "baseBranch": "develop",
+  "squad": "default",
+  "platform": "testharness2",
+  "status": "analysis",
+  "requestedBy": "@alokkulkarni",
+  "footprint": {},
+  "links": {
+    "branch": "feature/CHG-0002-declare-github-checks-none-and-security"
+  }
+}
