@@ -1,12 +1,13 @@
 ---
 type: data
 title: todos table
-summary: The todos table stores one row per to-do owned by one user, with a random public id, trimmed title and description, a required date-only due date, a priority, a done flag and UTC timestamps.
+summary: The todos table stores one row per to-do owned by one user, with a random public id, a trimmed title, a description stored as sent (NULL when blank), a required date-only due date, a priority, a done flag and UTC timestamps.
 owners: [alokkulkarni]
 status: current
 changeId: CHG-0001
 sources:
   - api/src/main/resources/db/migration/V1__init.sql
+  - api/src/main/java/app/todo/todo/TodoValidator.java
   - docs/specs/CHG-0001/sdd.md
 ---
 
@@ -21,7 +22,7 @@ Owner: [to-dos module](../components/todos-module.md). Schema: [schema overview]
 | `user_id` | INTEGER NOT NULL FK to `users` | owner, `ON DELETE CASCADE` |
 | `title` | TEXT NOT NULL | trimmed, 1 to 200 code points ([todo-field-rules](../rules/todo-field-rules.md)) |
 | `title_search` | TEXT NOT NULL | `title` lower-cased with `Locale.ROOT` |
-| `description` | TEXT NULL | up to 2000 code points; NULL means no description |
+| `description` | TEXT NULL | up to 2000 code points, stored as sent; a blank description is stored as NULL (`api/src/main/java/app/todo/todo/TodoValidator.java:L113-L121`) |
 | `description_search` | TEXT NULL | `description` lower-cased with `Locale.ROOT` |
 | `due_date` | TEXT NOT NULL | `YYYY-MM-DD`, date only |
 | `priority` | TEXT NOT NULL | CHECK `LOW`, `MEDIUM` or `HIGH` |

@@ -17,7 +17,7 @@ Spec: [requirements.md, REQ-AUTH-003](../../specs/CHG-0001/requirements.md#req-a
 AC-2 equal passwords give different hashes; AC-3 no password or hash in any API response or log line.
 
 **Implemented by.** [identity module](../components/identity-module.md) (`PasswordHasher`), [users table](../data/users.md),
-[shared kernel](../components/shared-kernel.md) logging rules ([common problem model](../apis/common-problem-model.md)).
+[shared kernel logging rules](../components/shared-kernel.md#logging-rules), [common problem model](../apis/common-problem-model.md).
 
 **Verified by.** [API integration tests](../tests/api-integration-tests.md) (`PasswordStorageTest`, `FilterExceptionTest`).
 

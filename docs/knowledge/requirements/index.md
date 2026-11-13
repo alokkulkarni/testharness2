@@ -2,7 +2,7 @@
 
 # Requirement
 
-* [NFR-001 Accessibility (WCAG 2.1 AA)](nfr-001.md) - The UI meets WCAG 2.1 Level AA on the sign-up, login, list, form, delete and clear-completed screens, is fully keyboard operable, and associates each validation error with its field.
+* [NFR-001 Accessibility (M)](nfr-001.md) - NFR-001 requires WCAG 2.1 Level AA on the six listed screens, full keyboard operation and field errors associated with their fields; automated checks are recorded, the manual screen-reader and contrast pass is not.
 * [NFR-002 Run locally](nfr-002.md) - The app runs on a developer machine with no cloud, hosted database or email service; the documented run steps and .env.example that the spec requires are deferred and absent at HEAD.
 * [NFR-003 Responsiveness](nfr-003.md) - With up to 500 to-dos for one user, list, filter, search, page, create, edit, complete and delete results appear within 1 second in at least 95% of attempts.
 * [NFR-004 Security baseline](nfr-004.md) - Passwords are hashed, input is validated on the server, no secrets are committed, and no response, error or log exposes stack traces, SQL, passwords or hashes.
@@ -11,9 +11,9 @@
 * [NFR-007 Modular API](nfr-007.md) - The API is one Spring Boot application and one SQLite pool, split into an identity module and a to-dos module whose boundaries, cycles and endpoint ownership are checked by tests.
 * [REQ-ACC-001 Overall success scenario](req-acc-001.md) - The end-to-end scenario covers add, see, search, filter, edit, complete and delete for one user, isolation from a second user, and persistence across an API restart.
 * [REQ-AUTH-001 Self sign-up](req-auth-001.md) - A new person creates an account with one identifier, an email address or a username, and a password, with no email verification step.
-* [REQ-AUTH-002 Log in](req-auth-002.md) - A registered user logs in with identifier and password, gets an 8-hour session that survives a reload, and sees the same generic refusal for a wrong password and an unknown identifier.
+* [REQ-AUTH-002 Login](req-auth-002.md) - A registered user logs in with identifier and password, gets an 8-hour session that survives a reload, and sees the same generic refusal for a wrong password and an unknown identifier.
 * [REQ-AUTH-003 Password storage](req-auth-003.md) - Passwords are stored only as salted one-way hashes from a strong algorithm, and no password or hash appears in any response or log line.
-* [REQ-AUTH-004 Unauthenticated access, logout and session end](req-auth-004.md) - Every to-do operation is refused without a valid session, logout ends the session, and an ended session sends the user to log in with a session-ended message.
+* [REQ-AUTH-004 Unauthenticated access and logout](req-auth-004.md) - Every to-do operation is refused without a valid session, logout ends the session, and an ended session sends the user to log in with a session-ended message.
 * [REQ-AUTH-005 No admin role](req-auth-005.md) - The system has one role with identical permissions for every account, and no operation lists users or reads another user's to-dos.
 * [REQ-DATA-001 Persistence](req-data-001.md) - All accounts and to-dos, with their status, due date, priority and timestamps, survive an application restart in a SQLite file that is created on first start.
 * [REQ-DATA-002 Concurrent edits, last write wins](req-data-002.md) - Two edits to the same to-do are both accepted with the later write stored and no conflict error, and edits to different to-dos are stored independently.

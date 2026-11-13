@@ -22,6 +22,8 @@ Component: `web/src/todos/TodoListPage.tsx` with `FilterGroup`, `SearchForm`, `P
 - **Filter** (radio group): All, Active, Completed. Changing it, or searching, resets to page 1 ([REQ-LIST-001](../requirements/req-list-001.md), [REQ-LIST-003](../requirements/req-list-003.md) AC-5).
 - **Search**: submitted with Enter or the button; whitespace-only is no search ([REQ-LIST-002](../requirements/req-list-002.md)).
 - **Pagination**: Previous, numbered links, Next; hidden with one page ([REQ-LIST-003](../requirements/req-list-003.md)).
+- **URL values**: a `page` that is not a positive whole number shows page 1, and an unknown `status` is removed from the URL
+  (filter All) ([sdd.md section 14](../../specs/CHG-0001/sdd.md#14-verification-and-traceability), REQ-LIST-001 and REQ-LIST-003 component checks).
 - **States**: first use (no to-dos at all) shows the "Add a to-do" link; any other empty result shows "No matching to-dos"
   ([sdd.md section 8](../../specs/CHG-0001/sdd.md#8-spa-behaviour)).
 - **Done toggle**: the list re-queries at once, so an Active view drops a newly completed row ([REQ-TODO-005](../requirements/req-todo-005.md) AC-3).

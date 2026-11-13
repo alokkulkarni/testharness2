@@ -24,7 +24,9 @@ sources:
 - `DatabaseConfig`: the only `DataSource` and `HikariConfig`. It creates the parent directory of `TODO_DB_PATH`, runs the
   SQLite pragmas, and keeps one connection ([ADR-0016](../decisions/adr-0016-single-connection-pool.md),
   NFR-007 AC-1).
-- `WebConfig`: web MVC configuration. Its contents were not reviewed line by line for this bundle; see the file for detail.
+- `WebConfig` (`api/src/main/java/app/todo/config/WebConfig.java:L18-L27`): registers `RequestIdFilter` as a servlet filter at
+  order -200 (`BEFORE_SECURITY`, L18, L25) for the REQUEST and ERROR dispatches (L24), so it runs ahead of Spring Security's own
+  registration, which sits at -100 (javadoc, L11-L13) ([sdd.md section 10](../../specs/CHG-0001/sdd.md)).
 
 **Rules.** This package may depend on every module; no module may depend on it ([architecture tests](../tests/architecture-tests.md)).
 
@@ -36,5 +38,6 @@ sources:
 
 **Tests.** [API integration tests](../tests/api-integration-tests.md) (persistence, module wiring, endpoint inventory).
 
-**Known gap.** The run steps and `.env.example` that SDD section 11 describes are not in the repository at HEAD, so
-the documented configuration is not visible in the repo ([overview](../system/overview.md#known-divergences-as-recorded-at-n12-and-n13)).
+**Known gap.** The README run steps and `.env.example` that SDD section 11 describes are not in the repository at HEAD
+([overview](../system/overview.md#known-divergences-as-recorded-at-n12-and-n13)). The settings they would document are
+already in `api/src/main/resources/application.properties:L3-L6` (`TODO_DB_PATH`, `TODO_COOKIE_SECURE`, `SERVER_PORT`).

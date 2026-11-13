@@ -64,6 +64,14 @@ REQ-TODO-001..007, REQ-LIST-001..003, REQ-NAV-001, REQ-DATA-001..002, REQ-ACC-00
 - **Contract whitelist for `listTodos` `q`**: the frozen `todo-api-v1.yaml` rejects an empty or blank `q`, while SDD
   section 7 accepts it; the test-side whitelist in `api/src/test/java/app/todo/testsupport/Contracts.java` records the
   requester's decision (finding F-7). The API behaves as the SDD says.
+- **Manual accessibility review not recorded (open gap).** SDD section 14 calls for a manual screen-reader and contrast pass on eight
+  screens, and REQ-NAV-001 AC-6 for a flash review; neither is in the change's evidence ([NFR-001](../requirements/nfr-001.md)).
+- **Request log shape.** The per-request line carries method, route, status and duration inside the message text, not as separate
+  structured fields, a partial departure from SDD section 10 (`api/src/main/java/app/todo/common/RequestIdFilter.java:L79-L81`;
+  N13 critic verdict F-2; see [shared kernel](../components/shared-kernel.md#logging-rules)).
+- **Node version.** `web/.nvmrc` holds `lts/*`, not a pinned LTS, against SDD section 11 (N12 verdict F-2).
+- **JDK.** The build compiles with JDK 23.0.2 using `--release 21`, against SDD section 11 (N12 verdict F-9; N13 critic verdict F-8).
+  Both N12 items are in `.harness/changes/CHG-0001/verdicts/N12-validate.validator.json`.
 
 ## Glossary
 

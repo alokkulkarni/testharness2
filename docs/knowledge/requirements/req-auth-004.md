@@ -1,6 +1,6 @@
 ---
 type: requirement
-title: REQ-AUTH-004 Unauthenticated access, logout and session end
+title: REQ-AUTH-004 Unauthenticated access and logout
 summary: Every to-do operation is refused without a valid session, logout ends the session, and an ended session sends the user to log in with a session-ended message.
 owners: [alokkulkarni]
 status: current

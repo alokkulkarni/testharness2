@@ -61,7 +61,10 @@
     <path d="M2584,261 L3610,2153" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>components/shared-kernel → decisions/adr-0011-problem-details-error-model</title></path>
     <path d="M2582,261 L3540,2424" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>components/shared-kernel → decisions/adr-0013-injected-clock-and-e2e-test-clock</title></path>
     <path d="M2577,261 L3190,3021" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>components/shared-kernel → decisions/adr-0018-modular-monolith-module-boundaries</title></path>
+    <path d="M2573,261 L2759,3370" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>components/shared-kernel → requirements/nfr-004</title></path>
+    <path d="M2567,261 L1825,3599" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>components/shared-kernel → requirements/req-auth-003</title></path>
     <path d="M2525,261 L255,1323" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>components/shared-kernel → rules/whitespace-trimming</title></path>
+    <path d="M2472,251 L944,434" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>components/shared-kernel → system/overview</title></path>
     <path d="M2472,243 L1182,295" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>components/shared-kernel → tests/api-integration-tests</title></path>
     <path d="M2472,239 L1308,239" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>components/shared-kernel → tests/architecture-tests</title></path>
     <path d="M2631,277 L2236,146" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>components/todos-module → apis/todo-api</title></path>
@@ -224,6 +227,7 @@
     <path d="M2242,3565 L2816,390" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>requirements/req-acc-001 → components/web-spa</title></path>
     <path d="M2147,3565 L880,3257" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>requirements/req-acc-001 → requirements/req-list-003</title></path>
     <path d="M2171,3565 L652,3065" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>requirements/req-acc-001 → requirements/req-todo-001</title></path>
+    <path d="M2230,3565 L1090,321" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>requirements/req-acc-001 → tests/api-integration-tests</title></path>
     <path d="M2233,3565 L1479,174" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>requirements/req-acc-001 → tests/e2e-tests</title></path>
     <path d="M2099,3587 L2030,130" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>requirements/req-auth-001 → apis/identity-api</title></path>
     <path d="M2101,3587 L2439,212" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>requirements/req-auth-001 → components/identity-module</title></path>
@@ -311,12 +315,12 @@
     <path d="M803,3213 L2684,321" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>requirements/req-list-003 → components/todos-module</title></path>
     <path d="M805,3213 L2804,390" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>requirements/req-list-003 → components/web-spa</title></path>
     <path d="M777,3213 L151,2059" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>requirements/req-list-003 → rules/list-search-and-paging</title></path>
-    <path d="M779,3213 L143,1779" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>requirements/req-list-003 → rules/return-to-and-not-found</title></path>
     <path d="M789,3213 L735,556" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>requirements/req-list-003 → screens/todo-list</title></path>
     <path d="M791,3213 L1080,321" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>requirements/req-list-003 → tests/api-integration-tests</title></path>
     <path d="M794,3213 L1469,174" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>requirements/req-list-003 → tests/e2e-tests</title></path>
     <path d="M795,3213 L1605,146" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>requirements/req-list-003 → tests/web-component-tests</title></path>
     <path d="M700,3121 L2803,390" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>requirements/req-nav-001 → components/web-spa</title></path>
+    <path d="M783,3143 L2997,3143" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>requirements/req-nav-001 → requirements/nfr-001</title></path>
     <path d="M674,3121 L142,1779" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>requirements/req-nav-001 → rules/return-to-and-not-found</title></path>
     <path d="M680,3121 L381,984" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>requirements/req-nav-001 → screens/not-found</title></path>
     <path d="M685,3121 L958,390" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>requirements/req-nav-001 → tests/accessibility-tests</title></path>
@@ -362,6 +366,7 @@
     <path d="M286,2554 L730,556" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>requirements/req-todo-005 → screens/todo-list</title></path>
     <path d="M289,2554 L1074,321" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>requirements/req-todo-005 → tests/api-integration-tests</title></path>
     <path d="M292,2554 L1463,174" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>requirements/req-todo-005 → tests/e2e-tests</title></path>
+    <path d="M293,2554 L1599,146" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>requirements/req-todo-005 → tests/web-component-tests</title></path>
     <path d="M248,2424 L2151,146" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>requirements/req-todo-006 → apis/todo-api</title></path>
     <path d="M255,2424 L2673,321" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>requirements/req-todo-006 → components/todos-module</title></path>
     <path d="M257,2424 L2793,390" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>requirements/req-todo-006 → components/web-spa</title></path>
@@ -473,6 +478,7 @@
     <path d="M944,442 L2720,372" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>system/overview → components/web-spa</title></path>
     <path d="M944,446 L2836,446" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>system/overview → data/schema</title></path>
     <path d="M864,468 L3175,3021" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>system/overview → decisions/adr-0018-modular-monolith-module-boundaries</title></path>
+    <path d="M862,468 L3079,3121" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>system/overview → requirements/nfr-001</title></path>
     <path d="M861,468 L2974,3213" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>system/overview → requirements/nfr-002</title></path>
     <path d="M977,390 L3080,3121" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>tests/accessibility-tests → requirements/nfr-001</title></path>
     <path d="M958,390 L685,3121" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>tests/accessibility-tests → requirements/req-nav-001</title></path>
@@ -539,12 +545,14 @@
     <path d="M1614,146 L2096,3587" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>tests/web-component-tests → requirements/req-auth-001</title></path>
     <path d="M1613,146 L1958,3599" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>tests/web-component-tests → requirements/req-auth-002</title></path>
     <path d="M1611,146 L1681,3587" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>tests/web-component-tests → requirements/req-auth-004</title></path>
+    <path d="M1609,146 L1275,3488" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>tests/web-component-tests → requirements/req-data-002</title></path>
     <path d="M1607,146 L1024,3370" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>tests/web-component-tests → requirements/req-list-001</title></path>
     <path d="M1605,146 L795,3213" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>tests/web-component-tests → requirements/req-list-003</title></path>
     <path d="M1604,146 L690,3121" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>tests/web-component-tests → requirements/req-nav-001</title></path>
     <path d="M1603,146 L593,3021" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>tests/web-component-tests → requirements/req-todo-001</title></path>
     <path d="M1602,146 L504,2914" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>tests/web-component-tests → requirements/req-todo-002</title></path>
     <path d="M1601,146 L425,2800" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>tests/web-component-tests → requirements/req-todo-003</title></path>
+    <path d="M1599,146 L293,2554" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>tests/web-component-tests → requirements/req-todo-005</title></path>
     <path d="M1598,146 L243,2424" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>tests/web-component-tests → requirements/req-todo-006</title></path>
     <path d="M1597,146 L202,2290" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>tests/web-component-tests → requirements/req-todo-007</title></path>
     <path d="M1591,146 L153,1735" fill="none" stroke="#64748b" stroke-width="1.2" marker-end="url(#arrow)"><title>tests/web-component-tests → rules/return-to-and-not-found</title></path>
@@ -748,7 +756,7 @@
     <g>
       <title>requirements/nfr-001</title>
       <rect x="2997" y="3121" width="200" height="44" rx="6" fill="#dcfce7" stroke="#475569"/>
-      <text x="3005" y="3139" font-weight="bold">NFR-001 Accessibility (WCAG 2…</text>
+      <text x="3005" y="3139" font-weight="bold">NFR-001 Accessibility (M)</text>
       <text x="3005" y="3155" fill="#475569" font-size="10">requirement · requirements/nfr-001</text>
     </g>
     <g>
@@ -802,7 +810,7 @@
     <g>
       <title>requirements/req-auth-002</title>
       <rect x="1860" y="3599" width="200" height="44" rx="6" fill="#dcfce7" stroke="#475569"/>
-      <text x="1868" y="3617" font-weight="bold">REQ-AUTH-002 Log in</text>
+      <text x="1868" y="3617" font-weight="bold">REQ-AUTH-002 Login</text>
       <text x="1868" y="3633" fill="#475569" font-size="10">requirement · requirements/req-auth-0…</text>
     </g>
     <g>

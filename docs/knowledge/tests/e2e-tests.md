@@ -27,8 +27,11 @@ Level: e2e (SDD section 14). Three configurations:
 
 Support: `web/e2e/support/` (`api-process.ts`, `app.ts`, `launch.ts`), `global-setup.ts`, `global-setup.session-expiry.ts`.
 
-**Projects.** chromium and webkit are the required projects (`.harness/config.yaml`). Firefox was configured but could not launch on the build host,
-so Firefox runs are not part of the evidence ([N12 finding F-9](../../../.harness/changes/CHG-0001/verdicts/N12-validate.validator.json)).
+**Projects.** chromium and webkit are the required projects (`.harness/config.yaml`, `tests.requiredProjects`, lines 53-54). The Playwright
+configs also list firefox, but it could not launch on the build host, so it is not required. The N10 plan
+(`docs/specs/CHG-0001/plan/N10-build-react.md`, lines 83 and 110) attaches the three-browser full runs
+(`N10-build-react.e2e-*-full.xml`), in which every Firefox case fails at launch, and records the chromium and webkit runs
+(`*-r3.xml`) as the evidence of record. The Firefox divergence is listed in [N12 finding F-9](../../../.harness/changes/CHG-0001/verdicts/N12-validate.validator.json).
 
 ## Performance spec
 

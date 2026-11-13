@@ -25,3 +25,5 @@ screen [not-found page](../screens/not-found.md).
 
 **Verified by.** [web component tests](../tests/web-component-tests.md) (`navigation.test.tsx`), [web unit tests](../tests/web-unit-tests.md)
 (`routing-helpers.test.ts`), [e2e tests](../tests/e2e-tests.md) (`navigation.spec.ts`), [accessibility tests](../tests/accessibility-tests.md) (`a11y.spec.ts`).
+The AC-6 check covers the animation's timing and reduced motion only. The web-qa flash review that [sdd.md section 14](../../specs/CHG-0001/sdd.md#14-verification-and-traceability)
+names for AC-6 is not recorded in the change's evidence ([NFR-001](nfr-001.md), open gap).

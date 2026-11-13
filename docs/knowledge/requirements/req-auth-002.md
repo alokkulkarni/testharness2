@@ -1,6 +1,6 @@
 ---
 type: requirement
-title: REQ-AUTH-002 Log in
+title: REQ-AUTH-002 Login
 summary: A registered user logs in with identifier and password, gets an 8-hour session that survives a reload, and sees the same generic refusal for a wrong password and an unknown identifier.
 owners: [alokkulkarni]
 status: current
@@ -9,7 +9,7 @@ sources:
   - docs/specs/CHG-0001/requirements.md
 ---
 
-# REQ-AUTH-002 Log in (M)
+# REQ-AUTH-002 Login (M)
 
 Spec: [requirements.md, REQ-AUTH-002](../../specs/CHG-0001/requirements.md#req-auth-002-login-m) (AC-1 to AC-5, and the Q36 note).
 

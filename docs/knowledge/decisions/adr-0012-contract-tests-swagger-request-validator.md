@@ -18,7 +18,7 @@ Frozen record: [adr/0012-contract-tests-swagger-request-validator.md](../../spec
 **Naming note.** The ADR filename says "swagger-request-validator". The build uses the renamed library at version 3.0.0:
 `com.atlassian.oai:openapi-request-validator-core` and `openapi-request-validator-mockmvc`
 (`api/pom.xml`, lines 77-89), as [sdd.md section 12.1 item 21](../../specs/CHG-0001/sdd.md#121-for-the-approver-to-confirm-at-freeze)
-and risk row 768 of section 13 record.
+and the section 13 validator-version risk at sdd.md line 768 record.
 
 **Known limit.** The validator does not enforce the cookie `apiKey` scheme, so 401 is tested at the integration level
-(sdd section 13, risk row 769). See [contract tests](../tests/contract-tests.md).
+(sdd.md line 769, the section 13 cookie-scheme risk). See [contract tests](../tests/contract-tests.md).

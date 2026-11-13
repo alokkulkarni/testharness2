@@ -18,4 +18,6 @@ Spec: [requirements.md, REQ-TODO-005](../../specs/CHG-0001/requirements.md#req-t
 **Implemented by.** [to-dos module](../components/todos-module.md) (`updateDone`), [to-do API](../apis/todo-api.md) `setTodoDone`,
 [web SPA](../components/web-spa.md) `TodoRow` and `TodoListPage`, screen [to-do list](../screens/todo-list.md).
 
-**Verified by.** [API integration tests](../tests/api-integration-tests.md) (`TodoUpdateApiTest`), [e2e tests](../tests/e2e-tests.md) (`acceptance.spec.ts`).
+**Verified by.** [API integration tests](../tests/api-integration-tests.md) (`TodoUpdateApiTest`), [web component tests](../tests/web-component-tests.md)
+(`list.test.tsx`, two done-toggle cases added under N10: the toggle succeeds but the re-query returns the other `done` value,
+[N10 plan](../../specs/CHG-0001/plan/N10-build-react.md) line 106), [e2e tests](../tests/e2e-tests.md) (`acceptance.spec.ts`).

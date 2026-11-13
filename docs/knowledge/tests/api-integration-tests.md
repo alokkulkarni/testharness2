@@ -36,7 +36,8 @@ test runs on the embedded container at a random port, because MockMvc performs n
 | `todo/HandlerExceptionTest` | [NFR-004](../requirements/nfr-004.md) AC-2 |
 | `config/PersistenceTest` | [REQ-DATA-001](../requirements/req-data-001.md) |
 | `config/ModuleWiringTest` | [NFR-007](../requirements/nfr-007.md) AC-1; [REQ-AUTH-004](../requirements/req-auth-004.md) AC-4 (system clock in the default profile) |
-| `common/ErrorSourcesTest`, `common/ProblemCodeTest`, `common/JsonSuffixMediaTypeTest`, `common/WhitespaceTest` | [common problem model](../apis/common-problem-model.md), [whitespace trimming](../rules/whitespace-trimming.md) |
+| `common/ErrorSourcesTest`, `common/JsonSuffixMediaTypeTest` | [common problem model](../apis/common-problem-model.md) (integration) |
+| `common/ProblemCodeTest`, `common/WhitespaceTest` | Unit tests, not integration: `ProblemCode` values ([common problem model](../apis/common-problem-model.md)) and [whitespace trimming](../rules/whitespace-trimming.md) |
 
 **Test helpers** (`testsupport/`): `Db`, `ApiClient`, `LogCapture`, `OffsetFileClock`, `E2eClockConfiguration`, `Contracts`.
 The `Contracts` helper holds a whitelist for the `listTodos` `q` parameter, recorded as a finding ([overview, known divergences](../system/overview.md#known-divergences-as-recorded-at-n12-and-n13)).
