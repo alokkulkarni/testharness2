@@ -29,7 +29,10 @@ Glossary:
 - "Polite live region" means an element with `role="status"` or `aria-live="polite"`, the attribute explicit or implied
   by the role (analyst default 3).
 - "Spec-wording difference" means a place where the CHG-0001 spec or the requester's Q10 wording differs from what the
-  app renders, and the difference is not a WCAG failure (REQ-A11Y-012 AC-5).
+  app renders, the difference is not a WCAG failure, and it is one of those listed in analyst defaults 1, 2, 3 and 6
+  (REQ-A11Y-012 AC-5). Any other difference is a spec question to stop and report (REQ-A11Y-012 AC-5).
+- "Test defect" means a first-run failure caused by a defect in the test itself or by test support not yet in place
+  (REQ-A11Y-012 AC-6); it is neither a real WCAG failure nor a spec-wording difference.
 
 ## Functional requirements
 
@@ -138,12 +141,12 @@ Evidences CHG-0001 REQ-NAV-001 AC-6 (no more than three flashes in any one secon
 
 ## REQ-A11Y-010 What the tests run against (M)
 
-Source: clarifications Q2, Q3, Q4 (audit-only).
+Source: clarifications Q2, Q3, Q4 (audit-only), Q11 (AC-4).
 
 - AC-1: Given the new tests, when I look at the repository after this change, then they are in `web/e2e/`, run under the main Playwright configuration (the SDD §11 run: API and Vite dev server), and `pnpm -C web e2e` includes them.
 - AC-2: Given the new tests, when they run, then they run in chromium and webkit (the projects in `tests.requiredProjects`) and pass in both; they do not run in firefox (Q3 a).
 - AC-3: Given this change's diff, when I review it, then it adds or changes only tests, test support, evidence and documentation: no file of the web app's or the API's product code (outside `web/e2e/` and its support files) is changed. Changes to `web/playwright.config.ts` are allowed only to keep the new tests out of firefox and to switch video on for the REQ-A11Y-008 tests; no new devDependency is added and `web/package.json` and the lockfile are unchanged (analyst default 10).
-- AC-4: Given the history of this change, when I read it, then every `test(...)` commit that adds a new test precedes any other non-documentation commit of the change; each new test's first run against develop is recorded in the summary as passed or failed; no failure is made up (no stub or artificial failing state is added to get a red commit); a test that passes on its first run is recorded as such; and a test that fails on its first run is handled by REQ-A11Y-012 (analyst default 11).
+- AC-4: Given the history of this change, when I read it, then every `test(...)` commit that adds a new test precedes any other non-documentation commit of the change; each new test's first run against develop is recorded in the summary as passed or failed; no failure is made up (no stub or artificial failing state is added to get a red commit); a test that passes on its first run is recorded as such; and a test that fails on its first run is handled by REQ-A11Y-012 according to its cause: a real WCAG failure by AC-1 to AC-3, a spec-wording difference by AC-5, a test defect by AC-6 (decided by the requester in Q11 (a); analyst default 11).
 - AC-5: Given the history of this change, when I read it, then no test is weakened, skipped or deleted to get green, and none uses `test.fail()` or `test.skip()` to hide a failure.
 - AC-6: Given a new test, when I read its name, then it starts with the requirement ID and AC it proves.
 
@@ -156,7 +159,7 @@ Source: clarifications Q1.
 - AC-3: Given the audit, when the evidence is attached, then one Markdown summary (kind `other`) is attached and committed that holds: the contrast ratio table (each control and state, its ratio, its threshold, asserted or not; disabled states marked "measured, not asserted"), the flash-check result (REQ-A11Y-009 AC-6), the announcement and state results (REQ-A11Y-001 to REQ-A11Y-005), the first-run result of each new test (REQ-A11Y-010 AC-4), every spec-wording difference (REQ-A11Y-012 AC-5), and the open screen-reader note of REQ-A11Y-013.
 - AC-4: Given the Playwright HTML report, when I list the evidence, then it is not among the attached files (it stays local).
 
-## REQ-A11Y-012 A real WCAG failure, and spec-wording differences (M)
+## REQ-A11Y-012 A real WCAG failure, spec-wording differences and test defects (M)
 
 Source: clarifications Q4.
 
@@ -164,7 +167,8 @@ Source: clarifications Q4.
 - AC-2: Given such a failure, when it is followed up, then it is fixed by a separate change (test-first, with this test as its red); this change merges only after that fix is on develop and the test passes.
 - AC-3: Given such a failure, when I read this change, then it has not fixed the product code itself, and has not marked the test as an expected failure or skipped it (REQ-A11Y-010 AC-3, AC-5).
 - AC-4: Given all new tests pass against develop, when the summary is written, then it states that no failure was found.
-- AC-5: Given the CHG-0001 spec or Q10 wording differs from what the app renders and the difference is not a WCAG failure (analyst defaults 1, 2, 3, 6), when the test checks the app's rendered text or role, then the test passes, the difference is not counted as a WCAG failure and does not block the merge, and the summary lists it with the spec wording, the app wording and the `file:line` of the app (analyst default 13).
+- AC-5: Given the CHG-0001 spec or Q10 wording differs from what the app renders, the difference is not a WCAG failure and it is one of those listed in analyst defaults 1, 2, 3 and 6, when the test checks the app's rendered text or role, then the test passes, the difference is not counted as a WCAG failure and does not block the merge, and the summary lists it with the spec wording, the app wording and the `file:line` of the app (analyst default 13). Given a wording difference found after freeze that no such default lists, then the test author stops and reports it as a spec question, and does not adapt the test.
+- AC-6: Given a new test fails on its first run because of a defect in the test itself or because test support is not yet in place (for example video not yet switched on for the REQ-A11Y-008 test), when it is handled, then it is fixed in the test or its support without weakening the assertion (REQ-A11Y-010 AC-5), the `web/playwright.config.ts` change allowed by REQ-A11Y-010 AC-3 lands in the test commit, and the summary records it as a test defect; it is not a real WCAG failure (AC-1) and not a spec-wording difference (AC-5).
 
 ## REQ-A11Y-013 Manual screen-reader pass: recorded as open (M)
 
@@ -233,9 +237,9 @@ Each is tagged inline in the AC it affects as "(analyst default N)".
 8. Video size (REQ-A11Y-008 AC-4): at most 1 MB per video; the requester's wording is "a few hundred KB each".
 9. Flash counting (REQ-A11Y-009 AC-2): the count of a window is the highest count of any single pixel; windows slide one sample at a time; the run covered is the whole animation run.
 10. Test configuration (REQ-A11Y-010 AC-3): `web/playwright.config.ts` may change only to exclude firefox for the new tests and switch video on for the REQ-A11Y-008 tests; no new devDependency, no lockfile change.
-11. Test-first order in an audit-only change (REQ-A11Y-010 AC-4): tests are committed in `test(...)` commits before any other non-documentation commit; a test that passes on its first run against develop is recorded as such, with no artificial red state; a test that fails on its first run is handled by REQ-A11Y-012.
+11. Test-first order in an audit-only change (REQ-A11Y-010 AC-4): decided by the requester in clarifications Q11 (a), not an analyst default: tests are committed first, each first-run result is recorded honestly, no failing state is made up; whether the harness can complete the tests node honestly is settled at planning, not in this spec.
 12. JUnit evidence (REQ-A11Y-011 AC-1): the JUnit file or files written by the runs that include chromium and webkit.
-13. Spec-wording differences (REQ-A11Y-012 AC-5): a difference between spec wording and the app that is not a WCAG failure is checked against the app, recorded in the summary and does not block the merge.
+13. Spec-wording differences (REQ-A11Y-012 AC-5): a difference between spec wording and the app that is listed in defaults 1, 2, 3 and 6 and is not a WCAG failure is checked against the app, recorded in the summary and does not block the merge.
 14. Reproducibility (NFR-101 AC-1): contrast ratios agree to two decimal places.
 15. Suite time (NFR-102 AC-2): the new spec files alone take at most 5 minutes in one browser, wall-clock, on the build host.
 
