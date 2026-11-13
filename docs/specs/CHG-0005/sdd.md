@@ -5,7 +5,7 @@ authors:
   - squadSessionId: SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM
     changeId: CHG-0005
     agent: spec-author
-    agentRunId: run-chg5-n03-1
+    agentRunId: run-chg5-n03-2
 upstream:
   - path: docs/specs/CHG-0005/requirements.md
     sha256: 9d004705a190fb1c59a66cceb81139c88a4ec5e4647836ee2dc2943ccbc2d531
@@ -46,6 +46,11 @@ REQ-CMP-007) and need no ADR (`solution.md` section 8).
    relocated (requirements D3).
 4. The solution architecture covers the whole app with a native-run view and a Compose view (Q10 (a)), already written
    (requirements D4).
+
+**Requester's decision on the Node image** (@alokkulkarni, 2026-11-13, Q14 in
+`.harness/changes/CHG-0005/clarifications.md:L180-L188`, asked after the first spec review): "Accept for node
+version": option (a), `node:26-slim` (the current LTS line) with an exactly pinned corepack installed through npm in
+the build stage only. Section 3.2 is written for it; no open question remains.
 
 Nothing outside the requirements is designed: no CI, no registry, no HTTPS, no Playwright against Compose, no change to
 `api/src`, `web/src`, `web/e2e`, `web/vite.config.ts` or the native run.
@@ -107,7 +112,7 @@ stages:
 
 | Stage | Base image (tag) | What it does |
 |---|---|---|
-| build | `node:26-slim` (Node's current LTS major, Debian-based; Assumption A3, open question OQ-1) | Installs corepack at an exact pinned version with npm (Node 25 and later no longer bundle it, Assumption A7; the same step works on any Node), enables corepack's pnpm and activates **pnpm 10.34.8** as its global pnpm (the pin of `.github/harness/versions.env:L47`; `web/package.json` has no `packageManager` field), with `COREPACK_ENABLE_DOWNLOAD_PROMPT=0`. Copies `package.json` and `pnpm-lock.yaml` (lockfile 9.0, `web/pnpm-lock.yaml:L1`) and runs `pnpm install --frozen-lockfile` (all dependencies, development ones included: `pnpm build` runs `tsc --noEmit`, `web/package.json:L11`); `--frozen-lockfile` fails the build if the pinned pnpm and the lockfile disagree (Assumption A4). Then copies the rest of `web/` and runs `pnpm build`, which writes `dist/`. The corepack version is pinned exactly in a build argument with a default value (never a range or `latest`). |
+| build | `node:26-slim` (Node's current LTS major, Debian-based; the requester's decision Q14 (a), `.harness/changes/CHG-0005/clarifications.md:L180-L188`; Assumption A3) | Installs **corepack 0.34.0** with npm, globally, in this stage only (Node 25 and later no longer bundle it, Assumption A7; the same step works on any Node; Assumption A11), enables corepack's pnpm and activates **pnpm 10.34.8** as its global pnpm (the pin of `.github/harness/versions.env:L47`; `web/package.json` has no `packageManager` field), with `COREPACK_ENABLE_DOWNLOAD_PROMPT=0`. It prints `node --version`, `corepack --version` and `pnpm --version`, so the build log records the three versions (A3, A11). Copies `package.json` and `pnpm-lock.yaml` (lockfile 9.0, `web/pnpm-lock.yaml:L1`) and runs `pnpm install --frozen-lockfile` (all dependencies, development ones included: `pnpm build` runs `tsc --noEmit`, `web/package.json:L11`); `--frozen-lockfile` fails the build if the pinned pnpm and the lockfile disagree (Assumption A4). Then copies the rest of `web/` and runs `pnpm build`, which writes `dist/`. The corepack version is pinned exactly in the build argument `COREPACK_VERSION`, default `0.34.0` (never a range or `latest`). |
 | run | `nginx:stable-alpine` (as named by the requester, Q11; P6) | Removes the image's `/etc/nginx/conf.d/default.conf` and the default files in `/usr/share/nginx/html/`, copies `web/nginx/nginx.conf` over `/etc/nginx/nginx.conf`, copies `dist/` into `/usr/share/nginx/html/` (root-owned, world-readable), then `USER nginx` (uid 101 in the official image; Assumption A5), `EXPOSE 5173`. The image's own entrypoint and command (`nginx -g 'daemon off;'`) are kept. |
 
 `web/.dockerignore` excludes what `web/.gitignore:L1-L7` ignores (`node_modules`, `dist`, `test-results`,
@@ -121,6 +126,7 @@ One complete main configuration file (it replaces the image's; it includes no `c
 | Context | Setting | Reason |
 |---|---|---|
 | main | no `user` directive; `pid /tmp/nginx.pid` | non-root: the master cannot switch user nor write `/var/run` |
+| main | an empty `events {}` block; `worker_processes` not set (nginx's default, 1) | nginx refuses to start without an `events` section; its defaults suffice for one local user |
 | main | `error_log /dev/stdout emerg` | stdout, as `solution.md` 6.2 and 7.1 draw it; nginx error lines about a request (for example an upstream failure at level `error`) carry the full request line and referrer, so `?q=` search text, while start-up failures (bad config, bind, pid or temp-path errors) are `emerg` and still appear (Assumption A10) |
 | http | `include /etc/nginx/mime.types`, `default_type application/octet-stream` | JavaScript modules need a JavaScript media type, or the browser refuses them |
 | http | `client_body_temp_path`, `proxy_temp_path`, `fastcgi_temp_path`, `uwsgi_temp_path`, `scgi_temp_path` each under `/tmp/` | the non-root user cannot write the compiled-in `/var/cache/nginx` |
@@ -213,9 +219,14 @@ lines (`.gitignore:L1-L7`) stay.
 
 The title line stays; sections, in order:
 
-1. **Prerequisites.** JDK 21; Node.js current LTS (`web/.nvmrc` is `lts/*`); pnpm 10; the Playwright browsers, only for
+1. **Prerequisites.** JDK 21; Node.js current LTS (`web/.nvmrc` is `lts/*`); pnpm 10, through corepack, which Node.js
+   25 and later no longer bundle (A7): `npm install -g corepack@0.34.0`, then `corepack enable pnpm`, then
+   `corepack install -g pnpm@10.34.8` (the same pins as the web image's build stage, 3.2; `pnpm --version` then shows
+   10.34.8); the Playwright browsers, only for
    the e2e: `pnpm -C web exec playwright install` (Chromium, Firefox and WebKit, `web/playwright.config.ts:L27-L29`;
-   on Linux add `--with-deps`); for the Compose run only, Docker with Docker Compose 2.17 or later.
+   on Linux add `--with-deps`); for the Compose run only, Docker with Docker Compose 2.17 or later, and Node.js on the
+   host for the smoke check (item 5), even when the native run is not used (pnpm and `pnpm install` are not needed
+   for it).
 2. **Native run** (CHG-0001 `sdd.md:L603-L611`). API: `cd api && ./mvnw spring-boot:run`, answers on
    `http://localhost:8080`; SPA: `pnpm -C web install`, then `pnpm -C web dev`, opens on `http://localhost:5173`. No
    cloud service, hosted database or email service. On first start the API creates `api/data/todo.db` (it is started
@@ -235,7 +246,7 @@ The title line stays; sections, in order:
    HTTPS and `TODO_COOKIE_SECURE=true`. Playwright is not run against the stack: check it with the smoke check and
    your own use of the app (UAT). Cleanup: `docker compose down --rmi local` removes the built images (add `-v` to
    remove the data too).
-5. **Smoke check.** Needs the stack already running; `node web/scripts/compose-smoke.mjs`; another address with
+5. **Smoke check.** Needs the stack already running and Node.js on the host; `node web/scripts/compose-smoke.mjs`; another address with
    `TODO_SMOKE_BASE_URL=http://127.0.0.1:5173 node web/scripts/compose-smoke.mjs`; exit 0 means both checks passed.
 6. **Both architectures (proof build).** `docker buildx build --platform linux/amd64,linux/arm64 --output type=cacheonly
    api` and the same with `web`: builds both, loads nothing and pushes nothing; it is the proof that both build and that
@@ -307,8 +318,11 @@ database. Images are built locally and never published.
 
 Tests first: the React tests node writes `web/tests/scripts/compose-smoke.test.ts` (red), the React build node writes
 the script (green). The test injects a fake `fetch` (no network), names each case with its requirement ID and AC, and
-covers: both pass (also with `charset` parameters); `/api` answers 200 HTML; 502; 302; a network error (each failing
-the `api` check with its received value printed); the page failing alone; exactly two calls, both `GET`, with no
+covers: both pass (also with `charset` parameters); `/api` answers 200 HTML; 502; 302; a network error; `/api`
+answers 401 with a media type other than `application/problem+json` (`application/json`, and `text/html`) (each
+failing the `api` check with its received value printed); the page failing alone; the page answering 200 with a media
+type other than `text/html` (`application/json`), failing the `page` check with the status and media type it received
+printed; exactly two calls, both `GET`, with no
 `Cookie` or `Authorization` header and no body; the default and the overridden base URL; an invalid base URL giving
 exit code 2. The Java stack adds no test: no behaviour in `api/src` changes. Files that configure rather than behave
 (Dockerfiles, nginx, Compose, README) are verified by building them, by the live checks below and by inspection.
@@ -362,8 +376,8 @@ healthcheck call CHG-0001 operations as their contracts define them).
 | REQ-DOC-004 AC-2 | 3.7 items 4, 5 | I |
 | REQ-DOC-004 AC-3 | 3.7 item 4 | I |
 | REQ-SMK-001 AC-1 | 3.5 | I |
-| REQ-SMK-001 AC-2 | 3.5 | T; S |
-| REQ-SMK-001 AC-3 | 3.5 | T; C: run with the stack stopped exits non-zero and names both requests |
+| REQ-SMK-001 AC-2 | 3.5 | T (section 9's cases, including the right status with the wrong media type on each request); S |
+| REQ-SMK-001 AC-3 | 3.5 | T (section 9's cases, including `/api` 401 that is not `application/problem+json`); C: run with the stack stopped exits non-zero and names both requests |
 | REQ-SMK-001 AC-4 | 3.5 | T; I |
 | REQ-SMK-001 AC-5 | 3.7 item 5 | I |
 | REQ-SMK-001 AC-6 | 3.5, 9 | S on the head commit, recorded |
@@ -382,7 +396,7 @@ healthcheck call CHG-0001 operations as their contracts define them).
 |---|---|---|
 | A1 | `eclipse-temurin:21-jdk-noble`, `21-jre-noble`, `node:26-slim` and `nginx:stable-alpine` are published for linux/amd64 and linux/arm64 | X |
 | A2 | The `eclipse-temurin` JRE 21 Ubuntu image ships `curl` (and `grep`, `sh`) | the build-time `curl --version` step (B) |
-| A3 | Node 26 is the current Active LTS line on 2026-11-13 (see OQ-1) | the requester at freeze |
+| A3 | Node 26 is the current Active LTS line on 2026-11-13 (the line the requester chose, Q14 (a)) | B, uncached with `--progress=plain` (`node --version` in the build log shows v26), and Node.js's published release schedule |
 | A4 | `web/pnpm-lock.yaml` was written by pnpm 10 and is accepted by pnpm 10.34.8 | `pnpm install --frozen-lockfile` in B |
 | A5 | The `nginx:stable-alpine` image has user `nginx` (uid 101) and its entrypoint scripts skip a missing `conf.d/default.conf` | B, container start, `id -u` |
 | A6 | Docker Compose 2.17 or later (the first with `depends_on.restart`), with BuildKit, on the person's machine (rootless Docker and Podman are not covered) | README prerequisite; U |
@@ -390,6 +404,7 @@ healthcheck call CHG-0001 operations as their contracts define them).
 | A8 | Spring Boot opens its HTTP port only after the context, including the Flyway migration, is ready, so a 401 means migrated | S on a fresh volume, U creating a to-do |
 | A9 | A new, empty named volume takes the owner and mode of the image directory it is mounted on, at its first use | S on a fresh volume (healthy API, to-do created in U) |
 | A10 | nginx logs request-related errors (with request line and referrer) at `error` or below, and start-up failures at `emerg` | I of a start with a broken config during build-node work; UAT: search, then no `q=` in `docker compose logs web` |
+| A11 | corepack 0.34.0 is a published npm release that runs on Node 26 and can activate pnpm 10.34.8 (not verifiable from the repository) | B: the npm install fails if the version is not published, and `pnpm install --frozen-lockfile` fails if pnpm is not activated (A4); supplementary, an uncached B with `--progress=plain` shows `corepack --version` 0.34.0 and `pnpm --version` 10.34.8 in the build log; the README's host steps use the same pins |
 
 ## 11. Risks
 
@@ -397,7 +412,7 @@ healthcheck call CHG-0001 operations as their contracts define them).
 |---|---|---|
 | R1 | No build node may own root files today (a known harness limitation, being fixed by the requester in parallel); `README.md`, `.env.example`, `docker-compose.yml` and `.gitignore` need an owning node in the plan | stays at the root as specified (decision 3); not designed around here |
 | R2 | A base image drops `curl` | the build fails at the check step (A2); a new design decision is then needed |
-| R3 | Node or corepack change (OQ-1, A3) | corepack pinned and installed explicitly; `--frozen-lockfile` |
+| R3 | Node or corepack change (A3, A7, A11) | corepack pinned and installed explicitly; `--frozen-lockfile` |
 | R4 | A named volume created earlier with another owner is not writable | README troubleshooting: `down -v` (deletes data) |
 | R5 | nginx keeps the old `api` address after `api` is recreated alone | `depends_on.api.restart: true`; `docker compose restart web` as a fallback in the README |
 | R6 | nginx runtime errors are not logged (error log at `emerg`) | the access log keeps status codes; the API log has the cause |
@@ -408,13 +423,12 @@ healthcheck call CHG-0001 operations as their contracts define them).
 
 ## 12. For the approver at freeze
 
-- **OQ-1 (open question, requester).** REQ-CMP-001 AC-2 asks for "Node's current LTS major and pnpm through corepack".
-  Node 25 and later no longer bundle corepack. Options: (a) `node:26-slim` (Active LTS) and install a pinned corepack
-  with npm before enabling pnpm; (b) `node:24-slim`, an LTS line that still bundles corepack (maintenance phase);
-  (c) `node:22-slim`, matching the harness tool pin `.github/harness/versions.env:L46`. **Recommended: (a)**, the only
-  option meeting both words of the AC; note that (a) adds one npm-installed build-time tool (corepack, pinned
-  exactly) to the image's build stage, nothing at run time. The design above is written for (a); (b) or (c) change
-  only the build stage's tag and drop the npm step.
-- The pnpm pin 10.34.8 and an exact corepack pin (3.2), the healthcheck timings (3.4: 10 s interval, 120 s start
+- **Node image: decided by the requester (Q14, `.harness/changes/CHG-0005/clarifications.md:L180-L188`).**
+  REQ-CMP-001 AC-2 asks for "Node's current LTS major and pnpm through corepack", and Node 25 and later no longer
+  bundle corepack. The requester accepted (a): `node:26-slim` (the current LTS line) with an exactly pinned corepack
+  installed through npm in the build stage only; it adds one build-time tool and nothing at run time. Not chosen:
+  (b) `node:24-slim`, an older LTS line that still bundles corepack, is not the current LTS; (c) `node:22-slim`,
+  matching the harness tool pin `.github/harness/versions.env:L46`, is older still. No open question remains.
+- The pnpm pin 10.34.8 and the corepack pin 0.34.0 (3.2, A11), the healthcheck timings (3.4: 10 s interval, 120 s start
   period, matching P1's 120 s), the error log at `emerg` (3.3), and uid 10001 for the API user are engineering defaults
   confirmed by approving the freeze.
