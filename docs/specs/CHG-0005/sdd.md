@@ -5,7 +5,7 @@ authors:
   - squadSessionId: SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM
     changeId: CHG-0005
     agent: spec-author
-    agentRunId: run-chg5-n03-2
+    agentRunId: run-chg5-n03-3
 upstream:
   - path: docs/specs/CHG-0005/requirements.md
     sha256: 9d004705a190fb1c59a66cceb81139c88a4ec5e4647836ee2dc2943ccbc2d531
@@ -65,7 +65,8 @@ The plan's tests and build nodes work in exactly these module directories:
 `api/` gains `api/Dockerfile` and `api/.dockerignore`, with no change in `api/src` or `api/pom.xml`. `web/` gains
 `web/Dockerfile`, `web/.dockerignore`, `web/nginx/nginx.conf`, `web/scripts/compose-smoke.mjs`,
 `web/scripts/compose-smoke.d.mts` and the test `web/tests/scripts/compose-smoke.test.ts`; `web/package.json` is not
-changed. The repository root, which belongs to no stack (risk R1), gains `.env.example` and `docker-compose.yml` and
+changed, neither by this change nor by building the image or following the README (corepack auto-pin turned off,
+sections 3.2 and 3.7; Assumption A12). The repository root, which belongs to no stack (risk R1), gains `.env.example` and `docker-compose.yml` and
 changes `README.md` and `.gitignore`.
 
 Data model changes: none (the schema stays CHG-0001's `V1__init.sql`).
@@ -112,7 +113,7 @@ stages:
 
 | Stage | Base image (tag) | What it does |
 |---|---|---|
-| build | `node:26-slim` (Node's current LTS major, Debian-based; the requester's decision Q14 (a), `.harness/changes/CHG-0005/clarifications.md:L180-L188`; Assumption A3) | Installs **corepack 0.34.0** with npm, globally, in this stage only (Node 25 and later no longer bundle it, Assumption A7; the same step works on any Node; Assumption A11), enables corepack's pnpm and activates **pnpm 10.34.8** as its global pnpm (the pin of `.github/harness/versions.env:L47`; `web/package.json` has no `packageManager` field), with `COREPACK_ENABLE_DOWNLOAD_PROMPT=0`. It prints `node --version`, `corepack --version` and `pnpm --version`, so the build log records the three versions (A3, A11). Copies `package.json` and `pnpm-lock.yaml` (lockfile 9.0, `web/pnpm-lock.yaml:L1`) and runs `pnpm install --frozen-lockfile` (all dependencies, development ones included: `pnpm build` runs `tsc --noEmit`, `web/package.json:L11`); `--frozen-lockfile` fails the build if the pinned pnpm and the lockfile disagree (Assumption A4). Then copies the rest of `web/` and runs `pnpm build`, which writes `dist/`. The corepack version is pinned exactly in the build argument `COREPACK_VERSION`, default `0.34.0` (never a range or `latest`). |
+| build | `node:26-slim` (Node's current LTS major, Debian-based; the requester's decision Q14 (a), `.harness/changes/CHG-0005/clarifications.md:L180-L188`; Assumption A3) | Sets `COREPACK_ENABLE_DOWNLOAD_PROMPT=0` and `COREPACK_ENABLE_AUTO_PIN=0` as stage environment before its first corepack or pnpm command, so both hold for every later step, `pnpm install` and `pnpm build` included (the `pnpm` command is corepack's shim); with auto-pin off corepack never writes a `packageManager` field into the stage's `package.json`, and the design does not rely on corepack's default (Assumption A12). Installs **corepack 0.34.0** globally, in this stage only (Node 25 and later no longer bundle it, Assumption A7), with npm's `--force` flag at the pinned version: corepack's package also links `pnpm`, `pnpx`, `yarn` and `yarnpkg` commands, and npm stops with `EEXIST` when such a command already exists and npm did not create it (for example a yarn 1 that official Node images have placed in `/usr/local/bin`). Whether `node:26-slim` ships such a link cannot be checked from the repository, so the step does not depend on it (Assumption A13): `--force` replaces any such link in this stage with corepack's; the stage uses no yarn, and nothing of the stage but `dist/` reaches the run image. `--force` does not hide a missing version: npm still fails when `corepack@0.34.0` is not published (A11). Then enables corepack's pnpm and activates **pnpm 10.34.8** as its global pnpm (the pin of `.github/harness/versions.env:L47`; `web/package.json` has no `packageManager` field). It prints `node --version`, `corepack --version` and `pnpm --version`, so the build log records the three versions (A3, A11). Copies `package.json` and `pnpm-lock.yaml` (lockfile 9.0, `web/pnpm-lock.yaml:L1`) and runs `pnpm install --frozen-lockfile` (all dependencies, development ones included: `pnpm build` runs `tsc --noEmit`, `web/package.json:L11`); `--frozen-lockfile` fails the build if the pinned pnpm and the lockfile disagree (Assumption A4). Then copies the rest of `web/` and runs `pnpm build`, which writes `dist/`. The corepack version is pinned exactly in the build argument `COREPACK_VERSION`, default `0.34.0` (never a range or `latest`). Every step writes only to the stage's own copy of the build context; a build never writes to `web/` on the host, so building the image cannot change `web/package.json` (checked after B with `git diff --exit-code web/package.json` and `git status --porcelain` unchanged from before B, section 9). |
 | run | `nginx:stable-alpine` (as named by the requester, Q11; P6) | Removes the image's `/etc/nginx/conf.d/default.conf` and the default files in `/usr/share/nginx/html/`, copies `web/nginx/nginx.conf` over `/etc/nginx/nginx.conf`, copies `dist/` into `/usr/share/nginx/html/` (root-owned, world-readable), then `USER nginx` (uid 101 in the official image; Assumption A5), `EXPOSE 5173`. The image's own entrypoint and command (`nginx -g 'daemon off;'`) are kept. |
 
 `web/.dockerignore` excludes what `web/.gitignore:L1-L7` ignores (`node_modules`, `dist`, `test-results`,
@@ -220,7 +221,10 @@ lines (`.gitignore:L1-L7`) stay.
 The title line stays; sections, in order:
 
 1. **Prerequisites.** JDK 21; Node.js current LTS (`web/.nvmrc` is `lts/*`); pnpm 10, through corepack, which Node.js
-   25 and later no longer bundle (A7): `npm install -g corepack@0.34.0`, then `corepack enable pnpm`, then
+   25 and later no longer bundle (A7): first `export COREPACK_ENABLE_AUTO_PIN=0`, in this shell and in every shell
+   that later runs pnpm for items 2 and 3 (adding the line to the shell profile keeps it set), so corepack never writes
+   a `packageManager` field into `web/package.json` (A12); then `npm install -g corepack@0.34.0` (not forced; if npm
+   stops with `EEXIST`, see item 8), then `corepack enable pnpm`, then
    `corepack install -g pnpm@10.34.8` (the same pins as the web image's build stage, 3.2; `pnpm --version` then shows
    10.34.8); the Playwright browsers, only for
    the e2e: `pnpm -C web exec playwright install` (Chromium, Firefox and WebKit, `web/playwright.config.ts:L27-L29`;
@@ -260,7 +264,15 @@ The title line stays; sections, in order:
    Spring Boot stops with "Port 8080 was already in use"; Compose says the port "is already allocated": stop the other
    run or find the process with `lsof -i :8080`); Docker not running ("Cannot connect to the Docker daemon": start
    Docker); the API never healthy or the app answers 502 on `/api` (`docker compose logs api`, then
-   `docker compose restart web`); an old volume the API cannot write (`docker compose down -v`, which deletes data). Exact messages are copied from the tools when written
+   `docker compose restart web`); an old volume the API cannot write (`docker compose down -v`, which deletes data);
+   `npm install -g corepack@0.34.0` stops with `EEXIST` naming a `pnpm`, `pnpx`, `yarn` or `yarnpkg` file (a pnpm or
+   yarn installed another way, for example with Homebrew, or shims left by an earlier `corepack enable`; A13): remove
+   that pnpm or yarn with the tool that installed it and run the step again, or run it as
+   `npm install -g --force corepack@0.34.0` (same pin), which replaces that command with corepack's shim, so pnpm and
+   yarn on that path then run through corepack while the other installation stays on disk unused there;
+   `git status` shows `web/package.json` modified with a `packageManager` line (corepack auto-pin, the variable of
+   item 1 not set in that shell): restore it with `git checkout -- web/package.json`, export
+   `COREPACK_ENABLE_AUTO_PIN=0` and go on. Exact messages are copied from the tools when written
    (P4).
 
 ## 4. Answers to `solution.md` section 9
@@ -336,8 +348,8 @@ healthcheck call CHG-0001 operations as their contracts define them).
 
 | AC | Design | Verified by |
 |---|---|---|
-| REQ-DOC-001 AC-1 | 3.7 item 2 | U (native: sign up, log in, create a to-do); I against CHG-0001 `sdd.md:L603-L611` |
-| REQ-DOC-001 AC-2 | 3.7 item 1 | I |
+| REQ-DOC-001 AC-1 | 3.7 item 2 | U (native: sign up, log in, create a to-do); I against CHG-0001 `sdd.md:L603-L611`; C after following items 1 to 3 (by the person in U, or by an agent during build-node work): `git diff --exit-code web/package.json` exits 0, and `git status --porcelain` shows the same output as before the steps (A12) |
+| REQ-DOC-001 AC-2 | 3.7 item 1 | I (item 1 sets `COREPACK_ENABLE_AUTO_PIN=0` before any corepack or pnpm command and uses the pins corepack 0.34.0 and pnpm 10.34.8) |
 | REQ-DOC-001 AC-3 | 3.7 item 2 | I |
 | REQ-DOC-001 AC-4 | 3.7 item 2 | I (no "clock", "e2e profile", `TODO_E2E_CLOCK_OFFSET_FILE` in README) |
 | REQ-DOC-002 AC-1 | 3.6 | I |
@@ -347,10 +359,10 @@ healthcheck call CHG-0001 operations as their contracts define them).
 | REQ-DOC-003 AC-1 | 3.7 item 3 | I against `web/package.json:L14`, `L16` and the e2e's `./api/mvnw -f api/pom.xml` pattern (`web/e2e/support/api-process.ts:L35`, `web/e2e/support/launch.ts:L35`) |
 | REQ-DOC-003 AC-2 | 3.7 items 3, 4 | I |
 | REQ-DOC-003 AC-3 | 3.7 item 7 | I |
-| REQ-DOC-003 AC-4 | 3.7 item 8 | I |
+| REQ-DOC-003 AC-4 | 3.7 item 8 | I (including the `EEXIST` and `packageManager` entries) |
 | REQ-DOC-003 AC-5 | 3.7 item 3 | I against `api-process.ts:L33` |
 | REQ-CMP-001 AC-1 | 3.1 | I; B |
-| REQ-CMP-001 AC-2 | 3.2 | I; B |
+| REQ-CMP-001 AC-2 | 3.2 | I (both corepack variables set before the first corepack step; the forced install at the pinned version); B, after which `git diff --exit-code web/package.json` exits 0 and `git status --porcelain` shows the same output as before B (the build does not write to the context; A12, A13) |
 | REQ-CMP-001 AC-3 | 3.1, 3.2 | I (four `FROM` lines: explicit, not `latest`, major line named, official multi-arch) |
 | REQ-CMP-001 AC-4 | 3.1, 3.2 | C: `docker compose exec api id -u` gives 10001; `docker compose exec web id -u` gives a value other than 0 (expected 101, A5) |
 | REQ-CMP-002 AC-1 | 3.4 | S after `docker compose up` on a fresh checkout; C: `docker compose ps` shows both running, `api` healthy |
@@ -400,11 +412,13 @@ healthcheck call CHG-0001 operations as their contracts define them).
 | A4 | `web/pnpm-lock.yaml` was written by pnpm 10 and is accepted by pnpm 10.34.8 | `pnpm install --frozen-lockfile` in B |
 | A5 | The `nginx:stable-alpine` image has user `nginx` (uid 101) and its entrypoint scripts skip a missing `conf.d/default.conf` | B, container start, `id -u` |
 | A6 | Docker Compose 2.17 or later (the first with `depends_on.restart`), with BuildKit, on the person's machine (rootless Docker and Podman are not covered) | README prerequisite; U |
-| A7 | Node.js 25 and later no longer bundle corepack, so `node:26-slim` may lack it | B (the npm install makes it present either way) |
+| A7 | Node.js 25 and later no longer bundle corepack, so `node:26-slim` may lack it | B (the pinned, forced npm install makes it present whether or not the image bundles it; A13) |
 | A8 | Spring Boot opens its HTTP port only after the context, including the Flyway migration, is ready, so a 401 means migrated | S on a fresh volume, U creating a to-do |
 | A9 | A new, empty named volume takes the owner and mode of the image directory it is mounted on, at its first use | S on a fresh volume (healthy API, to-do created in U) |
 | A10 | nginx logs request-related errors (with request line and referrer) at `error` or below, and start-up failures at `emerg` | I of a start with a broken config during build-node work; UAT: search, then no `q=` in `docker compose logs web` |
-| A11 | corepack 0.34.0 is a published npm release that runs on Node 26 and can activate pnpm 10.34.8 (not verifiable from the repository) | B: the npm install fails if the version is not published, and `pnpm install --frozen-lockfile` fails if pnpm is not activated (A4); supplementary, an uncached B with `--progress=plain` shows `corepack --version` 0.34.0 and `pnpm --version` 10.34.8 in the build log; the README's host steps use the same pins |
+| A11 | corepack 0.34.0 is a published npm release that runs on Node 26 and can activate pnpm 10.34.8 (not verifiable from the repository) | B: the npm install fails if the version is not published (`--force` does not change that), and `pnpm install --frozen-lockfile` fails if pnpm is not activated (A4); supplementary, an uncached B with `--progress=plain` shows `corepack --version` 0.34.0 and `pnpm --version` 10.34.8 in the build log; the README's host steps use the same pins |
+| A12 | corepack 0.34.0 honours `COREPACK_ENABLE_AUTO_PIN=0`, so with it set neither the build stage nor the README's host steps write a `packageManager` field into a `package.json`; corepack's default auto-pin behaviour cannot be checked from the repository and is not relied on | host: C after README items 1 to 3, `git diff --exit-code web/package.json` exits 0 and `git status --porcelain` shows the same output as before the steps (REQ-DOC-001 AC-1 row); if it fails, the README item 8 entry applies and the finding is reported; image: I of the build stage, and B never writes to the host context (the same two commands before and after B) |
+| A13 | `npm install -g --force corepack@0.34.0` succeeds in `node:26-slim` whether or not the image ships a `yarn` or `pnpm` command npm did not create (which cannot be checked from the repository); on the host the non-forced install may stop with `EEXIST` | B (the install step's exit status in the build log); I of the README item 8 entry for the host |
 
 ## 11. Risks
 
