@@ -130,7 +130,7 @@
       "executor": "any",
       "isolation": "none",
       "status": "running",
-      "attempts": 0,
+      "attempts": 1,
       "maxAttempts": 3,
       "claim": {
         "runId": "run-chg5-n05-1",
