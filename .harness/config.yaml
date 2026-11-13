@@ -50,5 +50,6 @@ github:
     environmentReviewers: true
     teams: false
   enforcement: github
+  checks: none
 tests:
   requiredProjects: [chromium, webkit]
