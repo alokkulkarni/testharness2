@@ -11,13 +11,5 @@
   "links": {
     "branch": "feature/CHG-0005-local-run-docs-and-docker-compose-for-th"
   },
-  "running": [
-    {
-      "node": "N05-solution-arch",
-      "role": "designer",
-      "runId": "run-chg5-n05-1",
-      "holder": "claude-code",
-      "leaseUntil": "2026-11-13T15:11:36.412Z"
-    }
-  ]
+  "running": []
 }
