@@ -1,0 +1,64 @@
+<mxfile host="sdlc-harness">
+  <diagram id="todo-spa-routes" name="SPA routes">
+    <mxGraphModel grid="1" gridSize="10" page="1" pageWidth="1400" pageHeight="1000">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title" value="&lt;b&gt;To-do list · SPA route and session-guard view (as built)&lt;/b&gt;&lt;br&gt;CHG-0001 · 2026-11-13&lt;br&gt;REQ-NAV-001, REQ-AUTH-002, REQ-AUTH-004, NFR-001" style="text;harness=title;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="560" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="shell" value="AppShell [React Router layout route]: skip link, Log out, main, live region" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#666666;container=1;verticalAlign=top;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="20" y="100" width="1220" height="600" as="geometry"/>
+        </mxCell>
+        <mxCell id="home" value="&lt;b&gt;/&lt;/b&gt; [Navigate]&lt;br&gt;Redirects to /todos, replacing the history entry" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;fontSize=11;" vertex="1" parent="shell">
+          <mxGeometry x="30" y="80" width="280" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="signup" value="&lt;b&gt;/signup&lt;/b&gt; [SignupPage in PublicRoute]&lt;br&gt;Waits for the session probe;&lt;br&gt;a signed-in visitor is sent to /todos" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;fontSize=11;" vertex="1" parent="shell">
+          <mxGeometry x="30" y="220" width="280" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="login" value="&lt;b&gt;/login&lt;/b&gt; [LoginPage in PublicRoute]&lt;br&gt;Waits for the session probe;&lt;br&gt;signed-in: sent to safeReturnTo or /todos" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;fontSize=11;" vertex="1" parent="shell">
+          <mxGeometry x="30" y="380" width="280" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="guard" value="RequireAuth: renders nothing while the session is unknown; signed-out visitors are replaced to login" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#666666;container=1;verticalAlign=top;align=left;spacingLeft=8;" vertex="1" parent="shell">
+          <mxGeometry x="640" y="40" width="520" height="520" as="geometry"/>
+        </mxCell>
+        <mxCell id="list" value="&lt;b&gt;/todos&lt;/b&gt; [TodoListPage]&lt;br&gt;List with filter, search, pagination" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;fontSize=11;" vertex="1" parent="guard">
+          <mxGeometry x="40" y="55" width="420" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="new" value="&lt;b&gt;/todos/new&lt;/b&gt; [TodoFormPage, create mode]&lt;br&gt;Create form" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;fontSize=11;" vertex="1" parent="guard">
+          <mxGeometry x="40" y="145" width="420" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="detail" value="&lt;b&gt;/todos/:id&lt;/b&gt; [TodoDetailPage]&lt;br&gt;Detail; to-do not-found message for a bad id" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;fontSize=11;" vertex="1" parent="guard">
+          <mxGeometry x="40" y="235" width="420" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="edit" value="&lt;b&gt;/todos/:id/edit&lt;/b&gt; [TodoFormPage, edit mode]&lt;br&gt;Edit form" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;fontSize=11;" vertex="1" parent="guard">
+          <mxGeometry x="40" y="325" width="420" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="nf" value="&lt;b&gt;*&lt;/b&gt; [NotFoundPage]&lt;br&gt;Any other address: not-found page, only when signed in" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;fontSize=11;" vertex="1" parent="guard">
+          <mxGeometry x="40" y="415" width="420" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1" value="Redirects [client-side, replace]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" edge="1" parent="1" source="home" target="list">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e2" value="Redirects signed-out [/login?returnTo]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;exitX=0;exitY=0.7596;entryX=1;entryY=0.5;" edge="1" parent="1" source="guard" target="login">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="notes" value="&lt;b&gt;Citations (as built)&lt;/b&gt;&lt;br&gt;Route table, catch-all behind RequireAuth: web/src/app/AppRoutes.tsx:L12-L49 (REQ-NAV-001 AC-1, AC-3, AC-8).&lt;br&gt;RequireAuth: nothing while unknown, replace to /login?returnTo= when signed out, session-ended message state: web/src/auth/RequireAuth.tsx:L21-L37 (REQ-AUTH-004 AC-2, AC-4).&lt;br&gt;PublicRoute: signed-in visitor sent on, /login via safeReturnTo: web/src/auth/RequireAuth.tsx:L40-L48.&lt;br&gt;AppShell skip link, Log out control and polite live region: web/src/app/AppShell.tsx:L45-L72 (REQ-AUTH-004 AC-3, NFR-001).&lt;br&gt;Per-route page behaviour beyond these files is stated in docs/specs/CHG-0001/sdd.md section 4.1 and 8 (page files not re-read here)." style="text;whiteSpace=wrap;html=1;align=left;fontSize=11;strokeColor=#999999;" vertex="1" parent="1">
+          <mxGeometry x="420" y="760" width="900" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend" value="&lt;b&gt;Legend&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;container=1;harness=legend;fillColor=none;strokeColor=#666666;verticalAlign=top;align=left;spacingLeft=6;" vertex="1" parent="1">
+          <mxGeometry x="20" y="760" width="380" height="200" as="geometry"/>
+        </mxCell>
+        <mxCell id="lg1" value="Route / page component" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#78A8D8;" vertex="1" parent="legend">
+          <mxGeometry x="10" y="30" width="150" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="lg4" value="Layout or guard (dashed)" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#666666;" vertex="1" parent="legend">
+          <mxGeometry x="180" y="30" width="180" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="lg5" value="Arrow: verb [mechanism], points to where the visitor is sent" style="text;whiteSpace=wrap;html=1;align=left;fontSize=11;" vertex="1" parent="legend">
+          <mxGeometry x="10" y="100" width="350" height="50" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
