@@ -14,6 +14,8 @@ creates the database file (ADR-0014, sdd.md L607-L608); JDK 21 (`api/pom.xml` L2
 the generated `web/src/styles/tokens.css` is committed.
 
 The requester answered Q1, Q3 and Q5 on 2026-11-13, before seeing the questions; their words are quoted as given.
+They answered the remaining questions on 2026-11-13 with "all as recommended", replying to a list of the
+recommended options; each answer below quotes the option they accepted.
 
 ## Q1. How should the SPA container serve the app?
 
@@ -36,7 +38,7 @@ the SPA's proxy. (c) Other ports (for example the SPA on 80 or 8080), with the e
 Recommended: (a), because it matches the native run's ports, needs no test change, and binding to `127.0.0.1` keeps
 the app off the local network (NFR-002).
 
-**Answer:**
+**Answer:** (a) SPA 5173 and API 8080, both bound to 127.0.0.1. (@alokkulkarni: all as recommended, 2026-11-13)
 
 ## Q3. Which base images, version pinning and CPU architectures?
 
@@ -62,7 +64,7 @@ leaving the person's named volume alone. (c) Run against whatever data the volum
 Recommended: (a), because it adds no file and makes the e2e start from the state the tests expect; it does wipe the
 person's own to-dos, which the README would say.
 
-**Answer:**
+**Waived:** @alokkulkarni — no Playwright e2e runs against the compose stack (Q5); compose is for the person's manual UAT. (all as recommended, 2026-11-13)
 
 ## Q5. Which e2e suites run against the stack, and where does Playwright run?
 
@@ -87,7 +89,7 @@ order only.
 Recommended: (a), because `docker compose up` then reports the stack ready only when the API answers, without
 changing the API's code or attack surface.
 
-**Answer:**
+**Answer:** (a) a compose healthcheck on an existing endpoint (401 = up); web waits for the API to be healthy. No API code change. (@alokkulkarni: all as recommended, 2026-11-13)
 
 ## Q7. What is `.env.example` for?
 
@@ -101,7 +103,7 @@ to export in their shell; `docker-compose.yml` sets the containers' own values i
 Recommended: (a), because one variable cannot hold both the native and the container database path, and keeping
 compose self-contained means `docker compose up` works with no setup.
 
-**Answer:**
+**Answer:** (a) `.env.example` documents the native run only; compose sets the containers' own values. (@alokkulkarni: all as recommended, 2026-11-13)
 
 ## Q8. What should the README cover?
 
@@ -111,7 +113,7 @@ in use, Docker not running). (c) As (b), plus the contributor and harness workfl
 Recommended: (b), because "run and test end to end on a fresh checkout" needs the test commands and the reset, and
 the harness workflow already lives in `CLAUDE.md` and `AGENTS.md`.
 
-**Answer:**
+**Answer:** (b) run steps + unit/component test commands + wiping data + common failures. (@alokkulkarni: all as recommended, 2026-11-13)
 
 ## Q9. How should "done" be proven for the containers?
 
@@ -122,7 +124,7 @@ stack once yourself. (c) A scripted smoke check only (the SPA page loads and `/a
 Recommended: (a), because the request's goal is that the stack really runs and the e2e passes against it; Docker on
 this machine decides who runs it.
 
-**Answer:**
+**Answer:** (c) a scripted smoke check (page loads and /api answers through the proxy) plus the user's own UAT. (@alokkulkarni: all as recommended, 2026-11-13; the list they accepted recommended (c) after their Q5 answer, not this file's (a))
 
 ## Q10. What should the solution architecture cover?
 
@@ -133,7 +135,7 @@ view, linking CHG-0001's design for the rest. (c) The whole app with the Compose
 Recommended: (a), because a first solution architecture should describe the system as it is, and both ways of
 running it remain supported.
 
-**Answer:**
+**Answer:** (a) the whole app, with a native-run view and a Compose deployment view. (@alokkulkarni: all as recommended, 2026-11-13)
 
 ## Q11. With images for both architectures (Q3), which base images and version pinning?
 
@@ -145,7 +147,7 @@ JDBC driver ships native code) to run it; `node:<current LTS major>` with pnpm t
 Recommended: (a), because each of these images is published for both linux/amd64 and linux/arm64, and minor-version
 tags are easy to keep current.
 
-**Answer:**
+**Answer:** (a) official multi-arch images: temurin 21 jdk to build and 21 jre on Ubuntu (not Alpine), node LTS with corepack pnpm, nginx:stable-alpine. Major/minor tags, non-root. (@alokkulkarni: all as recommended, 2026-11-13)
 
 ## Q12. How are the images for both architectures produced, with no registry?
 
@@ -160,7 +162,7 @@ request does not mention).
 Recommended: (a), because `docker compose up` stays fast and needs no extra Docker setup, while the documented
 command still shows both architectures build.
 
-**Answer:**
+**Answer:** (a) `compose up` builds the native architecture; the README gives a `docker buildx build --platform linux/amd64,linux/arm64` proof command, with no push. (@alokkulkarni: all as recommended, 2026-11-13)
 
 ## Q13. In the compose stack, should the session cookie be sent without the Secure flag?
 
@@ -173,4 +175,4 @@ certificate and set it to `true`.
 Recommended: (a), because it works in every browser on plain http, matches the native run, and keeps certificates out
 of a local-only stack.
 
-**Answer:**
+**Answer:** (a) TODO_COOKIE_SECURE=false over http on localhost; the README notes that hosting needs HTTPS and true. (@alokkulkarni: all as recommended, 2026-11-13)
