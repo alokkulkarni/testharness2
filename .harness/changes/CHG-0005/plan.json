@@ -4,7 +4,7 @@
   "title": "Local run docs and Docker Compose for the to-do app",
   "mode": "greenfield",
   "profile": "lite",
-  "specFreeze": null,
+  "specFreeze": ".harness/changes/CHG-0005/spec-freeze.json",
   "intent": null,
   "status": "active",
   "branch": "feature/CHG-0005-local-run-docs-and-docker-compose-for-th",
