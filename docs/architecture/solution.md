@@ -9,7 +9,7 @@ authors:
     agentRunId: run-chg4-n05-1
 upstream:
   - path: docs/specs/CHG-0004/requirements.md
-    sha256: a393f8fb5e2b2c6351a7a4e40e1f917ba6b665ee981322bf99c4619885776ddb
+    sha256: c67cab9d65db8c4d5eed647062b13def283addb1bd930d1aace77c8979dc5f43
 ---
 
 # Solution architecture (placeholder)
