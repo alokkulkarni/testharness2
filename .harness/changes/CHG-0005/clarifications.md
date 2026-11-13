@@ -176,3 +176,13 @@ Recommended: (a), because it works in every browser on plain http, matches the n
 of a local-only stack.
 
 **Answer:** (a) TODO_COOKIE_SECURE=false over http on localhost; the README notes that hosting needs HTTPS and true. (@alokkulkarni: all as recommended, 2026-11-13)
+
+## Q14. Node 25 and later no longer bundle corepack: which Node image builds the SPA?
+
+Asked after the spec review (SDD section 12, OQ-1), because Q11's answer names "node LTS with corepack pnpm". (a)
+`node:26-slim` (the current LTS line) with an exactly pinned corepack installed through npm in the build stage only. (b)
+`node:24-slim`, an older LTS line that still bundles corepack. (c) `node:22-slim`, matching the harness tool pin.
+Recommended: (a), because it is the only option that is both the current LTS and corepack-managed pnpm, and it adds
+nothing to the run image.
+
+**Answer:** "Accept for node version": (a) `node:26-slim`, with an exactly pinned corepack installed through npm in the build stage only. (@alokkulkarni, 2026-11-13)
