@@ -1,0 +1,174 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0004",
+  "node": "N03-spec",
+  "gate": "critic-verdict",
+  "verdict": "changes-required",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0004",
+      "agent": "critic",
+      "agentRunId": "a9a2a88c557f961b5"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0004",
+      "agent": "spec-author",
+      "agentRunId": "ae486fc65f8882ba1"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0004",
+      "agent": "spec-author",
+      "agentRunId": "af1e144a18e646833"
+    }
+  ],
+  "createdAt": "2026-11-13T18:06:58.649Z",
+  "reviewedCommit": "9a0b870e3d76ff6a759a6a7e710bdeb8fb54ad7d",
+  "diffHash": "80c7434bdfbb7f116accf24f6d3679450e997b13f87698abfe9f833933045363",
+  "summary": "Round 1 (exhaustive) of N03-spec sdd.md. Two majors: the red-flash formula is left conditional on a later lookup (open design question), and the contrast calibration uses only achromatic references, so R3 claim that it would expose a colour shift does not hold for the chromatic controls measured from pixels. 11 minors and 4 infos follow. Traceability covers every REQ/AC; no product-code change, no new devDependency; firefox exclusion, video scoping, test-first per Q11 (a) without artificial red, Q12-Q14 and section numbering after the removed open-questions section are otherwise consistent with the app as built.",
+  "findings": [
+    {
+      "id": "F-1",
+      "severity": "major",
+      "message": "The red-flash rule is left conditional: section 8.2 says whether WCAG 2.1 gives the (R-G-B)x320 form or the CIE 1976 UCS chromaticity form could not be checked, and that the test author picks the other form if 2.1 gives it; R9 repeats this. That hands a design decision to the build and is an open question left in the SDD. The label older for the CIE form also appears inverted (the chromaticity form is the later WCAG 2.2 wording), which shows the point was not settled.",
+      "requirement": "REQ-A11Y-009",
+      "location": "docs/specs/CHG-0004/sdd.md:L451-L454",
+      "suggestion": "Settle the formula in the SDD: state the WCAG 2.1 definition note it follows (general flash and red flash thresholds, the HARDING-BINNIE working definition with R/(R+G+B) >= 0.8 and a change in (R-G-B)x320 > 20, linearised R, G, B), cite it, drop the conditional and the older label, and close R9 (L682)."
+    },
+    {
+      "id": "F-2",
+      "severity": "major",
+      "message": "R3 says the calibration reference ratios (21.00 for #000000 on #FFFFFF, 4.54 for #767676, 2.32 for #AAAAAA) would expose a colour shift from decoding or screenshot colour management. All three references are neutral greys, which keep their values under a primaries-only conversion (for example sRGB to Display P3), so a shift of chromatic colours would pass the calibration. The boundary measure reads the identifying colour from screenshot pixels (section 6.3) but the adjacent colour from computed styles (section 6.2), so such a shift goes straight into the asserted ratios of the blue primary, red danger and filter-selected controls, and into the evidence table.",
+      "requirement": "REQ-A11Y-006",
+      "location": "docs/specs/CHG-0004/sdd.md:L365-L373",
+      "suggestion": "Add chromatic references to the calibration fixture from the tokens (for example a 1 px #1D4ED8 border and a #B91C1C fill on #FFFFFF) and assert that the decoded pixel equals the CSS colour and the ratio equals the computed reference; or, for CSS-painted controls, cross-check the identifying pixel against the computed border or background colour. Update R3 (L676) to match."
+    },
+    {
+      "id": "F-3",
+      "severity": "minor",
+      "message": "Section 9 says the global setup starts the API with the section 11 command; section 11 of this SDD is the knowledge-bundle notes. The run is CHG-0001 SDD section 11 (as section 2 L54 says).",
+      "requirement": "REQ-A11Y-010",
+      "location": "docs/specs/CHG-0004/sdd.md:L536-L537",
+      "suggestion": "Write CHG-0001 SDD section 11."
+    },
+    {
+      "id": "F-4",
+      "severity": "minor",
+      "message": "REQ-A11Y-002 AC-6 row says after each action wait for the URL q= to change; the filter step changes status=, not q= (TodoListPage.tsx L365-L372).",
+      "requirement": "REQ-A11Y-002",
+      "location": "docs/specs/CHG-0004/sdd.md:L202",
+      "suggestion": "Wait for status=active after the filter step and for q= after each search step."
+    },
+    {
+      "id": "F-5",
+      "severity": "minor",
+      "message": "The shared rule says every test signs in through the API except where the sign-up or log-in UI is under test, but the REQ-A11Y-005 AC-1 row expects the log-in heading for a signed-out browser after Retry, and REQ-A11Y-004 AC-1 starts signed out. The exceptions are not listed.",
+      "requirement": "REQ-A11Y-005",
+      "location": "docs/specs/CHG-0004/sdd.md:L183-L184",
+      "suggestion": "List REQ-A11Y-005 AC-1 (signed out) and REQ-A11Y-004 AC-1 (signed out, then signed in) as exceptions."
+    },
+    {
+      "id": "F-6",
+      "severity": "minor",
+      "message": "The rows for REQ-A11Y-001 AC-4 (logOut), REQ-A11Y-002 AC-7 (clearCompletedTodos) and AC-8 (delete by API) call non-GET operations through page.request without the X-Todo-Client: web header the API requires (web/src/api/client.ts L68; web/e2e/support/app.ts L27; CHG-0001 sdd.md L801, 403 without it). AC-8 also names no operation for delete one by API.",
+      "requirement": "REQ-A11Y-002",
+      "location": "docs/specs/CHG-0004/sdd.md:L193-L204",
+      "suggestion": "Name the header for every page.request write, and name deleteTodo (DELETE /api/v1/todos/{id}) for AC-8."
+    },
+    {
+      "id": "F-7",
+      "severity": "minor",
+      "message": "The list set-up (21 to-dos, one done, two pages) does not say the done to-do must be on page 1, which the row checkbox selected state and the done-row text need. The list orders by created descending (CHG-0001 sdd.md L806).",
+      "requirement": "REQ-A11Y-006",
+      "location": "docs/specs/CHG-0004/sdd.md:L345",
+      "suggestion": "Say the done to-do is created last (or otherwise shown on page 1)."
+    },
+    {
+      "id": "F-8",
+      "severity": "minor",
+      "message": "Several rows of the controls table give measures without states, (O; B; T) or as a button, and the form, detail and not-found rows list Skip link and Log out with no measures. The states each control is measured in, which REQ-A11Y-006 AC-3 and REQ-A11Y-007 AC-1 enumerate, are left implicit.",
+      "requirement": "REQ-A11Y-007",
+      "location": "docs/specs/CHG-0004/sdd.md:L345-L350",
+      "suggestion": "Define a default (for example B: normal, hover; T: normal, hover, focus; and the shell controls as on the list screen) or spell the states out per row."
+    },
+    {
+      "id": "F-9",
+      "severity": "minor",
+      "message": "The suite-time run times chromium only, while R7 names the webkit device-scale screenshots as the heaviest part. Timing the lighter browser can understate NFR-102 AC-2.",
+      "requirement": "NFR-102",
+      "location": "docs/specs/CHG-0004/sdd.md:L588-L589",
+      "suggestion": "Time webkit as well (or the slower of the two) and record both."
+    },
+    {
+      "id": "F-10",
+      "severity": "minor",
+      "message": "NFR-102 AC-1 is about pnpm -C web e2e, which also runs e2e:restart and e2e:session-expiry (web/package.json L16). The evidence run and the section 14 row (L737) use only e2e:main in chromium and webkit, and give no reason for leaving the two other configurations out.",
+      "requirement": "NFR-102",
+      "location": "docs/specs/CHG-0004/sdd.md:L577-L580",
+      "suggestion": "Run the two other configurations in chromium and webkit, or state why they need no run (their configs are untouched and match only their own spec file, section 4 L156-L158)."
+    },
+    {
+      "id": "F-11",
+      "severity": "minor",
+      "message": "No per-test timeout is designed. The main configuration sets none, so the 30 s default applies, and it may not change (analyst default 10). The flash test takes 73 device-scale viewport screenshots (2560x1440 in webkit) and decodes them, and the list-screen contrast tests take many element screenshots. R7 covers only the suite time.",
+      "requirement": "REQ-A11Y-009",
+      "location": "docs/specs/CHG-0004/sdd.md:L424-L441",
+      "suggestion": "Say that the long tests set their own timeout in their spec file (test.setTimeout or describe.configure), with the value and its reason."
+    },
+    {
+      "id": "F-12",
+      "severity": "minor",
+      "message": "A first-run rerun after a test defect is attached as a further test-report, but no file name is given for it. A rerun with the section 9 command would overwrite chg-0004-first-run-junit.xml on disk and could replace the first-run record that REQ-A11Y-010 AC-4 keeps.",
+      "requirement": "REQ-A11Y-010",
+      "location": "docs/specs/CHG-0004/sdd.md:L561-L562",
+      "suggestion": "Give reruns a distinct PLAYWRIGHT_JUNIT_OUTPUT_NAME (for example chg-0004-first-run-rerun-<n>-junit.xml) and list it in section 10 (L593)."
+    },
+    {
+      "id": "F-13",
+      "severity": "minor",
+      "message": "The REQ-A11Y-004 AC-3 init script records whether the heading, sentence and link are in the DOM outside any aria-hidden subtree. That stands in for in the accessibility tree but misses display:none, visibility:hidden and the hidden attribute.",
+      "requirement": "REQ-A11Y-004",
+      "location": "docs/specs/CHG-0004/sdd.md:L210",
+      "suggestion": "Also record that each is rendered (getClientRects non-empty, computed visibility visible), or state why the DOM check is enough."
+    },
+    {
+      "id": "F-14",
+      "severity": "info",
+      "message": "Finding ids from other verdicts (F-18, F-19, F-24, F-25) are cited without their source. F-19 also means the CHG-0001 N12 validator finding at L579.",
+      "requirement": "REQ-A11Y-010",
+      "location": "docs/specs/CHG-0004/sdd.md:L72",
+      "suggestion": "Name the verdict file once, or drop the ids."
+    },
+    {
+      "id": "F-15",
+      "severity": "info",
+      "message": "All 8 per-screen contrast tests are named with REQ-A11Y-006 AC-4 and REQ-A11Y-007 AC-2 (disabled states), but only the list screen has disabled controls, so the traceability claims AC-4 and AC-2 for 7 tests that do not exercise them.",
+      "requirement": "REQ-A11Y-006",
+      "location": "docs/specs/CHG-0004/sdd.md:L714-L716",
+      "suggestion": "Name AC-4 and AC-2 only in the list-screen tests."
+    },
+    {
+      "id": "F-16",
+      "severity": "info",
+      "message": "R11 accepts the most lenient statistic (the highest-contrast pixel) and relies on a reviewer reading the table to catch a pass carried by a thin edge.",
+      "requirement": "REQ-A11Y-006",
+      "location": "docs/specs/CHG-0004/sdd.md:L684",
+      "suggestion": "Consider also recording, per row, the share of band pixels at or above the threshold, so the table shows such cases."
+    },
+    {
+      "id": "F-17",
+      "severity": "info",
+      "message": "Outside this node: clarifications Q12-Q14 cite sdd.md section 14 items 1-3, a section that no longer exists now that the open questions are folded in.",
+      "requirement": "REQ-A11Y-002",
+      "location": ".harness/changes/CHG-0004/clarifications.md:L158-L170",
+      "suggestion": "None needed in the SDD; noted for the record."
+    }
+  ]
+}
