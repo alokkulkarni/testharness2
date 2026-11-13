@@ -31,6 +31,11 @@ AC-3). Goals, each tied to its requirements:
 
 Audit level: WCAG 2.1 AA (CHG-0001 Q44). Out of scope: as listed in the requirements.
 
+Finding ids F-18, F-19, F-24 and F-25 cited below are those of this change's requirements reviews
+(`.harness/changes/CHG-0004/verdicts/N02-requirements.critic-verdict.json`; F-18 in
+`verdicts/history/N02-requirements.critic-verdict.attempt-1.json`). "CHG-0001 N12 validator F-9, F-19" names findings
+of CHG-0001's validator.
+
 ## 2. Scope, module layout and architecture conformance
 
 **Module layout** (one stack; tests and test support only, no build of product code):
@@ -77,6 +82,15 @@ start with the requirement ID and the ACs they prove (REQ-A11Y-010 AC-6).
 
 Existing support is reused unchanged: `newAccount`, `signedInUser`, `apiSignUp`, `apiCreateTodo`, `apiMarkDone`,
 `apiSeedMany`, `pressTab`, `listHeading`, `rows` and `rowFor` from `web/e2e/support/app.ts`.
+
+**Per-test timeouts.** `a11y-audit-contrast.spec.ts` and `a11y-audit-flash.spec.ts` each call
+`test.describe.configure({ timeout: 120_000 })` at their top level, so every test in them, the calibration tests
+included, has 120 s instead of Playwright's 30 s default ("Each test in the file will … have a timeout",
+`playwright/types/test.d.ts` L4431-L4438, L4468). Their tests take many device-scale screenshots (73 viewports
+of 2560 × 1440 in webkit for the flash test; several element screenshots per control and state on the list screen) and
+decode them on the analysis page. 120 s leaves room for that and stays under NFR-102's 5 minutes for the whole set. The
+announcement and video files keep the default. The configuration is not changed for this (analyst default 10). A test
+that exceeds 120 s is reported, not given a higher limit.
 
 Support signatures (bodies are the coder's):
 
@@ -180,8 +194,15 @@ attributes, live-region membership and focus (`toBeFocused`).
 - **"Holds the text"** is checked as `toContainText` on the element found by role.
 - **A polite live region** is an element matched by `[role="status"], [aria-live="polite"]` whose `aria-live`, if
   present, is `polite` (analyst default 3).
-- **Session set-up.** Each test signs in through the API with a fresh generated account (`signedInUser`), except where
-  the sign-up or log-in UI is under test.
+- **Session set-up.** Each test signs in through the API with a fresh generated account (`signedInUser`), except these:
+  - 001 AC-1, AC-2, AC-3: signed out, the sign-up or log-in UI under test;
+  - 001 AC-5: signed out; its account is created with `apiSignUp` only, not logged in;
+  - 004 AC-1: signed out for the sign-up page's title, then signed in by API for the detail page;
+  - 005 AC-1: signed out throughout; after Retry the app shows the log-in page.
+- **API writes.** Every non-GET call a test makes through `page.request` sends the header `X-Todo-Client: web`; the API
+  refuses a write without it with 403 (`web/src/api/client.ts` L68; CHG-0001 SDD §14, REQ-AUTH-004 row). The constant
+  in `web/e2e/support/app.ts` (L27) is not exported and that file stays unchanged, so the new tests send the header
+  themselves.
 - **Opening a control by keyboard.** WebKit on macOS does not focus a button or radio on a mouse click. A check that
   depends on the focused or opening control therefore uses the keyboard: `locator.focus()` then `Enter`, Tab via
   `pressTab`, and arrow keys for radios.
@@ -190,7 +211,7 @@ attributes, live-region membership and focus (`toBeFocused`).
 |---|---|---|
 | 001 AC-1, AC-2 (sign-up; log-in) | Open `/signup` (and, in a second test, `/login`) signed out; submit the empty form with the submit button | The `role="alert"` element holding "There is a problem" is focused. It has one link per field in error, and each link's `href` is `#<id>` of a field. That field has `aria-invalid="true"` and an accessible description containing the link's text, the field error (`web/src/app/ui.tsx` L95-L113) |
 | 001 AC-3 | Sign up through the UI with a generated account | On `/login`, a `role="status"` element holds "Account created. Log in." (analyst default 1) |
-| 001 AC-4 (F-19) | Sign in through the API, open `/todos` and wait for the list heading. End the session server-side with the `logOut` operation (`POST /api/v1/auth/logout`) through `page.request`, which shares the page's cookies. Then, without reloading, choose the "Active" radio by keyboard, which makes the SPA send a list request | The URL is `/login?returnTo=…`; an element of role `status` or `alert` holds "Your session has ended. Please log in again." (analyst default 4) |
+| 001 AC-4 (F-19) | Sign in through the API, open `/todos` and wait for the list heading. End the session server-side with the `logOut` operation (`POST /api/v1/auth/logout`, header `X-Todo-Client: web`) through `page.request`, which shares the page's cookies. Then, without reloading, choose the "Active" radio by keyboard, which makes the SPA send a list request | The URL is `/login?returnTo=…`; an element of role `status` or `alert` holds "Your session has ended. Please log in again." (analyst default 4) |
 | 001 AC-5 | On `/login`, a generated account's identifier with a wrong password | A `role="alert"` element holds "Invalid identifier or password. Check them and try again." |
 | 001 AC-6 | `/todos/new` submitted empty; and the edit route of an API-created to-do with its title cleared, then submitted | The AC-1/AC-2 assertions, for every field in error (title, and due date on the empty create form) |
 | 001 AC-7 | Open `/todos/new` directly; open `/todos/<id>/edit` directly | The `<h1>` "Add a to-do" (then "Edit to-do") is focused |
@@ -199,15 +220,15 @@ attributes, live-region membership and focus (`toBeFocused`).
 | 002 AC-3 | 1 to-do; open `/todos` | A `group` role with a non-empty accessible name contains radios, and exactly one radio in it is checked |
 | 002 AC-4 | 45 to-dos; open `/todos` | A `navigation` named "Pagination" exists. Inside it, exactly one element has `aria-current="page"`, and that element holds "1". The element for the current page is checked whatever its role (Q12 a): the app's is a `<span>`, not a link (`web/src/todos/Pagination.tsx` L49-L53) |
 | 002 AC-5 | 45 to-dos; open `/todos`; activate the "Page 2" link | URL has `page=2`; the `<h1>` "My to-dos" is focused |
-| 002 AC-6 | 3 to-dos; open `/todos`. Filter: focus the checked radio "All" with Tab and press ArrowRight. Search: type a first text in the search box and press Enter. Then replace it with a different text, so that a new query runs, focus the Search button and press Enter. After each, wait for the URL's `q=` to change and the result to render | After each re-query has rendered, focus is on "Active", on the search box and on the Search button respectively |
-| 002 AC-7 | One active and one done to-do; open `/todos` (Clear all completed enabled). Delete the completed ones with the `clearCompletedTodos` operation (`DELETE /api/v1/todos/completed`) through `page.request`, standing in for another tab. Then activate "Clear all completed" by keyboard | The shell region (`[aria-live="polite"]`, `web/src/app/AppShell.tsx` L69) holds "There are no completed to-dos to clear.", checked before the shell clears it after 10 s (L27). The count of `dialog` role elements is 0 |
-| 002 AC-8 | 2 to-dos; open `/todos`; delete one by API; toggle that row's checkbox by keyboard | A `role="alert"` element holds "That to-do no longer exists, and the list has been refreshed." |
+| 002 AC-6 | 3 to-dos; open `/todos`. Filter: focus the checked radio "All" with Tab and press ArrowRight. Search: type a first text in the search box and press Enter. Then replace it with a different text, so that a new query runs, focus the Search button and press Enter. After the filter step, wait for the URL's `status=active`; after each search step, for the URL's `q=` to hold the text submitted; in each case, then for the result to render | After each re-query has rendered, focus is on "Active", on the search box and on the Search button respectively |
+| 002 AC-7 | One active and one done to-do; open `/todos` (Clear all completed enabled). Delete the completed ones with the `clearCompletedTodos` operation (`DELETE /api/v1/todos/completed`, header `X-Todo-Client: web`) through `page.request`, standing in for another tab. Then activate "Clear all completed" by keyboard | The shell region (`[aria-live="polite"]`, `web/src/app/AppShell.tsx` L69) holds "There are no completed to-dos to clear.", checked before the shell clears it after 10 s (L27). The count of `dialog` role elements is 0 |
+| 002 AC-8 | 2 to-dos; open `/todos`; delete one with the `deleteTodo` operation (`DELETE /api/v1/todos/{todoId}`, header `X-Todo-Client: web`) through `page.request`, standing in for another tab; toggle that row's checkbox by keyboard | A `role="alert"` element holds "That to-do no longer exists, and the list has been refreshed." |
 | 003 AC-1 to AC-3 (delete dialog; clear-completed dialog) | Open each dialog from the list by keyboard (focus its opener, press Enter). Close once with Cancel, once with Escape | Role `dialog` whose accessible name equals its `<h2>` text ("Delete this to-do?", "Clear completed to-dos?"). Cancel is focused on opening. After each close the dialog is gone and the opener is focused |
 | 003 AC-4 | Delete dialog opened by keyboard on a row; confirm with the dialog's Delete button | The row and its opener have count 0; the `<h1>` "My to-dos" is focused (analyst default 6) |
 | 003 AC-5 | Clear-completed dialog opened by keyboard; confirm | The `<h1>` "My to-dos" is focused (analyst default 6) |
 | 004 AC-1 | Signed out, open `/signup` and read `document.title`; then sign in by API and open `/todos/<id>` of an API-created to-do | The `<h1>` (the title) is focused; `document.title` is not empty and differs from the sign-up title |
 | 004 AC-2 | Open `/todos/<random lower-case UUID>`, so the API answers 404 | The `<h1>` "To-do not found" is focused; `document.title` is not empty and differs from the sign-up title |
-| 004 AC-3 | Before navigation, an init script (`page.addInitScript`) records, at the first `animationstart` event, whether the `<h1>`, the sentence and the home link are in the DOM outside any `aria-hidden` subtree. Then open `/nope` signed in | The record says all three were present at first render. By role: heading level 1 "Page not found", the sentence text, link "Go to home" |
+| 004 AC-3 | Before navigation, an init script (`page.addInitScript`) records, at the first `animationstart` event, whether the `<h1>`, the sentence and the home link are in the DOM outside any `aria-hidden` subtree, and whether each is rendered: its `getClientRects()` is not empty and its computed `visibility` is `visible`. Both checks run on the element itself: `display: none` or the `hidden` attribute on it or an ancestor leaves it no client rects, and `visibility` is inherited, so a hidden ancestor is caught too. Then open `/nope` signed in | The record says all three were present and rendered at first render. By role: heading level 1 "Page not found", the sentence text, link "Go to home" |
 | 004 AC-4 | Same page | `.nf-illustration` has `aria-hidden="true"`. Every animation target (`document.getAnimations()`, effect target) is inside it. The aria snapshot of `main` is exactly the heading, the sentence and the link: `toMatchAriaSnapshot` with `/children: deep-equal` in the template. Matching is partial by default (`playwright/types/test.d.ts` L312-L317). So the illustration adds no name or text |
 | 005 AC-1 | Route `**/api/v1/auth/session` to `abort()` before opening `/todos`. Then remove the route, move focus to Retry with Tab and press Enter | A `role="alert"` element holds "The app could not reach the server." and contains a button named "Retry". After Enter the alert is gone and the app has moved on (the log-in heading for a signed-out browser), so Retry worked by keyboard |
 
@@ -338,11 +359,16 @@ colour is the fill. Its adjacent colour is the page, row or dialog colour outsid
 Every screen is opened signed in through the API, except sign-up and log-in. Legend: **O** focus outline, **B**
 boundary, **T** text.
 
+- **Default states.** A measure given without states is taken in these: O in focus; B in normal and hover; T in normal,
+  hover and focus. For an input, textarea, date input or select, T is read with a value the test enters (§6.3).
+- **Shell controls.** Where "Skip link" and "Log out" are listed with no measures (form, detail and not-found screens),
+  they are measured with the measures and states of the list-screen row.
+
 | Screen and set-up | Control (measures: states) |
 |---|---|
 | Sign-up `/signup`, signed out; then after an empty submit | Skip link (O, T: focus). Identifier and password inputs (O: focus; B: normal, hover, invalid; T: normal, hover, focus with a typed value). "Sign up" primary button (O; B: normal, hover; T: normal, hover, focus). "Already have an account? Log in" text link (O; T: normal, hover, focus). Error-summary links (O; T: normal, hover, focus) |
 | Log-in `/login`, signed out; then after an empty submit | As sign-up, with the "Log in" button and the "No account yet? Sign up" link |
-| List `/todos`: 21 to-dos, one of them done (two pages); then the completed one deleted by API and the page reloaded (disabled state) | Skip link (O, T: focus). "Log out" secondary button in the header (O; B: normal, hover; T: normal, hover, focus). "Add a to-do" primary link (O; B, T as a button). "Clear all completed" danger-outline button (O; B: normal, hover, disabled; T: normal, hover, focus, disabled). Search box (O; B: normal, hover; T with a typed value). "Search" secondary button (O; B; T). Filter radio, native (O on the checked one; B: normal on "Active", hover, selected on "All"). Filter option label (B: normal, hover, selected; T: normal, selected). Row checkbox, native (O; B: normal, hover, selected on the done row). Row title link (O; T: normal, hover, focus). Row "Edit" secondary link (O; B; T). Row "Delete" danger-outline button (O; B; T). Pagination links "Page 2" and "Next" (O; T: normal, hover, focus). "Previous" marker (T: disabled). Current-page marker `<span aria-current="page">` (T: normal, asserted; its fill not asserted, Q14) |
+| List `/todos`: 21 to-dos (two pages): 20 seeded with `apiSeedMany`, then one created with `apiCreateTodo` and marked done with `apiMarkDone`. Created last, the done one is first on page 1 (newest first, `docs/specs/CHG-0001/sdd.md` L806). Then that to-do deleted with `deleteTodo` (`DELETE /api/v1/todos/{todoId}`, header `X-Todo-Client: web`) through `page.request` and the page reloaded (disabled state). With 20 left the list has one page, so only the disabled "Clear all completed" rows are measured after the delete; every other row is measured before it | Skip link (O, T: focus). "Log out" secondary button in the header (O; B: normal, hover; T: normal, hover, focus). "Add a to-do" primary link (O; B; T). "Clear all completed" danger-outline button (O; B: normal, hover, disabled; T: normal, hover, focus, disabled). Search box (O; B: normal, hover; T with a typed value). "Search" secondary button (O; B; T). Filter radio, native (O on the checked one; B: normal on "Active", hover, selected on "All"). Filter option label (B: normal, hover, selected; T: normal, selected). Row checkbox, native (O; B: normal, hover, selected on the done row). Row title link (O; T: normal, hover, focus). Row "Edit" secondary link (O; B; T). Row "Delete" danger-outline button (O; B; T). Pagination links "Page 2" and "Next" (O; T: normal, hover, focus). "Previous" marker (T: disabled). Current-page marker `<span aria-current="page">` (T: normal, asserted; its fill not asserted, Q14) |
 | Create/edit form: `/todos/new`, then after an empty submit, then `/todos/<id>/edit` | Skip link, "Log out". Title input, description textarea, due-date input, priority select (O; B: normal, hover, invalid where the field can be invalid; T with a value). "Add to-do" and "Save changes" primary buttons (O; B; T). "Cancel" secondary link (O; B; T). Error-summary links (O; T) |
 | Delete dialog: from the list, opened by keyboard | "Cancel" secondary button and "Delete" danger button on the dialog surface (O; B: normal, hover; T: normal, hover, focus) |
 | Clear-completed dialog: from the list with one done to-do, opened by keyboard | "Cancel" and "Delete 1 completed" (as the delete dialog) |
@@ -368,9 +394,23 @@ app). It asserts:
 
 - text `#000000` on `#FFFFFF` measures 21.00;
 - a 1 px `#767676` border on `#FFFFFF` measures 4.54 (boundary);
+- chromatic references, the app's action colours (`tokens.css` L20, L22): a 1 px `#1D4ED8` border, and a `#B91C1C`
+  fill on a box with no border, each on `#FFFFFF`, with square corners at whole-pixel positions. For each, the
+  identifying colour found in the pixels (§6.3) equals the declared colour exactly (`toHex`), and the measured ratio
+  equals `contrastRatio` of the declared colours, unrounded;
 - a 1 px `#AAAAAA` border on `#FFFFFF` (2.32) appears in `failuresOf` with its control name, state and "2.32".
 
-This checks the failure path and the PNG decode without making up a failure in the app.
+This checks the failure path, the PNG decode and the absence of a colour shift without making up a failure in the app.
+
+- **Why chromatic references.** A conversion between RGB spaces that differ only in their primaries (for example sRGB
+  to Display P3) keeps neutral greys unchanged and moves every chromatic colour. The boundary measure reads the
+  identifying colour from pixels and the adjacent colour from computed styles (§6.2), so such a shift would go straight
+  into the ratios of the blue and red controls. The greys alone would not expose it.
+- **Why a fixture is enough.** A colour conversion belongs to the browser's screenshot and the analysis page's decode,
+  not to the app's page. The calibration test uses the same project, screenshot options and helpers as the per-screen
+  tests.
+- **A mismatch** fails the calibration test. web-qa stops and reports it (R3), since the measure would then need a
+  design change; the comparison is not loosened.
 
 ### 6.7 The ratio table
 
@@ -448,10 +488,21 @@ For each pixel of each sample, linearise sRGB as in §6.1 to R, G, B in 0–1:
 - **Saturated:** R / (R + G + B) ≥ 0.8. A black pixel (R + G + B = 0) is not saturated.
 - **Red value:** max(0, (R − G − B) × 320).
 
-These follow the working definition of "pair of opposing transitions involving a saturated red" in the notes to WCAG
-2.1's definition "general flash and red flash thresholds". Whether the 2.1 notes give this formula or the older CIE
-1976 UCS chromaticity form could not be checked offline while this design was written. The test author confirms it
-against the WCAG 2.1 text and cites it in the spec file; if 2.1 gives the other form, that form is used.
+**Source.** These are the working definition of "pair of opposing transitions involving a saturated red" in the notes
+to the WCAG 2.1 Recommendation's definition "general flash and red flash thresholds" (after [HARDING-BINNIE]): for
+either or both states, R / (R + G + B) ≥ 0.8, and the change in (R − G − B) × 320 is > 20, with negative values of
+(R − G − B) × 320 set to zero. R, G and B are in 0–1 as in WCAG 2.1's definition of relative luminance, that is
+linearised. This design applies the rule to each red transition, and a red flash is a pair of opposing red
+transitions (§8.4).
+
+**One formula, one red count.** The test uses this formula only:
+
+- the audit level is WCAG 2.1 AA (§1), and REQ-A11Y-009 AC-2 counts red flashes "as in WCAG 2.3.1" at that level;
+- a newer working definition, introduced with WCAG 2.2, uses a difference > 0.2 in the CIE 1976 UCS chromaticity
+  diagram. That form is not the audit level's, and REQ-A11Y-009 AC-3 and AC-6 carry a single red count, so computing it
+  as well would be a design element without a requirement.
+
+The support code that computes the red value cites the WCAG 2.1 definition and its note in a comment.
 
 ### 8.3 Decoding without a new dependency (F-24)
 
@@ -533,7 +584,7 @@ This proves the counting and the over-limit report without making up a failure i
 
 **Where the tests run (REQ-A11Y-010 AC-1, AC-2).**
 
-- The new files run under `web/playwright.config.ts`: its global setup starts the API with the §11 command, and its
+- The new files run under `web/playwright.config.ts`: its global setup starts the API with the CHG-0001 SDD §11 command, and its
   `webServer` starts the Vite dev server.
 - `pnpm -C web e2e` runs `e2e:main` first, so it includes them. The files run in chromium and webkit; firefox ignores
   them (§4).
@@ -558,8 +609,10 @@ This proves the counting and the over-limit report without making up a failure i
    - **A wording difference listed in defaults 1, 2, 3 or 6**: the tests already check the app's text (§5). A
      difference found that is not in that list makes web-qa stop and report a spec question (AC-5).
    - **A test defect** (AC-6), for example video missing because the file's `test.use` was not yet in place, or a wrong
-     locator: web-qa fixes the test or its support without weakening any assertion and runs again. The rerun's JUnit
-     is attached as a further `test-report`. The fix, and any change to `web/playwright.config.ts`, land in the same
+     locator: web-qa fixes the test or its support without weakening any assertion and runs again. The n-th rerun
+     (n = 1, 2, …) uses the first-run command with
+     `PLAYWRIGHT_JUNIT_OUTPUT_NAME=test-results/chg-0004-first-run-rerun-<n>-junit.xml`, so it never overwrites the
+     first-run file, and that JUnit is attached as a further `test-report`. The fix, and any change to `web/playwright.config.ts`, land in the same
      test commit, because the first run precedes that commit.
 4. **What the history shows.** The commit records the tests as fixed; the evidence and the summary keep the failure.
    That is the reading REQ-A11Y-012 AC-6 gives ("lands in the test commit").
@@ -577,7 +630,9 @@ default 11), not in this design.
 2. Run `PLAYWRIGHT_JUNIT_OUTPUT_NAME=test-results/chg-0004-e2e-main-junit.xml pnpm -C web e2e:main --project=chromium
    --project=webkit`. This is the whole main suite, existing and new tests, in the two required projects (NFR-102
    AC-1). Firefox is not run: it does not launch on the build host (CHG-0001 N12 validator F-9, F-19), and the new
-   tests exclude it anyway.
+   tests exclude it anyway. The two other configurations of `pnpm -C web e2e` (`e2e:restart`, `e2e:session-expiry`)
+   are not run: this change touches neither configuration, their spec files nor their global setups, and each matches
+   only its own spec file (§4), so their tests and results are develop's.
 3. **Keep run 1.** Write the list of `.webm` files under `web/test-results/e2e-artifacts/` to
    `web/test-results/a11y-audit/webm-listing.txt`. Then copy `web/test-results/a11y-audit/` to
    `web/test-results/a11y-audit-run1/`. The summary's tables, figures and listing, the attached videos and the JUnit
@@ -585,13 +640,14 @@ default 11), not in this design.
 4. **Reproducibility (NFR-101 AC-1).** Run `pnpm -C web e2e:main --project=chromium --project=webkit
    a11y-audit-contrast a11y-audit-flash` again. Compare its `contrast-*.md` and `flash.md` with run 1's, byte for byte,
    and record the result in the summary.
-5. **Suite time (NFR-102 AC-2).** Time `pnpm -C web e2e:main --project=chromium a11y-audit-` wall-clock on the build
-   host, including server start-up. Record it (limit 5 minutes).
+5. **Suite time (NFR-102 AC-2).** Time `pnpm -C web e2e:main --project=chromium a11y-audit-` and, separately,
+   `pnpm -C web e2e:main --project=webkit a11y-audit-`, wall-clock on the build host, including server start-up. Record
+   both; each must be within 5 minutes. WebKit's device-scale screenshots make it the heavier of the two (R7).
 
 **Attached with `harness evidence attach`:**
 
-- `web/test-results/chg-0004-first-run-junit.xml` (and any rerun file from §9) and `chg-0004-e2e-main-junit.xml`, as
-  `test-report` (AC-1, analyst default 12);
+- `web/test-results/chg-0004-first-run-junit.xml`, any `chg-0004-first-run-rerun-<n>-junit.xml` (§9) and
+  `chg-0004-e2e-main-junit.xml`, as `test-report` (AC-1, analyst default 12);
 - `web/test-results/a11y-audit-run1/chromium/not-found-animation.webm` and `…/webkit/not-found-animation.webm`, as
   `other` (AC-2);
 - `web/e2e/a11y-audit/CHG-0004-summary.md`, as `other` (AC-3);
@@ -673,13 +729,13 @@ done, passed or waived (REQ-A11Y-013 AC-2).
 |---|---|---|
 | R1 | A native checkbox or radio is painted under 3:1 by a browser. WCAG 1.4.11 exempts appearance "determined by the user agent and not modified by the author", but REQ-A11Y-006 AC-2 asserts it | Asserted at 3:1 as written (Q13 a; §6.3). If a browser paints one under 3:1, the test fails, web-qa stops and reports it, and this change waits for a CSS fix in a separate change (Q4) |
 | R2 | WebKit may not paint a paused animation's `currentTime` in a screenshot, or may paint it a frame late | The two `requestAnimationFrame` waits. The non-vacuity assertion (§8.5) fails if frames never change. The calibration covers decoding, not stepping. A stepping problem is reported as a test defect, and the count is not loosened |
-| R3 | Canvas decoding applies colour management to the PNG and shifts colours | `colorSpaceConversion: 'none'`. The calibration's 21.00 and 4.54 reference ratios would expose a shift |
+| R3 | The screenshot or canvas decoding applies colour management and shifts colours | `colorSpaceConversion: 'none'`. The calibration's chromatic references (§6.6) must decode to their declared colours exactly, which exposes a shift that the neutral 21.00 and 4.54 references cannot. On a mismatch web-qa stops and reports; the comparison is not loosened |
 | R4 | `:focus-visible` heuristics differ between engines | Focus reached by keyboard (`focusByKeyboard`), and `:focus-visible` is checked before measuring |
 | R5 | Hover transitions are read mid-way | Transitions finished before reading; element screenshots use `animations: 'disabled'` |
 | R6 | Stale fragments from older runs end up in the summary | The evidence run deletes `web/test-results/a11y-audit/` first. Each test overwrites its own file. One file per project and test, never a shared file (`fullyParallel`) |
 | R7 | Suite time over 5 minutes (NFR-102 AC-2) | Device-scale screenshots in webkit (2560 × 1440) are the heaviest part; analysis stays in the browser (§8.3). If the limit is exceeded, report it; do not drop measurements |
 | R8 | The firefox `testIgnore` override drops the existing patterns | §4 lists all three patterns; the `--list` check of §9 confirms it |
-| R9 | The red-flash formula in WCAG 2.1 is not confirmed (§8.2) | The test author confirms it against WCAG 2.1 and cites it in the spec file |
+| R9 | The red-flash working definition differs between WCAG 2.1 ((R − G − B) × 320) and WCAG 2.2 (CIE 1976 UCS chromaticity) | Settled in §8.2: the WCAG 2.1 form, the audit level's, is used and cited in the support code. An audit at WCAG 2.2 would be a requirement change |
 | R10 | The shell's live region clears after 10 s (`AppShell.tsx` L27) | REQ-A11Y-002 AC-7 asserts right after the action, within Playwright's default 5 s timeout |
 | R11 | The boundary measure takes the highest-contrast pixel in its region (§6.3), the most lenient statistic. A thin or partial dark edge, such as a UA shadow on a native control, could pass a control whose main boundary is lighter | The table shows the identifying colour found, so a reviewer can see which colour carried the ratio. If a reviewer finds a pass carried by such an edge, they report it as a finding against this design; the statistic is not changed during the build |
 | F1 | **Follow-up (requester's decision, relayed from @alokkulkarni: "switch N05 to a minimal architecture stub and continue but make a note so its not lost and fixed after M22").** `docs/architecture/solution.md` is a placeholder that CHG-0004 wrote. CHG-0005 (PR #7, frozen, parked until harness M22) writes the whole-app solution architecture | Whichever of CHG-0004 and CHG-0005 merges second reconciles `docs/architecture/solution.md`. CHG-0005's version is the intended content |
@@ -711,9 +767,9 @@ validator or reviewer on the diff, evidence or files. Contract element: none for
 | REQ-A11Y-004 AC-1, AC-2 | §5 | e2e "REQ-A11Y-004 AC-1 the detail page focuses its h1 and sets its title", "REQ-A11Y-004 AC-2 the to-do not-found state focuses its h1 and sets its title" |
 | REQ-A11Y-004 AC-3, AC-4 | §5 | e2e "REQ-A11Y-004 AC-3 the not-found page's heading, sentence and link are in the tree at first render", "REQ-A11Y-004 AC-4 the not-found animation is hidden and adds no name or text" |
 | REQ-A11Y-005 AC-1 | §5 | e2e "REQ-A11Y-005 AC-1 the start-up alert names the failure and offers a keyboard-operable Retry" |
-| REQ-A11Y-006 AC-1 to AC-4 | §6.1–§6.5, §6.7 | e2e `a11y-audit-contrast.spec.ts`, 8 tests "REQ-A11Y-006 AC-1 AC-2 AC-3 AC-4 AC-5 <screen>: focus outlines, boundaries, hover and selected states meet 3:1"; ratio-table fragments |
+| REQ-A11Y-006 AC-1 to AC-4 | §6.1–§6.5, §6.7 | e2e `a11y-audit-contrast.spec.ts`, 8 tests "REQ-A11Y-006 AC-1 AC-2 AC-3 AC-5 <screen>: focus outlines, boundaries, hover and selected states meet 3:1"; the list-screen test alone also names AC-4 (only that screen has disabled controls, §6.4); ratio-table fragments |
 | REQ-A11Y-006 AC-5 | §6.6 | the per-screen tests' failure messages; e2e calibration "REQ-A11Y-006 AC-5 REQ-A11Y-007 AC-3 NFR-101 AC-1 …" (the under-threshold fixture is reported) |
-| REQ-A11Y-007 AC-1, AC-2 | §6.1–§6.5, §6.7 | e2e, 8 tests "REQ-A11Y-007 AC-1 AC-2 AC-3 <screen>: control text meets 4.5:1 (3:1 large) in every state" |
+| REQ-A11Y-007 AC-1, AC-2 | §6.1–§6.5, §6.7 | e2e, 8 tests "REQ-A11Y-007 AC-1 AC-3 <screen>: control text meets 4.5:1 (3:1 large) in every state"; the list-screen test alone also names AC-2 |
 | REQ-A11Y-007 AC-3 | §6.6 | as REQ-A11Y-006 AC-5 |
 | REQ-A11Y-007 AC-4 | §2 | review: `web/e2e/a11y.spec.ts` unchanged in the change's diff; its tests pass in the evidence JUnit |
 | REQ-A11Y-008 AC-1, AC-2, AC-4 | §7 | e2e `a11y-audit-not-found-video.spec.ts` "REQ-A11Y-008 AC-1 AC-2 AC-4 …" in chromium and webkit; videos attached |
@@ -734,6 +790,6 @@ validator or reviewer on the diff, evidence or files. Contract element: none for
 | REQ-A11Y-014 AC-1 to AC-3 | §11 | review of the three notes after the docs node |
 | NFR-101 AC-1 | §6.1, §8.5, §10 | review: byte-identical fragments across two runs (summary section 10); calibration tests |
 | NFR-101 AC-2 | §8.1 | review of `flash.ts`: no wall-clock wait in the sampling |
-| NFR-102 AC-1 | §2, §10 | evidence JUnit: existing tests pass; review: existing spec files unchanged |
-| NFR-102 AC-2 | §10 | timed run recorded in summary section 10 |
+| NFR-102 AC-1 | §2, §10 | evidence JUnit: existing tests of `e2e:main` pass in chromium and webkit; review: existing spec files unchanged, and the restart and session-expiry configurations untouched (§10, step 2) |
+| NFR-102 AC-2 | §10 | timed runs in chromium and in webkit, both recorded in summary section 10 |
 | NFR-103 AC-1 | §7, §12 | review of the new tests, videos and summary; the repository's secret scan in the gates |
