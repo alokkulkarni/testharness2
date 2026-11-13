@@ -18,6 +18,13 @@
       "runId": "run-chg4-n03-1",
       "holder": "claude-code",
       "leaseUntil": "2026-11-13T18:46:55.388Z"
+    },
+    {
+      "node": "N02-requirements",
+      "role": "analyst",
+      "runId": "run-chg4-n02-2",
+      "holder": "claude-code",
+      "leaseUntil": "2026-11-13T18:47:30.430Z"
     }
   ]
 }
