@@ -28,15 +28,9 @@
       ],
       "executor": "any",
       "isolation": "none",
-      "status": "running",
+      "status": "pending",
       "attempts": 0,
-      "maxAttempts": 3,
-      "claim": {
-        "runId": "run-mweysjrq",
-        "executor": "claude-code",
-        "leaseUntil": "2026-11-13T13:41:49.788Z",
-        "claimedAt": "2026-11-13T12:40:10.262Z"
-      }
+      "maxAttempts": 3
     },
     {
       "id": "N02-requirements",
