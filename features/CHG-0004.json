@@ -10,5 +10,14 @@
   "footprint": {},
   "links": {
     "branch": "feature/CHG-0004-automated-accessibility-audit-of-chg-000"
-  }
+  },
+  "running": [
+    {
+      "node": "N01-clarify",
+      "role": "lead",
+      "runId": "run-chg4-n01-1",
+      "holder": "claude-code",
+      "leaseUntil": "2026-11-13T13:50:27.966Z"
+    }
+  ]
 }
