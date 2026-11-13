@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0005",
+  "node": "N05-solution-arch",
+  "gate": "critic-verdict",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0005",
+      "agent": "critic",
+      "agentRunId": "a0d8b596c0e4f7ece"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0005",
+      "agent": "drawio-architect",
+      "agentRunId": "a076f3bd63b3ea2be"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0005",
+      "agent": "drawio-architect",
+      "agentRunId": "a82c747546b667318"
+    }
+  ],
+  "createdAt": "2026-11-13T14:11:23.508Z",
+  "reviewedCommit": "0a3c6b14e75b07bb1938b23b9bfb3912cdfd5b9b",
+  "diffHash": "b5d1c28adb99014348e58afb388429941cec5df73694b1685bbf429784f04d48",
+  "summary": "round 2, delta since 2b034d4 (docs/architecture identical to d695c7f): F-1, F-2, F-3, F-4, F-5, F-6, F-7, F-8, F-10, F-11 fixed. F-1: nginx query-string logging is now a spec-author constraint in 7.1 L191-L198, the containers table L77 and a section 9 risk row L304, and the web container log stream is drawn in the Compose view. New citations checked (ADR-0001 L16-L20, ADR-0018 L9-L11, sdd L41, L575-L576, package.json L42-L44; web/pnpm-lock.yaml is committed). Exports current (4 diagrams); PNGs read. F-9 partly fixed (healthcheck now inside the api container); its label part stays as a minor. Follow-ups: 1 minor (F-9), 2 infos (F-12, F-13) carried.",
+  "findings": [
+    {
+      "id": "F-9",
+      "severity": "minor",
+      "message": "Partly fixed: the healthcheck is now inside the api container box, but in the Compose view the browser and smoke-check edge labels (Opens SPA, calls /api [HTTP :5173]; GETs / and /api/v1/todos [HTTP :5173]) still sit against the dashed Compose network boundary line.",
+      "location": "docs/architecture/drawio/todo-deployment-compose.drawio:L45-L50",
+      "suggestion": "Move the two labels to a clear stretch of their edges (for example label offset toward the source) so they do not touch the boundary."
+    },
+    {
+      "id": "F-12",
+      "severity": "info",
+      "message": "Not verified: the solution-architecture skill template could not be read (outside the checkout, refused) and harness docs diagram lint is not on the critic command list; section order and content were judged against the critic rubric, layout from the PNGs; harness docs diagram export --check reports 4 diagrams, exports current.",
+      "location": "docs/architecture/drawio/todo-deployment-compose.drawio"
+    },
+    {
+      "id": "F-13",
+      "severity": "info",
+      "message": "Section 8 summarises ADR-0002 as API serves no static files; ADR-0002 L25 decides spring.web.resources.add-mappings=false, which application.properties L1-L14 does not set. Outside CHG-0005 scope (no api change), noted for a later change.",
+      "location": "docs/architecture/solution.md:L268"
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0005",
+  "node": "N02-requirements",
+  "gate": "critic-verdict",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0005",
+      "agent": "critic",
+      "agentRunId": "aa32d35dd1512fa0d"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0005",
+      "agent": "requirements-analyst",
+      "agentRunId": "a0369fa5e1bf9ef18"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0005",
+      "agent": "requirements-analyst",
+      "agentRunId": "a5a7da33778bce029"
+    }
+  ],
+  "createdAt": "2026-11-13T13:50:59.994Z",
+  "reviewedCommit": "14ce023cab86c2f7bebcdc7791cbf2536732ff1e",
+  "diffHash": "af28bc718cdae6a951073adccebd51df811068fc0ab09496a972f96ecf448e07",
+  "summary": "round 2, delta since 78f056a: F-1, F-2, F-3, F-4, F-5 fixed (REQ-CMP-001 AC-1..AC-3 with P6; REQ-SMK-001 AC-2, AC-3 with P2; REQ-DOC-001 AC-2 and REQ-DOC-003 AC-5; REQ-CMP-007 AC-2, AC-3; REQ-SMK-001 AC-6, AC-7 with P5). Minors F-6 to F-16 and info F-20 also fixed. No blocker or major. Proposed items: none needs a requester question; P6 relaxes the literal Q11 wording and the approver should confirm it knowingly (F-25). Follow-ups: 3 new minor, 2 new info, 3 carried info (F-17, F-18, F-19).",
+  "findings": [
+    {
+      "id": "F-17",
+      "severity": "info",
+      "message": "The front matter upstream list is empty, while CHG-0001 requirements listed its input (intent.md with its sha256). This file input is clarifications.md.",
+      "requirement": "REQ-DOC-001",
+      "location": "docs/specs/CHG-0005/requirements.md:L9-L9",
+      "suggestion": "List .harness/changes/CHG-0005/clarifications.md as upstream if the harness supports it."
+    },
+    {
+      "id": "F-18",
+      "severity": "info",
+      "message": "D3 keeps README.md, .env.example and docker-compose.yml at the root, and CHG-0001 deferred NFR-002 AC-1 because no node could own root files (conformance.md L153). Nothing yet assigns them to a node.",
+      "requirement": "REQ-DOC-001",
+      "location": "docs/specs/CHG-0005/requirements.md:L36-L37",
+      "suggestion": "Make sure the plan gives one node the root files (and .gitignore, if F-10 is taken) before the build phase."
+    },
+    {
+      "id": "F-19",
+      "severity": "info",
+      "message": "For the SDD: the build contexts should exclude api/data (the person SQLite file), api/target and web/node_modules, the API healthcheck needs an HTTP client in the JRE image or another probe, and a non-root nginx cannot listen on port 80.",
+      "requirement": "REQ-CMP-001",
+      "location": "docs/specs/CHG-0005/requirements.md:L95-L109",
+      "suggestion": "Settle these in the SDD under REQ-CMP-001, REQ-CMP-005 and NFR-102."
+    },
+    {
+      "id": "F-21",
+      "severity": "minor",
+      "message": "REQ-SMK-001 AC-7 does not match the ACs it should record. Its Given is the Compose stack and the glossary defines UAT as Compose-only, yet it lists REQ-DOC-001 AC-1 (the native run). It omits REQ-CMP-002 AC-1 and REQ-CMP-007 AC-1, which the file says are verified by the UAT. The runs of REQ-CMP-003 AC-4 (curl by the person or agents) and the REQ-CMP-005 AC-3 trial have no record either.",
+      "requirement": "REQ-SMK-001",
+      "location": "docs/specs/CHG-0005/requirements.md:L239-L241",
+      "suggestion": "List every AC verified by the person or by a manual trial (REQ-DOC-001 AC-1 as a native-run step, REQ-CMP-002 AC-1, REQ-CMP-007 AC-1, REQ-CMP-003 AC-4, REQ-CMP-005 AC-3), or widen the glossary UAT entry to cover the native run."
+    },
+    {
+      "id": "F-22",
+      "severity": "minor",
+      "message": "REQ-DOC-003 AC-5 says pnpm -C web e2e starts its own SPA, but web/playwright.config.ts L35-L42 reuses a server already on 5173 outside CI (reuseExistingServer). It quotes the error as \"port 8080 is already in use\"; web/e2e/support/api-process.ts L33 says \"Port 8080 is already in use; stop the other API first\". The required README advice (stop the native run and the Compose stack first) stays right.",
+      "requirement": "REQ-DOC-003",
+      "location": "docs/specs/CHG-0005/requirements.md:L98-L100",
+      "suggestion": "Say the e2e starts its own API and starts or reuses a server on 5173, and quote the message exactly or paraphrase it without quotes."
+    },
+    {
+      "id": "F-23",
+      "severity": "minor",
+      "message": "The note that each NFR is a cross-reference to the AC it names is not true for NFR-106 and NFR-107, which name no other AC and need their own proof. NFR-101, NFR-102 and NFR-104 also add clauses beyond the AC they cite (no other port published; no credential in a build argument; no file configures a registry).",
+      "requirement": "NFR-106",
+      "location": "docs/specs/CHG-0005/requirements.md:L245-L245",
+      "suggestion": "Limit the note to NFR-101 to NFR-105, and say that their extra clauses are checked by inspection under the NFR ID."
+    },
+    {
+      "id": "F-24",
+      "severity": "info",
+      "message": "NFR-106 is measured from the healthcheck status times in docker compose ps, but ps shows only the current status, not when it changed, and REQ-SMK-001 AC-6 does not ask the record to include the measured time.",
+      "requirement": "NFR-106",
+      "location": "docs/specs/CHG-0005/requirements.md:L285-L287",
+      "suggestion": "Measure with docker compose events or the health log of docker inspect, and add the measured time to the AC-6 record."
+    },
+    {
+      "id": "F-25",
+      "severity": "info",
+      "message": "P6 reads the Q11 answer (Major/minor tags) as at least the major line and states that minor-version pinning is not required. The reading fits every image Q11 (a) names (eclipse-temurin:21-jdk, nginx:stable-alpine), so no requester question is needed, but it departs from the literal answer. P2 (tightened), P5 and P7 are analyst proposals within the answers and are fit for confirmation at freeze.",
+      "requirement": "REQ-CMP-001",
+      "location": "docs/specs/CHG-0005/requirements.md:L331-L334",
+      "suggestion": "At the freeze, the approver confirms P6 explicitly as a reading of Q11, not a restatement of it."
+    }
+  ]
+}

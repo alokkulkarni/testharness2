@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0005",
+  "files": {
+    "docs/specs/CHG-0005/adr/0019-single-api-container-sqlite-named-volume.md": "051eac993cc632ad1ce461581d4fd8bb629ec4b64235ac7507c3ce3ce54fdcf2",
+    "docs/specs/CHG-0005/adr/0020-nginx-same-origin-spa-and-api-proxy.md": "e2979b80c0e665a82933699551c0e7252f7b6d4d804c0044b3c3979d36192961",
+    "docs/specs/CHG-0005/requirements.md": "9d004705a190fb1c59a66cceb81139c88a4ec5e4647836ee2dc2943ccbc2d531",
+    "docs/specs/CHG-0005/sdd.md": "6ad2ec0a4a6d784c4ec756aba783c695785c2ae5ecd3f7927aa1a369d180be57"
+  },
+  "requestedBy": "@alokkulkarni",
+  "approvedBy": "@alokkulkarni",
+  "approvedAt": "2026-11-13T16:42:19.358Z",
+  "approvalReference": "https://github.com/alokkulkarni/testharness2/pull/7#pullrequestreview-5894738943",
+  "criticVerdict": ".harness/changes/CHG-0005/verdicts/N03-spec.critic-verdict.json"
+}

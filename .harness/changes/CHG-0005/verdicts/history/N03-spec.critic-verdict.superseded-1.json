@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0005",
+  "node": "N03-spec",
+  "gate": "critic-verdict",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0005",
+      "agent": "critic",
+      "agentRunId": "afb1748703e15c651"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0005",
+      "agent": "spec-author",
+      "agentRunId": "a8bcad1f7cdb0d945"
+    }
+  ],
+  "createdAt": "2026-11-13T14:45:21.411Z",
+  "reviewedCommit": "62e7a2e97134ff3a15440feaf09fbf366dbc0dd5",
+  "diffHash": "1d9673e94f005b8feb212a0cd36d4f524d6adfd4312fb74b6aadc99cd6a8e6dc",
+  "summary": "Round 1, exhaustive. The SDD and ADR-0019/0020 cover every AC of REQ-DOC-001..004, REQ-CMP-001..007, REQ-SMK-001 and NFR-101..107 with a design and a verification, answer every solution.md section-9 question, add no element the architecture does not show, and give the two section-8 ADRs (one decision each, with context, alternatives and consequences). Sampled citations hold (eslint, tsconfig, vitest, package.json, pom.xml, SecurityConfig L56, the session filter L40-L53, identity-api L139-L158, common-problem, versions.env L46-L47, both .gitignore files, DatabaseConfig, AuthController, launch.ts, api-process.ts). The nginx non-root, proxy, Compose and buildx designs are sound. OQ-1 is a design choice inside Q11 and REQ-CMP-001 AC-2, not a requester question: restate it as a decision for the approver. The engineering defaults in section 12 are acceptable once the corepack version is named. Pass, with 8 minor and 6 info follow-ups.",
+  "findings": [
+    {
+      "id": "F-1",
+      "severity": "minor",
+      "message": "OQ-1 is labelled an open question for the requester, and A3 is to be checked by the requester, but nothing in it needs a requester decision. Q11 says node LTS with corepack pnpm and REQ-CMP-001 AC-2 says Node current LTS major and pnpm through corepack. Option (a), node:26-slim with an exact npm-installed corepack, meets both as written. web/.nvmrc is lts/*, which resolves to the newest LTS line, and web/package.json pins @types/node ^26. The extra corepack install is a build-stage detail that changes no scope and no run-time image. Whether Node 26 is the Active LTS line is a fact from the Node release schedule, not a preference. requirements.md says Open questions: None. Leaving an open question addressed to the requester in a spec about to be frozen invites a decision by freeze instead of by clarification.",
+      "requirement": "REQ-CMP-001",
+      "location": "docs/specs/CHG-0005/sdd.md:L409-L417",
+      "suggestion": "Restate OQ-1 as a design decision (node:26-slim plus pinned corepack; alternatives node:24-slim and node:22-slim rejected, with reasons) listed for the approver to confirm at freeze. Change A3 (L385) so it is checked by the build (node --version in B) and the published release schedule."
+    },
+    {
+      "id": "F-2",
+      "severity": "minor",
+      "message": "The exact corepack pin is called an engineering default confirmed at freeze, but no version is named, so the approver cannot confirm it.",
+      "requirement": "REQ-CMP-001",
+      "location": "docs/specs/CHG-0005/sdd.md:L110, L418-L420",
+      "suggestion": "Name the corepack version in 3.2 and section 12, or state that the build node picks the newest release at build time and records it in its plan file."
+    },
+    {
+      "id": "F-3",
+      "severity": "minor",
+      "message": "The smoke-check test list has no case where the status is right but the media type is wrong: /api answering 401 with application/json or text/html, or the page answering 200 with a non-HTML type. A script that checks only status codes would pass every listed case, so the content-type half of AC-2 and AC-3 is not shown to be tested.",
+      "requirement": "REQ-SMK-001",
+      "location": "docs/specs/CHG-0005/sdd.md:L308-L313",
+      "suggestion": "Add to the covered cases: 401 with a non-problem media type fails the api check, and 200 with a non-HTML media type fails the page check, each printing what it received."
+    },
+    {
+      "id": "F-4",
+      "severity": "minor",
+      "message": "The tests-first plan gives the test to the tests node and the script to the build node, but does not say who writes web/scripts/compose-smoke.d.mts, or whether the red commit carries a failing stub .mjs. Without the .d.mts, tsc --noEmit (pnpm typecheck and pnpm build) fails in the red commit for a missing module, not for the behaviour.",
+      "requirement": "REQ-SMK-001",
+      "location": "docs/specs/CHG-0005/sdd.md:L76, L308-L309",
+      "suggestion": "State that the React tests node writes compose-smoke.d.mts (signatures only) and a stub compose-smoke.mjs whose functions throw not implemented, and that the build node replaces the stub."
+    },
+    {
+      "id": "F-5",
+      "severity": "minor",
+      "message": "Section 3.3 calls nginx.conf one complete main configuration file and lists directives by context, but omits the events block, which nginx requires to start (no events section in configuration).",
+      "requirement": "REQ-CMP-003",
+      "location": "docs/specs/CHG-0005/sdd.md:L119-L133",
+      "suggestion": "Add a row: main context, an empty events block (and worker_processes if a value is intended)."
+    },
+    {
+      "id": "F-6",
+      "severity": "minor",
+      "message": "Section 1 says Section 6 below answers each section-9 question, but the answers are in section 4 (section 6 is Security and privacy).",
+      "location": "docs/specs/CHG-0005/sdd.md:L25-L26",
+      "suggestion": "Change Section 6 to Section 4."
+    },
+    {
+      "id": "F-7",
+      "severity": "minor",
+      "message": "The citation web/playwright.config.ts:L27-L29 for Chromium, Firefox and WebKit misses WebKit: L27 opens projects, the three projects are L28-L30.",
+      "requirement": "REQ-DOC-001",
+      "location": "docs/specs/CHG-0005/sdd.md:L217",
+      "suggestion": "Cite web/playwright.config.ts:L28-L30."
+    },
+    {
+      "id": "F-8",
+      "severity": "minor",
+      "message": "README prerequisites list pnpm 10 with no install step, although the SDD itself notes Node 25 and later ship no corepack, so a fresh Node 26 install has neither pnpm nor corepack. They also list only Docker for the Compose run, while the smoke check (item 5) needs Node 18 or later on the host. A person following only the README could get stuck.",
+      "requirement": "REQ-DOC-001",
+      "location": "docs/specs/CHG-0005/sdd.md:L216-L218, L238-L239",
+      "suggestion": "Give the pnpm install command (for example npm install -g corepack, then corepack enable pnpm) and state that the smoke check needs Node.js on the host even for a Compose-only run."
+    },
+    {
+      "id": "F-9",
+      "severity": "info",
+      "message": "error_log at emerg also drops alert-level lines (for example a worker process exiting on a signal), which carry no request data. Request-bearing lines are logged at crit and below (for example open() permission failures name the request), so alert would keep the privacy rule and lose less.",
+      "location": "docs/specs/CHG-0005/sdd.md:L124, L404",
+      "suggestion": "Consider error_log /dev/stdout alert, and update A10 and R6 to match."
+    },
+    {
+      "id": "F-10",
+      "severity": "info",
+      "message": "The jar and the SPA dist are platform-independent, yet both build stages run under emulation in the buildx proof, which is the slow part (R8).",
+      "location": "docs/specs/CHG-0005/sdd.md:L91, L110, L240-L245",
+      "suggestion": "Consider FROM --platform=BUILDPLATFORM (the BuildKit build argument) for both build stages so that only the run stages are per platform. This is allowed in Dockerfiles; the no-dollar rule covers only docker-compose.yml."
+    },
+    {
+      "id": "F-11",
+      "severity": "info",
+      "message": "Neither .dockerignore excludes .env files. A person-made web/.env is read by Vite at build time, and an api/.env would enter the build stage. Neither reaches the run image, but excluding them is cheap defence for NFR-102.",
+      "requirement": "NFR-102",
+      "location": "docs/specs/CHG-0005/sdd.md:L97-L98, L113-L115",
+      "suggestion": "Add .env and .env.* (keeping .env.example) to api/.dockerignore and web/.dockerignore."
+    },
+    {
+      "id": "F-12",
+      "severity": "info",
+      "message": "The java module (api/) is listed as a plan module but gets no test. A java tests node therefore has no red commit to make, and the SDD does not say how that node is satisfied.",
+      "location": "docs/specs/CHG-0005/sdd.md:L57, L313",
+      "suggestion": "State what the java tests node delivers (nothing, a test-plan note, or that the plan has no java tests node) so plan extension does not stall."
+    },
+    {
+      "id": "F-13",
+      "severity": "info",
+      "message": "NFR-101, REQ-CMP-004 AC-1 and the no-query-string constraint are verified by inspection only. Cheap static Vitest checks (docker-compose.yml has no dollar sign and only 127.0.0.1 ports; the nginx log_format has none of the request, args, query_string or http_referer variables) would turn them into regression tests.",
+      "location": "docs/specs/CHG-0005/sdd.md:L306-L314",
+      "suggestion": "Optional: add such checks in web/tests if the approver wants automated proof. Not required by the requirements."
+    },
+    {
+      "id": "F-14",
+      "severity": "info",
+      "message": "The base image tags pin only the major line (21-jdk-noble, 21-jre-noble, 26-slim), relying on the P6 reading. Q11 as answered said Major/minor tags. If the approver rejects P6 at freeze, the tags must change.",
+      "requirement": "REQ-CMP-001",
+      "location": "docs/specs/CHG-0005/sdd.md:L91-L92, L110",
+      "suggestion": "Mention in section 12 that the tags follow P6, and what they become if P6 is not confirmed."
+    }
+  ]
+}
