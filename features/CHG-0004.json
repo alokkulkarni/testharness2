@@ -11,5 +11,13 @@
   "links": {
     "branch": "feature/CHG-0004-automated-accessibility-audit-of-chg-000"
   },
-  "running": []
+  "running": [
+    {
+      "node": "N05-solution-arch",
+      "role": "designer",
+      "runId": "run-chg4-n05-2",
+      "holder": "claude-code",
+      "leaseUntil": "2026-11-14T12:56:49.378Z"
+    }
+  ]
 }
