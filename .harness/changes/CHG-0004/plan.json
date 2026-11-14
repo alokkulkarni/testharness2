@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0004",
+  "title": "Automated accessibility audit of CHG-0001 (Playwright) with human screen-reader note",
+  "mode": "greenfield",
+  "profile": "lite",
+  "specFreeze": null,
+  "intent": null,
+  "status": "active",
+  "branch": "feature/CHG-0004-automated-accessibility-audit-of-chg-000",
+  "baseBranch": "develop",
+  "squad": "default",
+  "nodes": [
+    {
+      "id": "N01-clarify",
+      "kind": "agent",
+      "agent": "orchestrator",
+      "phase": "0",
+      "description": "Analyse the request and the code for ambiguity; ask targeted questions and record answers or waivers.",
+      "inputs": [],
+      "outputs": [
+        ".harness/changes/CHG-0004/clarifications.md"
+      ],
+      "dependsOn": [],
+      "gates": [
+        "clarified"
+      ],
+      "executor": "claude-code",
+      "isolation": "none",
+      "status": "complete",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N02-requirements",
+      "kind": "agent",
+      "agent": "requirements-analyst",
+      "phase": "1",
+      "description": "Write the change's requirements with Given/When/Then acceptance criteria.",
+      "inputs": [
+        ".harness/changes/CHG-0004/clarifications.md"
+      ],
+      "outputs": [
+        "docs/specs/CHG-0004/requirements.md"
+      ],
+      "dependsOn": [
+        "N01-clarify"
+      ],
+      "gates": [
+        "critic-verdict"
+      ],
+      "executor": "claude-code",
+      "isolation": "none",
+      "status": "complete",
+      "attempts": 2,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N03-spec",
+      "kind": "agent",
+      "agent": "spec-author",
+      "phase": "2",
+      "description": "Write the SDD, contracts and ADRs for the change.",
+      "inputs": [
+        "docs/specs/CHG-0004/requirements.md",
+        "docs/architecture/",
+        "docs/knowledge/diagrams/CHG-0004/"
+      ],
+      "outputs": [
+        "docs/specs/CHG-0004/sdd.md",
+        "docs/specs/CHG-0004/contracts/",
+        "docs/specs/CHG-0004/adr/"
+      ],
+      "dependsOn": [
+        "N02-requirements",
+        "N05-solution-arch"
+      ],
+      "gates": [
+        "critic-verdict"
+      ],
+      "executor": "claude-code",
+      "isolation": "none",
+      "status": "complete",
+      "attempts": 1,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N04-spec-freeze",
+      "kind": "human-gate",
+      "phase": "2",
+      "description": "A product owner or tech lead approves the spec; harness freeze records the hashes.",
+      "approvers": [
+        "@alokkulkarni"
+      ],
+      "inputs": [
+        "docs/specs/CHG-0004/sdd.md",
+        "docs/specs/CHG-0004/contracts/",
+        "docs/specs/CHG-0004/adr/"
+      ],
+      "outputs": [
+        ".harness/changes/CHG-0004/spec-freeze.json"
+      ],
+      "dependsOn": [
+        "N03-spec"
+      ],
+      "gates": [
+        "spec-freeze-approval"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "N05-solution-arch",
+      "kind": "agent",
+      "agent": "drawio-architect",
+      "phase": "2",
+      "description": "Write or amend the solution architecture (docs/architecture/solution.md and its views) that the spec follows.",
+      "inputs": [
+        "docs/specs/CHG-0004/requirements.md"
+      ],
+      "outputs": [
+        "docs/architecture/",
+        "docs/knowledge/diagrams/CHG-0004/"
+      ],
+      "dependsOn": [
+        "N02-requirements"
+      ],
+      "gates": [
+        "critic-verdict"
+      ],
+      "executor": "claude-code",
+      "isolation": "none",
+      "status": "complete",
+      "attempts": 0,
+      "maxAttempts": 3
+    }
+  ]
+}

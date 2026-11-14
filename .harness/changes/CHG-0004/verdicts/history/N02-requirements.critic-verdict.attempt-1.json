@@ -1,0 +1,192 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0004",
+  "node": "N02-requirements",
+  "gate": "critic-verdict",
+  "verdict": "changes-required",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0004",
+      "agent": "critic",
+      "agentRunId": "add011635f0c25dab"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0004",
+      "agent": "requirements-analyst",
+      "agentRunId": "a324ec2b83f46005f"
+    }
+  ],
+  "createdAt": "2026-11-13T13:16:30.315Z",
+  "reviewedCommit": "529fb4b1911e07070be31e34b603c52b950693cb",
+  "diffHash": "28bc2c8a601fd502c8b505290ed4c3fda7f5a616a0d580a673e70bd4ea92cb1b",
+  "summary": "Round 1 (exhaustive). Six majors: three quoted texts or attributes the ACs assert do not match the app they audit, so the tests would fail on develop for non-WCAG reasons with no defined path (F-1 to F-3); the dialog focus-return AC has an unreachable branch and omits the confirm path (F-4); the flash check contradicts itself on pausing (F-5); and test-first red/green cannot be squared with tests of existing behaviour that pass on first run (F-6). Eleven minors and three infos are follow-ups. Scope otherwise traces cleanly to Q1-Q10; out-of-scope is complete.",
+  "findings": [
+    {
+      "id": "F-1",
+      "severity": "major",
+      "message": "REQ-A11Y-001 AC-3 asserts the text \"Account created — log in\" in a role=status region, but the login page shows \"Account created. Log in.\" (web/src/auth/LoginPage.tsx:L14, rendered with role=status at L89). The string is verbatim from Q10 item 2, so it traces, but a literal assertion fails on develop for a wording reason, not a WCAG failure, and REQ-A11Y-012 only defines what happens on a real WCAG failure, so the merge would block with no defined path.",
+      "requirement": "REQ-A11Y-001",
+      "location": "docs/specs/CHG-0004/requirements.md:L40-L40",
+      "suggestion": "Pin the role and region and take the text from the app (as a flagged analyst default for the approver), or raise an open question to the requester; and have REQ-A11Y-012 say how a non-WCAG mismatch between the spec text and the app is classified and handled."
+    },
+    {
+      "id": "F-2",
+      "severity": "major",
+      "message": "REQ-A11Y-002 AC-1 asserts \"Showing 1–20 of 45\" with an en dash; the app renders a hyphen-minus, \"Showing 1-20 of 45\" (web/src/todos/TodoListPage.tsx:L314). The text is verbatim from Q10 item 4 and SDD section 9 (docs/specs/CHG-0001/sdd.md:L558), but a literal check fails on develop for a non-WCAG reason, with the same missing path as F-1.",
+      "requirement": "REQ-A11Y-002",
+      "location": "docs/specs/CHG-0004/requirements.md:L50-L50",
+      "suggestion": "State the text as the app renders it (flagged default) or say the match ignores dash variants, or raise it as an open question; tie the handling to the REQ-A11Y-012 classification asked for in F-1."
+    },
+    {
+      "id": "F-3",
+      "severity": "major",
+      "message": "REQ-A11Y-002 AC-1 requires the result text in a region with the attribute aria-live=\"polite\", but the app puts it in a <p role=\"status\"> with no aria-live attribute (web/src/todos/TodoListPage.tsx:L314); role=status is implicitly polite. The literal aria-live=\"polite\" exists only on the shell live region (web/src/app/AppShell.tsx:L69) that AC-7 uses. A test of the attribute as written fails on develop although the region is a polite live region.",
+      "requirement": "REQ-A11Y-002",
+      "location": "docs/specs/CHG-0004/requirements.md:L50-L50",
+      "suggestion": "Say a polite live region is role=status or aria-live=polite (explicit or implicit), consistently for AC-1 and AC-7."
+    },
+    {
+      "id": "F-4",
+      "severity": "major",
+      "message": "REQ-A11Y-003 AC-3 says closing a dialog by Cancel or Escape returns focus to the opener, or to the list heading when the opener no longer exists. Cancel and Escape never remove the opener, and the app always returns focus to it (web/src/todos/ConfirmDialog.tsx:L42-L52), so the heading branch cannot be reached as written. The heading case is the confirm path (delete confirmed: TodoListPage.tsx:L244 and L251; clear confirmed: L268), which Q10 item 6 (focus returned when closed) and SDD section 9 (docs/specs/CHG-0001/sdd.md:L557-L558, if that row was deleted) cover but the AC omits. For clear-completed the opener still exists after confirm, so the condition is also wrong there.",
+      "requirement": "REQ-A11Y-003",
+      "location": "docs/specs/CHG-0004/requirements.md:L65-L65",
+      "suggestion": "Split AC-3: Cancel or Escape returns focus to the opener; confirming a delete (the row is gone) moves focus to the list heading; state where focus goes after a confirmed clear-completed, from the app or as a flagged default."
+    },
+    {
+      "id": "F-5",
+      "severity": "major",
+      "message": "REQ-A11Y-009 AC-1 has the test pause the page animations and step them with the Web Animations API, but AC-5 says it runs with the animation stepped the same way without pausing real playback. The two ACs contradict each other, so neither the tests node nor the validator can tell which behaviour is required (Q8 chose (a), pause and step; (c), real playback without pausing, was rejected).",
+      "requirement": "REQ-A11Y-009",
+      "location": "docs/specs/CHG-0004/requirements.md:L118-L122",
+      "suggestion": "Reword AC-5 to match Q8 (a) and AC-1, for example: in chromium and webkit the animation is paused and stepped the same way and the test passes in both; if something else was meant, state it as a flagged default or open question."
+    },
+    {
+      "id": "F-6",
+      "severity": "major",
+      "message": "REQ-A11Y-010 AC-4 requires every new test to appear first as a failing test commit with the passing state following, while REQ-A11Y-010 AC-3 forbids any product change and REQ-A11Y-012 AC-4 expects all new tests to pass on first run against develop. Tests of existing behaviour that already holds cannot be red unless something else makes them fail, and the spec does not say what (for example failing stubs of the test-support helpers). It also leaves a stub-red failure indistinguishable from the real WCAG failure of REQ-A11Y-012 AC-1, which blocks the merge.",
+      "requirement": "REQ-A11Y-010",
+      "location": "docs/specs/CHG-0004/requirements.md:L134-L134",
+      "suggestion": "State what the red state is in an audit-only change (as a flagged default, or ask the requester), define first run in REQ-A11Y-012 AC-1 and AC-4 relative to it, and say how a red-stub failure is told apart from a real WCAG failure."
+    },
+    {
+      "id": "F-7",
+      "severity": "minor",
+      "message": "The section Proposed (needs confirmation) sits beside Open questions: None, and the inline (proposed) tags appear only on NFR-101 AC-1 and NFR-102 AC-2, not on the other listed items (for example REQ-A11Y-001 AC-4). CHG-0001 used the same pattern under Analyst defaults (for the approver to confirm at freeze) (docs/specs/CHG-0001/requirements.md:L322-L337), so this is a labelling issue, but the frozen AC text should not read as unconfirmed.",
+      "requirement": "NFR-101",
+      "location": "docs/specs/CHG-0004/requirements.md:L177-L217",
+      "suggestion": "Rename the section to analyst defaults for the approver to confirm at freeze and tag every listed AC the same way inline (analyst default)."
+    },
+    {
+      "id": "F-8",
+      "severity": "minor",
+      "message": "REQ-A11Y-001 AC-2 says the accessible description is the text of the field error, but the description the app builds is the error paragraph with its Error: prefix plus any help text (web/src/app/ui.tsx:L97-L112), so an equality check fails.",
+      "requirement": "REQ-A11Y-001",
+      "location": "docs/specs/CHG-0004/requirements.md:L39-L39",
+      "suggestion": "Say the accessible description includes the text of its field error."
+    },
+    {
+      "id": "F-9",
+      "severity": "minor",
+      "message": "Quoted texts are asserted with is, holds or is in without saying whether the match is exact or contains. REQ-A11Y-005 AC-1 needs contains: the alert reads The app could not reach the server. Please try again. (web/src/errors/userMessage.ts:L44 and L88; web/src/auth/RequireAuth.tsx:L9-L18).",
+      "requirement": "REQ-A11Y-005",
+      "location": "docs/specs/CHG-0004/requirements.md:L80-L80",
+      "suggestion": "Add one line to the glossary defining holds as contains the quoted text, and use it throughout REQ-A11Y-001, -002, -005."
+    },
+    {
+      "id": "F-10",
+      "severity": "minor",
+      "message": "REQ-A11Y-010 AC-2 says firefox is not required for the new tests, while Q3 (a) chose firefox excluded from them. The main configuration runs every spec in the firefox project too (web/playwright.config.ts:L27-L30), so not required leaves open whether they run, and fail to launch, there.",
+      "requirement": "REQ-A11Y-010",
+      "location": "docs/specs/CHG-0004/requirements.md:L132-L132",
+      "suggestion": "Say the new tests do not run in firefox (Q3 a), leaving the mechanism to the SDD."
+    },
+    {
+      "id": "F-11",
+      "severity": "minor",
+      "message": "REQ-A11Y-010 AC-3 allows only tests, test support, evidence and documentation but does not say whether web/playwright.config.ts, web/package.json devDependencies or the lockfile count as test support. The flash check may need a PNG decoder; Q8 (a) was chosen because it needs no new tool.",
+      "requirement": "REQ-A11Y-010",
+      "location": "docs/specs/CHG-0004/requirements.md:L133-L133",
+      "suggestion": "State whether test configuration and new devDependencies are allowed, and if so which."
+    },
+    {
+      "id": "F-12",
+      "severity": "minor",
+      "message": "REQ-A11Y-002 AC-2 asks for the first-use empty state to be in the accessibility tree without naming what is checked; the app renders a heading You have no to-dos yet (web/src/todos/TodoListPage.tsx:L295; web/e2e/a11y.spec.ts:L41).",
+      "requirement": "REQ-A11Y-002",
+      "location": "docs/specs/CHG-0004/requirements.md:L51-L51",
+      "suggestion": "Name the observable: a level-2 heading with that text in the tree, and for no matches the heading No matching to-dos."
+    },
+    {
+      "id": "F-13",
+      "severity": "minor",
+      "message": "REQ-A11Y-008 AC-4 (small enough to commit, a few hundred KB each, as the requester stated) has no testable limit, and the few hundred KB came from the question text (Q1), not from the requester.",
+      "requirement": "REQ-A11Y-008",
+      "location": "docs/specs/CHG-0004/requirements.md:L112-L112",
+      "suggestion": "Give a limit as a flagged default (for example at most 1 MB each) or drop the size from the AC and keep it as a note."
+    },
+    {
+      "id": "F-14",
+      "severity": "minor",
+      "message": "REQ-A11Y-008 AC-3 says video is on only for the not-found test(s) but does not say which: the REQ-A11Y-004 AC-3 and AC-4 tests and the REQ-A11Y-009 flash test also open the not-found page, and a video of the paused, stepped flash run is not the full run SDD section 14 asks for.",
+      "requirement": "REQ-A11Y-008",
+      "location": "docs/specs/CHG-0004/requirements.md:L111-L111",
+      "suggestion": "Say video is on only for the REQ-A11Y-008 tests."
+    },
+    {
+      "id": "F-15",
+      "severity": "minor",
+      "message": "REQ-A11Y-009 AC-2 computes per-pixel luminance and red saturation but does not say how per-pixel flashes become the count of a window (any pixel, the maximum over pixels, or the mean frame). With AC-4 dropping the small-area exemption the readings differ.",
+      "requirement": "REQ-A11Y-009",
+      "location": "docs/specs/CHG-0004/requirements.md:L119-L121",
+      "suggestion": "State the aggregation, for example the count of a window is the highest count of any single pixel, as a flagged default."
+    },
+    {
+      "id": "F-16",
+      "severity": "minor",
+      "message": "REQ-A11Y-011 AC-1 attaches the JUnit XML of each run in chromium and webkit, but the main configuration writes one JUnit file for all its projects in one run (web/playwright.config.ts:L19), and pnpm -C web e2e also runs other configurations.",
+      "requirement": "REQ-A11Y-011",
+      "location": "docs/specs/CHG-0004/requirements.md:L141-L141",
+      "suggestion": "Say which file or files are attached: the main configuration JUnit of the run that includes chromium and webkit, or one file per project run."
+    },
+    {
+      "id": "F-17",
+      "severity": "minor",
+      "message": "NFR-102 AC-2 (no more than 5 minutes added per browser on the build host) is not grounded in Q2, which accepted a growing main suite, and has no baseline or definition of the build host, so it cannot be measured as written.",
+      "requirement": "NFR-102",
+      "location": "docs/specs/CHG-0004/requirements.md:L185-L185",
+      "suggestion": "Either drop it or define how it is measured (the new spec files run alone, per browser, wall-clock) and keep it flagged as an analyst default."
+    },
+    {
+      "id": "F-18",
+      "severity": "info",
+      "message": "REQ-A11Y-006 AC-2 measures the border of every button; some buttons are identified by their fill rather than a border. This follows Q7 (a) and (b) as written; the SDD should say what adjacent colour means for a filled button.",
+      "requirement": "REQ-A11Y-006",
+      "location": "docs/specs/CHG-0004/requirements.md:L89-L89",
+      "suggestion": "Leave the AC; settle the measurement of filled controls in the SDD."
+    },
+    {
+      "id": "F-19",
+      "severity": "info",
+      "message": "REQ-A11Y-001 AC-4 (session ended) must run under the main configuration (REQ-A11Y-010 AC-1), which has no test clock (docs/specs/CHG-0001/sdd.md:L613-L620); the state is reachable by a signed-in user whose next request gets 401 (web/src/auth/SessionProvider.tsx:L61-L67), for example after the session cookie is removed.",
+      "requirement": "REQ-A11Y-001",
+      "location": "docs/specs/CHG-0004/requirements.md:L41-L41",
+      "suggestion": "No change needed; the SDD can name how the state is reached."
+    },
+    {
+      "id": "F-20",
+      "severity": "info",
+      "message": "Out of scope lists most rejected options but not Q2 (b), a separate on-demand Playwright configuration, Q8 (c), screenshots during real playback, or Q9 (b), a later separate docs change.",
+      "requirement": "REQ-A11Y-010",
+      "location": "docs/specs/CHG-0004/requirements.md:L193-L203",
+      "suggestion": "Optionally add them so the rejected options are explicit."
+    }
+  ]
+}
