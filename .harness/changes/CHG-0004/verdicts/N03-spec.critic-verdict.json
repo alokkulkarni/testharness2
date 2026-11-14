@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0004",
+  "node": "N03-spec",
+  "gate": "critic-verdict",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0004",
+      "agent": "critic",
+      "agentRunId": "ac6fe2f57e3daae60"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0004",
+      "agent": "spec-author",
+      "agentRunId": "a33e7614d1b4ff12d"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0004",
+      "agent": "spec-author",
+      "agentRunId": "ae486fc65f8882ba1"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0004",
+      "agent": "spec-author",
+      "agentRunId": "af1e144a18e646833"
+    }
+  ],
+  "createdAt": "2026-11-14T11:59:39.420Z",
+  "reviewedCommit": "38b6f993b1b1c9edaf4c6689b249ffa479c58a7b",
+  "diffHash": "a874154a6c4d9d1b3b42e8c95cdfee03752722f244ff04f84033b14147ae7213",
+  "summary": "round 3, delta since 8d8e04f: no previous blocker or major to check. The only change under docs/specs/CHG-0004/ and docs/architecture/ is the stamp upstream sha256 of requirements.md in docs/architecture/solution.md L12 (c1c9d38); requirements.md is unchanged since 8d8e04f (last changed in 46a7a15), so the re-stamp only syncs the stamp. The stub body (no container, integration, store, deployment, security boundary or observability element added) is unchanged, so the unchanged SDD, contracts and ADRs still conform and need no change. Infos F-16, F-17, F-18 carried; one new info (F-19). No blocker or major; 4 follow-ups (all info).",
+  "findings": [
+    {
+      "id": "F-16",
+      "severity": "info",
+      "message": "R11 accepts the most lenient statistic (the highest-contrast pixel) and relies on a reviewer reading the table to catch a pass carried by a thin edge.",
+      "requirement": "REQ-A11Y-006",
+      "location": "docs/specs/CHG-0004/sdd.md:L740",
+      "suggestion": "Consider also recording, per row, the share of band pixels at or above the threshold, so the table shows such cases."
+    },
+    {
+      "id": "F-17",
+      "severity": "info",
+      "message": "Outside this node: clarifications Q12-Q14 cite sdd.md section 14 items 1-3, a section that no longer exists now that the open questions are folded in.",
+      "requirement": "REQ-A11Y-002",
+      "location": ".harness/changes/CHG-0004/clarifications.md:L158-L170",
+      "suggestion": "None needed in the SDD; noted for the record."
+    },
+    {
+      "id": "F-18",
+      "severity": "info",
+      "message": "The per-test timeout rationale says 120 s stays under NFR-102 5 minutes for the whole set; a per-test limit does not bound the set, which several such tests could exceed. The timed runs of section 10 step 5 are what prove NFR-102 AC-2, so behaviour is unaffected.",
+      "requirement": "NFR-102",
+      "location": "docs/specs/CHG-0004/sdd.md:L86-L93",
+      "suggestion": "Say that 120 s bounds a single test and that the set time is checked by the section 10 timed runs."
+    },
+    {
+      "id": "F-19",
+      "severity": "info",
+      "message": "I could not compute the sha256 of requirements.md myself (no hashing command on the critic list), so the new stamp value is not independently verified here; harness freeze checks it.",
+      "requirement": "REQ-A11Y-010",
+      "location": "docs/architecture/solution.md:L12-L12",
+      "suggestion": "None; rely on the freeze check of the upstream stamp."
+    }
+  ]
+}
