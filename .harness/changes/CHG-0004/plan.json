@@ -129,15 +129,9 @@
       ],
       "executor": "claude-code",
       "isolation": "none",
-      "status": "running",
+      "status": "complete",
       "attempts": 0,
-      "maxAttempts": 3,
-      "claim": {
-        "runId": "run-chg4-n05-2",
-        "executor": "claude-code",
-        "leaseUntil": "2026-11-14T12:58:25.058Z",
-        "claimedAt": "2026-11-14T11:56:49.378Z"
-      }
+      "maxAttempts": 3
     }
   ]
 }
