@@ -4,7 +4,7 @@
   "title": "Automated accessibility audit of CHG-0001 (Playwright) with human screen-reader note",
   "mode": "greenfield",
   "profile": "lite",
-  "specFreeze": null,
+  "specFreeze": ".harness/changes/CHG-0004/spec-freeze.json",
   "intent": null,
   "status": "active",
   "branch": "feature/CHG-0004-automated-accessibility-audit-of-chg-000",
