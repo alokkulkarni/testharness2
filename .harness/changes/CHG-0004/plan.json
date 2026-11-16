@@ -132,6 +132,263 @@
       "status": "complete",
       "attempts": 0,
       "maxAttempts": 3
+    },
+    {
+      "id": "N06-design-ux",
+      "phase": "3",
+      "inputs": [
+        ".harness/changes/CHG-0004/spec-freeze.json"
+      ],
+      "outputs": [
+        "docs/specs/CHG-0004/design/ux/"
+      ],
+      "dependsOn": [
+        "N04-spec-freeze"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "ux-designer",
+      "description": "UX design spec and tokens for the frozen spec.",
+      "gates": [
+        "critic-verdict"
+      ],
+      "executor": "any",
+      "isolation": "none",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N07-tests-backend",
+      "phase": "4",
+      "inputs": [
+        "docs/specs/CHG-0004/design/ux/"
+      ],
+      "outputs": [
+        "api/src/test/"
+      ],
+      "dependsOn": [
+        "N06-design-ux"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "backend-qa",
+      "description": "Failing backend tests for the acceptance criteria, committed first.",
+      "gates": [
+        "critic-verdict",
+        "tests-red-first"
+      ],
+      "executor": "any",
+      "isolation": "worktree",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N08-tests-web",
+      "phase": "4",
+      "inputs": [
+        "docs/specs/CHG-0004/design/ux/"
+      ],
+      "outputs": [
+        "web/"
+      ],
+      "dependsOn": [
+        "N06-design-ux"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "web-qa",
+      "description": "Failing web tests for the acceptance criteria, committed first.",
+      "gates": [
+        "critic-verdict",
+        "tests-red-first"
+      ],
+      "executor": "any",
+      "isolation": "worktree",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N09-build-java",
+      "phase": "5",
+      "inputs": [
+        "api/src/test/",
+        "web/"
+      ],
+      "outputs": [
+        "api/"
+      ],
+      "dependsOn": [
+        "N07-tests-backend",
+        "N08-tests-web"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "java-engineer",
+      "description": "Make the java tests pass in an isolated worktree.",
+      "gates": [
+        "critic-verdict"
+      ],
+      "executor": "any",
+      "isolation": "worktree",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N10-build-react",
+      "phase": "5",
+      "inputs": [
+        "api/src/test/",
+        "web/"
+      ],
+      "outputs": [
+        "web/"
+      ],
+      "dependsOn": [
+        "N07-tests-backend",
+        "N08-tests-web"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "react-engineer",
+      "description": "Make the react tests pass in an isolated worktree.",
+      "gates": [
+        "critic-verdict"
+      ],
+      "executor": "any",
+      "isolation": "worktree",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N11-docs-diagrams",
+      "phase": "8",
+      "inputs": [
+        "api/",
+        "web/"
+      ],
+      "outputs": [
+        "docs/knowledge/diagrams/"
+      ],
+      "dependsOn": [
+        "N09-build-java",
+        "N10-build-react"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "drawio-architect",
+      "description": "Update the change's diagrams in docs/knowledge/diagrams/ for the built change.",
+      "gates": [
+        "critic-verdict"
+      ],
+      "executor": "any",
+      "isolation": "none",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N12-docs",
+      "phase": "8",
+      "inputs": [
+        "docs/knowledge/diagrams/"
+      ],
+      "outputs": [
+        "docs/knowledge/"
+      ],
+      "dependsOn": [
+        "N11-docs-diagrams"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "okf-documenter",
+      "description": "Fold the change into the OKF bundle.",
+      "gates": [
+        "critic-verdict",
+        "docs-valid"
+      ],
+      "executor": "any",
+      "isolation": "none",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N13-security",
+      "phase": "6",
+      "inputs": [
+        "api/",
+        "web/",
+        "docs/knowledge/"
+      ],
+      "outputs": [
+        ".harness/changes/CHG-0004/evidence/scan-report/"
+      ],
+      "dependsOn": [
+        "N12-docs"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "security-reviewer",
+      "description": "Security scans, SBOM and findings on the PR delta.",
+      "gates": [
+        "security"
+      ],
+      "executor": "any",
+      "isolation": "none",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N14-validate",
+      "phase": "6",
+      "inputs": [
+        "api/",
+        "web/",
+        "docs/knowledge/"
+      ],
+      "outputs": [
+        ".harness/changes/CHG-0004/traceability.json",
+        ".harness/changes/CHG-0004/conformance.json",
+        "docs/specs/CHG-0004/conformance.md"
+      ],
+      "dependsOn": [
+        "N12-docs"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "validator",
+      "description": "Map the PR delta to the frozen requirements (traceability) and build the conformance register.",
+      "gates": [
+        "validator"
+      ],
+      "executor": "any",
+      "isolation": "none",
+      "attempts": 0,
+      "maxAttempts": 3
+    },
+    {
+      "id": "N15-pr-review",
+      "phase": "6",
+      "inputs": [
+        "api/",
+        "web/",
+        "docs/knowledge/"
+      ],
+      "outputs": [
+        ".harness/changes/CHG-0004/verdicts/"
+      ],
+      "dependsOn": [
+        "N12-docs"
+      ],
+      "status": "pending",
+      "kind": "agent",
+      "agent": "critic",
+      "description": "Review the PR delta against the frozen spec (critic-verdict).",
+      "gates": [
+        "critic-verdict"
+      ],
+      "executor": "any",
+      "isolation": "none",
+      "attempts": 0,
+      "maxAttempts": 3
     }
   ]
 }
