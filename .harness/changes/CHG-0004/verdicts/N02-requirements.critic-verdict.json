@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0004",
+  "node": "N02-requirements",
+  "gate": "critic-verdict",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0004",
+      "agent": "critic",
+      "agentRunId": "a2c8b2889bdcab0c3"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0004",
+      "agent": "requirements-analyst",
+      "agentRunId": "a324ec2b83f46005f"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0004",
+      "agent": "requirements-analyst",
+      "agentRunId": "a3d922ca8234c848f"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0004",
+      "agent": "requirements-analyst",
+      "agentRunId": "a443a2269800f903f"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0004",
+      "agent": "requirements-analyst",
+      "agentRunId": "afc9f58ae4af0b25e"
+    }
+  ],
+  "createdAt": "2026-11-13T17:49:47.287Z",
+  "reviewedCommit": "0fa19e32b1713ba048e55b3cb18215e61fd75f31",
+  "diffHash": "cf94df92c07cf50c4afa16974cea472015b9d9d5b995bc6527f6c04c70e849f8",
+  "summary": "round 4, delta since d27a089: no previous blocker or major to check. The delta applies Q12 (a) exactly (REQ-A11Y-002 AC-4 L64 now says the element for the current page, matching the <span aria-current=page> at web/src/todos/Pagination.tsx L49-L53, source cites Q12 at L59), Q13 (a) with no AC change (REQ-A11Y-006 AC-2 L102 already asserts checkboxes and radios at 3:1; Q13 added to the source at L99), and Q14 (a) (REQ-A11Y-006 AC-3 L103 excludes the marker fill and points its text to REQ-A11Y-007). clarifications.md gains only Q12-Q14 with the requester answers. No creep. One new minor F-29; carried minors F-25, F-26 and infos F-19, F-24, F-27, F-28 as follow-ups.",
+  "findings": [
+    {
+      "id": "F-19",
+      "severity": "info",
+      "message": "REQ-A11Y-001 AC-4 (session ended) must run under the main configuration (REQ-A11Y-010 AC-1), which has no test clock (docs/specs/CHG-0001/sdd.md:L613-L620); the state is reachable by a signed-in user whose next request gets 401 (web/src/auth/SessionProvider.tsx:L61-L67), for example after the session cookie is removed.",
+      "requirement": "REQ-A11Y-001",
+      "location": "docs/specs/CHG-0004/requirements.md:L52-L52",
+      "suggestion": "No change needed; the SDD can name how the state is reached."
+    },
+    {
+      "id": "F-24",
+      "severity": "info",
+      "message": "REQ-A11Y-010 AC-3 (analyst default 10) adds no devDependency, while REQ-A11Y-009 AC-2 computes per-pixel luminance from screenshots, which needs a PNG decode. That fits Q8 (a) (no new tool) and can be done in the page (canvas) or with what Playwright already provides.",
+      "requirement": "REQ-A11Y-009",
+      "location": "docs/specs/CHG-0004/requirements.md:L148-L148",
+      "suggestion": "No change needed; the SDD should name how screenshots are decoded without a new dependency."
+    },
+    {
+      "id": "F-25",
+      "severity": "minor",
+      "message": "REQ-A11Y-012 AC-6 says the web/playwright.config.ts change lands in the test commit, yet its own example is a first-run failure because video is not yet switched on. If the first run is after the test commit, the config change can no longer land in that commit; if before, the example cannot occur. When the first run happens relative to the test commit is not stated.",
+      "requirement": "REQ-A11Y-012",
+      "location": "docs/specs/CHG-0004/requirements.md:L171-L171",
+      "suggestion": "State when the first run is taken and that a test-defect fix, config included, lands in a later test(...) commit before any other non-documentation commit; or drop the video example."
+    },
+    {
+      "id": "F-26",
+      "severity": "minor",
+      "message": "The glossary says any other difference is a spec question to stop and report, which read literally also covers a difference that is a real WCAG failure (handled by REQ-A11Y-012 AC-1) and is broader than AC-5, which speaks of a wording difference.",
+      "requirement": "REQ-A11Y-012",
+      "location": "docs/specs/CHG-0004/requirements.md:L33-L33",
+      "suggestion": "Write: any other wording difference that is not a WCAG failure is a spec question to stop and report; a WCAG failure is handled by REQ-A11Y-012 AC-1."
+    },
+    {
+      "id": "F-27",
+      "severity": "info",
+      "message": "Analyst default 11 says it is decided by the requester in Q11 (a) and is not an analyst default, but it stays in the list the approver confirms at freeze and AC-4 still tags it analyst default 11.",
+      "requirement": "REQ-A11Y-010",
+      "location": "docs/specs/CHG-0004/requirements.md:L240-L240",
+      "suggestion": "Optional: tag AC-4 with Q11 only, or note in the list header that item 11 is recorded for reference."
+    },
+    {
+      "id": "F-28",
+      "severity": "info",
+      "message": "REQ-A11Y-012 AC-6 requires the summary to record a test defect, but the summary contents listed in REQ-A11Y-011 AC-3 name only the first-run result of each test, not its cause.",
+      "requirement": "REQ-A11Y-011",
+      "location": "docs/specs/CHG-0004/requirements.md:L171-L171",
+      "suggestion": "Optional: add the first-run failure cause to the REQ-A11Y-011 AC-3 list at a later edit."
+    },
+    {
+      "id": "F-29",
+      "severity": "minor",
+      "message": "The new sentence in REQ-A11Y-006 AC-3 says the pagination current-page marker is not a control and that its text is asserted under REQ-A11Y-007, but REQ-A11Y-007 AC-1 asserts the text of every control only, and its source does not cite Q14. Read literally, REQ-A11Y-007 does not cover the marker text the new sentence points to (the marker is a non-interactive span, web/src/todos/Pagination.tsx:L50-L53).",
+      "requirement": "REQ-A11Y-007",
+      "location": "docs/specs/CHG-0004/requirements.md:L103-L113",
+      "suggestion": "At the next edit, add to REQ-A11Y-007 AC-1 (or a new AC) that the pagination current-page marker text is measured and asserted at 4.5:1 (Q14), and cite Q14 in its source line; until then the SDD text-contrast table (Q14) should list the marker explicitly."
+    }
+  ]
+}

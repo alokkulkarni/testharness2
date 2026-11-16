@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0004",
+  "node": "N05-solution-arch",
+  "gate": "critic-verdict",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0004",
+      "agent": "critic",
+      "agentRunId": "a43d17ce4b5768696"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0004",
+      "agent": "drawio-architect",
+      "agentRunId": "a960ef81e466e300d"
+    }
+  ],
+  "createdAt": "2026-11-14T11:57:59.983Z",
+  "reviewedCommit": "4ceb60ee482cb41a01a2b209199ea9816ac071cc",
+  "diffHash": "f2b0ec78d838e21739311aefe5cfe1ef7987ad836c917addc59acf1e33208f14",
+  "summary": "round 2, delta since bb6e9aa: no blockers or majors in round 1, so none to fix. The only change to docs/architecture/ is the upstream sha256 of requirements.md (c1c9d38, solution.md:L12). The requirements change since bb6e9aa is three test-level clarifications (REQ-A11Y-002 AC-4 aria-current on the current-page element, REQ-A11Y-006 AC-3 pagination marker fill excluded, source refs Q12-Q14). None adds a container, integration, store, deployment, security boundary or observability element, and REQ-A11Y-010 AC-3 (audit-only) is unchanged, so the placeholder needs no content change. I could not recompute the sha256 with my read-only commands; harness freeze checks it. F-1 (minor) and F-2 (info) carried unchanged as follow-ups.",
+  "findings": [
+    {
+      "id": "F-1",
+      "severity": "minor",
+      "message": "The stub says each CHG-0001 view is a .drawio source with a PNG and a PDF export beside it; the README links the exports in png/ and pdf/ subfolders, not beside the source.",
+      "requirement": "REQ-A11Y-010",
+      "location": "docs/architecture/solution.md:L28-L30",
+      "suggestion": "Say the PNG and PDF exports are under png/ and pdf/ of that folder (README rows 1-10)."
+    },
+    {
+      "id": "F-2",
+      "severity": "info",
+      "message": "The stub calls CHG-0001 diagrams the as-built architecture; the README says they were drawn against CHG-0001 frozen spec (design), not checked against the built code.",
+      "requirement": "REQ-A11Y-010",
+      "location": "docs/architecture/solution.md:L26",
+      "suggestion": "Optionally say the architecture of record (as designed in CHG-0001 frozen spec); moot once CHG-0005 replaces the file."
+    }
+  ]
+}

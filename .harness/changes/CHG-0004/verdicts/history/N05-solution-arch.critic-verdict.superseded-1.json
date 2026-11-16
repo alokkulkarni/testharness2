@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0004",
+  "node": "N05-solution-arch",
+  "gate": "critic-verdict",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0004",
+      "agent": "critic",
+      "agentRunId": "ab685a2bd2586c1d0"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0004",
+      "agent": "drawio-architect",
+      "agentRunId": "a960ef81e466e300d"
+    }
+  ],
+  "createdAt": "2026-11-13T17:15:09.311Z",
+  "reviewedCommit": "bb6e9aa6972bae2b9680ee91e45891e6bfbdaa08",
+  "diffHash": "7ac5f08fe167ca505d6a9d9e0361346dd02b733f71565399728e0c995c3bfcdb",
+  "summary": "Round 1, exhaustive, scoped to the requester-approved minimal stub. All four checks hold: it states it is a CHG-0004 audit-only placeholder changing no architecture (consistent with REQ-A11Y-010 AC-3 and the out-of-scope list); its pointers to CHG-0001 README views, sdd.md section 2 (Components) and section 11 (Local run) are accurate and nothing is copied; the Pending section names CHG-0005 (PR #7, frozen, parked until M22), native-run and Compose views, second-merger reconciliation and CHG-0005 as intended content; it adds no element a later SDD could build on. Two follow-ups (1 minor, 1 info).",
+  "findings": [
+    {
+      "id": "F-1",
+      "severity": "minor",
+      "message": "The stub says each CHG-0001 view is a .drawio source with a PNG and a PDF export beside it; the README links the exports in png/ and pdf/ subfolders, not beside the source.",
+      "requirement": "REQ-A11Y-010",
+      "location": "docs/architecture/solution.md:L28-L30",
+      "suggestion": "Say the PNG and PDF exports are under png/ and pdf/ of that folder (README rows 1-10)."
+    },
+    {
+      "id": "F-2",
+      "severity": "info",
+      "message": "The stub calls CHG-0001 diagrams the as-built architecture; the README says they were drawn against CHG-0001 frozen spec (design), not checked against the built code.",
+      "requirement": "REQ-A11Y-010",
+      "location": "docs/architecture/solution.md:L26",
+      "suggestion": "Optionally say the architecture of record (as designed in CHG-0001 frozen spec); moot once CHG-0005 replaces the file."
+    }
+  ]
+}

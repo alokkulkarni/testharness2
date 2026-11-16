@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0004",
+  "title": "Automated accessibility audit of CHG-0001 (Playwright) with human screen-reader note",
+  "baseBranch": "develop",
+  "squad": "default",
+  "platform": "testharness2",
+  "status": "analysis",
+  "requestedBy": "@alokkulkarni",
+  "footprint": {},
+  "links": {
+    "branch": "feature/CHG-0004-automated-accessibility-audit-of-chg-000"
+  }
+}

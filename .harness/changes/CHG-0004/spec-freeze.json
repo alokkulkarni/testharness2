@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0004",
+  "files": {
+    "docs/specs/CHG-0004/requirements.md": "c67cab9d65db8c4d5eed647062b13def283addb1bd930d1aace77c8979dc5f43",
+    "docs/specs/CHG-0004/sdd.md": "08a3afb7900d83eb925c47e2f1a2e3bbfcecaaf28030f76be86cb27dfef0bafa"
+  },
+  "requestedBy": "@alokkulkarni",
+  "approvedBy": "@alokkulkarni",
+  "approvedAt": "2026-11-16T09:05:17.354Z",
+  "approvalReference": "https://github.com/alokkulkarni/testharness2/pull/8#pullrequestreview-5917415229",
+  "criticVerdict": ".harness/changes/CHG-0004/verdicts/N03-spec.critic-verdict.json"
+}

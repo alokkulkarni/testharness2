@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0004",
+  "node": "N02-requirements",
+  "gate": "critic-verdict",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0004",
+      "agent": "critic",
+      "agentRunId": "aef5681202a794fc9"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0004",
+      "agent": "requirements-analyst",
+      "agentRunId": "a324ec2b83f46005f"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0004",
+      "agent": "requirements-analyst",
+      "agentRunId": "a443a2269800f903f"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0004",
+      "agent": "requirements-analyst",
+      "agentRunId": "afc9f58ae4af0b25e"
+    }
+  ],
+  "createdAt": "2026-11-13T13:29:10.673Z",
+  "reviewedCommit": "d27a089faa440ef46393bead8141ee6ccc735c46",
+  "diffHash": "4b479f3b99b478742752740f1559c7f6b731f0d9923ea930509165eda5d77312",
+  "summary": "round 3, delta since 0af85eb: F-21 fixed (requester answered Q11 (a); REQ-A11Y-010 AC-4 L149 and default 11 L240 cite it, and the tests-red-first question is deferred to planning with stop-and-report as the requester chose). Minors F-22 (new AC-6 L171, glossary L34-L35) and F-23 (AC-5 L170, glossary L31-L33, default 13 L242) also fixed. No blocker or major. Follow-ups: new minors F-25, F-26; new infos F-27, F-28; infos F-19 and F-24 carried.",
+  "findings": [
+    {
+      "id": "F-19",
+      "severity": "info",
+      "message": "REQ-A11Y-001 AC-4 (session ended) must run under the main configuration (REQ-A11Y-010 AC-1), which has no test clock (docs/specs/CHG-0001/sdd.md:L613-L620); the state is reachable by a signed-in user whose next request gets 401 (web/src/auth/SessionProvider.tsx:L61-L67), for example after the session cookie is removed.",
+      "requirement": "REQ-A11Y-001",
+      "location": "docs/specs/CHG-0004/requirements.md:L49-L49",
+      "suggestion": "No change needed; the SDD can name how the state is reached."
+    },
+    {
+      "id": "F-24",
+      "severity": "info",
+      "message": "REQ-A11Y-010 AC-3 (analyst default 10) adds no devDependency, while REQ-A11Y-009 AC-2 computes per-pixel luminance from screenshots, which needs a PNG decode. That fits Q8 (a) (no new tool) and can be done in the page (canvas) or with what Playwright already provides.",
+      "requirement": "REQ-A11Y-009",
+      "location": "docs/specs/CHG-0004/requirements.md:L148-L148",
+      "suggestion": "No change needed; the SDD should name how screenshots are decoded without a new dependency."
+    },
+    {
+      "id": "F-25",
+      "severity": "minor",
+      "message": "REQ-A11Y-012 AC-6 says the web/playwright.config.ts change lands in the test commit, yet its own example is a first-run failure because video is not yet switched on. If the first run is after the test commit (REQ-A11Y-010 AC-4 orders the commits and records the first run against develop), the config change can no longer land in that commit; if the first run is before the commit, the example cannot occur. When the first run happens relative to the test commit is not stated.",
+      "requirement": "REQ-A11Y-012",
+      "location": "docs/specs/CHG-0004/requirements.md:L171-L171",
+      "suggestion": "State when the first run is taken (on the committed test commit) and that a test-defect fix, config included, lands in a later test(...) commit before any other non-documentation commit; or drop the video example."
+    },
+    {
+      "id": "F-26",
+      "severity": "minor",
+      "message": "The glossary says any other difference is a spec question to stop and report, which read literally also covers a difference that is a real WCAG failure (handled by REQ-A11Y-012 AC-1, the test stays failing) and is broader than AC-5, which speaks of a wording difference.",
+      "requirement": "REQ-A11Y-012",
+      "location": "docs/specs/CHG-0004/requirements.md:L33-L33",
+      "suggestion": "Write: any other wording difference that is not a WCAG failure is a spec question to stop and report; a WCAG failure is handled by REQ-A11Y-012 AC-1."
+    },
+    {
+      "id": "F-27",
+      "severity": "info",
+      "message": "Analyst default 11 now says it is decided by the requester in Q11 (a) and is not an analyst default, but it stays in the list the approver confirms at freeze and AC-4 still tags it analyst default 11.",
+      "requirement": "REQ-A11Y-010",
+      "location": "docs/specs/CHG-0004/requirements.md:L240-L240",
+      "suggestion": "Optional: keep the numbering but tag AC-4 with Q11 only, or note in the list header that item 11 is recorded for reference."
+    },
+    {
+      "id": "F-28",
+      "severity": "info",
+      "message": "REQ-A11Y-012 AC-6 requires the summary to record a test defect, but the summary contents listed in REQ-A11Y-011 AC-3 name only the first-run result of each test, not its cause.",
+      "requirement": "REQ-A11Y-011",
+      "location": "docs/specs/CHG-0004/requirements.md:L171-L171",
+      "suggestion": "Optional: add the first-run failure cause (WCAG failure, spec-wording difference, test defect) to the REQ-A11Y-011 AC-3 list at a later edit."
+    }
+  ]
+}
