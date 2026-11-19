@@ -1,0 +1,25 @@
+# Written by harness init (sdlc-harness) from its template, once: the repository's to edit (SDD 08 §5, ADR-0010).
+# The Copilot cloud agent's toolchain, from the same pins as the runner image (.github/harness/versions.env, written
+# with the installer by harness init). Copilot reads one job named copilot-setup-steps, from the default branch, for at
+# most 59 minutes. --host leaves the runner's own apt alone (its git, python; no ctags, xvfb or browsers). Edit the tool
+# list for your stacks.
+name: Copilot setup steps
+on:
+  workflow_dispatch:
+  push:
+    paths: [.github/workflows/copilot-setup-steps.yml]
+  pull_request:
+    paths: [.github/workflows/copilot-setup-steps.yml]
+permissions: {}
+jobs:
+  copilot-setup-steps:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 59
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install the pinned toolchain
+        run: bash .github/harness/install-tools.sh --host node pnpm temurin maven gradle dotnet-sdk-8 dotnet-sdk-10 gh semgrep sqlglot gitleaks syft grype scc tree-sitter

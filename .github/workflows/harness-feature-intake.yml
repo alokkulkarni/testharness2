@@ -1,0 +1,71 @@
+# Written by harness init (sdlc-harness) from its template, once: the repository's to edit (SDD 08 §5, SDD 12 §3).
+# Jira intake (M16): harness feature intake starts each squad's ready Jira features in rank order up to its WIP limit
+# and queues the rest, through the gateway's Jira MCP with the squad gateway key; then harness feature sync keeps the
+# started features and Jira in step (SDD 12 §3, SDD 08 §5) and sets auto-merged ones merged once GitHub merged them. Opt-in: the schedule runs only with
+# the repository variable HARNESS_JIRA_INTAKE set to true (match the cron to platform.yaml jira.intakeCron). An optional
+# Jira relay may start it at once with workflow_dispatch, holding a token with actions: write on this repository only
+# (SDD 10 §7, a documented exception). In a platform repository set the repository variable HARNESS_PLATFORM_REPO to 1.
+name: harness feature intake
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+permissions: {}
+concurrency:
+  group: harness-feature-intake
+  cancel-in-progress: false
+jobs:
+  intake:
+    if: github.event_name != 'schedule' || vars.HARNESS_JIRA_INTAKE == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    container:
+      image: ${{ vars.HARNESS_RUNNER_IMAGE || 'ghcr.io/alokkulkarni/sdlc-harness-runner:1.0.0' }}
+    # The job's GITHUB_TOKEN only reads; the state branch and the features' branches are written with the App token.
+    permissions:
+      contents: read
+    steps:
+      - name: A token for this repository (the state branch and the features' branches)
+        id: repo-token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          app-id: ${{ vars.HARNESS_APP_ID }}
+          private-key: ${{ secrets.HARNESS_APP_PRIVATE_KEY }}
+          repositories: ${{ github.event.repository.name }}
+          permission-contents: write # the state branch and feature/<KEY>-<slug> branches
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: 'develop'
+          fetch-depth: 0
+          persist-credentials: false # only the intake step writes, with the App token
+      - name: Intake (each squad's ready features, rank order, WIP limits)
+        env:
+          GH_TOKEN: ${{ steps.repo-token.outputs.token }}
+          HARNESS_PLATFORM_REPO: ${{ vars.HARNESS_PLATFORM_REPO }}
+          HARNESS_JIRA_TOKEN: ${{ secrets.HARNESS_GATEWAY_KEY }}
+        run: |
+          set -euo pipefail
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          gh auth setup-git # git writes the state branch and feature branches with this step's GH_TOKEN, here only
+          harness feature intake
+      - name: A token for feature sync (the state branch, auto-merged PRs, restarts), never given to intake
+        id: sync-token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          app-id: ${{ vars.HARNESS_APP_ID }}
+          private-key: ${{ secrets.HARNESS_APP_PRIVATE_KEY }}
+          repositories: ${{ github.event.repository.name }}
+          permission-contents: write # the state branch and the features' clarifications
+          permission-pull-requests: read # the PRs harness merge handed to auto-merge
+          permission-actions: write # restarts a plan whose human gate passed (harness-run.yml)
+      - name: Sync (questions, the owners' answers and acceptance, status, auto-merges, restarts)
+        env:
+          GH_TOKEN: ${{ steps.sync-token.outputs.token }}
+          HARNESS_PLATFORM_REPO: ${{ vars.HARNESS_PLATFORM_REPO }}
+          HARNESS_JIRA_TOKEN: ${{ secrets.HARNESS_GATEWAY_KEY }}
+        run: |
+          set -euo pipefail
+          gh auth setup-git # this step's GH_TOKEN, as in the intake step
+          harness feature sync

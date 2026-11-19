@@ -1,0 +1,33 @@
+# Written by harness init (sdlc-harness) from its template, once: the repository's to edit (SDD 08 §5, SDD 07).
+# On every PR: the OKF bundle validates and its index files are current (REQ-DOC-002), every draw.io diagram's PNG and
+# PDF exports are current — docs/architecture/ (the solution architecture's views), docs/knowledge/diagrams/ and each of
+# its per-change folders (REQ-DOC-004) — and the graph viewer is published as the PR's artifact (REQ-DOC-003).
+name: harness docs
+on:
+  pull_request:
+permissions: {}
+jobs:
+  docs:
+    name: harness docs
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    container:
+      image: ${{ vars.HARNESS_RUNNER_IMAGE || 'ghcr.io/alokkulkarni/sdlc-harness-runner:1.0.0' }}
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: The bundle validates (REQ-DOC-002)
+        run: harness docs validate
+      - name: Its index files are current
+        run: harness docs index --check
+      - name: Diagram exports are current, docs/architecture and docs/knowledge/diagrams (REQ-DOC-004)
+        run: harness docs diagram export --check
+      - name: The graph viewer (REQ-DOC-003)
+        run: harness docs viewer --out okf-viewer
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: okf-viewer
+          path: okf-viewer

@@ -1,0 +1,53 @@
+# Written by harness init (sdlc-harness) from its template, once: the repository's to edit (SDD 08 §5, SDD 12 §6).
+# The release train (M16): it runs harness release assemble, which lists the merged and accepted features of every
+# squad in releases/<id>.json on harness-state, orders the repositories provider before consumer and opens an issue
+# for the release approvers. It never cuts a branch, opens a PR, tags, merges or deploys: a release approver (a person)
+# cuts release/<version>, and harness-release.yml deploys. Opt-in: the schedule runs only with the repository variable
+# HARNESS_RELEASE_TRAIN set to true (match the cron to platform.yaml sharedTeams.release.train.cron); workflow_dispatch
+# runs it by hand. In a platform repository set the repository variable HARNESS_PLATFORM_REPO to 1.
+name: harness release train
+on:
+  schedule:
+    - cron: '0 9 * * 2'
+  workflow_dispatch:
+permissions: {}
+concurrency:
+  group: harness-release-train
+  cancel-in-progress: false
+jobs:
+  assemble:
+    if: github.event_name != 'schedule' || vars.HARNESS_RELEASE_TRAIN == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    container:
+      image: ${{ vars.HARNESS_RUNNER_IMAGE || 'ghcr.io/alokkulkarni/sdlc-harness-runner:1.0.0' }}
+    # The job's GITHUB_TOKEN only reads; the state branch and the issue are written with the App token below.
+    permissions:
+      contents: read
+    steps:
+      - name: A token for this repository (the state branch and the release approvers' issue)
+        id: repo-token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          app-id: ${{ vars.HARNESS_APP_ID }}
+          private-key: ${{ secrets.HARNESS_APP_PRIVATE_KEY }}
+          repositories: ${{ github.event.repository.name }}
+          permission-contents: write # releases/<id>.json on the state branch
+          permission-issues: write # the issue for the release approvers
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: 'develop'
+          fetch-depth: 0
+          persist-credentials: false # only the assemble step writes, with the App token
+      - name: Assemble the release (it never cuts, deploys or approves)
+        env:
+          GH_TOKEN: ${{ steps.repo-token.outputs.token }}
+          TRIGGER: ${{ github.event_name == 'schedule' && 'schedule' || 'manual' }}
+          HARNESS_PLATFORM_REPO: ${{ vars.HARNESS_PLATFORM_REPO }}
+        run: |
+          set -euo pipefail
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          gh auth setup-git # git writes the state branch with this step's GH_TOKEN, the App token, here only
+          harness release assemble --trigger "$TRIGGER"
