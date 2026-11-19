@@ -1,0 +1,195 @@
+# Written by harness init (sdlc-harness) from its template, once: the repository's to edit (SDD 08 §5, SDD 02 §6).
+# The required check "harness gate verify": on a PR to develop or to release/* it verifies the
+# change on the PR's branch (harness gate verify); on a release PR (release/<version> → main) it runs release
+# verify (harness gate verify --release <version>); on the merge-back PR (main → develop) it checks that the
+# head is the commit tagged v<version>. A review, and the end of a harness release run, re-run that check, so the
+# release check turns green once the approvals and the prod deploy exist (D-26). Make "harness gate verify" a
+# required check of main, develop and release/* (enforcement: github).
+name: harness gates
+on:
+  pull_request:
+    branches: ['develop', 'release/**', main]
+    types: [opened, synchronize, reopened, edited] # edited: the release PR's divergence rows
+  pull_request_review:
+    types: [submitted, dismissed]
+  workflow_run:
+    workflows: [harness release]
+    types: [completed]
+permissions: {}
+jobs:
+  verify:
+    name: harness gate verify
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    container:
+      image: ${{ vars.HARNESS_RUNNER_IMAGE || 'ghcr.io/alokkulkarni/sdlc-harness-runner:1.0.0' }}
+    permissions:
+      contents: read
+      pull-requests: read # reviews: conformance-accepted, feature-acceptance, prod-release-approval
+      actions: read # the prod environment's approvals (enforcement: github)
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0 # the base, the state branch and the tags
+          persist-credentials: true # harness gate verify fetches the base, integration and state branches (read-only token, no agent)
+      - name: Secret scan of the PR's commits (REQ-SEC-001)
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: gitleaks git --redact --no-banner --log-opts="$BASE_SHA..HEAD" .
+      - name: Verify the gates
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+          INTEGRATION: 'develop'
+          RELEASE_PREFIX: 'release/'
+          HARNESS_PLATFORM_REPO: ${{ vars.HARNESS_PLATFORM_REPO }} # 1 in a platform repository (platform.yaml, squads/ at its root)
+        run: |
+          set -euo pipefail
+          if [ "$BASE_REF" = main ]; then
+            case "$HEAD_REF" in
+              "$RELEASE_PREFIX"*) exec harness gate verify --release "${HEAD_REF#"$RELEASE_PREFIX"}" --pr "$PR" --skip-gate evidence-complete ;;
+              *) echo "::error::only a release PR ($RELEASE_PREFIX<version> → main) merges into main"; exit 1 ;;
+            esac
+          fi
+          # A release branch's only PR goes into main: another one shares its head, so its run could pass for the release
+          # gate that harness release record reads (M16f); fixes come through bugfix/* branches cut from the release
+          if [ -n "$RELEASE_PREFIX" ]; then
+            case "$HEAD_REF" in
+              "$RELEASE_PREFIX"*) echo "::error::a release branch's PR goes into main ($HEAD_REF → $BASE_REF): fixes come through bugfix/* branches"; exit 1 ;;
+            esac
+          fi
+          if [ "$HEAD_REF" = main ] && [ "$BASE_REF" = "$INTEGRATION" ]; then
+            tag=$(git describe --tags --exact-match --match 'v*' HEAD 2>/dev/null || true)
+            [ -n "$tag" ] || { echo "::error::the merge-back PR's head carries no v<version> tag"; exit 1; }
+            exec harness gate verify --release "${tag#v}" --pr "$PR" --skip-gate evidence-complete
+          fi
+          # Squad and platform files change only by PR, approved per file by their owners on the base (D-39): checked here
+          # in every enforcement mode (with enforcement: github, CODEOWNERS and required code-owner reviews too). The base
+          # is origin's remote-tracking branch by its full name: a tag named origin/<base> must not choose the diff. In a
+          # platform repository (vars.HARNESS_PLATFORM_REPO = 1) a squad file is wherever platform.yaml lists it, so every
+          # PR runs the check and the CLI decides which of its files are governed. Without the variable a root platform.yaml
+          # or squads/ still runs it, so a platform repository whose variable is unset does not skip it.
+          if [ "${HARNESS_PLATFORM_REPO:-}" = 1 ] ||
+            [ -n "$(git diff --name-only --no-renames "refs/remotes/origin/$BASE_REF...HEAD" -- .harness/platform.yaml .harness/squads .github/CODEOWNERS platform.yaml squads)" ]; then
+            harness platform validate --base "origin/$BASE_REF" --pr "$PR"
+          fi
+          # A PR that carries no change record (an intent, a squad file) has no gates to verify; the secret scan above
+          # still ran. A feature/* or bugfix/* branch is a change (REQ-ORC-008) and must carry its record.
+          if [ -z "$(git diff --name-only "refs/remotes/origin/$BASE_REF...HEAD" -- .harness/changes)" ]; then
+            case "$HEAD_REF" in
+              feature/* | bugfix/*)
+                echo "::error::$HEAD_REF carries no change record (.harness/changes/<id>/): start the change with harness plan create (or harness feature start) and work on its branch, or rename the branch if it is not a harness change"
+                exit 1 ;;
+            esac
+            echo "no harness change on $HEAD_REF: nothing to verify"
+            exit 0
+          fi
+          git checkout -q -B "$HEAD_REF"
+          # evidence-complete is its own required check (the job below, the only one that reads the audit store)
+          exec harness gate verify --skip-gate evidence-complete
+  # The required check "evidence-complete" (M13, SDD 10 §1-2, SDD 01 §4, REQ-GOV-003): a change PR's committed evidence pack
+  # is complete for the profile (regulated: auditRefs, tddCommits, approvals); in the lite profile it passes, as lite
+  # does not require it. On a release PR it checks each included change's evidence-complete (gate verify --release
+  # --gate evidence-complete); the merge-back PR includes no change of its own. "harness gate verify" above leaves this
+  # gate here (--skip-gate evidence-complete), the only job that reads the audit store. Required, with it, in the
+  # regulated profile's .github/harness/branch-protection.json. The audit log is git-ignored, so CI proves auditRefs
+  # against the audit store when one is configured: vars.HARNESS_AUDIT_STORE_URL (the bucket's URL) and
+  # vars.HARNESS_AUDIT_STORE_ROLE_ARN (a read-only role, OIDC; vars.HARNESS_AUDIT_STORE_REGION, default eu-west-2).
+  # Without them the regulated profile fails this check (nothing in CI can prove the refs); lite does not require it.
+  evidence-complete:
+    name: evidence-complete
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    container:
+      image: ${{ vars.HARNESS_RUNNER_IMAGE || 'ghcr.io/alokkulkarni/sdlc-harness-runner:1.0.0' }}
+    permissions:
+      contents: read
+      pull-requests: read # a release PR's branches and head (release verify); no review is read for this gate
+      id-token: write # the audit store's read-only role (OIDC), when configured
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0 # the base, the integration and state branches
+          persist-credentials: true # harness gate verify fetches them (read-only token, no agent)
+      - name: The audit store's read-only role (optional)
+        if: vars.HARNESS_AUDIT_STORE_URL != '' && vars.HARNESS_AUDIT_STORE_ROLE_ARN != '' && github.event.pull_request.head.repo.full_name == github.repository
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ vars.HARNESS_AUDIT_STORE_ROLE_ARN }}
+          aws-region: ${{ vars.HARNESS_AUDIT_STORE_REGION || 'eu-west-2' }}
+      - name: Verify the evidence pack
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+          INTEGRATION: 'develop'
+          RELEASE_PREFIX: 'release/'
+          HARNESS_AUDIT_STORE_URL: ${{ vars.HARNESS_AUDIT_STORE_URL }}
+          HARNESS_AUDIT_STORE_REGION: ${{ vars.HARNESS_AUDIT_STORE_REGION }}
+        run: |
+          set -euo pipefail
+          if [ "$BASE_REF" = main ]; then
+            case "$HEAD_REF" in
+              "$RELEASE_PREFIX"*) exec harness gate verify --release "${HEAD_REF#"$RELEASE_PREFIX"}" --pr "$PR" --gate evidence-complete ;;
+              *) echo "::error::only a release PR ($RELEASE_PREFIX<version> → main) merges into main"; exit 1 ;;
+            esac
+          fi
+          # A release branch's only PR goes into main: another one shares its head, so its run could pass for the release
+          # gate that harness release record reads (M16f); fixes come through bugfix/* branches cut from the release
+          if [ -n "$RELEASE_PREFIX" ]; then
+            case "$HEAD_REF" in
+              "$RELEASE_PREFIX"*) echo "::error::a release branch's PR goes into main ($HEAD_REF → $BASE_REF): fixes come through bugfix/* branches"; exit 1 ;;
+            esac
+          fi
+          if [ "$HEAD_REF" = main ] && [ "$BASE_REF" = "$INTEGRATION" ]; then
+            echo "the merge-back PR includes no change of its own: the release PR checked each included change's evidence"
+            exit 0
+          fi
+          if [ -z "$(git diff --name-only "refs/remotes/origin/$BASE_REF...HEAD" -- .harness/changes)" ]; then
+            echo "no harness change on $HEAD_REF: no evidence pack to verify (harness gate verify reports a change branch without its record)"
+            exit 0
+          fi
+          if [ -z "${HARNESS_AUDIT_STORE_URL:-}" ]; then
+            note="no audit store is configured: the regulated profile refuses evidence whose auditRefs nothing can prove (lite does not need them); set vars.HARNESS_AUDIT_STORE_URL and vars.HARNESS_AUDIT_STORE_ROLE_ARN (a read-only role)"
+            echo "::notice::$note"
+            if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then echo "$note" >>"$GITHUB_STEP_SUMMARY"; fi
+          fi
+          git checkout -q -B "$HEAD_REF"
+          exec harness gate verify --gate evidence-complete --pr "$PR"
+  rerun:
+    name: re-run harness gate verify
+    if: >-
+      (github.event_name == 'pull_request_review' &&
+      github.event.pull_request.head.repo.full_name == github.repository) ||
+      (github.event_name == 'workflow_run' &&
+      startsWith(github.event.workflow_run.head_branch, 'release/'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      actions: write # re-run the PR's check
+      pull-requests: read
+    steps:
+      - name: Re-run the PR's own check, so its result is the one the branch rules read
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          REVIEW_SHA: ${{ github.event.pull_request.head.sha }}
+          RUN_SHA: ${{ github.event.workflow_run.head_sha }}
+          RUN_BRANCH: ${{ github.event.workflow_run.head_branch }}
+        run: |
+          set -euo pipefail
+          sha="$REVIEW_SHA"
+          if [ -z "$sha" ]; then
+            pr=$(gh pr list -R "$REPO" --head "$RUN_BRANCH" --base main --state open --json number,headRefOid --jq '.[0].headRefOid // ""')
+            [ "$pr" = "$RUN_SHA" ] || { echo "no open release PR at $RUN_SHA: nothing to re-run"; exit 0; }
+            sha="$RUN_SHA"
+          fi
+          run=$(gh run list -R "$REPO" --workflow harness-gates.yml --event pull_request --commit "$sha" --json databaseId,status --jq '[.[] | select(.status == "completed")][0].databaseId // ""')
+          if [ -n "$run" ]; then gh run rerun "$run" -R "$REPO"; else echo "no completed check at $sha to re-run"; fi

@@ -1,0 +1,176 @@
+# Written by harness init (sdlc-harness) from its template, once: the repository's to edit (SDD 08 §5, SDD 02 §11).
+# Headless runs: an issue labelled harness:run, an @claude comment by someone with write access, or a manual run resumes
+# the change the issue's title names (CHG-NNNN) or starts one from the issue, then runs the plugin's orchestrator with
+# anthropics/claude-code-action. Never on a fork's pull request, never for an actor without write access (REQ-SEC-002).
+# Models per models.access in .harness/config.yaml (SDD 08 §5): gateway (vars.HARNESS_GATEWAY_URL, secret
+# HARNESS_GATEWAY_KEY), bedrock-oidc (vars.HARNESS_BEDROCK_ROLE_ARN), and for personal testing on the lite profile only
+# anthropic-api (secret ANTHROPIC_API_KEY) or claude-subscription (secret CLAUDE_CODE_OAUTH_TOKEN), D-29. The private
+# marketplace is read with a GitHub App installation token (vars.HARNESS_APP_ID, secret HARNESS_APP_PRIVATE_KEY).
+name: harness run
+on:
+  issues:
+    types: [labeled]
+  issue_comment:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      change:
+        description: The change to resume (CHG-NNNN)
+        required: true
+permissions: {}
+concurrency:
+  # a comment that does not call @claude never queues in (and so never displaces) a run's group
+  group: harness-run-${{ github.event.issue.number || inputs.change }}-${{ github.event_name != 'issue_comment' || contains(github.event.comment.body, '@claude') }}
+  cancel-in-progress: false
+jobs:
+  run:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'issues' && github.event.label.name == 'harness:run') ||
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude') &&
+      contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    environment: harness-agents # the model secrets live here, not at repository level
+    container:
+      image: ${{ vars.HARNESS_RUNNER_IMAGE || 'ghcr.io/alokkulkarni/sdlc-harness-runner:1.0.0' }}
+    # The job's own GITHUB_TOKEN only reads; the run writes with the App token below, scoped to this repository.
+    permissions:
+      contents: read
+      pull-requests: read # the guard reads whether a commented PR comes from a fork
+      id-token: write # bedrock-oidc
+    steps:
+      - name: Only for actors with write access, never on a fork's pull request (REQ-SEC-002)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          ACTOR: ${{ github.triggering_actor }}
+          PR_NUMBER: ${{ github.event.issue.pull_request && github.event.issue.number || '' }}
+        run: |
+          set -euo pipefail
+          perm=$(gh api "repos/$REPO/collaborators/$ACTOR/permission" --jq .permission)
+          case "$perm" in
+            admin | maintain | write) ;;
+            *) echo "::error::$ACTOR has $perm access: headless runs need write access (REQ-SEC-002)"; exit 1 ;;
+          esac
+          if [ -n "$PR_NUMBER" ] && [ "$(gh pr view "$PR_NUMBER" -R "$REPO" --json isCrossRepository --jq .isCrossRepository)" != false ]; then
+            echo "::error::pull request #$PR_NUMBER comes from a fork: headless runs never run on it (REQ-SEC-002)"
+            exit 1
+          fi
+      # The run pushes and opens PRs with an App installation token: a PR made with the workflow's GITHUB_TOKEN
+      # would start no workflow, so the required check would never run on it.
+      - name: A token for this repository (pushes and PRs that start the gates)
+        id: repo-token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          app-id: ${{ vars.HARNESS_APP_ID }}
+          private-key: ${{ secrets.HARNESS_APP_PRIVATE_KEY }}
+          repositories: ${{ github.event.repository.name }}
+          permission-contents: write # the orchestrator's commits on the change's branch
+          permission-pull-requests: write # the change's PR
+          permission-issues: write # the run's comment on the issue
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          token: ${{ steps.repo-token.outputs.token }}
+          persist-credentials: true # the orchestrator commits and pushes the change's branch (plan writes, its PR)
+      - name: How the run reaches models (models.access; a regulated config refuses the bypass modes, D-29)
+        id: access
+        run: |
+          set -euo pipefail
+          access=$(harness models access)
+          echo "access=$access" >> "$GITHUB_OUTPUT"
+      - name: The change, resumed or started from the issue, and the run's command (harness run --dry-run)
+        id: run
+        env:
+          ACCESS: ${{ steps.access.outputs.access }}
+          GH_TOKEN: ${{ steps.repo-token.outputs.token }}
+          ACTOR: ${{ github.triggering_actor }}
+          INPUT_CHANGE: ${{ inputs.change }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          STATE_BRANCH: 'harness-state'
+          ANTHROPIC_BASE_URL: ${{ vars.HARNESS_GATEWAY_URL }}
+        run: |
+          set -euo pipefail
+          if [ "$ACCESS" = gateway ] && [ -z "$ANTHROPIC_BASE_URL" ]; then
+            echo "::error::models.access is gateway but vars.HARNESS_GATEWAY_URL is not set"
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          change="$INPUT_CHANGE"
+          if [ -z "$change" ]; then change=$(printf '%s' "$ISSUE_TITLE" | grep -oE 'CHG-[0-9]{4,}' | head -n 1 || true); fi
+          if [ -n "$change" ]; then
+            [[ "$change" =~ ^CHG-[0-9]{4,}$ ]] || { echo "::error::$change is not a change id"; exit 1; }
+            git fetch -q origin "+refs/heads/$STATE_BRANCH:refs/remotes/origin/$STATE_BRANCH"
+            # origin's remote-tracking branches by their full names: a tag named origin/<branch> must not choose them
+            branch=$(git show "refs/remotes/origin/$STATE_BRANCH:features/$change.json" | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>console.log(JSON.parse(s).links.branch))')
+            case "$branch" in -*) echo "::error::$branch is not a branch name"; exit 1 ;; esac
+            git check-ref-format --branch "$branch" > /dev/null || { echo "::error::$branch is not a branch name"; exit 1; }
+            git checkout -B "$branch" "refs/remotes/origin/$branch"
+          else
+            # the requester is the person who triggered the run; the regulated profile takes it only as GITHUB_ACTOR
+            GITHUB_ACTOR="$ACTOR" harness plan create --title "$ISSUE_TITLE" --json > plan.json.out
+            branch=$(node -e 'console.log(JSON.parse(require("fs").readFileSync("plan.json.out","utf8")).branch)')
+            rm -f plan.json.out
+            git push -q -u origin "$branch"
+          fi
+          harness run --dry-run --json > run.json
+          # shellcheck disable=SC2016 # a JavaScript program, not shell
+          node -e '
+            const fs = require("fs");
+            const r = JSON.parse(fs.readFileSync("run.json", "utf8"));
+            // warnings[] (the D-29 gateway bypass) on the run page, escaped as workflow command data
+            const esc = (w) => String(w).replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
+            for (const w of r.warnings ?? []) console.log(`::warning::${esc(w)}`);
+            const q = (a) => JSON.stringify(a);
+            const eof = `HARNESS_EOF_${require("crypto").randomBytes(8).toString("hex")}`;
+            const [, , prompt, ...args] = r.command;
+            const gateway = process.env.ACCESS === "gateway";
+            const out = [`change=${r.changeId}`, `claude_args=${args.map(q).join(" ")}`];
+            out.push(`prompt<<${eof}`, prompt, eof);
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, out.join("\n") + "\n");
+            const env = Object.entries(r.env).filter(([k]) => gateway || k !== "ANTHROPIC_CUSTOM_HEADERS");
+            if (gateway) env.push(["ANTHROPIC_BASE_URL", process.env.ANTHROPIC_BASE_URL ?? ""]);
+            fs.appendFileSync(process.env.GITHUB_ENV, env.map(([k, v]) => `${k}<<${eof}\n${v}\n${eof}`).join("\n") + "\n");
+          '
+          rm -f run.json
+      - name: Bedrock through OIDC (models.access bedrock-oidc)
+        if: steps.access.outputs.access == 'bedrock-oidc'
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ vars.HARNESS_BEDROCK_ROLE_ARN }}
+          aws-region: ${{ vars.HARNESS_BEDROCK_REGION || 'eu-west-2' }}
+      - name: A token that can read the private marketplace (spike S-6)
+        id: app
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          app-id: ${{ vars.HARNESS_APP_ID }}
+          private-key: ${{ secrets.HARNESS_APP_PRIVATE_KEY }}
+          owner: 'alokkulkarni'
+          repositories: 'sdlc-harness'
+          permission-contents: read
+      - name: git reads the marketplace with it (the token lasts an hour and reads that repository only)
+        env:
+          TOKEN: ${{ steps.app.outputs.token }}
+          MARKETPLACE: 'https://github.com/alokkulkarni/sdlc-harness'
+        run: git config --global "url.https://x-access-token:${TOKEN}@github.com/alokkulkarni/sdlc-harness.insteadOf" "$MARKETPLACE"
+      - name: The orchestrator, headless
+        uses: anthropics/claude-code-action@f27be6b65a4652f08a2ba3cff79114829b588967 # v1.0.252
+        with:
+          prompt: ${{ steps.run.outputs.prompt }}
+          claude_args: ${{ steps.run.outputs.claude_args }}
+          plugin_marketplaces: 'https://github.com/alokkulkarni/sdlc-harness.git'
+          plugins: "sdlc-core@sdlc-harness\nsdlc-quality@sdlc-harness\nsdlc-docs@sdlc-harness\nsdlc-backend@sdlc-harness\nsdlc-web@sdlc-harness\nsdlc-design@sdlc-harness\nsdlc-release@sdlc-harness"
+          github_token: ${{ steps.repo-token.outputs.token }}
+          use_bedrock: ${{ steps.access.outputs.access == 'bedrock-oidc' }}
+          anthropic_api_key: ${{ steps.access.outputs.access == 'gateway' && secrets.HARNESS_GATEWAY_KEY || steps.access.outputs.access == 'anthropic-api' && secrets.ANTHROPIC_API_KEY || '' }}
+          claude_code_oauth_token: ${{ steps.access.outputs.access == 'claude-subscription' && secrets.CLAUDE_CODE_OAUTH_TOKEN || '' }}
+      - name: The run's spend, so the plan pauses at its budget (M06)
+        if: always() && steps.access.outputs.access == 'gateway'
+        env:
+          CHANGE: ${{ steps.run.outputs.change }}
+          HARNESS_GATEWAY_URL: ${{ vars.HARNESS_GATEWAY_URL }}
+          HARNESS_GATEWAY_SPEND_KEY: ${{ secrets.HARNESS_GATEWAY_SPEND_KEY }}
+        run: |
+          if [ -n "$HARNESS_GATEWAY_SPEND_KEY" ]; then harness plan spend --change "$CHANGE"; else echo "no spend-read key: spend not recorded"; fi

@@ -5,3 +5,9 @@
 .harness/audit/
 .harness/reports/
 .claude/worktrees/
+# sdlc-harness scratch (SDD 02 §2)
+.harness/repos/
+.claude/settings.local.json
+.DS_Store
+Thumbs.db
+desktop.ini

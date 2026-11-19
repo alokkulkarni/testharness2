@@ -1,0 +1,202 @@
+# Written by harness init (sdlc-harness) from its template, once: the repository's to edit (SDD 08 §5, SDD 02 §6).
+# The release lifecycle. A push to develop deploys to dev, then test. A push to release/<version>
+# (the cut and every merged fix; workflow_dispatch on that branch re-runs it) deploys to staging, then runs the prod job
+# after prod-release-approval: the prod environment's required reviewers (enforcement: github), or an approving review by
+# a release approver on the release PR, checked as the prod job's first step after its checkout (harness-fallback,
+# SDD 10 §8). Staging jobs of one release share release-<version> (a newer one cancels an older one); prod jobs share
+# release-<version>-prod and are never cancelled (DEV-022). A push to main from the release PR's merge tags v<version> and creates the GitHub release from the release
+# PR's notes; no other job writes contents, and neither deploys nor the tag run on workflow_dispatch. Agents never
+# deploy, tag or release: this workflow does (SDD 12 §6).
+# Set up once: environments dev, test, staging, prod, each with its own AWS_ROLE_ARN variable (OIDC; no static keys),
+# prod with the release approvers as required reviewers;
+# restrict the deployment branches of staging and prod to release/*;
+# keep deploy secrets in the environments that use them, never at repository level;
+# under enforcement: github, a tag ruleset protecting v* (letting this workflow create the tag). Replace scripts/deploy.sh.
+# Concurrency: staging jobs share release-<version> and a newer one cancels an older one; prod jobs share
+# release-<version>-prod and queue, never cancelled (DEV-022): an older run whose prod job is waiting for approval stays
+# queued, and its approver approves only the head they mean.
+name: harness release
+on:
+  push:
+    branches: ['develop', 'release/**', main]
+  workflow_dispatch:
+permissions: {}
+jobs:
+  meta:
+    name: what this run releases
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: read # the release PR behind a push to main
+    outputs:
+      kind: ${{ steps.kind.outputs.kind }}
+      version: ${{ steps.kind.outputs.version }}
+      pr: ${{ steps.kind.outputs.pr }}
+    steps:
+      - id: kind
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          EVENT: ${{ github.event_name }}
+          REF_NAME: ${{ github.ref_name }}
+          SHA: ${{ github.sha }}
+          INTEGRATION: 'develop'
+          RELEASE_PREFIX: 'release/'
+        run: |
+          set -euo pipefail
+          kind=none version="" pr=""
+          case "$REF_NAME" in
+            "$RELEASE_PREFIX"*) kind=release; version="${REF_NAME#"$RELEASE_PREFIX"}" ;;
+            "$INTEGRATION") if [ "$EVENT" = push ]; then kind=integration; fi ;;
+            main)
+              if [ "$EVENT" = push ]; then
+                # only a merged PR from this repository's own release branch (never a fork's branch of that name)
+                merged=$(gh api "repos/$REPO/commits/$SHA/pulls" --jq '[.[] | select(.merged_at != null and .base.ref == "main" and .head.repo.full_name == env.REPO)][0] | "\(.number // "") \(.head.ref // "")"')
+                head="${merged#* }"
+                case "$head" in "$RELEASE_PREFIX"*) kind=publish; version="${head#"$RELEASE_PREFIX"}"; pr="${merged%% *}" ;; esac
+              fi
+              ;;
+          esac
+          if [ -n "$version" ] && ! [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$ ]]; then
+            echo "::error::$version is not a release version (X.Y.Z or X.Y.Z-pre)"
+            exit 1
+          fi
+          { echo "kind=$kind"; echo "version=$version"; echo "pr=$pr"; } >> "$GITHUB_OUTPUT"
+
+  dev:
+    name: deploy dev
+    needs: meta
+    if: needs.meta.outputs.kind == 'integration' && github.event_name == 'push'
+    runs-on: ubuntu-24.04
+    environment: dev
+    concurrency:
+      group: harness-deploy-dev
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      id-token: write # AWS through OIDC, this environment's role
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION || 'eu-west-2' }}
+      - name: Deploy (replace with your own)
+        env:
+          HARNESS_ENVIRONMENT: dev
+        run: ./scripts/deploy.sh "$HARNESS_ENVIRONMENT"
+
+  test:
+    name: deploy test
+    needs: [meta, dev]
+    if: needs.meta.outputs.kind == 'integration' && github.event_name == 'push'
+    runs-on: ubuntu-24.04
+    environment: test
+    concurrency:
+      group: harness-deploy-test
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION || 'eu-west-2' }}
+      - name: Deploy (replace with your own)
+        env:
+          HARNESS_ENVIRONMENT: test
+        run: ./scripts/deploy.sh "$HARNESS_ENVIRONMENT"
+
+  staging:
+    name: deploy staging
+    needs: meta
+    if: needs.meta.outputs.kind == 'release'
+    runs-on: ubuntu-24.04
+    environment: staging
+    concurrency:
+      group: release-${{ needs.meta.outputs.version }}
+      cancel-in-progress: true
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION || 'eu-west-2' }}
+      - name: Deploy (replace with your own)
+        env:
+          HARNESS_ENVIRONMENT: staging
+        run: ./scripts/deploy.sh "$HARNESS_ENVIRONMENT"
+
+  prod:
+    name: deploy prod
+    needs: [meta, staging]
+    if: needs.meta.outputs.kind == 'release'
+    runs-on: ubuntu-24.04
+    environment: prod
+    concurrency:
+      # its own group (DEV-022): nothing cancels a prod deploy in flight, not even a newer run's staging
+      group: release-${{ needs.meta.outputs.version }}-prod
+      cancel-in-progress: false
+    container:
+      image: ${{ vars.HARNESS_RUNNER_IMAGE || 'ghcr.io/alokkulkarni/sdlc-harness-runner:1.0.0' }}
+    permissions:
+      contents: read
+      pull-requests: read # the release PR's reviews (harness-fallback)
+      actions: read # this environment's approvals (enforcement: github)
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # the approver lists are read from develop
+          persist-credentials: true # the check fetches develop and the state branch (read-only token, no agent)
+      - name: prod-release-approval, before any deploy step (SDD 10 §8)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.meta.outputs.version }}
+        run: harness gate verify --release "$VERSION" --gate prod-release-approval
+      - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION || 'eu-west-2' }}
+      - name: Deploy (replace with your own)
+        env:
+          HARNESS_ENVIRONMENT: prod
+        run: ./scripts/deploy.sh "$HARNESS_ENVIRONMENT"
+
+  publish:
+    name: tag and publish the release
+    needs: meta
+    if: needs.meta.outputs.kind == 'publish' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write # the tag and the GitHub release; the only job that writes contents
+      pull-requests: read # the release PR's notes
+    steps:
+      - name: Tag v<version> on the merge and create the release from the release PR's notes
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+          VERSION: ${{ needs.meta.outputs.version }}
+          PR: ${{ needs.meta.outputs.pr }}
+        run: |
+          set -euo pipefail
+          if gh release view "v$VERSION" -R "$REPO" >/dev/null 2>&1; then
+            echo "v$VERSION is already released"
+            exit 0
+          fi
+          gh pr view "$PR" -R "$REPO" --json body --jq .body > "$RUNNER_TEMP/notes.md"
+          gh release create "v$VERSION" -R "$REPO" --target "$SHA" --title "v$VERSION" --notes-file "$RUNNER_TEMP/notes.md"

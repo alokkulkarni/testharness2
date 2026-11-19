@@ -13,6 +13,7 @@ plugins:
   - sdlc-backend
   - sdlc-web
   - sdlc-design
+  - sdlc-release
 stacks:
   - java
   - react
@@ -52,6 +53,6 @@ github:
   enforcement: github
   checks: none
 security:
-  blockOn: [critical, high]
+  blockOn: [ critical, high ]
 tests:
-  requiredProjects: [chromium, webkit]
+  requiredProjects: [ chromium, webkit ]
