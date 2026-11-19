@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0005",
+  "node": "N03-spec",
+  "gate": "critic-verdict",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0005",
+      "agent": "critic",
+      "agentRunId": "a1591ad6e95ca5e7d"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0005",
+      "agent": "spec-author",
+      "agentRunId": "a2fbcdac23eaa5b6b"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0005",
+      "agent": "spec-author",
+      "agentRunId": "a8bcad1f7cdb0d945"
+    },
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0005",
+      "agent": "spec-author",
+      "agentRunId": "ae160ec349aeff33e"
+    }
+  ],
+  "createdAt": "2026-11-13T15:50:07.996Z",
+  "reviewedCommit": "bf620bd8cbb163c273211387140aee188a1baed0",
+  "diffHash": "298aa57ca43c13093b0d41339129929aac9b6c68c87be65f2748f77d37e792cf",
+  "summary": "round 3, delta since f1f0450: F-15, F-16 fixed. F-15: COREPACK_ENABLE_AUTO_PIN=0 is stage environment before the first corepack step (sdd.md L116), README item 1 exports it on the host (L224-L226), item 8 gives the restore path (L273-L275), A12 and the REQ-DOC-001 AC-1 / REQ-CMP-001 AC-2 rows check it with git diff --exit-code and git status --porcelain (checkable: api/data, api/target and the web outputs are git-ignored). F-16: the build stage installs the pinned corepack with --force (within Q14 (a): exact pin, npm, build stage only), the host install stays unforced with an EEXIST entry in item 8, A7 and A11 updated, A13 added and checked by B. One new info finding. Carried unchanged: F-4, F-6, F-7 (minor), F-9 to F-14 and F-17 (info). Pass with 3 minor and 8 info follow-ups.",
+  "findings": [
+    {
+      "id": "F-4",
+      "severity": "minor",
+      "message": "The tests-first plan gives the test to the tests node and the script to the build node, but does not say who writes web/scripts/compose-smoke.d.mts, or whether the red commit carries a failing stub .mjs. Without the .d.mts, tsc --noEmit (pnpm typecheck and pnpm build) fails in the red commit for a missing module, not for the behaviour.",
+      "requirement": "REQ-SMK-001",
+      "location": "docs/specs/CHG-0005/sdd.md:L81, L319-L320",
+      "suggestion": "State that the React tests node writes compose-smoke.d.mts (signatures only) and a stub compose-smoke.mjs whose functions throw not implemented, and that the build node replaces the stub."
+    },
+    {
+      "id": "F-6",
+      "severity": "minor",
+      "message": "Section 1 says that Section 6 below answers each section-9 question, but the answers are in section 4 (section 6 is Security and privacy).",
+      "location": "docs/specs/CHG-0005/sdd.md:L24-L26",
+      "suggestion": "Change Section 6 to Section 4."
+    },
+    {
+      "id": "F-7",
+      "severity": "minor",
+      "message": "The citation web/playwright.config.ts:L27-L29 for Chromium, Firefox and WebKit misses WebKit: L27 opens projects, and the three projects are L28-L30.",
+      "requirement": "REQ-DOC-001",
+      "location": "docs/specs/CHG-0005/sdd.md:L230",
+      "suggestion": "Cite web/playwright.config.ts:L28-L30."
+    },
+    {
+      "id": "F-9",
+      "severity": "info",
+      "message": "An error_log at emerg also drops alert-level lines (for example a worker process exiting on a signal), which carry no request data. Request-bearing lines are logged at crit and below, so alert would keep the privacy rule and lose less.",
+      "location": "docs/specs/CHG-0005/sdd.md:L130, L406, L418",
+      "suggestion": "Consider error_log /dev/stdout alert, and update A10 and R6 to match."
+    },
+    {
+      "id": "F-10",
+      "severity": "info",
+      "message": "The jar and the SPA dist are platform-independent, yet both build stages run under emulation in the buildx proof, which is the slow part (R8).",
+      "location": "docs/specs/CHG-0005/sdd.md:L96, L116, L255-L260",
+      "suggestion": "Consider FROM --platform=BUILDPLATFORM for both build stages so that only the run stages are per platform."
+    },
+    {
+      "id": "F-11",
+      "severity": "info",
+      "message": "Neither .dockerignore excludes .env files. Vite reads a web/.env that a person made at build time, and an api/.env would enter the build stage. Neither reaches the run image, but excluding them is a cheap defence for NFR-102.",
+      "requirement": "NFR-102",
+      "location": "docs/specs/CHG-0005/sdd.md:L102-L103, L119-L121",
+      "suggestion": "Add .env and .env.* (keeping .env.example) to api/.dockerignore and web/.dockerignore."
+    },
+    {
+      "id": "F-12",
+      "severity": "info",
+      "message": "The java module (api/) is listed as a plan module but gets no test. A java tests node therefore has no red commit to make, and the SDD does not say how that node is satisfied.",
+      "location": "docs/specs/CHG-0005/sdd.md:L62, L339",
+      "suggestion": "State what the java tests node delivers (nothing, a test-plan note, or that the plan has no java tests node) so plan extension does not stall."
+    },
+    {
+      "id": "F-13",
+      "severity": "info",
+      "message": "NFR-101, REQ-CMP-004 AC-1 and the no-query-string constraint are verified by inspection only. Cheap static Vitest checks would turn them into regression tests.",
+      "location": "docs/specs/CHG-0005/sdd.md:L331-L340",
+      "suggestion": "Optional: add such checks in web/tests if the approver wants automated proof. The requirements do not require them."
+    },
+    {
+      "id": "F-14",
+      "severity": "info",
+      "message": "The base image tags pin only the major line (21-jdk-noble, 21-jre-noble, 26-slim) and rely on the P6 reading. Q11 as answered said major/minor tags. If the approver rejects P6 at freeze, the tags must change.",
+      "requirement": "REQ-CMP-001",
+      "location": "docs/specs/CHG-0005/sdd.md:L96-L97, L116",
+      "suggestion": "Mention in section 12 that the tags follow P6, and what they become if P6 is not confirmed."
+    },
+    {
+      "id": "F-17",
+      "severity": "info",
+      "message": "corepack 0.34.0 is plausible but could not be checked against the npm registry here, and newer releases may exist by 2026-11. A11 correctly marks it as an assumption, and B fails if the version is not published or cannot activate pnpm 10.34.8.",
+      "requirement": "REQ-CMP-001",
+      "location": "docs/specs/CHG-0005/sdd.md:L116, L419",
+      "suggestion": "Build node: record the corepack --version line from an uncached build log as A11 evidence. If the version is changed, change the build argument default and the README pin together."
+    },
+    {
+      "id": "F-18",
+      "severity": "info",
+      "message": "npm --force relaxes more than bin clobbering: it also lets an engines mismatch and a failed lifecycle script pass. The SDD notes only that a missing version still fails. The effect is covered, because A11 is proven by corepack --version and pnpm install --frozen-lockfile in B, not by npm, but the build-stage text and A13 could say so. On the host, the forced fallback over a Homebrew pnpm or yarn overwrites a Homebrew-managed link, so brew may later report a link conflict. The entry already offers removal first.",
+      "requirement": "REQ-CMP-001",
+      "location": "docs/specs/CHG-0005/sdd.md:L116, L268-L272, L421",
+      "suggestion": "Optional: add to A13 that --force also skips the engines check, so Node 26 compatibility rests on B. In item 8, prefer removal and note that the forced path can leave brew reporting a link conflict."
+    }
+  ]
+}

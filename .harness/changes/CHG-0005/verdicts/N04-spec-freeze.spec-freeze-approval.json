@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0005",
+  "node": "N04-spec-freeze",
+  "gate": "spec-freeze-approval",
+  "verdict": "pass",
+  "reviewer": {
+    "kind": "human",
+    "id": "@alokkulkarni",
+    "reference": "https://github.com/alokkulkarni/testharness2/pull/7#pullrequestreview-5894738943"
+  },
+  "createdAt": "2026-11-13T16:42:19.358Z",
+  "reviewedCommit": "65673cca6a99a8ca90f7d0ea7d7cd53c48a216f7",
+  "findings": []
+}

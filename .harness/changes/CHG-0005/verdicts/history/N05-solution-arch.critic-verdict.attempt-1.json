@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0005",
+  "node": "N05-solution-arch",
+  "gate": "critic-verdict",
+  "verdict": "changes-required",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0005",
+      "agent": "critic",
+      "agentRunId": "a1c81816abdf41a9b"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0005",
+      "agent": "drawio-architect",
+      "agentRunId": "a076f3bd63b3ea2be"
+    }
+  ],
+  "createdAt": "2026-11-13T14:05:10.723Z",
+  "reviewedCommit": "2b034d4b532bcd0d9900612663a71eedd09ce7cc",
+  "diffHash": "d8d74814fa96967f8e8ab0bb0f4197282b2b933e4018c2640e377a9df722b315",
+  "summary": "Round 1, exhaustive. One major: the Compose web container adds nginx access and error logs as a new log sink without flagging that a default access log records the request line with its query string, so search text (q, kept in the URL by ADR-0001) would be logged, against the frozen CHG-0001 sdd.md section 10 rule; it is in no risk row, open question or view. Ten minors and two infos as follow-ups: README marked new though edited; docker compose up said to rebuild; nginx SPA history fallback unstated; build-time registries not shown; four inaccurate citations; non-binary ADR markings; pillars 7.4-7.6 without risks; view readability and label mismatches; a risk row assigned to the requester though settled. Citations otherwise check out broadly (SecurityConfig, DatabaseConfig, AuthController, SessionService, ClientHeaderFilter, pom, vite config, sdd, conformance, ADRs); exports current; no cloud drawn.",
+  "findings": [
+    {
+      "id": "F-1",
+      "severity": "major",
+      "message": "Section 7.1 adds nginx access and error logs from the web container as an observability element but keeps the claim that identifiers, titles and similar are never logged. A default nginx access log writes the request line including the query string; the SPA keeps q (search text) in the URL (CHG-0001 ADR-0001 L19-L20) and listTodos takes q as a query parameter, so search text would reach the log, which CHG-0001 sdd.md L575-L576 forbids (search text never logged). No risk row, open question or ADR item covers it, and the nginx log stream is drawn in no view while the API log stream is.",
+      "requirement": "NFR-102",
+      "location": "docs/architecture/solution.md:L180-L185",
+      "suggestion": "Add a risk or open question for the spec author: the nginx access log must not record query strings (access_log off, or a format without $request/$args), keeping CHG-0001 sdd section 10; mark it [new] and show the web container log stream in the Compose view."
+    },
+    {
+      "id": "F-2",
+      "severity": "minor",
+      "message": "README.md is marked [new] (and drawn as a green New box in the native view) though it exists and is edited (requirements.md L19, README.md L1); only .env.example is new.",
+      "requirement": "REQ-DOC-001",
+      "location": "docs/architecture/solution.md:L148-L149",
+      "suggestion": "Mark README.md run steps as [changed] in sections 6.1 and 11 (L294-L296) and in the native view; keep .env.example as [new]."
+    },
+    {
+      "id": "F-3",
+      "severity": "minor",
+      "message": "Section 7.1 says docker compose up rebuilds; Compose builds an image only when it is missing and reuses an existing one unless --build is given, so a person updating the checkout, or the REQ-SMK-001 AC-6 run on the head commit, could run a stale image.",
+      "requirement": "REQ-SMK-001",
+      "location": "docs/architecture/solution.md:L186-L188",
+      "suggestion": "State that docker compose up --build (or docker compose build) is needed after a code change, and leave the exact README command to the SDD."
+    },
+    {
+      "id": "F-4",
+      "severity": "minor",
+      "message": "The web container is described as serving the build and proxying /api, but not as falling back to index.html for client routes (/todos, /login, /todos/:id); the Vite dev server does this by default and nginx does not, and REQ-CMP-003 AC-3 (reload keeps the list) and REQ-CMP-002 AC-2 depend on it. Neither section 6.2 nor the open questions name it.",
+      "requirement": "REQ-CMP-003",
+      "location": "docs/architecture/solution.md:L158-L161",
+      "suggestion": "Add the SPA history fallback (every non-/api path not a file answers index.html, /api never does) to the web container description or as a section 9 item for the spec author."
+    },
+    {
+      "id": "F-5",
+      "severity": "minor",
+      "message": "Image builds pull base images from Docker Hub and dependencies from Maven Central and the npm registry (section 6 L138 mentions build-time fetches only in passing), but the context view states no external system exists and the Compose deployment node says no registry; build-time external dependencies and their trust boundary are not drawn.",
+      "requirement": "REQ-CMP-001",
+      "location": "docs/architecture/solution.md:L31-L32",
+      "suggestion": "Show build-time external systems (base-image registry, Maven Central, npm registry) as external/tool elements in the context or Compose view, and reword no registry as no publishing registry (L156, L168-L170)."
+    },
+    {
+      "id": "F-6",
+      "severity": "minor",
+      "message": "Four citations do not support their claims: web/package.json:L21-L25 holds only react, react-dom and react-router, not TypeScript or Vite (L42, L44); sdd.md:L31 does not say no HA or no horizontal scale (L264); web/playwright.config.ts:L35-L42 sets reuseExistingServer to !CI, so locally 5173 need not be free, only 8080 (api-process.ts L33) (L150-L152); ADR-0018 does not state one machine as its context (L256).",
+      "requirement": "REQ-DOC-003",
+      "location": "docs/architecture/solution.md:L71",
+      "suggestion": "Cite web/package.json:L21-L25 and L42-L44; cite sdd.md L41 or NFR-002 for no scale-out; say only 8080 is checked by the e2e and 5173 is reused locally (or cite the requirement); quote ADR-0018 L9-L11 (one process, one SQLite file)."
+    },
+    {
+      "id": "F-7",
+      "severity": "minor",
+      "message": "Section 8 markings are not binary: session state is covered for the native run only (L259), and the healthcheck and image rows say ADR proposed, the spec author call (L262-L263); the spec gate checks each non-distributed choice as covered or ADR needed.",
+      "requirement": "REQ-CMP-005",
+      "location": "docs/architecture/solution.md:L259-L263",
+      "suggestion": "Mark L259 covered (sessions are rows in the one SQLite file whichever run) with the Compose part pointing to the L260 ADR, and mark L262-L263 not a non-distributed choice: requirement-fixed (REQ-CMP-005, REQ-CMP-001, REQ-CMP-007), no ADR required."
+    },
+    {
+      "id": "F-8",
+      "severity": "minor",
+      "message": "Pillars 7.4 performance, 7.5 cost and 7.6 sustainability list choices but no risks and how they are met (for example image size and build time on the person machine, multi-arch emulation build time, volume growth).",
+      "location": "docs/architecture/solution.md:L221-L234",
+      "suggestion": "Add a risk line to each of 7.4-7.6, or say explicitly that the pillar has none at this scale and why."
+    },
+    {
+      "id": "F-9",
+      "severity": "minor",
+      "message": "Compose view readability: the healthcheck is drawn as its own box outside the api container though it runs inside it (only the label says so), and the edge labels from the browser and smoke check sit on the dashed network boundary line.",
+      "location": "docs/architecture/solution.md:L156",
+      "suggestion": "Draw the healthcheck inside the api container box (or as a note on it) and move the two labels to a clear stretch of their edges."
+    },
+    {
+      "id": "F-10",
+      "severity": "minor",
+      "message": "View labels disagree with text or code: the container view places the smoke-check script inside the system boundary as part of the app and names web/scripts, while section 3 and section 9 leave the path to the SDD; the native view labels the Vite edge Proxies /api/v1/** while vite.config.ts L9 proxies /api; the README box arrow Documents settings is drawn as a runtime flow into the API process.",
+      "location": "docs/architecture/solution.md:L67",
+      "suggestion": "Move the smoke check outside the system boundary as a tool and drop web/scripts (or say example); label the Vite edge /api; draw the README relation as a dashed note, not a call."
+    },
+    {
+      "id": "F-11",
+      "severity": "minor",
+      "message": "The risk row Warm-machine 120 s target and a Docker-less agent environment assigns both to the requester at freeze (P1, P5); P1 is a requirements proposal already pending, and who runs the smoke check without Docker is settled by REQ-SMK-001 AC-6 (P5 covers only the record form), so it is not an open requester decision.",
+      "requirement": "NFR-106",
+      "location": "docs/architecture/solution.md:L280",
+      "suggestion": "Keep only the P1 target as pending at freeze and cite REQ-SMK-001 AC-6 for the Docker-less case."
+    },
+    {
+      "id": "F-12",
+      "severity": "info",
+      "message": "Not verified: the solution-architecture skill template could not be read (outside the checkout, refused) and harness docs diagram lint is not on the critic command list; section order and content were judged against the critic rubric, layout from the PNGs; harness docs diagram export --check reports 4 diagrams, exports current.",
+      "location": "docs/architecture/drawio/todo-deployment-compose.drawio"
+    },
+    {
+      "id": "F-13",
+      "severity": "info",
+      "message": "Section 8 summarises ADR-0002 as API serves no static files; ADR-0002 L25 decides spring.web.resources.add-mappings=false, which application.properties L1-L14 does not set. Outside CHG-0005 scope (no api change), noted for a later change.",
+      "location": "docs/architecture/solution.md:L244"
+    }
+  ]
+}

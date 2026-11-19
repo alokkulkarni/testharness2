@@ -1,0 +1,192 @@
+{
+  "schemaVersion": 1,
+  "changeId": "CHG-0005",
+  "node": "N02-requirements",
+  "gate": "critic-verdict",
+  "verdict": "changes-required",
+  "reviewer": {
+    "kind": "agent",
+    "id": "critic",
+    "session": {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0005",
+      "agent": "critic",
+      "agentRunId": "abcb2711ec381fefa"
+    },
+    "modelAlias": "harness/critic"
+  },
+  "authors": [
+    {
+      "squadSessionId": "SQS-default-01M6QZZPTSQ6RP91Y1RRZ8AZAM",
+      "changeId": "CHG-0005",
+      "agent": "requirements-analyst",
+      "agentRunId": "a5a7da33778bce029"
+    }
+  ],
+  "createdAt": "2026-11-13T13:45:30.376Z",
+  "reviewedCommit": "20838728e3899508712b18e901242977261c7eef",
+  "diffHash": "8aa3589f7750aacc593458755690d68511b5188e5d59b01c1d6a23480d93d198",
+  "summary": "Round 1 (exhaustive). changes-required: 5 major, 10 minor, 5 info. Majors: the base-image tag rule contradicts the tags it names (F-1). The smoke check pass rule P2 cannot tell an API answer from an SPA fallback (F-2). The README e2e step omits that pnpm -C web e2e starts its own servers, needs 8080 free and needs Playwright browsers (F-3). The buildx proof lacks its builder prerequisite (F-4). No AC obliges a recorded smoke-check run against the built stack for Q9 (c) (F-5). IDs do not collide with CHG-0001. Q1-Q13 and D1-D4 are traced and none is contradicted. Proposed items: P1 and P3 are acceptable for the approver at freeze, P4 only restates Q8 (b), P2 must be tightened (F-2). The tag conflict (F-1) must become a Proposed item or go back to the requester. No other item needs a requester question.",
+  "findings": [
+    {
+      "id": "F-1",
+      "severity": "major",
+      "message": "REQ-CMP-001 AC-3 requires every base image tag pinned to a major/minor version, but AC-1 names eclipse-temurin:21 (a major only) and AC-2 names the Node current LTS major and nginx:stable-alpine (a floating channel tag with no version). The parenthesis (not latest, not a bare major only for nginx) does not parse. The source answer Q11 (clarifications.md L150) has the same conflict, yet it is neither under Proposed nor under Open questions, so a Dockerfile cannot be checked against AC-3.",
+      "requirement": "REQ-CMP-001",
+      "location": "docs/specs/CHG-0005/requirements.md:L99-L107",
+      "suggestion": "State the exact tag form per image as a Proposed item for the approver (for example eclipse-temurin 21-jdk and 21-jre Ubuntu variant, node LTS major with a Debian variant, nginx stable branch as major.minor-alpine such as 1.28-alpine instead of stable-alpine), or ask the requester which rule wins, then make AC-1, AC-2 and AC-3 agree."
+    },
+    {
+      "id": "F-2",
+      "severity": "major",
+      "message": "REQ-SMK-001 AC-2 says the /api request must be answered by the API, but P2 passes any answer other than 502, 503, 504 or a connection failure, and AC-3 names only 502 or 504. With a missing or wrong nginx proxy rule, the SPA fallback returns 200 HTML for /api and the check passes, so it does not prove Q9 (c) (/api answers through the proxy). The contract gives a discriminator: every /api error is application/problem+json and an unauthenticated request gets 401 UNAUTHENTICATED (docs/specs/CHG-0001/contracts/common-problem-v1.yaml L21-L26, L70-L75).",
+      "requirement": "REQ-SMK-001",
+      "location": "docs/specs/CHG-0005/requirements.md:L207-L211",
+      "suggestion": "Make AC-2 pass only on 401 with Content-Type application/problem+json for an unauthenticated GET of an existing /api path (for example /api/v1/todos), and AC-3 fail on anything else, including 200 HTML. Align P2 (L292-L293) and AC-3 to the same rule."
+    },
+    {
+      "id": "F-3",
+      "severity": "major",
+      "message": "REQ-DOC-003 AC-1 and AC-2 call it the e2e on the native run, but pnpm -C web e2e starts its own API through global-setup on a temporary database and refuses if port 8080 is in use (web/e2e/support/api-process.ts L33), and starts or reuses a Vite server on 5173 (web/playwright.config.ts L35-L42). A person who starts the native run, or leaves the Compose stack up, and then runs the command fails. REQ-DOC-001 AC-2 lists the prerequisites as a closed set and omits the Playwright browser install.",
+      "requirement": "REQ-DOC-003",
+      "location": "docs/specs/CHG-0005/requirements.md:L82-L86",
+      "suggestion": "Require the README to say the e2e starts its own API and SPA on a temporary database and needs ports 8080 and 5173 free (stop the native run and the Compose stack first), and add the Playwright browser install step to REQ-DOC-001 AC-2 (L60-L61) or REQ-DOC-003 AC-1."
+    },
+    {
+      "id": "F-4",
+      "severity": "major",
+      "message": "REQ-CMP-007 AC-3 assumes only a machine with buildx, but this change clarification (clarifications.md L154-L155) says Docker keeps a multi-platform image only with the containerd image store, otherwise it must be pushed. The default docker builder without that store refuses a two-platform build, and building the other architecture needs emulation. AC-2 does not require the README to state these prerequisites and REQ-DOC-001 AC-2 lists only Docker with Compose, so the proof command can fail on a machine that meets every stated precondition.",
+      "requirement": "REQ-CMP-007",
+      "location": "docs/specs/CHG-0005/requirements.md:L179-L186",
+      "suggestion": "Have AC-2 require the README to state the builder prerequisite (containerd image store turned on, or a docker-container builder, and emulation for the non-native architecture) and an output that neither loads nor pushes (for example cache only), and set the AC-3 precondition to match."
+    },
+    {
+      "id": "F-5",
+      "severity": "major",
+      "message": "Q9 (c) makes a scripted smoke check plus the user UAT the proof that the stack works, and REQ-CMP-003 AC-2 is verified by the smoke check, but no AC requires the smoke check to be run against the stack built from this change with its result recorded (who ran it, on which commit), as REQ-CMP-007 AC-3 does for the buildx proof. The UAT-verified ACs (REQ-DOC-001 AC-1, REQ-CMP-002 AC-2, REQ-CMP-003 AC-3, REQ-CMP-004 AC-2) name no record of the UAT either, so the conformance register cannot show them met.",
+      "requirement": "REQ-SMK-001",
+      "location": "docs/specs/CHG-0005/requirements.md:L200-L215",
+      "suggestion": "Add an AC to REQ-SMK-001: the smoke check is run against the stack built at the change head, by the agents when Docker is available or else by the person, and the run is recorded with its output, who ran it and the commit. State how the UAT result is recorded (for example the person approval at the PR names the UAT steps done)."
+    },
+    {
+      "id": "F-6",
+      "severity": "minor",
+      "message": "The context says conformance.md L153 deferred AC-1 because no README or .env.example existed. README.md exists at the root (README.md L1, a title only), the deferral reason was that the run steps and .env.example were not added because no node could own root files, and the NFR-002/AC-1 row is conformance.md L154 (L153 is the NFR-002 row).",
+      "requirement": "NFR-107",
+      "location": "docs/specs/CHG-0005/requirements.md:L19-L21",
+      "suggestion": "Say the README held no run steps, cite conformance.md L153-L154, and note that README.md is edited, not created."
+    },
+    {
+      "id": "F-7",
+      "severity": "minor",
+      "message": "REQ-DOC-001 traces Q13 for the native cookie, but Q13 is about the Compose stack. The native cookie fact is in the clarifications preface (clarifications.md L11-L12) and CHG-0001 sdd.md L610-L611.",
+      "requirement": "REQ-DOC-001",
+      "location": "docs/specs/CHG-0005/requirements.md:L54-L54",
+      "suggestion": "Trace the native cookie setting to CHG-0001 sdd.md section 11 L610-L611."
+    },
+    {
+      "id": "F-8",
+      "severity": "minor",
+      "message": "REQ-DOC-003 AC-1 calls pnpm -C web test the web component tests, but it runs the unit and the component tests (web/vitest.config.ts L12), and Q8 (b) asks for the unit and component test commands. The API test command is not named.",
+      "requirement": "REQ-DOC-003",
+      "location": "docs/specs/CHG-0005/requirements.md:L82-L84",
+      "suggestion": "Say web unit and component tests, and name the API test command run from the root (for example api/mvnw -f api/pom.xml test)."
+    },
+    {
+      "id": "F-9",
+      "severity": "minor",
+      "message": "REQ-DOC-003 AC-3 says delete the SQLite file at TODO_DB_PATH, but the default ./data/todo.db resolves under api/ (CHG-0001 sdd.md L607-L608: cd api, api/data/ is git-ignored), so a person may look for ./data at the root.",
+      "requirement": "REQ-DOC-003",
+      "location": "docs/specs/CHG-0005/requirements.md:L87-L89",
+      "suggestion": "Require the README to name the default location api/data/todo.db and to say that a custom TODO_DB_PATH replaces it."
+    },
+    {
+      "id": "F-10",
+      "severity": "minor",
+      "message": "REQ-DOC-002 AC-3 requires that no real .env is committed, and Q7 notes that Compose reads a .env beside docker-compose.yml, but the root .gitignore does not ignore .env (.gitignore L1-L7), so a person who copies .env.example to .env can commit it.",
+      "requirement": "REQ-DOC-002",
+      "location": "docs/specs/CHG-0005/requirements.md:L75-L76",
+      "suggestion": "Add an AC that .env is git-ignored at the root, or state why not."
+    },
+    {
+      "id": "F-11",
+      "severity": "minor",
+      "message": "REQ-CMP-003 AC-4 joins the curl debugging check with a clause that the Playwright baseURL stays unchanged. After D2 Playwright never runs against the stack, so the clause is moot here and is a separate condition (no test code change) inside an AC about the API port.",
+      "requirement": "REQ-CMP-003",
+      "location": "docs/specs/CHG-0005/requirements.md:L136-L137",
+      "suggestion": "Drop the Playwright clause, or move it to Out of scope as no change to web/e2e."
+    },
+    {
+      "id": "F-12",
+      "severity": "minor",
+      "message": "REQ-CMP-005 AC-3 may be verified by stopping the process, but the API JVM is the container main process, so stopping it exits the container rather than leaving it unhealthy. Only the closed-port trial shows the unhealthy state.",
+      "requirement": "REQ-CMP-005",
+      "location": "docs/specs/CHG-0005/requirements.md:L163-L165",
+      "suggestion": "Verify by a trial that makes the probe fail while the container keeps running (closed port, or a paused process), and drop stopping the process."
+    },
+    {
+      "id": "F-13",
+      "severity": "minor",
+      "message": "NFR-106 traces Q6 (a), which sets no time limit, and leaves warm machine and the verification method undefined.",
+      "requirement": "NFR-106",
+      "location": "docs/specs/CHG-0005/requirements.md:L253-L258",
+      "suggestion": "Define warm machine (images built, base layers cached), name who measures it and how (for example the healthcheck status times in docker compose ps or events), and trace it to P1 as an analyst proposal."
+    },
+    {
+      "id": "F-14",
+      "severity": "minor",
+      "message": "Analyst choices that no answer or decision makes are not tagged or listed under Proposed (CHG-0001 requirements.md L322-L337 is the precedent): REQ-SMK-001 AC-4 (no credentials, no data, no Playwright), REQ-CMP-004 AC-3 non-root write to the volume, REQ-CMP-005 AC-3, NFR-107 and the existence of NFR-106.",
+      "requirement": "REQ-SMK-001",
+      "location": "docs/specs/CHG-0005/requirements.md:L289-L296",
+      "suggestion": "Tag them (proposed) and list them under Proposed so the approver confirms them at freeze."
+    },
+    {
+      "id": "F-15",
+      "severity": "minor",
+      "message": "Several ACs name no verification method: REQ-CMP-002 AC-1 and AC-3, REQ-CMP-004 AC-3 and AC-4, and REQ-CMP-007 AC-1, whose run on the other architecture cannot be shown on one machine (only the AC-3 build proves it).",
+      "requirement": "REQ-CMP-007",
+      "location": "docs/specs/CHG-0005/requirements.md:L115-L121",
+      "suggestion": "Add verified by (smoke check, UAT, inspection or the AC-3 build) to each, including L148-L152, and narrow REQ-CMP-007 AC-1 (L179-L180) to running on the machine at hand plus building for the other architecture."
+    },
+    {
+      "id": "F-16",
+      "severity": "info",
+      "message": "NFR-101 to NFR-105 restate REQ ACs (REQ-CMP-003 AC-1, REQ-DOC-002 AC-3, REQ-CMP-001 AC-4, REQ-CMP-007 AC-2 and AC-3, REQ-CMP-004 AC-2), so each check carries two IDs in its test or inspection.",
+      "requirement": "NFR-101",
+      "location": "docs/specs/CHG-0005/requirements.md:L219-L251",
+      "suggestion": "Keep them as cross-references without their own ACs, or accept the double trace knowingly."
+    },
+    {
+      "id": "F-17",
+      "severity": "info",
+      "message": "The front matter upstream list is empty, while CHG-0001 requirements listed its input (intent.md with its sha256). This file input is clarifications.md.",
+      "requirement": "REQ-DOC-001",
+      "location": "docs/specs/CHG-0005/requirements.md:L9-L9",
+      "suggestion": "List .harness/changes/CHG-0005/clarifications.md as upstream if the harness supports it."
+    },
+    {
+      "id": "F-18",
+      "severity": "info",
+      "message": "D3 keeps README.md, .env.example and docker-compose.yml at the root, and CHG-0001 deferred NFR-002 AC-1 because no node could own root files (conformance.md L153). Nothing yet assigns them to a node.",
+      "requirement": "REQ-DOC-001",
+      "location": "docs/specs/CHG-0005/requirements.md:L36-L37",
+      "suggestion": "Make sure the plan gives one node the root files (and .gitignore, if F-10 is taken) before the build phase."
+    },
+    {
+      "id": "F-19",
+      "severity": "info",
+      "message": "For the SDD: the build contexts should exclude api/data (the person SQLite file), api/target and web/node_modules, the API healthcheck needs an HTTP client in the JRE image or another probe, and a non-root nginx cannot listen on port 80.",
+      "requirement": "REQ-CMP-001",
+      "location": "docs/specs/CHG-0005/requirements.md:L95-L109",
+      "suggestion": "Settle these in the SDD under REQ-CMP-001, REQ-CMP-005 and NFR-102."
+    },
+    {
+      "id": "F-20",
+      "severity": "info",
+      "message": "Compose reads a .env beside docker-compose.yml for interpolation (clarifications.md L96-L98). If docker-compose.yml interpolates TODO_DB_PATH, TODO_COOKIE_SECURE or SERVER_PORT, a .env copied from .env.example would change the container values, against REQ-CMP-004 AC-1.",
+      "requirement": "REQ-CMP-004",
+      "location": "docs/specs/CHG-0005/requirements.md:L143-L145",
+      "suggestion": "Add to REQ-CMP-004 AC-1 that docker-compose.yml sets these variables as literal values, with no variable interpolation."
+    }
+  ]
+}
