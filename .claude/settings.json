@@ -14,7 +14,8 @@
     "sdlc-docs@sdlc-harness": true,
     "sdlc-backend@sdlc-harness": true,
     "sdlc-web@sdlc-harness": true,
-    "sdlc-design@sdlc-harness": true
+    "sdlc-design@sdlc-harness": true,
+    "sdlc-release@sdlc-harness": true
   },
   "permissions": {
     "disableBypassPermissionsMode": "disable"

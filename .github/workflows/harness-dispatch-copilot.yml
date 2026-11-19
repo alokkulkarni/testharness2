@@ -1,0 +1,76 @@
+# Written by harness init (sdlc-harness) from its template, once: the repository's to edit (SDD 08 §5, ADR-0012).
+# Issue-per-node execution on the Copilot cloud agent: harness plan dispatch --executor copilot-cloud creates one
+# sub-issue per ready node under the change's parent issue, assigned to the cloud agent with the node's custom agent and
+# model, each with its own squad session, and records the issue (and later its PR) in plan.json. It runs by hand and
+# when a change's plan.json changes on its branch; it is idempotent. The cloud-agent API takes only a user token: the
+# secret COPILOT_DISPATCH_TOKEN (fine-grained: actions, contents, issues and pull requests read and write on this
+# repository), the documented exception of REQ-SEC-004, stored with minimal scope and rotated.
+name: harness dispatch copilot
+on:
+  workflow_dispatch:
+    inputs:
+      change:
+        description: The change (CHG-NNNN); run this on its branch
+        required: true
+      parent:
+        description: The change's parent issue (first dispatch only)
+        required: false
+  push:
+    branches: ['feature/**', 'bugfix/**']
+    paths: ['.harness/changes/*/plan.json']
+permissions: {}
+concurrency:
+  group: harness-dispatch-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  dispatch:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment: copilot-dispatch # COPILOT_DISPATCH_TOKEN here; protect it (reviewers or branch rules)
+    container:
+      image: ${{ vars.HARNESS_RUNNER_IMAGE || 'ghcr.io/alokkulkarni/sdlc-harness-runner:1.0.0' }}
+    permissions:
+      contents: write # the dispatch's claims in plan.json, on the change's branch
+    steps:
+      - name: Only for actors with write access (REQ-SEC-002)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          ACTOR: ${{ github.triggering_actor }}
+        run: |
+          set -euo pipefail
+          perm=$(gh api "repos/$REPO/collaborators/$ACTOR/permission" --jq .permission)
+          case "$perm" in
+            admin | maintain | write) ;;
+            *) echo "::error::$ACTOR has $perm access: dispatch needs write access (REQ-SEC-002)"; exit 1 ;;
+          esac
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: true # harness plan dispatch pushes plan.json (this job's token; no agent runs here)
+      - name: Dispatch the ready nodes to the Copilot cloud agent
+        env:
+          GH_TOKEN: ${{ secrets.COPILOT_DISPATCH_TOKEN }}
+          BRANCH: ${{ github.ref_name }}
+          REF_TYPE: ${{ github.ref_type }}
+          INPUT_CHANGE: ${{ inputs.change }}
+          INPUT_PARENT: ${{ inputs.parent }}
+          HARNESS_GATEWAY_URL: ${{ vars.HARNESS_GATEWAY_URL }}
+          HARNESS_GATEWAY_SPEND_KEY: ${{ secrets.HARNESS_GATEWAY_SPEND_KEY }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # a branch only, resolved as origin's remote-tracking branch by its full name: a tag named origin/<branch>
+          # must not choose what is dispatched
+          [ "$REF_TYPE" = branch ] || { echo "::error::dispatch runs on a branch (the change's), not a $REF_TYPE"; exit 1; }
+          case "$BRANCH" in -*) echo "::error::$BRANCH is not a branch name"; exit 1 ;; esac
+          git check-ref-format --branch "$BRANCH" > /dev/null || { echo "::error::$BRANCH is not a branch name"; exit 1; }
+          git checkout -q -B "$BRANCH" "refs/remotes/origin/$BRANCH"
+          args=(plan dispatch --executor copilot-cloud)
+          if [ -n "$INPUT_CHANGE" ]; then
+            [[ "$INPUT_CHANGE" =~ ^CHG-[0-9]{4,}$ ]] || { echo "::error::$INPUT_CHANGE is not a change id"; exit 1; }
+            args+=(--change "$INPUT_CHANGE")
+          fi
+          if [ -n "$INPUT_PARENT" ]; then args+=(--parent "$INPUT_PARENT"); fi
+          harness "${args[@]}"
